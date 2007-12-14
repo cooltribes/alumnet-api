@@ -13,14 +13,11 @@
 
 ActiveRecord::Schema.define(version: 20141017193149) do
 
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
   create_table "groups", force: true do |t|
     t.string   "name"
     t.string   "description"
     t.string   "avatar"
-    t.integer  "group_type",  default: 0
+    t.integer  "group_type"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "parent_id"
