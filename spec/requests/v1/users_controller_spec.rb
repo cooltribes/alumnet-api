@@ -82,7 +82,7 @@ describe V1::UsersController, type: :request do
   describe "POST /users/1/invite" do
     context "user can invite" do
       it "create a membership mode invitation for the user and the given group" do
-        inviter_user = User.make!
+        inviter_user = User.make!(email: "fcoarmandomendoza@gmail.com")
         group = Group.make!
         Membership.create_membership_for_creator(group, inviter_user)
         user = User.make!
@@ -90,6 +90,8 @@ describe V1::UsersController, type: :request do
         expect(response.status).to eq 200
         expect(user.memberships.count).to eq(1)
         expect(user.memberships.last.mode).to eq("invitation")
+        expect(user.mailbox.notifications.count).to eq(1)
+        expect(ActionMailer::Base.deliveries).to_not be_empty
       end
     end
     context "user cannot invite" do

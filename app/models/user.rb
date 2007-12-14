@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   has_secure_password
   mount_uploader :avatar, AvatarUploader
+  acts_as_messageable
 
   ### Relations
   has_many :memberships
@@ -15,6 +16,10 @@ class User < ActiveRecord::Base
   before_save :ensure_api_token
 
   ### Instance Methods
+  def mailboxer_email(object)
+    email
+  end
+
   def ensure_api_token
     if api_token.blank?
       self.api_token = generate_api_token

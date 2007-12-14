@@ -27,10 +27,18 @@ class Membership < ActiveRecord::Base
 
   def self.create_membership_for_invitation(group, user)
     create!(mode: "invitation", user: user, group: group)
+    Notification.notify_invitation_to_users(user, group)
+    #Notification.notify_invitation_to_admins()
   end
 
   def self.create_membership_for_request(group, user)
-    create!(mode: "request", user: user, group: group)
+    membership = create!(mode: "request", user: user, group: group)
+    if group.open?
+      membership.approved!
+      # send notificacion to user and group.admins
+    elsif group.closed?
+      #send notificacion to user and group.admins
+    end
   end
 
 end

@@ -19,4 +19,12 @@ class Group < ActiveRecord::Base
   def has_children?
     children.any?
   end
+
+  def creator
+    creator_user_id.present? ? User.find_by(id: creator_user_id) : nil
+  end
+
+  def membership_of_user(user)
+    memberships.find_by(user_id: user.id)
+  end
 end
