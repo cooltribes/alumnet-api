@@ -1,0 +1,26 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+
+development:
+  <<: *default
+  database: alumnet_development
+  username:
+  password:
+  host: localhost
+  port: 5432
+
+test:
+  <<: *default
+  database: alumnet_test
+  username:
+  password:
+  host: localhost
+  port: 5432
+
+production:
+  <<: *default
+  database: alumnet
+  username:
+  password: <%= ENV['ALUMNET-API_DATABASE_PASSWORD'] %>
