@@ -124,6 +124,10 @@ GEM
     tilt (1.4.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    versionist (1.3.0)
+      rails (>= 3)
+      yard (~> 0.7)
+    yard (0.8.7.4)
 
 PLATFORMS
   ruby
@@ -144,3 +148,4 @@ DEPENDENCIES
   shoulda-matchers
   spring
   spring-commands-rspec
+  versionist
