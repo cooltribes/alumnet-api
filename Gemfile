@@ -5,6 +5,7 @@ gem 'rails-api'
 gem 'pg'
 gem 'jbuilder'
 gem 'doorkeeper'
+gem 'bcrypt', '~> 3.1.7'
 
 group :development do
   gem 'spring'
