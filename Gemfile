@@ -5,6 +5,7 @@ gem 'rails-api'
 gem 'pg'
 gem 'jbuilder'
 gem 'bcrypt'
+gem 'versionist'
 
 group :development do
   gem 'spring'
