@@ -1,5 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe User, :type => :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  it { validate_presence_of(:password).on(:create) }
+
+  describe "callbacks" do
+    it "should set a api_key on save" do
+      user = User.make
+      user.save
+      expect(user.api_token).to_not be_blank
+    end
+  end
 end
