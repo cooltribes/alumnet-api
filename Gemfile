@@ -24,5 +24,6 @@ end
 group :test do
   gem 'machinist'
   gem 'faker'
+  gem 'database_cleaner'
   gem 'shoulda-matchers', require: false
 end

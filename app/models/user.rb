@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :password, on: :create
+  validates_presence_of :email
   ## TODO add format validation for email.
 
   ### Callbacks
