@@ -55,7 +55,7 @@ module V1
     end
 
     describe "PUT /users/1" do
-      it "create a user" do
+      it "edit a user" do
         user = User.make!
         put user_path(user), { user: { email: "test_email@gmail" } }, basic_header(admin.api_token)
         expect(response.status).to eq 200

@@ -1,1 +1,1 @@
-json.group @group
+json.partial! 'group', group: @group

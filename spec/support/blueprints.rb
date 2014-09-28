@@ -12,3 +12,12 @@ Group.blueprint do
   avatar { "Avatar" }
   group_type { 1 }
 end
+
+Group.blueprint(:with_parent_and_childen) do
+  name { "Group #{sn}"}
+  description { "Group description" }
+  avatar { "Avatar" }
+  group_type { 1 }
+  parent { Group.make! }
+  children { [Group.make!, Group.make!] }
+end

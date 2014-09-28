@@ -6,6 +6,8 @@ gem 'pg'
 gem 'jbuilder'
 gem 'bcrypt'
 gem 'versionist'
+gem 'acts_as_tree'
+gem 'json-schema'
 
 group :development do
   gem 'spring'

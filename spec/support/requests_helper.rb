@@ -11,4 +11,11 @@ module RequestsHelper
     }
   end
 
+  def get_schema(name)
+    "#{Rails.root}/public/docs/v1/schemas/#{name}.json"
+  end
+
+  def valid_schema(schema, data)
+    JSON::Validator.fully_validate(get_schema(schema), data)
+  end
 end
