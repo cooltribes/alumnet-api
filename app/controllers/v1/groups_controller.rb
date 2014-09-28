@@ -17,6 +17,15 @@ class V1::GroupsController < V1::BaseController
     end
   end
 
+  def add_group
+    @new_group = Group.new(group_params)
+    if @group.children << @new_group
+      render :show, status: :created,  location: @group
+    else
+      render json: @new_group.errors, status: :unprocessable_entity
+    end
+  end
+
   def update
     if @group.update(group_params)
       render :show, status: :ok,  location: @group

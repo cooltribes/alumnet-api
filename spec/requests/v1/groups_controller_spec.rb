@@ -39,6 +39,16 @@ module V1
       end
     end
 
+    describe "POST /groups/:id/add_group" do
+      it "create a new group on given group" do
+        group = Group.make!
+        post add_group_group_path(group), { group: valid_attributes }, basic_header(admin.api_token)
+        expect(response.status).to eq 201
+        group.reload
+        expect(group.children.count).to eq(1)
+      end
+    end
+
     describe "POST /groups" do
       context "with valid attributes" do
         it "create a group" do
