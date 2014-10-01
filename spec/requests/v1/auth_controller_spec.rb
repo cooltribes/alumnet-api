@@ -4,7 +4,7 @@ describe V1::UsersController, type: :request do
   let!(:user) { User.make!(password: "12345678") }
 
   def header
-    { 'Accept' => 'application/vnd.alumnet+json; version=1' }
+    { 'Accept' => 'application/vnd.alumnet+json;version=1' }
   end
 
   describe "POST /sign_in" do
