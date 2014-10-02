@@ -8,6 +8,7 @@ gem 'bcrypt'
 gem 'versionist'
 gem 'acts_as_tree'
 gem 'json-schema'
+gem 'rack-cors', :require => 'rack/cors'
 
 group :development do
   gem 'spring'
