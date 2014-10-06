@@ -41,7 +41,7 @@ describe V1::GroupsController, type: :request do
   describe "POST /groups/:id/add_group" do
     it "create a new group on given group" do
       group = Group.make!
-      post add_group_group_path(group), { group: valid_attributes }, basic_header(admin.api_token)
+      post add_group_group_path(group), valid_attributes , basic_header(admin.api_token)
       expect(response.status).to eq 201
       group.reload
       expect(group.children.count).to eq(1)
@@ -52,7 +52,7 @@ describe V1::GroupsController, type: :request do
     context "with valid attributes" do
       it "create a group" do
         expect {
-          post groups_path, { group: valid_attributes }, basic_header(admin.api_token)
+          post groups_path, valid_attributes , basic_header(admin.api_token)
         }.to change(Group, :count).by(1)
         expect(response.status).to eq 201
         #expect(valid_schema('group', json)).to be_empty
@@ -62,7 +62,7 @@ describe V1::GroupsController, type: :request do
     context "with invalid attributes" do
       it "return the errors in format json" do
         expect {
-          post groups_path, { group: invalid_attributes }, basic_header(admin.api_token)
+          post groups_path, invalid_attributes, basic_header(admin.api_token)
         }.to change(Group, :count).by(0)
         expect(json).to eq({"name"=>["can't be blank"]})
         expect(response.status).to eq 422
@@ -73,7 +73,7 @@ describe V1::GroupsController, type: :request do
   describe "PUT /groups/1" do
     it "edit a group" do
       group = Group.make!(:with_parent_and_childen)
-      put group_path(group), { group: { name: "New name group" } }, basic_header(admin.api_token)
+      put group_path(group), { name: "New name group" }, basic_header(admin.api_token)
       expect(response.status).to eq 200
       group.reload
       expect(group.name).to eq("New name group")

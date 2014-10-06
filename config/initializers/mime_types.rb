@@ -1,2 +1,2 @@
-Mime::Type.unregister(:json)
-Mime::Type.register 'application/vnd.alumnet+json', :json
+#Mime::Type.unregister(:json)
+#Mime::Type.register_alias 'application/vnd.alumnet+json', :json
