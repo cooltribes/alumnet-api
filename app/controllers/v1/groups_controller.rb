@@ -46,6 +46,6 @@ class V1::GroupsController < V1::BaseController
   end
 
   def group_params
-    params.require(:group).permit(:name, :description, :avatar, :group_type)
+    params.permit(:name, :description, :avatar, :group_type)
   end
 end

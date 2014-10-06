@@ -3,6 +3,7 @@ class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
   before_filter :authenticate
+  before_filter :set_request_format
 
 
   protected
@@ -17,6 +18,10 @@ class ApplicationController < ActionController::API
     else
       request_http_token_authentication
     end
+  end
+
+  def set_request_format
+    request.format = :json
   end
 
 end
