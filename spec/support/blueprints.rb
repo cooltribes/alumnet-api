@@ -1,4 +1,5 @@
 require 'machinist/active_record'
+require 'faker'
 
 User.blueprint do
   email { Faker::Internet.email }
@@ -8,14 +9,14 @@ end
 
 Group.blueprint do
   name { "Group #{sn}"}
-  description { "Group description" }
+  description { Faker::Lorem.sentence }
   avatar { "Avatar" }
   group_type { 1 }
 end
 
 Group.blueprint(:with_parent_and_childen) do
   name { "Group #{sn}"}
-  description { "Group description" }
+  description {  Faker::Lorem.sentence }
   avatar { "Avatar" }
   group_type { 1 }
   parent { Group.make! }
