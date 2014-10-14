@@ -1,8 +1,9 @@
 class Group < ActiveRecord::Base
   acts_as_tree order: "name"
+  mount_uploader :avatar, AvatarUploader
 
   ### Validations
-  validates_presence_of :name, :description, :avatar, :group_type
+  validates_presence_of :name, :description, :avatar #:group_type
 
   ### Instance Methods
 
