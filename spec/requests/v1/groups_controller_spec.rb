@@ -16,16 +16,18 @@ describe V1::GroupsController, type: :request do
   end
 
   describe "GET /groups" do
+
     before do
-      5.times { Group.make!() }
+      parent = Group.make!
+      5.times { Group.make!(parent: parent) }
     end
 
     it "return all groups" do
       get groups_path, {}, basic_header(admin.api_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(5)
+      expect(json.count).to eq(6)
+      #TODO: Validate schema with null value. Groups without parents and children
       #expect(valid_schema('group-array', json)).to be_empty
-
     end
   end
 
@@ -38,7 +40,7 @@ describe V1::GroupsController, type: :request do
       expect(json).to have_key('parent')
       expect(json).to have_key('children')
       expect(json['children'].count).to eq(2)
-      # expect(valid_schema('group', json)).to be_empty
+      expect(valid_schema('group', json)).to be_empty
     end
   end
 
@@ -81,7 +83,7 @@ describe V1::GroupsController, type: :request do
       expect(response.status).to eq 200
       group.reload
       expect(group.name).to eq("New name group")
-      # expect(valid_schema('group', json)).to be_empty
+      expect(valid_schema('group', json)).to be_empty
     end
   end
 

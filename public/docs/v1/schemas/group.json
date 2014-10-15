@@ -14,7 +14,15 @@
       "type": "string"
     },
     "avatar": {
-      "type": "string"
+      "type": "object",
+      "properties": {
+        "original": {
+          "type": "string"
+        },
+        "thumb": {
+          "type": "string"
+        }
+      }
     },
     "group_type": {
       "type": "integer"
@@ -32,7 +40,15 @@
           "type": "string"
         },
         "avatar": {
-          "type": "string"
+          "type": "object",
+          "properties": {
+            "original": {
+              "type": "string"
+            },
+            "thumb": {
+              "type": "string"
+            }
+          }
         },
         "group_type": {
           "type": "integer"
@@ -54,7 +70,15 @@
             "type": "string"
           },
           "avatar": {
-            "type": "string"
+            "type": "object",
+            "properties": {
+              "original": {
+                "type": "string"
+              },
+              "thumb": {
+                "type": "string"
+              }
+            }
           },
           "group_type": {
             "type": "integer"

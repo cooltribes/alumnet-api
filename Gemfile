@@ -10,6 +10,7 @@ gem 'acts_as_tree'
 gem 'json-schema'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'carrierwave'
+gem 'mini_magick'
 
 group :development do
   gem 'spring'

@@ -71,6 +71,8 @@ GEM
     mail (2.6.1)
       mime-types (>= 1.16, < 3)
     mime-types (2.3)
+    mini_magick (3.8.1)
+      subexec (~> 0.2.1)
     minitest (5.4.1)
     multi_json (1.10.1)
     pg (0.17.1)
@@ -130,6 +132,7 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (~> 2.8)
+    subexec (0.2.3)
     thor (0.19.1)
     thread_safe (0.3.4)
     tilt (1.4.1)
@@ -156,6 +159,7 @@ DEPENDENCIES
   json-schema
   lol_dba
   machinist
+  mini_magick
   pg
   quiet_assets
   rack-cors
