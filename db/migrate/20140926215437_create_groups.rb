@@ -4,7 +4,7 @@ class CreateGroups < ActiveRecord::Migration
       t.string :name
       t.string :description
       t.string :avatar
-      t.integer :group_type
+      t.integer :group_type, default: 0
 
       t.timestamps
     end

@@ -3,6 +3,8 @@ require 'faker'
 
 User.blueprint do
   email { Faker::Internet.email }
+  name { Faker::Name.name }
+  avatar { File.open("#{Rails.root}/spec/fixtures/user_test.png") }
   password { "12345678" }
   password_confirmation { "12345678" }
 end

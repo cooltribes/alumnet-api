@@ -4,14 +4,13 @@ class ApplicationController < ActionController::API
 
   before_filter :authenticate
   before_filter :set_request_format
-
-
-  protected
+  helper_method :current_user
 
   def current_user
     @current_user
   end
 
+  protected
   def authenticate
     if user = authenticate_with_http_token { |t, o| User.find_by(api_token: t) }
       @current_user = user

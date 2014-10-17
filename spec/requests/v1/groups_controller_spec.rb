@@ -8,11 +8,11 @@ describe V1::GroupsController, type: :request do
   end
 
   def valid_attributes
-    { name: "Group 1", description: "short description", group_type: 1, avatar: avatar_file }
+    { name: "Group 1", description: "short description", avatar: avatar_file }
   end
 
   def invalid_attributes
-    { name: "", description: "short description", avatar: avatar_file, group_type: 1 }
+    { name: "", description: "short description", avatar: avatar_file }
   end
 
   describe "GET /groups" do
