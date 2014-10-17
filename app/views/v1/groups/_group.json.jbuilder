@@ -1,4 +1,4 @@
-json.(group, :id, :name, :description, :group_type)
+json.(group, :id, :name, :description, :group_type, :official)
 
 json.avatar do
   json.original group.avatar.url

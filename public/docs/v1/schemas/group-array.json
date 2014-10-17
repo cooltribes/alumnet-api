@@ -29,6 +29,9 @@
       "group_type": {
         "type": "integer"
       },
+      "official": {
+        "type": "boolean"
+      },
       "parent": {
         "type": "object",
         "properties": {
@@ -89,6 +92,6 @@
         }
       }
     },
-    "required": ["id", "name", "description", "group_type"]
+    "required": ["id", "name", "description", "group_type", "official"]
   }
 }

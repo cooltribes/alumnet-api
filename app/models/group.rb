@@ -1,6 +1,7 @@
 class Group < ActiveRecord::Base
   acts_as_tree order: "name"
   mount_uploader :avatar, AvatarUploader
+  enum group_type: [:open, :closed, :secret]
 
   ### Validations
   validates_presence_of :name, :description, :avatar #:group_type

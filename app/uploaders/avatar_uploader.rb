@@ -7,7 +7,7 @@ class AvatarUploader < CarrierWave::Uploader::Base
   # storage :fog
 
   version :thumb do
-    process :resize_to_fit => [200,224]
+    process :resize_to_fill => [200,224]
   end
 
   def store_dir

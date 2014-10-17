@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20141015213209) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "parent_id"
-    t.boolean  "official"
+    t.boolean  "official",    default: false
   end
 
   add_index "groups", ["parent_id"], name: "index_groups_on_parent_id", using: :btree
