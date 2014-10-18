@@ -57,12 +57,14 @@ describe V1::GroupsController, type: :request do
 
   describe "POST /groups" do
     context "with valid attributes" do
-      it "create a group" do
+      it "create a group and membership for user" do
         expect {
           post groups_path, valid_attributes , basic_header(admin.api_token)
         }.to change(Group, :count).by(1)
         expect(response.status).to eq 201
         #expect(valid_schema('group', json)).to be_empty
+        expect(admin.memberships.last.mode).to eq("creation")
+        expect(admin.groups).to eq([Group.last])
       end
     end
 

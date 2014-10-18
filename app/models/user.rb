@@ -2,6 +2,10 @@ class User < ActiveRecord::Base
   has_secure_password
   mount_uploader :avatar, AvatarUploader
 
+  ### Relations
+  has_many :memberships
+  has_many :groups, through: :memberships
+
   ### Validations
   validates_presence_of :password, on: :create
   validates_presence_of :email
@@ -10,10 +14,19 @@ class User < ActiveRecord::Base
   ### Callbacks
   before_save :ensure_api_token
 
-
+  ### Instance Methods
   def ensure_api_token
     if api_token.blank?
       self.api_token = generate_api_token
+    end
+  end
+
+  def can_invite_on_group?(group)
+    membership = memberships.find_by(group_id: group.id)
+    if membership
+      membership.approve_register == 1
+    else
+      false
     end
   end
 

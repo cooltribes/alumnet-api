@@ -2,6 +2,9 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   it { should validate_presence_of(:password).on(:create) }
+  it { should have_many(:memberships) }
+  it { should have_many(:groups).through(:memberships) }
+
 
   describe "callbacks" do
     it "should set a api_key on save" do

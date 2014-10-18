@@ -20,3 +20,12 @@ json.children do
     json.array! []
   end
 end
+
+json.members do
+  json.array! group.users do |user|
+    json.id user.id
+    json.name user.name
+    json.email user.email
+    json.avatar user.avatar.url
+  end
+end

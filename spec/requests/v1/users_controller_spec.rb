@@ -78,4 +78,28 @@ describe V1::UsersController, type: :request do
       expect(response.status).to eq 204
     end
   end
+
+  describe "POST /users/1/invite" do
+    context "user can invite" do
+      it "create a membership mode invitation for the user and the given group" do
+        inviter_user = User.make!
+        group = Group.make!
+        Membership.create_membership_for_creator(group, inviter_user)
+        user = User.make!
+        post invite_user_path(user), { group_id: group.id }, basic_header(inviter_user.api_token)
+        expect(response.status).to eq 200
+        expect(user.memberships.count).to eq(1)
+        expect(user.memberships.last.mode).to eq("invitation")
+      end
+    end
+    context "user cannot invite" do
+      it "return unauthorize response" do
+        inviter_user = User.make!
+        group = Group.make!
+        user = User.make!
+        post invite_user_path(user), { group_id: group.id }, basic_header(inviter_user.api_token)
+        expect(response.status).to eq 401
+      end
+    end
+  end
 end

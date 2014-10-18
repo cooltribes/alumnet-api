@@ -4,7 +4,10 @@ Rails.application.routes.draw do
 
     post '/sign_in', to: 'auth#sign_in', as: :sign_in
 
-    resources :users
+    resources :users do
+      post :invite, on: :member
+    end
+
     resources :groups do
       post :add_group, on: :member
     end

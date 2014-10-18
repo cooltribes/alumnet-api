@@ -1,5 +1,7 @@
 class V1::UsersController < V1::BaseController
   before_filter :set_user, except: [:index, :create]
+  before_filter :set_group, only: :invite
+  before_filter :check_if_current_user_can_invite_on_group, only: :invite
 
   def index
     @users = User.all
@@ -30,13 +32,29 @@ class V1::UsersController < V1::BaseController
     head :no_content
   end
 
+  def invite
+    group = Group.find(params[:group_id])
+    Membership.create_membership_for_invitation(@group, @user)
+    render nothing: true
+  end
+
   private
 
   def set_user
     @user = User.find(params[:id])
   end
 
+  def set_group
+    @group = Group.find(params[:group_id])
+  end
+
   def user_params
     params.permit(:email, :password, :password_confirmation, :avatar, :name)
+  end
+
+  def check_if_current_user_can_invite_on_group
+    unless current_user.can_invite_on_group?(@group)
+      render nothing: true, status: 401
+    end
   end
 end

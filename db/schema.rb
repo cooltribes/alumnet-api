@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141017183940) do
+ActiveRecord::Schema.define(version: 20141017193149) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,26 @@ ActiveRecord::Schema.define(version: 20141017183940) do
   end
 
   add_index "groups", ["parent_id"], name: "index_groups_on_parent_id", using: :btree
+
+  create_table "memberships", force: true do |t|
+    t.string   "mode"
+    t.integer  "approved",            default: 0
+    t.integer  "moderate_members",    default: 0
+    t.integer  "edit_infomation",     default: 0
+    t.integer  "create_subgroups",    default: 0
+    t.integer  "change_member_type",  default: 0
+    t.integer  "approve_register",    default: 0
+    t.integer  "make_group_official", default: 0
+    t.integer  "make_event_official", default: 0
+    t.integer  "group_id"
+    t.integer  "user_id"
+    t.datetime "approved_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "memberships", ["group_id"], name: "index_memberships_on_group_id", using: :btree
+  add_index "memberships", ["user_id"], name: "index_memberships_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email"
