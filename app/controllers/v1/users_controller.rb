@@ -33,9 +33,12 @@ class V1::UsersController < V1::BaseController
   end
 
   def invite
-    group = Group.find(params[:group_id])
-    Membership.create_membership_for_invitation(@group, @user)
-    render nothing: true
+    unless membership = Membership.find_by(user_id: @user, group_id: @group.id)
+      Membership.create_membership_for_invitation(@group, @user)
+      render json: { user_id: @user.id, group_id: @group.id }
+    else
+      render json: { error: "User has already invited" }, status: :unprocessable_entity
+    end
   end
 
   private
