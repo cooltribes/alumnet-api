@@ -2,7 +2,8 @@ class V1::GroupsController < V1::BaseController
   before_filter :set_group, except: [:index, :create]
 
   def index
-    @groups = Group.all
+    @q = Group.search(params[:q])
+    @groups = @q.result
   end
 
   def show

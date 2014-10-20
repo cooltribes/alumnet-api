@@ -11,6 +11,7 @@ gem 'json-schema'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'carrierwave'
 gem 'mini_magick'
+gem 'ransack', github: 'activerecord-hackery/ransack', branch: 'rails-4.1'
 
 group :development do
   gem 'spring'
