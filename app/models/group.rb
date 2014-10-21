@@ -19,4 +19,8 @@ class Group < ActiveRecord::Base
   def has_children?
     children.any?
   end
+
+  def membership_of_user(user)
+    memberships.find_by(user_id: user.id)
+  end
 end

@@ -4,11 +4,11 @@ class ApplicationController < ActionController::API
 
   before_filter :authenticate
   before_filter :set_request_format
-  helper_method :current_user
 
   def current_user
     @current_user
   end
+  helper_method :current_user
 
   protected
   def authenticate

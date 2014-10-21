@@ -29,3 +29,7 @@ json.members do
     json.avatar user.avatar.url
   end
 end
+
+json.membership group.membership_of_user(user), :id, :mode, :approved,
+  :moderate_members, :edit_infomation, :create_subgroups, :change_member_type,
+  :approve_register, :make_group_official, :make_event_official

@@ -40,7 +40,6 @@ Rails.application.configure do
     address: "smtp.mandrillapp.com",
     port: 587,
     user_name: 'nramirez@upsidecorp.ch',
-    password: 'alumnet098',
-    authentication: 'plain'
+    password: '0IVzh8zd9CAJw1CZgeaLTw'
   }
 end
