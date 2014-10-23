@@ -1,4 +1,4 @@
-json.(group, :id, :name, :description, :group_type, :official)
+json.(group, :id, :name, :description, :group_type, :official, :created_at)
 
 json.avatar do
   json.original group.avatar.url
@@ -27,6 +27,14 @@ json.members do
     json.name user.name
     json.email user.email
     json.avatar user.avatar.url
+  end
+end
+
+json.creator do
+  if group.creator.present?
+    json.(group.creator, :id, :name) #for now
+  else
+    json.nil!
   end
 end
 
