@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141023003711) do
+ActiveRecord::Schema.define(version: 20141024014718) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(version: 20141023003711) do
     t.string   "mode"
     t.integer  "approved",            default: 0
     t.integer  "moderate_members",    default: 0
-    t.integer  "edit_infomation",     default: 0
+    t.integer  "edit_information",    default: 0
     t.integer  "create_subgroups",    default: 0
     t.integer  "change_member_type",  default: 0
     t.integer  "approve_register",    default: 0
