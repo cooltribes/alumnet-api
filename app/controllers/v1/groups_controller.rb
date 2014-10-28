@@ -11,6 +11,7 @@ class V1::GroupsController < V1::BaseController
 
   def create
     @group = Group.new(group_params)
+    @group.creator_user_id = current_user.id
     if @group.save
       Membership.create_membership_for_creator(@group, current_user)
       render :show, status: :created,  location: @group
