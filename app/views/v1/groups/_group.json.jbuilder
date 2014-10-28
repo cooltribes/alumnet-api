@@ -38,6 +38,12 @@ json.creator do
   end
 end
 
-json.membership group.membership_of_user(user), :id, :mode, :approved,
-  :moderate_members, :edit_information, :create_subgroups, :change_member_type,
-  :approve_register, :make_group_official, :make_event_official
+json.membership do
+  if group.membership_of_user(user)
+    json.(group.membership_of_user(user), :id, :mode, :approved, :moderate_members,
+      :edit_information, :create_subgroups, :change_member_type, :approve_register,
+      :make_group_official, :make_event_official)
+  else
+    json.nil!
+  end
+end

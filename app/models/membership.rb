@@ -19,7 +19,7 @@ class Membership < ActiveRecord::Base
 
   ### Class Methods
   def self.create_membership_for_creator(group, user)
-    attrs = { mode: "creation", approved: 1, moderate_members: 1, edit_infomation: 1,
+    attrs = { mode: "creation", approved: 1, moderate_members: 1, edit_information: 1,
       create_subgroups:  1, change_member_type: 1, approve_register: 1, make_group_official: 1,
       make_event_official: 1, group: group, user: user }
     create!(attrs)
