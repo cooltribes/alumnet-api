@@ -20,6 +20,10 @@ class Group < ActiveRecord::Base
     children.any?
   end
 
+  def get_group_type_info
+    { text: group_type, value: Group.group_types[group_type] }
+  end
+
   def creator
     creator_user_id.present? ? User.find_by(id: creator_user_id) : nil
   end
