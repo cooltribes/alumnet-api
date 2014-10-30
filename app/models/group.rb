@@ -6,6 +6,7 @@ class Group < ActiveRecord::Base
   ### Relations
   has_many :memberships
   has_many :users, through: :memberships
+  has_many :posts, as: :postable
 
   ### Validations
   validates_presence_of :name, :description, :avatar #:group_type

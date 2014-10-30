@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141024014718) do
+ActiveRecord::Schema.define(version: 20141029234740) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "groups", force: true do |t|
     t.string   "name"
-    t.string   "description"
+    t.text     "description"
     t.string   "avatar"
     t.integer  "group_type",      default: 0
     t.datetime "created_at"
@@ -102,6 +102,17 @@ ActiveRecord::Schema.define(version: 20141024014718) do
 
   add_index "memberships", ["group_id"], name: "index_memberships_on_group_id", using: :btree
   add_index "memberships", ["user_id"], name: "index_memberships_on_user_id", using: :btree
+
+  create_table "posts", force: true do |t|
+    t.text     "body"
+    t.integer  "user_id"
+    t.integer  "postable_id"
+    t.string   "postable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "posts", ["user_id"], name: "index_posts_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email"

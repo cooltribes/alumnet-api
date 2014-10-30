@@ -6,10 +6,12 @@ Rails.application.routes.draw do
 
     resources :users do
       post :invite, on: :member
+      resources :posts, controller: 'users/posts'
     end
 
     resources :groups do
       post :add_group, on: :member
+      resources :posts, controller: 'groups/posts'
     end
   end
 end

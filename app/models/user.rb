@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   ### Relations
   has_many :memberships
   has_many :groups, through: :memberships
+  has_many :posts
 
   ### Validations
   validates_presence_of :password, on: :create
