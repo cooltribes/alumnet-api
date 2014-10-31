@@ -1,7 +1,7 @@
 class V1::UsersController < V1::BaseController
-  before_filter :set_user, except: [:index, :create]
-  before_filter :set_group, only: :invite
-  before_filter :check_if_current_user_can_invite_on_group, only: :invite
+  before_action :set_user, except: [:index, :create]
+  before_action :set_group, only: :invite
+  before_action :check_if_current_user_can_invite_on_group, only: :invite
 
   def index
     @q = User.search(params[:q])

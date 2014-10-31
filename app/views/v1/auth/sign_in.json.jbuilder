@@ -1,1 +1,1 @@
-json.(@user, :id, :email, :api_token)
+json.(@user, :id, :email, :api_token, :name)

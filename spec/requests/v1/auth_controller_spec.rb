@@ -12,7 +12,8 @@ describe V1::UsersController, type: :request do
       it "return the user" do
         post sign_in_path, { email: user.email, password: "12345678" }, header
         expect(response.status).to eq 200
-        expect(json).to eq({"id"=>user.id, "email"=>user.email, "api_token"=>user.api_token})
+        expect(json).to eq({"id"=>user.id, "email"=>user.email, "api_token"=>user.api_token,
+          "name"=>user.name})
       end
     end
 

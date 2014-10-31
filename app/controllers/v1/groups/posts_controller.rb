@@ -1,6 +1,6 @@
 class V1::Groups::PostsController < V1::BaseController
-  before_filter :set_group
-  before_filter :set_post, except: [:index, :create]
+  before_action :set_group
+  before_action :set_post, except: [:index, :create]
 
   def index
     @q = @group.posts.search(params[:q])

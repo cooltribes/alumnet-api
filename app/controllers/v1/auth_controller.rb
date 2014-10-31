@@ -1,6 +1,6 @@
 class V1::AuthController < V1::BaseController
-  skip_before_filter :authenticate
-  before_filter :check_params
+  skip_before_action :authenticate
+  before_action :check_params
 
   def sign_in
     email, password = params[:email], params[:password]

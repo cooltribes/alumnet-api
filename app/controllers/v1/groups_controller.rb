@@ -1,5 +1,5 @@
 class V1::GroupsController < V1::BaseController
-  before_filter :set_group, except: [:index, :create]
+  before_action :set_group, except: [:index, :create]
 
   def index
     @q = Group.search(params[:q])
