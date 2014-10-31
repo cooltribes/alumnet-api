@@ -1,4 +1,5 @@
 require 'rails_helper'
+### posts from groups
 
 describe V1::Groups::PostsController, type: :request do
   let!(:admin) { User.make! }
