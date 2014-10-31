@@ -12,9 +12,9 @@ class V1::AuthController < V1::BaseController
   def register
     @user = User.new(user_params)
     if @user.save
-      render :register, status: :created,  location: @user
+      render :sign_in, status: :created,  location: @user
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: { errors: @user.errors }, status: :unprocessable_entity
     end
   end
 

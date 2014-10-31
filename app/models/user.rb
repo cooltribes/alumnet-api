@@ -9,7 +9,6 @@ class User < ActiveRecord::Base
   has_many :posts
 
   ### Validations
-  validates_presence_of :password, on: :create
   validates_presence_of :email
   ## TODO add format validation for email.
 
