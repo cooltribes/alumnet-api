@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe V1::UsersController, type: :request do
+describe V1::AuthController, type: :request do
   let!(:user) { User.make!(password: "12345678") }
 
   def header
@@ -50,6 +50,7 @@ describe V1::UsersController, type: :request do
           post register_path, valid_attributes, header
         }.to change(User, :count).by(1)
         expect(response.status).to eq 201
+        expect(json).to have_key('email')
       end
     end
 
@@ -58,7 +59,7 @@ describe V1::UsersController, type: :request do
         expect {
           post register_path, invalid_attributes, header
         }.to change(User, :count).by(0)
-        expect(json).to eq({"email"=>["can't be blank"]})
+        expect(json).to eq({"errors" => { "email"=>["can't be blank"] }})
         expect(response.status).to eq 422
       end
     end
