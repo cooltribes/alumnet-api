@@ -13,6 +13,7 @@ gem 'carrierwave'
 gem 'mini_magick'
 gem 'ransack', github: 'activerecord-hackery/ransack', branch: 'rails-4.1'
 gem 'mailboxer'
+gem 'acts_as_commentable'
 
 group :development do
   gem 'spring'

@@ -1,4 +1,5 @@
 class Post < ActiveRecord::Base
+  acts_as_commentable
 
   ### Relations
   belongs_to :user

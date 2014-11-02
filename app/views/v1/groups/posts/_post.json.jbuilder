@@ -7,3 +7,9 @@ json.user do
     json.thumb post.user.avatar.thumb.url
   end
 end
+
+condition = post.user == current_user
+json.permissions do
+  json.canEdit = condition
+  json.canDelete = condition
+end

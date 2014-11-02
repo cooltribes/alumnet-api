@@ -39,3 +39,8 @@ Post.blueprint do
   body { Faker::Lorem.paragraph }
   user { User.make! }
 end
+
+Comment.blueprint do
+  comment { Faker::Lorem.paragraph }
+  user { User.make! }
+end

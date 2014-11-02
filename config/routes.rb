@@ -15,6 +15,8 @@ Rails.application.routes.draw do
       resources :posts, controller: 'groups/posts'
     end
 
-    resources :posts, only: :show
+    resources :posts, only: :show do
+      resources :comments, controller: 'posts/comments'
+    end
   end
 end
