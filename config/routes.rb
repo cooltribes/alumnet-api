@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     end
 
     resources :groups do
+      post :join, on: :member
       post :add_group, on: :member
       resources :posts, controller: 'groups/posts'
     end

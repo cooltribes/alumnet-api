@@ -99,4 +99,33 @@ describe V1::GroupsController, type: :request do
       expect(response.status).to eq 204
     end
   end
+
+  describe "POST /groups/1/join" do
+    context "group is open" do
+      it "create an approved membership mode request for the current user" do
+        joiner_user = User.make!(email: "fcoarmandomendoza@gmail.com")
+        group = Group.make!(group_type: 0)
+        post join_group_path(group), {}, basic_header(joiner_user.api_token)
+        expect(response.status).to eq 200
+        expect(joiner_user.memberships.count).to eq(1)
+        expect(joiner_user.memberships.last.mode).to eq("request")
+        expect(joiner_user.memberships.last.approved).to eq(1)
+        expect(joiner_user.mailbox.notifications.count).to eq(1)
+        expect(ActionMailer::Base.deliveries).to_not be_empty
+      end
+    end
+    context "group is closed" do
+      it "create an unapproved membership mode request for the current user" do
+        joiner_user = User.make!(email: "fcoarmandomendoza@gmail.com")
+        group = Group.make!(group_type: 1)
+        post join_group_path(group), {}, basic_header(joiner_user.api_token)
+        expect(response.status).to eq 200
+        expect(joiner_user.memberships.count).to eq(1)
+        expect(joiner_user.memberships.last.mode).to eq("request")
+        expect(joiner_user.memberships.last.approved).to eq(0)
+        # expect(joiner_user.mailbox.notifications.count).to eq(1)
+        # expect(ActionMailer::Base.deliveries).to_not be_empty
+      end
+    end
+  end
 end
