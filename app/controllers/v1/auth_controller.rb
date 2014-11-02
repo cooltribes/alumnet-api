@@ -4,7 +4,9 @@ class V1::AuthController < V1::BaseController
 
   def sign_in
     email, password = params[:email], params[:password]
-    unless @user = User.find_by(email: email).try(:authenticate, password)
+    if @user = User.find_by(email: email).try(:authenticate, password)
+      render :user, status: :ok,  location: @user
+    else
       render json: { error: "email or password are incorrect"} , status: 401
     end
   end
@@ -12,7 +14,7 @@ class V1::AuthController < V1::BaseController
   def register
     @user = User.new(user_params)
     if @user.save
-      render :sign_in, status: :created,  location: @user
+      render :user, status: :created,  location: @user
     else
       render json: { errors: @user.errors }, status: :unprocessable_entity
     end

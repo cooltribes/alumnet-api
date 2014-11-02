@@ -1,1 +1,1 @@
-json.partial! 'post', post: @post, current_user: @current_user
+json.partial! 'v1/shared/post', post: @post, current_user: @current_user

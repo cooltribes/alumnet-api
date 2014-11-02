@@ -1,4 +1,4 @@
-json.(post, :body, :created_at)
+json.(post, :id, :body, :created_at)
 
 json.user do
   json.(post.user, :id, :name, :email)
