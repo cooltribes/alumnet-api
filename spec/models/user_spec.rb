@@ -5,6 +5,8 @@ RSpec.describe User, type: :model do
   it { should have_many(:memberships) }
   it { should have_many(:groups).through(:memberships) }
   it { should have_many(:posts) }
+  it { should have_many(:likes) }
+
 
 
   describe "callbacks" do
