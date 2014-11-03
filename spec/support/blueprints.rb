@@ -44,3 +44,7 @@ Comment.blueprint do
   comment { Faker::Lorem.paragraph }
   user { User.make! }
 end
+
+Like.blueprint do
+  user { User.make! }
+end
