@@ -6,5 +6,5 @@ class Like < ActiveRecord::Base
 
   ### Validations
   validates_uniqueness_of :user_id, scope: [:likeable_id, :likeable_type],
-    message: "The user already made like!"
+    message: "already made like!"
 end

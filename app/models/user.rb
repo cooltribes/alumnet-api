@@ -36,6 +36,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def has_like_in?(likeable)
+    likes.exists?(likeable: likeable)
+  end
+
 
   private
 

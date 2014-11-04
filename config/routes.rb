@@ -17,6 +17,8 @@ Rails.application.routes.draw do
     end
 
     resources :posts, only: :show do
+      post :like, on: :member
+      post :unlike, on: :member
       resources :comments, controller: 'posts/comments'
     end
   end

@@ -30,7 +30,7 @@ RSpec.describe LikeableMethods, :type => :module do
         Like.make!(user: user, likeable: post)
         like = post.add_like_by(user)
         expect(like).to_not be_valid
-        expect(like.errors[:user_id]).to eq(["The user already made like!"])
+        expect(like.errors[:user_id]).to eq(["already made like!"])
       end
     end
   end
