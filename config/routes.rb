@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     post '/register', to: 'auth#register', as: :register
 
     resources :users, except: :create do
+      get :me, on: :collection
       post :invite, on: :member
       resources :posts, controller: 'users/posts'
     end

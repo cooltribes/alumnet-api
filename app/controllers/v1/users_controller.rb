@@ -1,5 +1,5 @@
 class V1::UsersController < V1::BaseController
-  before_action :set_user, except: [:index, :create]
+  before_action :set_user, except: [:index, :create, :me]
   before_action :set_group, only: :invite
   before_action :check_if_current_user_can_invite_on_group, only: :invite
 
@@ -9,6 +9,11 @@ class V1::UsersController < V1::BaseController
   end
 
   def show
+  end
+
+  def me
+    @user = current_user
+    render :show, status: :ok,  location: @user
   end
 
   def update
