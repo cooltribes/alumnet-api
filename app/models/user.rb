@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
   has_many :groups, through: :memberships
   has_many :posts
   has_one :profile
+  has_many :likes
 
   ### Validations
   validates_presence_of :email
@@ -39,6 +40,10 @@ class User < ActiveRecord::Base
     else
       false
     end
+  end
+
+  def has_like_in?(likeable)
+    likes.exists?(likeable: likeable)
   end
 
 

@@ -8,6 +8,9 @@ json.user do
   end
 end
 
+json.likes_count post.likes_count
+json.you_like post.has_like_for?(current_user)
+
 condition = post.user == current_user
 json.permissions do
   json.canEdit = condition

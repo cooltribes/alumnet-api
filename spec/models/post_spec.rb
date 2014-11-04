@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe Post, :type => :model do
   it { should belong_to(:user) }
   it { should belong_to(:postable) }
+  it { should have_many(:likes) }
+
 
   describe "acts_as_commentable" do
     it "should have methods to handle comments" do

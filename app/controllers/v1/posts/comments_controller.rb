@@ -32,6 +32,20 @@ class V1::Posts::CommentsController < V1::BaseController
     head :no_content
   end
 
+  def like
+    like = @comment.add_like_by(current_user)
+    if like.valid?
+      render json: like, status: :ok
+    else
+      render json: { errors: like.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def unlike
+    response = @comment.remove_like_of(current_user)
+    render json: { ok: response}, status: :ok
+  end
+
   private
 
   def set_post
