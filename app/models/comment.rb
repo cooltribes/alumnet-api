@@ -1,7 +1,9 @@
 class Comment < ActiveRecord::Base
   include ActsAsCommentable::Comment
+  include LikeableMethods
 
   ### Relations
+  has_many :likes, as: :likeable
   belongs_to :commentable, polymorphic: true
   belongs_to :user
 

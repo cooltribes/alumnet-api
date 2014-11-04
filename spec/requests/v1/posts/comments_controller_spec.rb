@@ -85,4 +85,34 @@ describe V1::Posts::CommentsController, type: :request do
     end
   end
 
+  describe "POST /posts/:post_id/commment/:id/like" do
+    context "without like from user" do
+      it "add like a comment" do
+        user = User.make!
+        group = Group.make!
+        post_model = Post.make!(postable: group)
+        comment = Comment.make!(commentable: post_model)
+        expect {
+          post like_post_comment_path(post_model, comment), {}, basic_header(user.api_token)
+        }.to change(comment, :likes_count).by(1)
+        expect(response.status).to eq 200
+        expect(json).to have_key("user_id")
+      end
+    end
+
+    context "with like from user" do
+      it "return a json with error" do
+        user = User.make!
+        group = Group.make!
+        post_model = Post.make!(postable: group)
+        comment = Comment.make!(commentable: post_model)
+        Like.make!(user: user, likeable: comment)
+        expect {
+          post like_post_comment_path(post_model, comment), {}, basic_header(user.api_token)
+        }.to change(comment, :likes_count).by(0)
+        expect(response.status).to eq 422
+        expect(json['errors']).to eq(["User already made like!"])
+      end
+    end
+  end
 end
