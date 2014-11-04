@@ -19,7 +19,10 @@ Rails.application.routes.draw do
     resources :posts, only: :show do
       post :like, on: :member
       post :unlike, on: :member
-      resources :comments, controller: 'posts/comments'
+      resources :comments, controller: 'posts/comments' do
+        post :like, on: :member
+        post :unlike, on: :member
+      end
     end
   end
 end
