@@ -38,6 +38,15 @@ describe V1::UsersController, type: :request do
     end
   end
 
+  describe "GET /users/me" do
+    it "return the current user" do
+      get me_users_path, {}, basic_header(admin.api_token)
+      expect(response.status).to eq 200
+      expect(json).to have_key('email')
+      expect(json['email']).to eq(admin.email)
+    end
+  end
+
   describe "PUT /users/1" do
     it "edit a user" do
       user = User.make!
