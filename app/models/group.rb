@@ -6,6 +6,7 @@ class Group < ActiveRecord::Base
   ### Relations
   has_many :memberships
   has_many :users, through: :memberships
+  has_many :posts, as: :postable
 
   ### Validations
   validates_presence_of :name, :description, :avatar #:group_type
@@ -18,6 +19,10 @@ class Group < ActiveRecord::Base
 
   def has_children?
     children.any?
+  end
+
+  def get_group_type_info
+    { text: group_type, value: Group.group_types[group_type] }
   end
 
   def creator

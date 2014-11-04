@@ -26,4 +26,22 @@ namespace :data_fixture do
     Membership.create_membership_for_creator(group_a, user_a)
     Membership.create_membership_for_creator(group_b, user_b)
   end
+
+  desc "create all date to test group module"
+  task group_data: :environment do
+    require 'machinist'
+    require Rails.root.join("spec/support/blueprints")
+    user_a = User.make!(email: "fcoarmandomendoza@gmail.com", name: "Armando")
+    user_b = User.make!
+    user_c = User.make!
+    group_a = Group.make!(creator_user_id: user_a.id)
+    group_b = Group.make!(creator_user_id: user_b.id)
+    group_c = Group.make!(creator_user_id: user_c.id)
+    Membership.create_membership_for_creator(group_a, user_a)
+    Membership.create_membership_for_creator(group_b, user_b)
+    Membership.create_membership_for_creator(group_c, user_c)
+    post = Post.make!(postable: group_a, user: user_a)
+    Comment.make!(commentable: post, user: user_b)
+    Comment.make!(commentable: post, user: user_c)
+  end
 end

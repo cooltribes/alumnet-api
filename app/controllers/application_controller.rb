@@ -2,8 +2,8 @@ class ApplicationController < ActionController::API
   include ActionController::ImplicitRender
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
-  before_filter :authenticate
-  before_filter :set_request_format
+  before_action :authenticate
+  before_action :set_request_format
 
   def current_user
     @current_user

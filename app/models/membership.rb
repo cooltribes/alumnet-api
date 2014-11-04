@@ -35,6 +35,7 @@ class Membership < ActiveRecord::Base
     membership = create!(mode: "request", user: user, group: group)
     if group.open?
       membership.approved!
+      Notification.notify_join_to_users(user, group)
       # send notificacion to user and group.admins
     elsif group.closed?
       #send notificacion to user and group.admins

@@ -24,3 +24,23 @@ Group.blueprint(:with_parent_and_childen) do
   parent { Group.make! }
   children { [Group.make!, Group.make!] }
 end
+
+Group.blueprint(:all_relations) do
+  name { "Group #{sn}"}
+  description {  Faker::Lorem.sentence }
+  avatar { File.open("#{Rails.root}/spec/fixtures/avatar_test.jpg") }
+  group_type { 1 }
+  parent { Group.make! }
+  children { [Group.make!, Group.make!] }
+  posts(3)
+end
+
+Post.blueprint do
+  body { Faker::Lorem.paragraph }
+  user { User.make! }
+end
+
+Comment.blueprint do
+  comment { Faker::Lorem.paragraph }
+  user { User.make! }
+end

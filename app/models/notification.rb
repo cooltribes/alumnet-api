@@ -9,6 +9,15 @@ class Notification
     )
   end
 
+  def self.notify_join_to_users(users, group)
+    recipients = users.is_a?(Array) ? users : [users]
+    Mailboxer::Notification.notify_all(
+      recipients,
+      "You've joined to #{group.name}!",
+      "Greetings! You've joined to #{group.name}"
+    )
+  end
+
   def self.notify_invitation_to_admins(admins, user, group)
     recipients = users.is_a?(Array) ? users : [users]
     MailBoxer::Notification.notify_all(

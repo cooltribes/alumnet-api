@@ -1,7 +1,7 @@
 class V1::UsersController < V1::BaseController
-  before_filter :set_user, except: [:index, :create]
-  before_filter :set_group, only: :invite
-  before_filter :check_if_current_user_can_invite_on_group, only: :invite
+  before_action :set_user, except: [:index, :create]
+  before_action :set_group, only: :invite
+  before_action :check_if_current_user_can_invite_on_group, only: :invite
 
   def index
     @q = User.search(params[:q])
@@ -9,15 +9,6 @@ class V1::UsersController < V1::BaseController
   end
 
   def show
-  end
-
-  def create
-    @user = User.new(user_params)
-    if @user.save
-      render :show, status: :created,  location: @user
-    else
-      render json: @user.errors, status: :unprocessable_entity
-    end
   end
 
   def update
@@ -34,7 +25,7 @@ class V1::UsersController < V1::BaseController
   end
 
   def invite
-    unless membership = Membership.find_by(user_id: @user, group_id: @group.id)
+    unless membership = Membership.find_by(user_id: @user.id, group_id: @group.id)
       Membership.create_membership_for_invitation(@group, @user)
       render json: { user_id: @user.id, group_id: @group.id }
     else

@@ -38,27 +38,6 @@ describe V1::UsersController, type: :request do
     end
   end
 
-  describe "POST /users" do
-    context "with valid attributes" do
-      it "create a user" do
-        expect {
-          post users_path, valid_attributes, basic_header(admin.api_token)
-        }.to change(User, :count).by(1)
-        expect(response.status).to eq 201
-      end
-    end
-
-    context "with invalid attributes" do
-      it "return the errors in format json" do
-        expect {
-          post users_path, invalid_attributes, basic_header(admin.api_token)
-        }.to change(User, :count).by(0)
-        expect(json).to eq({"email"=>["can't be blank"]})
-        expect(response.status).to eq 422
-      end
-    end
-  end
-
   describe "PUT /users/1" do
     it "edit a user" do
       user = User.make!
