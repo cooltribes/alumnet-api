@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   has_many :memberships
   has_many :groups, through: :memberships
   has_many :posts
+  has_one :profile
 
   ### Validations
   validates_presence_of :email
@@ -14,6 +15,7 @@ class User < ActiveRecord::Base
 
   ### Callbacks
   before_save :ensure_api_token
+  before_create :create_profile
 
   ### Instance Methods
   def mailboxer_email(object)
@@ -24,6 +26,10 @@ class User < ActiveRecord::Base
     if api_token.blank?
       self.api_token = generate_api_token
     end
+  end
+  def create_profile
+    # self.profile.build_other
+    self.build_profile
   end
 
   def can_invite_on_group?(group)

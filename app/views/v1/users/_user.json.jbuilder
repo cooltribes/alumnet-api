@@ -8,3 +8,7 @@ end
 json.groups do
   json.array! user.groups.pluck(:id)
 end
+
+json.profile do
+  user.profile
+end
