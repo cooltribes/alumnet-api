@@ -28,10 +28,6 @@ class User < ActiveRecord::Base
       self.api_token = generate_api_token
     end
   end
-  def create_profile
-    # self.profile.build_other
-    self.build_profile
-  end
 
   def can_invite_on_group?(group)
     membership = memberships.find_by(group_id: group.id)
@@ -55,5 +51,9 @@ class User < ActiveRecord::Base
       return token = SecureRandom.urlsafe_base64(30).tr('lIO0', 'sxyz')
     end while User.exists?(api_token: token)
 
+  end
+
+  def create_profile
+    build_profile
   end
 end

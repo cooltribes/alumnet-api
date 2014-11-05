@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     resources :users, except: :create do
       get :me, on: :collection
       post :invite, on: :member
+      resource :profile, only: [:show, :update]
       resources :posts, controller: 'users/posts'
     end
 
