@@ -24,8 +24,7 @@ describe V1::ProfilesController, type: :request do
       profile = user.profile
       get user_profile_path(user), {}, basic_header(user.api_token)
       expect(response.status).to eq 200
-      expect(json["user"]).to eq({"name"=> user.name, "email"=> user.email})
-      expect(json["profile"]).to eq({"first_name"=> profile.first_name,
+      expect(json).to eq({"first_name"=> profile.first_name, "id" => profile.id,
         "last_name" => profile.last_name, "born" => profile.born.strftime("%Y-%m-%d"),
         "register_step" => profile.register_step})
     end
@@ -36,11 +35,8 @@ describe V1::ProfilesController, type: :request do
     it "return the user profile" do
       put user_profile_path(user), { first_name: "Armando" }, basic_header(user.api_token)
       expect(response.status).to eq 200
-      expect(json["user"]).to eq({"name"=> user.name, "email"=> user.email})
-      expect(json["profile"]).to eq({"first_name"=> "Armando",
+      expect(json).to eq({"first_name"=> "Armando", "id" => user.profile.id,
         "last_name" => nil, "born" => nil, "register_step" => 0})
     end
   end
-
-
 end
