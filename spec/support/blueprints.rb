@@ -12,7 +12,7 @@ end
 Profile.blueprint do
   first_name { Faker::Name.first_name }
   last_name { Faker::Name.last_name }
-  # avatar { File.open("#{Rails.root}/spec/fixtures/user_test.png") }
+  avatar { File.open("#{Rails.root}/spec/fixtures/user_test.png") }
   born { Date.parse("21/08/1980") }
   register_step { 0 }
   user { User.make! }
