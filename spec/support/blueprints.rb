@@ -21,14 +21,14 @@ end
 Group.blueprint do
   name { "Group #{sn}"}
   description { Faker::Lorem.sentence }
-  avatar { File.open("#{Rails.root}/spec/fixtures/avatar_test.jpg") }
+  cover { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
   group_type { 1 }
 end
 
 Group.blueprint(:with_parent_and_childen) do
   name { "Group #{sn}"}
   description {  Faker::Lorem.sentence }
-  avatar { File.open("#{Rails.root}/spec/fixtures/avatar_test.jpg") }
+  cover { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
   group_type { 1 }
   parent { Group.make! }
   children { [Group.make!, Group.make!] }
@@ -37,7 +37,7 @@ end
 Group.blueprint(:all_relations) do
   name { "Group #{sn}"}
   description {  Faker::Lorem.sentence }
-  avatar { File.open("#{Rails.root}/spec/fixtures/avatar_test.jpg") }
+  cover { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
   group_type { 1 }
   parent { Group.make! }
   children { [Group.make!, Group.make!] }

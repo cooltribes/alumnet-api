@@ -3,16 +3,16 @@ require 'rails_helper'
 describe V1::GroupsController, type: :request do
   let!(:admin) { User.make! }
 
-  def avatar_file
-    fixture_file_upload("#{Rails.root}/spec/fixtures/avatar_test.jpg")
+  def cover_file
+    fixture_file_upload("#{Rails.root}/spec/fixtures/cover_test.jpg")
   end
 
   def valid_attributes
-    { name: "Group 1", description: "short description", avatar: avatar_file }
+    { name: "Group 1", description: "short description", cover: cover_file }
   end
 
   def invalid_attributes
-    { name: "", description: "short description", avatar: avatar_file }
+    { name: "", description: "short description", cover: cover_file }
   end
 
   describe "GET /groups" do
