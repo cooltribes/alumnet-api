@@ -19,6 +19,10 @@ class User < ActiveRecord::Base
   before_create :create_profile
 
   ### Instance Methods
+  def name
+    "#{profile.first_name} #{profile.last_name}"
+  end
+
   def mailboxer_email(object)
     email
   end

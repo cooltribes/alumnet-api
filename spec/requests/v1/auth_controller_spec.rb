@@ -8,12 +8,13 @@ describe V1::AuthController, type: :request do
   end
 
   def valid_attributes
-    { email: "test_email@gmail.com", password: "12345678", password_confirmation: "12345678",
-      name: "name test" }
+    { user: { email: "test_email@gmail.com", password: "12345678", password_confirmation: "12345678" },
+      profile: { first_name: "Armando", last_name: "Mendoza"} }
   end
 
   def invalid_attributes
-    { email: "", password: "12345678", password_confirmation: "12345678" }
+    { user: { email: "", password: "12345678", password_confirmation: "12345678" },
+      profile: { first_name: "Armando", last_name: "Mendoza"} }
   end
 
   describe "POST /sign_in" do
@@ -50,7 +51,10 @@ describe V1::AuthController, type: :request do
           post register_path, valid_attributes, header
         }.to change(User, :count).by(1)
         expect(response.status).to eq 201
-        expect(json).to have_key('email')
+        expect(json['email']).to eq("test_email@gmail.com")
+        user = User.find_by(email: "test_email@gmail.com")
+        expect(user.profile.first_name).to eq("Armando")
+        expect(user.profile.last_name).to eq("Mendoza")
       end
     end
 

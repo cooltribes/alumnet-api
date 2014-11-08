@@ -3,15 +3,6 @@ require 'rails_helper'
 describe V1::ProfilesController, type: :request do
   let!(:user) { User.make!(password: "12345678") }
 
-  def valid_attributes
-    { email: "test_email@gmail.com", password: "12345678", password_confirmation: "12345678",
-      name: "name test" }
-  end
-
-  def invalid_attributes
-    { email: "", password: "12345678", password_confirmation: "12345678" }
-  end
-
   describe "GET /users/:user_id:/profile" do
     before do
       user.profile.first_name = "First Name"
