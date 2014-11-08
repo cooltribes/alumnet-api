@@ -7,6 +7,7 @@ class V1::ProfilesController < V1::BaseController
 
   def update
     if @profile.update(profile_params)
+      @profile.update_step
       render :show, status: :ok
     else
       render json: @profile.errors, status: :unprocessable_entity
@@ -24,6 +25,8 @@ class V1::ProfilesController < V1::BaseController
     end
 
     def profile_params
-      params.permit(:first_name, :last_name, :avatar, :born, :register_step)
+      if @profile.initial?
+        params.permit(:first_name, :last_name, :avatar, :born)
+      end
     end
 end

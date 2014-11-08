@@ -12,6 +12,7 @@ class V1::UserController < V1::BaseController
 
   def update_profile
     if @profile.update(profile_params)
+      @profile.update_step
       render 'v1/profiles/show', status: :ok
     else
       render json: @profile.errors, status: :unprocessable_entity

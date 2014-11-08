@@ -36,7 +36,7 @@ describe V1::UserController, type: :request do
       put me_profile_path, { first_name: "Armando", last_name: "Mendoza" }, basic_header(user.api_token)
       expect(response.status).to eq 200
       expect(json).to eq({"first_name"=> "Armando", "id" => user.profile.id,
-        "last_name" => "Mendoza", "born" => nil, "register_step" => 0})
+        "last_name" => "Mendoza", "born" => nil, "register_step" => "profile"})
     end
   end
 
