@@ -13,6 +13,10 @@ class Group < ActiveRecord::Base
 
   ### Instance Methods
 
+  def members
+    users.where("memberships.approved = ?", 1)
+  end
+
   def has_parent?
     parent.present?
   end

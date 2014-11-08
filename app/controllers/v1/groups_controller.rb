@@ -6,6 +6,11 @@ class V1::GroupsController < V1::BaseController
     @groups = @q.result
   end
 
+  def members
+    @q = @group.members.search(params[:q])
+    @members = @q.result
+  end
+
   def show
   end
 

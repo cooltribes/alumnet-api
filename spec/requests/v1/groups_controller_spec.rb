@@ -45,6 +45,22 @@ describe V1::GroupsController, type: :request do
     end
   end
 
+  describe "GET /groups/:id/members" do
+    it "return all members of group" do
+      group = Group.make!
+      creator = User.make!
+      Membership.create_membership_for_creator(group, creator)
+      3.times do
+        user = User.make!
+        Membership.create_membership_for_request(group, user)
+      end
+      get members_group_path(group), {}, basic_header(creator.api_token)
+      expect(response.status).to eq 200
+      expect(json.count).to eq(4)
+      #expect(valid_schema('group', json)).to be_empty
+    end
+  end
+
   describe "POST /groups/:id/add_group" do
     it "create a new group on given group" do
       group = Group.make!

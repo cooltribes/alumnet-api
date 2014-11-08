@@ -1,6 +1,5 @@
 class User < ActiveRecord::Base
   has_secure_password
-  mount_uploader :avatar, AvatarUploader
   acts_as_messageable
 
   ### Relations
@@ -21,6 +20,10 @@ class User < ActiveRecord::Base
   ### Instance Methods
   def name
     "#{profile.first_name} #{profile.last_name}"
+  end
+
+  def avatar
+    profile.avatar if profile.present?
   end
 
   def mailboxer_email(object)
@@ -58,6 +61,6 @@ class User < ActiveRecord::Base
   end
 
   def create_profile
-    build_profile
+    build_profile unless profile.present?
   end
 end
