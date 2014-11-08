@@ -5,8 +5,11 @@ Rails.application.routes.draw do
     post '/sign_in', to: 'auth#sign_in', as: :sign_in
     post '/register', to: 'auth#register', as: :register
 
+    get '/me', to: 'user#me', as: :me
+    get '/me/profile', to: 'user#profile', as: :me_profile
+    put '/me/profile', to: 'user#update_profile'
+
     resources :users, except: :create do
-      get :me, on: :collection
       post :invite, on: :member
       resource :profile, only: [:show, :update]
       resources :posts, controller: 'users/posts'

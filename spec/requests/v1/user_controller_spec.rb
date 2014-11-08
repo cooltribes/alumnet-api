@@ -1,9 +1,18 @@
 require 'rails_helper'
 
-describe V1::ProfilesController, type: :request do
-  let!(:user) { User.make!(password: "12345678") }
+describe V1::UserController, type: :request do
+  let!(:user) { User.make! }
 
-  describe "GET /users/:user_id:/profile" do
+  describe "GET /me" do
+    it "return the current user" do
+      get me_path, {}, basic_header(user.api_token)
+      expect(response.status).to eq 200
+      expect(json).to have_key('email')
+      expect(json['email']).to eq(user.email)
+    end
+  end
+
+  describe "GET /me/profile" do
     before do
       user.profile.first_name = "First Name"
       user.profile.last_name = "Last Name"
@@ -13,7 +22,7 @@ describe V1::ProfilesController, type: :request do
 
     it "return the user profile" do
       profile = user.profile
-      get user_profile_path(user), {}, basic_header(user.api_token)
+      get me_profile_path, {}, basic_header(user.api_token)
       expect(response.status).to eq 200
       expect(json).to eq({"first_name"=> profile.first_name, "id" => profile.id,
         "last_name" => profile.last_name, "born" => profile.born.strftime("%Y-%m-%d"),
@@ -21,13 +30,14 @@ describe V1::ProfilesController, type: :request do
     end
   end
 
-  describe "PUT /users/:user_id:/profile" do
+  describe "PUT /me/profile" do
 
     it "update the user profile" do
-      put user_profile_path(user), { first_name: "Armando", last_name: "Mendoza" }, basic_header(user.api_token)
+      put me_profile_path, { first_name: "Armando", last_name: "Mendoza" }, basic_header(user.api_token)
       expect(response.status).to eq 200
       expect(json).to eq({"first_name"=> "Armando", "id" => user.profile.id,
         "last_name" => "Mendoza", "born" => nil, "register_step" => 0})
     end
   end
+
 end

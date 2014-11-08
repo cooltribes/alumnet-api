@@ -6,6 +6,7 @@ RSpec.describe User, type: :model do
   it { should have_many(:groups).through(:memberships) }
   it { should have_many(:posts) }
   it { should have_many(:likes) }
+  it { should have_one(:profile) }
 
   describe "callbacks" do
     it "should set a api_key on save" do

@@ -11,11 +11,6 @@ class V1::UsersController < V1::BaseController
   def show
   end
 
-  def me
-    @user = current_user
-    render :show, status: :ok,  location: @user
-  end
-
   def update
     if @user.update(user_params)
       render :show, status: :ok,  location: @user
