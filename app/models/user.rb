@@ -4,10 +4,13 @@ class User < ActiveRecord::Base
 
   ### Relations
   has_many :memberships
+  has_many :friendships
   has_many :groups, through: :memberships
+  has_many :friends, through: :friendships
   has_many :posts
   has_one :profile
   has_many :likes
+
 
   ### Validations
   validates_presence_of :email
