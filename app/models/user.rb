@@ -5,8 +5,10 @@ class User < ActiveRecord::Base
   ### Relations
   has_many :memberships
   has_many :friendships
+  has_many :inverse_friendships, class_name: "Friendship", foreign_key: "friend_id"
   has_many :groups, through: :memberships
   has_many :friends, through: :friendships
+  has_many :inverse_friends, through: :inverse_friendships, source: :user
   has_many :posts
   has_one :profile
   has_many :likes
@@ -39,6 +41,24 @@ class User < ActiveRecord::Base
     end
   end
 
+  ### about friends
+  def my_friends
+    accepted_friends | accepted_inverse_friends
+  end
+
+  def accepted_friends
+    friends.where("friendships.accepted = ?", true)
+  end
+
+  def accepted_inverse_friends
+    inverse_friends.where("friendships.accepted = ?", true)
+  end
+
+  def add_to_friends(user)
+    friendships.build(friend_id: user.id)
+  end
+
+  ### about groups
   def can_invite_on_group?(group)
     membership = memberships.find_by(group_id: group.id)
     if membership

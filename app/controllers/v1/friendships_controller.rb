@@ -2,7 +2,7 @@ class V1::FriendshipsController < V1::BaseController
   before_action :set_and_check_user
 
   def create
-    @friendship = current_user.friendships.build(friend_id: @user.id)
+    @friendship = current_user.add_to_friends(@user)
     if @friendship.save
       render :friendship, status: :created
     else
