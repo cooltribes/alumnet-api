@@ -55,3 +55,15 @@ end
 Like.blueprint do
   user { User.make! }
 end
+
+Friendship.blueprint(:accepted) do
+  user { User.make! }
+  friend { User.make! }
+  accepted { true }
+end
+
+Friendship.blueprint(:not_accepted) do
+  user { User.make! }
+  friend { User.make! }
+  accepted { false }
+end

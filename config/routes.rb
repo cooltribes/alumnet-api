@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       post :invite, on: :member
       resource :profile, only: [:show, :update]
       resources :posts, controller: 'users/posts'
+      resources :friends, controller: 'users/friends'
     end
 
     resources :groups do

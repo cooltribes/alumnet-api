@@ -42,6 +42,12 @@ class User < ActiveRecord::Base
   end
 
   ### about friends
+  def find_friends(q)
+    accepted_friends_search = accepted_friends.search(q)
+    accepted_inverse_friends_search = accepted_inverse_friends.search(q)
+    accepted_friends_search.result | accepted_inverse_friends_search.result
+  end
+
   def my_friends
     accepted_friends | accepted_inverse_friends
   end
