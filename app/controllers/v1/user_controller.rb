@@ -30,6 +30,6 @@ class V1::UserController < V1::BaseController
     end
 
     def profile_params
-      params.permit(:first_name, :last_name, :avatar, :born, :register_step)
+      params.permit(:first_name, :last_name, :avatar, :born, :birth_city, :residence_city, :register_step)
     end
 end
