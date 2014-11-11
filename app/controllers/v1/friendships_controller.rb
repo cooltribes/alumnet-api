@@ -1,10 +1,14 @@
 class V1::FriendshipsController < V1::BaseController
-  before_action :set_and_check_user
+  before_action :set_and_check_user, only: :create
+
+  def index
+    @friendships = current_user.find_friendships(params[:filter])
+  end
 
   def create
     @friendship = current_user.add_to_friends(@user)
     if @friendship.save
-      render :friendship, status: :created
+      render :show, status: :created
     else
       render json: @friendship.errors, status: :unprocessable_entity
     end

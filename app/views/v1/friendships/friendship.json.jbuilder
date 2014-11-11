@@ -1,1 +1,0 @@
-json.(@friendship, :id, :user_id, :friend_id, :accepted)

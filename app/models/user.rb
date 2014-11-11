@@ -13,7 +13,6 @@ class User < ActiveRecord::Base
   has_one :profile
   has_many :likes
 
-
   ### Validations
   validates_presence_of :email
   ## TODO add format validation for email.
@@ -42,6 +41,16 @@ class User < ActiveRecord::Base
   end
 
   ### about friends
+  def find_friendships(filter)
+    if filter == "sent"
+      friendships
+    elsif filter == "received"
+      inverse_friendships
+    else
+      friendships | inverse_friendships
+    end
+  end
+
   def find_friends(q)
     accepted_friends_search = accepted_friends.search(q)
     accepted_inverse_friends_search = accepted_inverse_friends.search(q)
