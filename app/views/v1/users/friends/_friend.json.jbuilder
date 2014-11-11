@@ -1,0 +1,1 @@
+json.(friend, :id, :email, :name, :avatar)

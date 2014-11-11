@@ -4,7 +4,11 @@ class User < ActiveRecord::Base
 
   ### Relations
   has_many :memberships
+  has_many :friendships
+  has_many :inverse_friendships, class_name: "Friendship", foreign_key: "friend_id"
   has_many :groups, through: :memberships
+  has_many :friends, through: :friendships
+  has_many :inverse_friends, through: :inverse_friendships, source: :user
   has_many :posts
   has_one :profile
   has_many :likes
@@ -36,6 +40,54 @@ class User < ActiveRecord::Base
     end
   end
 
+  ### about friends
+  def friendship_with(user)
+    if friendships.find_by(friend_id: user.id)
+      "sent"
+    elsif inverse_friendships.find_by(user_id: user.id)
+      "received"
+    else
+      "none"
+    end
+  end
+
+  def is_friend_of?(user)
+    accepted_friends.exists?(id: user.id) || accepted_inverse_friends.exists?(id: user.id)
+  end
+
+  def find_friendships(filter)
+    if filter == "sent"
+      friendships
+    elsif filter == "received"
+      inverse_friendships
+    else
+      friendships | inverse_friendships
+    end
+  end
+
+  def find_friends(q)
+    accepted_friends_search = accepted_friends.search(q)
+    accepted_inverse_friends_search = accepted_inverse_friends.search(q)
+    accepted_friends_search.result | accepted_inverse_friends_search.result
+  end
+
+  def my_friends
+    accepted_friends | accepted_inverse_friends
+  end
+
+  def accepted_friends
+    friends.where("friendships.accepted = ?", true)
+  end
+
+  def accepted_inverse_friends
+    inverse_friends.where("friendships.accepted = ?", true)
+  end
+
+  def add_to_friends(user)
+    friendships.build(friend_id: user.id)
+  end
+
+  ### about groups
   def can_invite_on_group?(group)
     membership = memberships.find_by(group_id: group.id)
     if membership
