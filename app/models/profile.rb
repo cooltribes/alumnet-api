@@ -7,7 +7,7 @@ class Profile < ActiveRecord::Base
 
   ###Validations
   validates_presence_of :user_id
-  validates_presence_of :first_name, :last_name, on: :update
+  validates_presence_of :first_name, on: :update
 
   ###Instance Methods
 

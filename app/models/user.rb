@@ -44,7 +44,7 @@ class User < ActiveRecord::Base
   def friendship_with(user)
     if friendships.find_by(friend_id: user.id)
       "sent"
-    elsif inverse_friendships.find_by(user: user.id)
+    elsif inverse_friendships.find_by(user_id: user.id)
       "received"
     else
       "none"
