@@ -5,7 +5,7 @@ class V1::UsersController < V1::BaseController
 
   def index
     @q = User.search(params[:q])
-    @users = @q.result
+    @users = @q.result.where.not(id: current_user.id) #conditional when is admin.
   end
 
   def show

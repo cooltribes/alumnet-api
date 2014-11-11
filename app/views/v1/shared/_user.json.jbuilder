@@ -12,3 +12,5 @@ end
 json.profile do
   user.profile
 end
+
+json.friendship user.friendship_with(@current_user)

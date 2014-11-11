@@ -41,6 +41,20 @@ class User < ActiveRecord::Base
   end
 
   ### about friends
+  def friendship_with(user)
+    if friendships.find_by(friend_id: user.id)
+      "sent"
+    elsif inverse_friendships.find_by(user: user.id)
+      "received"
+    else
+      "none"
+    end
+  end
+
+  def is_friend_of?(user)
+    accepted_friends.exists?(id: user.id) || accepted_inverse_friends.exists?(id: user.id)
+  end
+
   def find_friendships(filter)
     if filter == "sent"
       friendships
