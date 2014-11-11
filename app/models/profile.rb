@@ -4,10 +4,14 @@ class Profile < ActiveRecord::Base
 
   ###Relations
   belongs_to :user
+  has_many :contact_infos
 
   ###Validations
   validates_presence_of :user_id
   validates_presence_of :first_name, on: :update
+
+  ###Nested Atrributes
+  accepts_nested_attributes_for :contact_infos, allow_destroy: true
 
   ###Instance Methods
 

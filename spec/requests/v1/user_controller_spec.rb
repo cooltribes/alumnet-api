@@ -26,7 +26,7 @@ describe V1::UserController, type: :request do
       expect(response.status).to eq 200
       expect(json).to eq({"first_name"=> profile.first_name, "id" => profile.id,
         "last_name" => profile.last_name, "born" => profile.born.strftime("%Y-%m-%d"),
-        "register_step" => profile.register_step})
+        "register_step" => profile.register_step, "birth_city" => nil, "residence_city" => nil})
     end
   end
 
@@ -35,8 +35,8 @@ describe V1::UserController, type: :request do
     it "update the user profile" do
       put me_profile_path, { first_name: "Armando", last_name: "Mendoza" }, basic_header(user.api_token)
       expect(response.status).to eq 200
-      expect(json).to eq({"first_name"=> "Armando", "id" => user.profile.id,
-        "last_name" => "Mendoza", "born" => nil, "register_step" => "profile"})
+      expect(json).to eq({"first_name"=> "Armando", "id" => user.profile.id, "residence_city" => nil,
+        "last_name" => "Mendoza", "born" => nil, "register_step" => "profile", "birth_city" => nil})
     end
   end
 
