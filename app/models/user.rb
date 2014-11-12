@@ -57,9 +57,9 @@ class User < ActiveRecord::Base
 
   def find_friendships(filter)
     if filter == "sent"
-      friendships
+      friendships.where(accepted: false)
     elsif filter == "received"
-      inverse_friendships
+      inverse_friendships.where(accepted: false)
     else
       friendships | inverse_friendships
     end

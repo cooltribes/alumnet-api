@@ -3,6 +3,7 @@ class V1::FriendshipsController < V1::BaseController
 
   def index
     @friendships = current_user.find_friendships(params[:filter])
+    @friendship_type = params[:filter]
   end
 
   def create
