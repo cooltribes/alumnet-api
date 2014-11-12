@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     get '/me/profile', to: 'user#profile', as: :me_profile
     put '/me/profile', to: 'user#update_profile'
 
-    resources :friendships, only: [:index, :create]
+    resources :friendships, except: :show
 
     resources :users, except: :create do
       post :invite, on: :member

@@ -3,12 +3,15 @@ class Friendship < ActiveRecord::Base
   belongs_to :user
   belongs_to :friend, class_name: "User"
 
-  validate :existence_of_friendship
+  validate :existence_of_friendship, on: :create
 
   ###Instance Methods
 
   def accept!
-    toggle(:accepted)
+    unless accepted?
+      update_column(:accepted, true)
+      touch(:accepted_at)
+    end
   end
 
   private

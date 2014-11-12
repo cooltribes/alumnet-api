@@ -34,4 +34,16 @@ describe V1::UsersController, type: :request do
       expect(json["user_id"]).to eq(user.id)
     end
   end
+
+  describe "PUT /friendships/:id" do
+    it "should update a friendship to accepted" do
+      requester = User.make!
+      friend = User.make!
+      friendship = Friendship.make!(:not_accepted, user: requester, friend: friend)
+      expect(friendship).to_not be_accepted
+      put friendship_path(friendship), {}, basic_header(friend.api_token)
+      friendship.reload
+      expect(friendship).to be_accepted
+    end
+  end
 end

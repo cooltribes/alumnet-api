@@ -57,11 +57,11 @@ class User < ActiveRecord::Base
 
   def find_friendships(filter)
     if filter == "sent"
-      friendships.where(accepted: false)
+      pending_friendships
     elsif filter == "received"
-      inverse_friendships.where(accepted: false)
+      pending_inverse_friendships
     else
-      friendships | inverse_friendships
+      pending_friendships | pending_inverse_friendships
     end
   end
 
@@ -81,6 +81,22 @@ class User < ActiveRecord::Base
 
   def accepted_inverse_friends
     inverse_friends.where("friendships.accepted = ?", true)
+  end
+
+  def accepted_friendships
+    friendships.where(accepted: true)
+  end
+
+  def accepted_inverse_friendships
+    inverse_friendships.where(accepted: true)
+  end
+
+  def pending_friendships
+    friendships.where(accepted: false)
+  end
+
+  def pending_inverse_friendships
+    inverse_friendships.where(accepted: false)
   end
 
   def add_to_friends(user)

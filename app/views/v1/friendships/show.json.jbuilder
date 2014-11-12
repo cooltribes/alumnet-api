@@ -1,1 +1,1 @@
-json.partial! 'friendship', friendship: @friendship
+json.partial! 'friendship', friendship: @friendship, friendship_type: nil

@@ -15,6 +15,12 @@ class V1::FriendshipsController < V1::BaseController
     end
   end
 
+  def update
+    @friendship = current_user.pending_inverse_friendships.find(params[:id])
+    @friendship.accept! #if @friendship.friend_id == current_user.id #this a policy refactor!
+    render :show, status: :ok
+  end
+
   private
     def set_and_check_user
       unless @user = User.find_by(id: params[:friend_id])
