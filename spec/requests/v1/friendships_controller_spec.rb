@@ -9,7 +9,7 @@ describe V1::UsersController, type: :request do
       3.times { Friendship.make!(:not_accepted, user: user ) }
       get friendships_path, { filter: "sent" }, basic_header(user.api_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(5)
+      expect(json.count).to eq(3)
     end
 
     it "with filter='received' return a friendships filtered" do
@@ -17,7 +17,7 @@ describe V1::UsersController, type: :request do
       2.times { Friendship.make!(:not_accepted, friend: user ) }
       get friendships_path, { filter: "received" }, basic_header(user.api_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(3)
+      expect(json.count).to eq(2)
     end
   end
 

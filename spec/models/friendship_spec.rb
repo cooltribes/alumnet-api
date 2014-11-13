@@ -12,9 +12,9 @@ RSpec.describe Friendship, :type => :model do
         friend_one = User.make!
         friend_two = User.make!
         friend_three = User.make!
-        user.add_to_friends(friend_one).accept!.save
-        user.add_to_friends(friend_two).accept!.save
-        friend_three.add_to_friends(user).accept!.save ##inverse_friend
+        user.add_to_friends(friend_one).tap { |f| f.save! }.accept!
+        user.add_to_friends(friend_two).tap { |f| f.save! }.accept!
+        friend_three.add_to_friends(user).tap { |f| f.save! }.accept! ##inverse_friend
         expect(user.my_friends).to match_array([friend_one, friend_two, friend_three])
       end
     end
