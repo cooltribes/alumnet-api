@@ -67,3 +67,16 @@ Friendship.blueprint(:not_accepted) do
   friend { User.make! }
   accepted { false }
 end
+
+Country.blueprint do
+  cc_fips { sn }
+  cc_iso { sn }
+  tld { '.xx' }
+  name { "Country #{sn}"}
+  3.times { |x| City.make!(cc_fips: object.cc_fips, name: "City #{x} of #{object.name}") }
+end
+
+City.blueprint do
+  cc_fips { sn }
+  name { "City #{sn}" }
+end

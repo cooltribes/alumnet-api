@@ -33,5 +33,9 @@ Rails.application.routes.draw do
         post :unlike, on: :member
       end
     end
+
+    resources :countries, only: [:index, :show] do
+      get :cities, on: :member
+    end
   end
 end
