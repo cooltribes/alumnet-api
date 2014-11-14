@@ -2,7 +2,7 @@ class V1::FriendshipsController < V1::BaseController
   before_action :set_and_check_user, only: :create
 
   def index
-    @friendships = current_user.find_pending_friendships(params[:filter])
+    @friendships = current_user.get_pending_friendships(params[:filter])
     @friendship_type = params[:filter]
   end
 
@@ -19,6 +19,13 @@ class V1::FriendshipsController < V1::BaseController
     @friendship = current_user.pending_inverse_friendships.find(params[:id])
     @friendship.accept! #if @friendship.friend_id == current_user.id #this a policy refactor!
     render :show, status: :ok
+  end
+
+  def destroy
+    @friendship = Friendship.find(params[:id])
+    #if @friendship.friend_id == current_user.id || @friendship.user_id == current_user.id
+    @friendship.destroy
+    head :no_content
   end
 
   private

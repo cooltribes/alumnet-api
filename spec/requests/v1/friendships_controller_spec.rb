@@ -46,4 +46,14 @@ describe V1::UsersController, type: :request do
       expect(friendship).to be_accepted
     end
   end
+
+  describe "DELETE /friendships/:id" do
+    it "delete a friendship of current_user" do
+      friendship = Friendship.make!(:not_accepted, user: user)
+      expect {
+        delete friendship_path(friendship), {}, basic_header(user.api_token)
+      }.to change(Friendship, :count).by(-1)
+      expect(response.status).to eq 204
+    end
+  end
 end

@@ -2,7 +2,7 @@ class V1::Users::FriendsController < V1::BaseController
   before_action :set_user
 
   def index
-    @friends = @user.find_friends(params[:q])
+    @friends = @user.search_friends(params[:q])
   end
 
   private

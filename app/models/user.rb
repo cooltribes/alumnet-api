@@ -65,7 +65,7 @@ class User < ActiveRecord::Base
     accepted_friendship_with(user).present? || accepted_inverse_friendship_with(user).present?
   end
 
-  def find_pending_friendships(filter)
+  def get_pending_friendships(filter)
     if filter == "sent"
       pending_friendships
     elsif filter == "received"
@@ -75,7 +75,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def find_friends(q)
+  def search_friends(q)
     accepted_friends_search = accepted_friends.search(q)
     accepted_inverse_friends_search = accepted_inverse_friends.search(q)
     accepted_friends_search.result | accepted_inverse_friends_search.result
