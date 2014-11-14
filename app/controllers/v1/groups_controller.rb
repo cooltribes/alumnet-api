@@ -1,9 +1,11 @@
 class V1::GroupsController < V1::BaseController
+  include Pundit
   before_action :set_group, except: [:index, :create]
 
   def index
     @q = Group.search(params[:q])
     @groups = @q.result
+    authorize Group
   end
 
   def members

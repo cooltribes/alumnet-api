@@ -15,6 +15,7 @@ gem 'ransack', github: 'activerecord-hackery/ransack', branch: 'rails-4.1'
 gem 'mailboxer'
 gem 'acts_as_commentable'
 gem 'smarter_csv'
+gem 'pundit'
 
 group :development do
   gem 'spring'

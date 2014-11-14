@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
   has_secure_password
   acts_as_messageable
 
+  ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin", regular: "Regular" }
+
   ### Relations
   has_many :memberships
   has_many :friendships
@@ -19,7 +21,7 @@ class User < ActiveRecord::Base
 
   ### Callbacks
   before_save :ensure_api_token
-  before_create :create_profile
+  before_create :set_role_and_create_profile
 
   ### Instance Methods
   def name
@@ -40,7 +42,21 @@ class User < ActiveRecord::Base
     end
   end
 
-  ### about friends
+  ### all about Roles
+  def is_system_admin?
+    role == "SystemAdmin"
+  end
+
+  def is_alumnet_admin?
+    role == "AlumNetAdmin"
+  end
+
+  def is_regular?
+    role == "Regular"
+  end
+
+
+  ### all about friends
   def add_to_friends(user)
     friendships.build(friend_id: user.id)
   end
@@ -150,7 +166,8 @@ class User < ActiveRecord::Base
 
   end
 
-  def create_profile
+  def set_role_and_create_profile
+    self[:role] = ROLES[:regular]
     build_profile unless profile.present?
   end
 end
