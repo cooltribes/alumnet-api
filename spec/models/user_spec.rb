@@ -30,7 +30,7 @@ RSpec.describe User, type: :model do
         Friendship.make!(:accepted, user: inverse_friend, friend: user )
         expect(user.is_friend_of?(friend)).to eq true
         expect(user.is_friend_of?(inverse_friend)).to eq true
-        expect(user.is_friend_of?(not_friend)).to_not eq true
+        expect(user.is_friend_of?(not_friend)).to eq false
 
       end
     end

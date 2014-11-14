@@ -13,6 +13,23 @@ namespace :data_fixture do
     require 'machinist'
     require Rails.root.join("spec/support/blueprints")
     4.times { User.make! }
+    User.all.each do |user|
+      user.profile.update(
+        first_name: Faker::Name.first_name,
+        last_name: Faker::Name.last_name,
+        avatar: File.open("#{Rails.root}/spec/fixtures/user_test.png"),
+        born: Date.parse("21/08/1980"),
+        register_step: 1
+      )
+    end
+    me = User.make!(email: "fcoarmandomendoza@gmail.com", password: "210880", password_confirmation: "210880")
+    me.profile.update(
+      first_name: "Franciso Armando",
+      last_name: "Mendoza Granda",
+      avatar: File.open("#{Rails.root}/spec/fixtures/user_test.png"),
+      born: Date.parse("21/08/1980"),
+      register_step: 1
+    )
   end
 
   desc "create 2 users and 2 groups, 1 user belongs to 1 group"

@@ -41,21 +41,31 @@ class User < ActiveRecord::Base
   end
 
   ### about friends
+  def add_to_friends(user)
+    friendships.build(friend_id: user.id)
+  end
+
   def friendship_with(user)
-    if friendships.find_by(friend_id: user.id)
+    friendships.find_by(friend_id: user.id) || inverse_friendships.find_by(user_id: user.id)
+  end
+
+  def friendship_status_with(user)
+    if pending_friendship_with(user).present?
       "sent"
-    elsif inverse_friendships.find_by(user_id: user.id)
+    elsif pending_inverse_friendship_with(user).present?
       "received"
+    elsif is_friend_of?(user)
+      "accepted"
     else
       "none"
     end
   end
 
   def is_friend_of?(user)
-    accepted_friends.exists?(id: user.id) || accepted_inverse_friends.exists?(id: user.id)
+    accepted_friendship_with(user).present? || accepted_inverse_friendship_with(user).present?
   end
 
-  def find_friendships(filter)
+  def find_pending_friendships(filter)
     if filter == "sent"
       pending_friendships
     elsif filter == "received"
@@ -73,6 +83,22 @@ class User < ActiveRecord::Base
 
   def my_friends
     accepted_friends | accepted_inverse_friends
+  end
+
+  def pending_friendship_with(user)
+    pending_friendships.find_by(friend_id: user.id)
+  end
+
+  def pending_inverse_friendship_with(user)
+    pending_inverse_friendships.find_by(user_id: user.id)
+  end
+
+  def accepted_friendship_with(user)
+    accepted_friendships.find_by(friend_id: user.id)
+  end
+
+  def accepted_inverse_friendship_with(user)
+    accepted_inverse_friendships.find_by(user_id: user.id)
   end
 
   def accepted_friends
@@ -97,10 +123,6 @@ class User < ActiveRecord::Base
 
   def pending_inverse_friendships
     inverse_friendships.where(accepted: false)
-  end
-
-  def add_to_friends(user)
-    friendships.build(friend_id: user.id)
   end
 
   ### about groups

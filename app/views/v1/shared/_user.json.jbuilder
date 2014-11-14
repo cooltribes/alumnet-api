@@ -13,4 +13,7 @@ json.profile do
   user.profile
 end
 
-json.friendship current_user.friendship_with(user)
+json.friendship_status current_user.friendship_status_with(user)
+
+friendship = current_user.friendship_with(user)
+json.friendship(current_user.friendship_with(user), :id, :accepted) if friendship.present?

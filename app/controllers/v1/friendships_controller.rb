@@ -2,7 +2,7 @@ class V1::FriendshipsController < V1::BaseController
   before_action :set_and_check_user, only: :create
 
   def index
-    @friendships = current_user.find_friendships(params[:filter])
+    @friendships = current_user.find_pending_friendships(params[:filter])
     @friendship_type = params[:filter]
   end
 
