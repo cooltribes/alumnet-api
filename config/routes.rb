@@ -5,23 +5,27 @@ Rails.application.routes.draw do
     post '/sign_in', to: 'auth#sign_in', as: :sign_in
     post '/register', to: 'auth#register', as: :register
 
-    get '/me', to: 'user#me', as: :me
-    get '/me/profile', to: 'user#profile', as: :me_profile
-    put '/me/profile', to: 'user#update_profile'
-
-    resources :friendships, except: :show
+    resource :me, only: [:show, :update], controller: 'user' do
+      resource :profile, only: [:show, :update], controller: 'user/profiles'
+      resources :friendships, except: :show, controller: 'user/friendships' do
+        get :friends, on: :collection
+      end
+      # resources :groups, controller: 'user/groups'
+    end
 
     resources :users, except: :create do
-      post :invite, on: :member
       resource :profile, only: [:show, :update]
       resources :posts, controller: 'users/posts'
-      resources :friends, only: [:index], controller: 'users/friends'
+      resources :memberships, except: :show, controller: 'users/memberships' do
+        get :groups, on: :collection
+      end
     end
 
     resources :groups do
-      get :members, on: :member
-      post :join, on: :member
       post :add_group, on: :member
+      resources :memberships, except: :show, controller: 'groups/memberships' do
+        get :members, on: :collection
+      end
       resources :posts, controller: 'groups/posts'
     end
 

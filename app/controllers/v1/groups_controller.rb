@@ -1,16 +1,9 @@
 class V1::GroupsController < V1::BaseController
-  include Pundit
   before_action :set_group, except: [:index, :create]
 
   def index
     @q = Group.search(params[:q])
     @groups = @q.result
-    authorize Group
-  end
-
-  def members
-    @q = @group.members.search(params[:q])
-    @members = @q.result
   end
 
   def show
@@ -47,15 +40,6 @@ class V1::GroupsController < V1::BaseController
   def destroy
     @group.destroy
     head :no_content
-  end
-
-  def join
-    unless membership = Membership.find_by(user_id: current_user.id, group_id: @group.id)
-      Membership.create_membership_for_request(@group, current_user)
-      render json: { user_id: current_user.id, group_id: @group.id }
-    else
-      render json: { error: "User has already join" }, status: :unprocessable_entity
-    end
   end
 
   private

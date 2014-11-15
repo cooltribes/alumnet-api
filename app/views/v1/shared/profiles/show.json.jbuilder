@@ -1,0 +1,1 @@
+json.(@profile, :id, :first_name, :last_name, :born, :birth_city, :residence_city, :register_step)

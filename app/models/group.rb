@@ -9,12 +9,17 @@ class Group < ActiveRecord::Base
   has_many :posts, as: :postable
 
   ### Validations
-  validates_presence_of :name, :description, :cover #:group_type
+  validates_presence_of :name, :description, :cover, :group_type
 
   ### Instance Methods
 
+  ### all membership
   def members
-    users.where("memberships.approved = ?", 1)
+    users.where("memberships.approved = ?", true)
+  end
+
+  def build_membership_for(user)
+    memberships.build(mode: "invitation", user: user)
   end
 
   def has_parent?

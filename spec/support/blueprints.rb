@@ -42,6 +42,18 @@ Group.blueprint(:all_relations) do
   posts(3)
 end
 
+Membership.blueprint(:approved) do
+  user { User.make! }
+  group { Group.make! }
+  approved { true }
+end
+
+Membership.blueprint(:not_approved) do
+  user { User.make! }
+  group { Group.make! }
+  approved { false }
+end
+
 Post.blueprint do
   body { Faker::Lorem.paragraph }
   user { User.make! }

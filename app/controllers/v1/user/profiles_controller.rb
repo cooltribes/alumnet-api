@@ -1,23 +1,23 @@
-class V1::ProfilesController < V1::BaseController
+class V1::User::ProfilesController < V1::BaseController
   before_action :set_user
   before_action :set_profile
 
   def show
+    render 'v1/shared/profiles/show'
   end
 
   def update
     if @profile.update(profile_params)
       @profile.update_step
-      render :show, status: :ok
+      render 'v1/shared/profiles/show'
     else
       render json: @profile.errors, status: :unprocessable_entity
     end
   end
 
-
   private
     def set_user
-      @user = User.find(params[:user_id])
+      @user = current_user if current_user
     end
 
     def set_profile
@@ -26,7 +26,7 @@ class V1::ProfilesController < V1::BaseController
 
     def profile_params
       if @profile.initial?
-        params.permit(:first_name, :last_name, :avatar, :born)
+        params.permit(:first_name, :last_name, :avatar, :born, :birth_city, :residence_city)
       elsif @profile.profile?
         params.permit(contact_infos_attributes: [:contact_type, :info, :privacy])
       end

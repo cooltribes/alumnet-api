@@ -6,23 +6,37 @@ class Membership < ActiveRecord::Base
   belongs_to :group
   belongs_to :user
 
-  ### Scope
-  scope :invitations, -> { where( mode: "invitation", approved: 0 ) }
-  scope :requests, -> { where( mode: "request", approved: 0 ) }
-
   ### Instances Methods
 
   def approved!
-    update_column(:approved, 1)
+    update_column(:approved, true)
     touch(:approved_at)
   end
 
   ### Class Methods
+  def self.accepted
+    where(approved: true)
+  end
+
+  def self.pending
+    where(approved: false)
+  end
+
   def self.create_membership_for_creator(group, user)
-    attrs = { mode: "creation", approved: 1, moderate_members: 1, edit_information: 1,
-      create_subgroups:  1, change_member_type: 1, approve_register: 1, make_group_official: 1,
-      make_event_official: 1, group: group, user: user }
-    create!(attrs)
+    attrs = {
+      mode:                "creation",
+      group:               group,
+      user:                user,
+      invite_users:        false,
+      moderate_members:    false,
+      edit_information:    false,
+      create_subgroups:    false,
+      change_member_type:  false,
+      approve_register:    false,
+      make_group_official: false,
+      admin:               false,
+    }
+    create!(attrs).approved!
   end
 
   def self.create_membership_for_invitation(group, user)

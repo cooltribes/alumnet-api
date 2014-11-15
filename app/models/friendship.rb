@@ -7,6 +7,14 @@ class Friendship < ActiveRecord::Base
 
   ###Instance Methods
 
+  def friendship_type(user)
+    if user_id == user.id
+      "sent"
+    elsif friend_id == user.id
+      "received"
+    end
+  end
+
   def accept!
     unless accepted?
       update_column(:accepted, true)
