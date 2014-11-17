@@ -45,22 +45,6 @@ describe V1::GroupsController, type: :request do
     end
   end
 
-  describe "GET /groups/:id/members" do
-    it "return all members of group" do
-      group = Group.make!
-      creator = User.make!
-      Membership.create_membership_for_creator(group, creator)
-      3.times do
-        user = User.make!
-        Membership.create_membership_for_request(group, user)
-      end
-      get members_group_path(group), {}, basic_header(creator.api_token)
-      expect(response.status).to eq 200
-      expect(json.count).to eq(4)
-      #expect(valid_schema('group', json)).to be_empty
-    end
-  end
-
   describe "POST /groups/:id/add_group" do
     it "create a new group on given group" do
       group = Group.make!
@@ -78,7 +62,6 @@ describe V1::GroupsController, type: :request do
           post groups_path, valid_attributes , basic_header(admin.api_token)
         }.to change(Group, :count).by(1)
         expect(response.status).to eq 201
-        #expect(valid_schema('group', json)).to be_empty
         expect(admin.memberships.last.mode).to eq("creation")
         expect(admin.groups).to eq([Group.last])
       end
@@ -113,35 +96,6 @@ describe V1::GroupsController, type: :request do
         delete group_path(group), {}, basic_header(admin.api_token)
       }.to change(Group, :count).by(-1)
       expect(response.status).to eq 204
-    end
-  end
-
-  describe "POST /groups/1/join" do
-    context "group is open" do
-      it "create an approved membership mode request for the current user" do
-        joiner_user = User.make!(email: "fcoarmandomendoza@gmail.com")
-        group = Group.make!(group_type: 0)
-        post join_group_path(group), {}, basic_header(joiner_user.api_token)
-        expect(response.status).to eq 200
-        expect(joiner_user.memberships.count).to eq(1)
-        expect(joiner_user.memberships.last.mode).to eq("request")
-        expect(joiner_user.memberships.last.approved).to eq(1)
-        expect(joiner_user.mailbox.notifications.count).to eq(1)
-        expect(ActionMailer::Base.deliveries).to_not be_empty
-      end
-    end
-    context "group is closed" do
-      it "create an unapproved membership mode request for the current user" do
-        joiner_user = User.make!(email: "fcoarmandomendoza@gmail.com")
-        group = Group.make!(group_type: 1)
-        post join_group_path(group), {}, basic_header(joiner_user.api_token)
-        expect(response.status).to eq 200
-        expect(joiner_user.memberships.count).to eq(1)
-        expect(joiner_user.memberships.last.mode).to eq("request")
-        expect(joiner_user.memberships.last.approved).to eq(0)
-        # expect(joiner_user.mailbox.notifications.count).to eq(1)
-        # expect(ActionMailer::Base.deliveries).to_not be_empty
-      end
     end
   end
 end

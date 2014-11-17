@@ -2,11 +2,13 @@ class User < ActiveRecord::Base
   has_secure_password
   acts_as_messageable
 
+  ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin", regular: "Regular" }
+
   ### Relations
   has_many :memberships
+  has_many :groups, -> { where("memberships.approved = ?", true) }, through: :memberships
   has_many :friendships
   has_many :inverse_friendships, class_name: "Friendship", foreign_key: "friend_id"
-  has_many :groups, through: :memberships
   has_many :friends, through: :friendships
   has_many :inverse_friends, through: :inverse_friendships, source: :user
   has_many :posts
@@ -19,7 +21,7 @@ class User < ActiveRecord::Base
 
   ### Callbacks
   before_save :ensure_api_token
-  before_create :create_profile
+  before_create :set_role_and_create_profile
 
   ### Instance Methods
   def name
@@ -40,16 +42,31 @@ class User < ActiveRecord::Base
     end
   end
 
-  ### about friends
-  def add_to_friends(user)
+  ### all about Roles
+  def is_system_admin?
+    role == "SystemAdmin"
+  end
+
+  def is_alumnet_admin?
+    role == "AlumNetAdmin"
+  end
+
+  def is_regular?
+    role == "Regular"
+  end
+
+  ### all about friends
+  def create_friendship_for(user)
     friendships.build(friend_id: user.id)
   end
 
   def friendship_with(user)
-    friendships.find_by(friend_id: user.id) || inverse_friendships.find_by(user_id: user.id)
+    Friendship.where("(friend_id = :id and user_id = :user_id) or (friend_id = :user_id and user_id = :id)", id: id, user_id: user.id).first
+    # friendships.find_by(friend_id: user.id) || inverse_friendships.find_by(user_id: user.id)
   end
 
   def friendship_status_with(user)
+    ##Optimize this
     if pending_friendship_with(user).present?
       "sent"
     elsif pending_inverse_friendship_with(user).present?
@@ -75,7 +92,13 @@ class User < ActiveRecord::Base
     end
   end
 
-  def search_friends(q)
+  def search_accepted_friendships(q)
+    accepted_friendships_search = accepted_friendships.search(q)
+    accepted_inverse_friendships_search = accepted_inverse_friendships.search(q)
+    accepted_friendships_search.result | accepted_inverse_friendships_search.result
+  end
+
+  def search_accepted_friends(q)
     accepted_friends_search = accepted_friends.search(q)
     accepted_inverse_friends_search = accepted_inverse_friends.search(q)
     accepted_friends_search.result | accepted_inverse_friends_search.result
@@ -125,11 +148,29 @@ class User < ActiveRecord::Base
     inverse_friendships.where(accepted: false)
   end
 
-  ### about groups
+  ### about groups and Membership
+  def build_membership_for(group)
+    attrs = if group.open?
+      { mode: "request", approved: true, group: group }
+    else
+      { mode: "request", approved: false, group: group }
+    end
+    memberships.build(attrs)
+  end
+
+  def is_admin_of_group?(group)
+    membership = memberships.find_by(group_id: group.id)
+    if membership
+      membership.admin? || is_alumnet_admin? || is_system_admin?
+    else
+      false
+    end
+  end
+
   def can_invite_on_group?(group)
     membership = memberships.find_by(group_id: group.id)
     if membership
-      membership.approve_register == 1
+      membership.invite_users == 1
     else
       false
     end
@@ -138,6 +179,7 @@ class User < ActiveRecord::Base
   def has_like_in?(likeable)
     likes.exists?(likeable: likeable)
   end
+
 
 
   private
@@ -150,7 +192,8 @@ class User < ActiveRecord::Base
 
   end
 
-  def create_profile
+  def set_role_and_create_profile
+    self[:role] = ROLES[:regular]
     build_profile unless profile.present?
   end
 end

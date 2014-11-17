@@ -1,1 +1,1 @@
-json.array! @groups, partial: 'group', as: :group, user: @current_user
+json.array! @groups, partial: 'group', as: :group, current_user: @current_user

@@ -1,1 +1,1 @@
-json.partial! 'group', group: @group, user: @current_user
+json.partial! 'group', group: @group, current_user: @current_user

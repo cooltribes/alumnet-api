@@ -24,12 +24,16 @@ json.children do
 end
 
 json.members do
-  json.array! group.users do |user|
+  json.array! group.members do |user|
     json.id user.id
     json.name user.name
     json.email user.email
     json.cover user.avatar.url
   end
+end
+
+json.membership_users do
+  json.array! group.memberships.pluck(:user_id)
 end
 
 json.creator do
@@ -40,12 +44,20 @@ json.creator do
   end
 end
 
-json.membership do
-  if group.membership_of_user(user)
-    json.(group.membership_of_user(user), :id, :mode, :approved, :moderate_members,
-      :edit_information, :create_subgroups, :change_member_type, :approve_register,
-      :make_group_official, :make_event_official)
-  else
-    json.nil!
+json.is_admin? current_user.is_admin_of_group?(group)
+
+membership = group.membership_of_user(current_user)
+
+if membership
+  json.permissions do
+    json.can_moderate_members membership.try(:moderate_members)
+    json.can_edit_information membership.try(:edit_information)
+    json.can_create_subgroups membership.try(:create_subgroups)
+    json.can_change_member_type membership.try(:change_member_type)
+    json.can_approve_register membership.try(:approve_register)
+    json.can_invite_users membership.try(:invite_users)
+    json.can_make_group_official membership.try(:make_group_official)
   end
+else
+  json.permissions nil
 end

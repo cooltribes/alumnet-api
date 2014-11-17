@@ -16,6 +16,7 @@ RSpec.describe User, type: :model do
       user = User.make
       user.save
       expect(user.api_token).to_not be_blank
+      expect(user.is_regular?).to eq(true)
     end
   end
 

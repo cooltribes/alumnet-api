@@ -15,5 +15,7 @@ end
 
 json.friendship_status current_user.friendship_status_with(user)
 
-friendship = current_user.friendship_with(user)
-json.friendship(current_user.friendship_with(user), :id, :accepted) if friendship.present?
+friendship = user.friendship_with(current_user)
+if friendship.present?
+  json.friendship friendship, :id, :accepted, :created_at
+end
