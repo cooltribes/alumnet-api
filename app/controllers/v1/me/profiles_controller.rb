@@ -1,4 +1,4 @@
-class V1::User::ProfilesController < V1::BaseController
+class V1::Me::ProfilesController < V1::BaseController
   before_action :set_user
   before_action :set_profile
 

@@ -6,6 +6,9 @@ class Membership < ActiveRecord::Base
   belongs_to :group
   belongs_to :user
 
+  ### Validations
+  validates_uniqueness_of :group_id, scope: [:user_id]
+
   ### Instances Methods
 
   def approved!
@@ -27,14 +30,14 @@ class Membership < ActiveRecord::Base
       mode:                "creation",
       group:               group,
       user:                user,
-      invite_users:        false,
-      moderate_members:    false,
-      edit_information:    false,
-      create_subgroups:    false,
-      change_member_type:  false,
-      approve_register:    false,
-      make_group_official: false,
-      admin:               false,
+      invite_users:        true,
+      moderate_members:    true,
+      edit_information:    true,
+      create_subgroups:    true,
+      change_member_type:  true,
+      approve_register:    true,
+      make_group_official: true,
+      admin:               true,
     }
     create!(attrs).approved!
   end

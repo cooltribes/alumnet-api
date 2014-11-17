@@ -1,8 +1,7 @@
-class V1::UserController < V1::BaseController
+class V1::MeController < V1::BaseController
   before_action :set_user
 
   def show
-    render 'v1/users/show', status: :ok,  location: me_path
   end
 
   def update

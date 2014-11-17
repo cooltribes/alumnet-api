@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe V1::UserController, type: :request do
+describe V1::MeController, type: :request do
   let!(:user) { User.make! }
 
   describe "GET /user" do

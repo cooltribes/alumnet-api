@@ -4,7 +4,8 @@ class V1::AuthController < V1::BaseController
 
   def sign_in
     email, password = params[:email], params[:password]
-    if @user = User.find_by(email: email).try(:authenticate, password)
+    @user = User.find_by(email: email).try(:authenticate, password)
+    if @user
       render :user, status: :ok,  location: @user
     else
       render json: { error: "email or password are incorrect"} , status: 401

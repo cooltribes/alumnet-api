@@ -9,7 +9,8 @@ class V1::Groups::MembershipsController < V1::BaseController
   end
 
   def members
-    @memberships = @group.memberships.accepted
+    @q = @group.memberships.accepted.search(params[:q])
+    @memberships = @q.result
     render 'v1/shared/memberships/index'
   end
 

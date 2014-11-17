@@ -1,4 +1,6 @@
-json.(group, :id, :name, :description, :official, :group_type, :created_at)
+json.(group, :id, :name, :description, :official, :created_at)
+
+json.group_type group.get_group_type_info
 
 json.cover do
   json.original group.cover.url
@@ -28,6 +30,10 @@ json.members do
     json.email user.email
     json.cover user.avatar.url
   end
+end
+
+json.membership_users do
+  json.array! group.memberships.pluck(:user_id)
 end
 
 json.creator do

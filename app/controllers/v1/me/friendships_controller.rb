@@ -1,4 +1,4 @@
-class V1::User::FriendshipsController < V1::BaseController
+class V1::Me::FriendshipsController < V1::BaseController
   before_action :set_user
   before_action :set_and_check_friend, only: :create
 
@@ -8,8 +8,8 @@ class V1::User::FriendshipsController < V1::BaseController
   end
 
   def friends
-    @friendships = @user.search_accepted_friendships(params[:q])
-    render 'v1/shared/friendships/index'
+    @friends = @user.search_accepted_friends(params[:q])
+    render 'v1/shared/friendships/friends'
   end
 
   def create

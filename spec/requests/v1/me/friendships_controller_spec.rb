@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe V1::User::FriendshipsController, type: :request do
+describe V1::Me::FriendshipsController, type: :request do
   let!(:user) { User.make! }
 
   describe "GET /me/friendships" do

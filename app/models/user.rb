@@ -61,10 +61,12 @@ class User < ActiveRecord::Base
   end
 
   def friendship_with(user)
-    friendships.find_by(friend_id: user.id) || inverse_friendships.find_by(user_id: user.id)
+    Friendship.where("(friend_id = :id and user_id = :user_id) or (friend_id = :user_id and user_id = :id)", id: id, user_id: user.id).first
+    # friendships.find_by(friend_id: user.id) || inverse_friendships.find_by(user_id: user.id)
   end
 
   def friendship_status_with(user)
+    ##Optimize this
     if pending_friendship_with(user).present?
       "sent"
     elsif pending_inverse_friendship_with(user).present?
@@ -94,6 +96,12 @@ class User < ActiveRecord::Base
     accepted_friendships_search = accepted_friendships.search(q)
     accepted_inverse_friendships_search = accepted_inverse_friendships.search(q)
     accepted_friendships_search.result | accepted_inverse_friendships_search.result
+  end
+
+  def search_accepted_friends(q)
+    accepted_friends_search = accepted_friends.search(q)
+    accepted_inverse_friends_search = accepted_inverse_friends.search(q)
+    accepted_friends_search.result | accepted_inverse_friends_search.result
   end
 
   def my_friends

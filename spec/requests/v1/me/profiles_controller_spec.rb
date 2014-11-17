@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe V1::User::ProfilesController, type: :request do
+describe V1::Me::ProfilesController, type: :request do
 
   describe "GET /me/profile" do
     before do
