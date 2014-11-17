@@ -23,10 +23,10 @@ Rails.application.routes.draw do
 
     resources :groups do
       post :add_group, on: :member
+      resources :posts, controller: 'groups/posts'
       resources :memberships, except: :show, controller: 'groups/memberships' do
         get :members, on: :collection
       end
-      resources :posts, controller: 'groups/posts'
     end
 
     resources :posts, only: :show do
