@@ -68,12 +68,12 @@ class User < ActiveRecord::Base
 
   def friendship_status_with(user)
     ##Optimize this
-    if pending_friendship_with(user).present?
+    if is_friend_of?(user) || id == user.id
+      "accepted"
+    elsif pending_friendship_with(user).present?
       "sent"
     elsif pending_inverse_friendship_with(user).present?
       "received"
-    elsif is_friend_of?(user)
-      "accepted"
     else
       "none"
     end

@@ -3,13 +3,13 @@ json.(group, :id, :name, :description, :official, :created_at)
 json.group_type group.get_group_type_info
 
 json.cover do
-  json.original group.cover.url
-  json.thumb group.cover.thumb.url
+  json.main group.cover.main.url
+  json.card group.cover.card.url
 end
 
 json.parent do
   if group.has_parent?
-    json.(group.parent, :id, :name, :description, :cover, :group_type)
+    json.(group.parent, :id, :name, :description, :group_type)
   else
     json.nil!
   end
@@ -17,7 +17,7 @@ end
 
 json.children do
   if group.has_children?
-    json.array! group.children, :id, :name, :description, :cover, :group_type
+    json.array! group.children, :id, :name, :description, :group_type
   else
     json.array! []
   end
@@ -28,7 +28,7 @@ json.members do
     json.id user.id
     json.name user.name
     json.email user.email
-    json.cover user.avatar.url
+    json.avatar user.avatar.url
   end
 end
 

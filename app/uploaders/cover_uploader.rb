@@ -6,8 +6,12 @@ class CoverUploader < CarrierWave::Uploader::Base
   storage :file
   # storage :fog
 
-  version :thumb do
-    process :resize_to_fill => [200,224]
+  version :main do
+    process :resize_to_fill => [1360,430]
+  end
+
+  version :card do
+    process :resize_to_fill => [212,225]
   end
 
   def store_dir
