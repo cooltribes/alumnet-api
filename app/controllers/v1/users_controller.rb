@@ -2,7 +2,7 @@ class V1::UsersController < V1::BaseController
   before_action :set_user, except: [:index, :create]
 
   def index
-    @q = User.search(params[:q])
+    @q = User.includes(:profile).search(params[:q])
     @users = @q.result.where.not(id: current_user.id) #conditional when is admin.
   end
 
