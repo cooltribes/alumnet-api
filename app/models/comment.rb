@@ -13,8 +13,13 @@ class Comment < ActiveRecord::Base
   ### Validations
   validates_presence_of :comment, :user_id
 
-  # NOTE: install the acts_as_votable plugin if you
-  # want user to vote on the quality of comments.
-  #acts_as_voteable
+  ### Callback
+  after_create :set_last_comment_at_on_post
 
+  private
+    def set_last_comment_at_on_post
+      if commentable.respond_to?(:last_comment_at)
+        commentable.update_column(:last_comment_at, created_at)
+      end
+    end
 end

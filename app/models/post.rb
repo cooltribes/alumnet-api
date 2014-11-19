@@ -11,4 +11,11 @@ class Post < ActiveRecord::Base
   ### Validations
   validates_presence_of :body, :user_id
 
+  ### Callbacks
+  before_create :set_last_comment_at
+
+  private
+    def set_last_comment_at
+      self[:last_comment_at] ||= Time.current
+    end
 end
