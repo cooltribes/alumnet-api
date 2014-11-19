@@ -23,6 +23,14 @@ json.children do
   end
 end
 
+json.creator do
+  if group.creator.present?
+    json.(group.creator, :id, :name) #for now
+  else
+    json.nil!
+  end
+end
+
 json.members do
   json.array! group.members do |user|
     json.id user.id
@@ -36,19 +44,11 @@ json.membership_users do
   json.array! group.memberships.pluck(:user_id)
 end
 
-json.creator do
-  if group.creator.present?
-    json.(group.creator, :id, :name) #for now
-  else
-    json.nil!
-  end
-end
-
-json.is_admin? current_user.is_admin_of_group?(group)
-
 membership = group.membership_of_user(current_user)
 
 if membership
+  json.is_admin current_user.is_admin_of_group?(group)
+  json.membership_status membership.status
   json.permissions do
     json.can_moderate_members membership.try(:moderate_members)
     json.can_edit_information membership.try(:edit_information)
@@ -59,5 +59,7 @@ if membership
     json.can_make_group_official membership.try(:make_group_official)
   end
 else
+  json.is_admin false
+  json.membership_status "none"
   json.permissions nil
 end

@@ -11,6 +11,10 @@ class Membership < ActiveRecord::Base
 
   ### Instances Methods
 
+  def status
+    approved ? "approved" : "pending"
+  end
+
   def approved!
     update_column(:approved, true)
     touch(:approved_at)
