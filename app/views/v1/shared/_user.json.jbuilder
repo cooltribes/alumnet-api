@@ -17,4 +17,7 @@ friendship = user.friendship_with(current_user)
 if friendship
   json.friendship_status current_user.friendship_status_with(user)
   json.friendship friendship, :id, :accepted, :created_at
+else
+  json.friendship_status "none"
+  json.friendship nil
 end

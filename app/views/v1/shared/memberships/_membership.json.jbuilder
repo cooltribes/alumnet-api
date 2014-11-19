@@ -4,8 +4,8 @@ json.group do
   json.id membership.group.id
   json.name membership.group.name
   json.cover do
-    json.original membership.group.cover.url
-    json.thumb membership.group.cover.thumb.url
+    json.main membership.group.cover.main.url
+    json.card membership.group.cover.card.url
   end
 end
 
