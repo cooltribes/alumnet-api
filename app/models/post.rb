@@ -5,6 +5,7 @@ class Post < ActiveRecord::Base
   ### Relations
   belongs_to :user
   belongs_to :postable, polymorphic: true
+  belongs_to :postable_group, foreign_key: :postable_id, class_name: 'Group'
   has_many :likes, as: :likeable
 
   ### Validations

@@ -22,7 +22,7 @@ describe V1::Users::PostsController, type: :request do
     it "return all posts of user" do
       get user_posts_path(user), {}, basic_header(author.api_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(4)
+      expect(json.count).to eq(5)
       #TODO: Validate schema with null value. Groups without parents and children
       #expect(valid_schema('user-array', json)).to be_empty
     end

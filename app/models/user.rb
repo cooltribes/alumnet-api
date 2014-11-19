@@ -43,6 +43,13 @@ class User < ActiveRecord::Base
     end
   end
 
+  ### all about Post
+  def groups_posts
+    #return all posts of groups where the user is member
+    groups_ids = groups.pluck(:id)
+    Post.joins(:postable_group).where("groups.id in(?)", groups_ids)
+  end
+
   ### all about Roles
   def is_system_admin?
     role == "SystemAdmin"
