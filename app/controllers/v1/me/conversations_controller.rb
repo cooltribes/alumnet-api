@@ -1,8 +1,8 @@
 class V1::Me::ConversationsController < V1::BaseController
   before_action :set_user
+  before_action :set_conversation, except: [:index, :create]
 
   def show
-    @conversation = @user.mailbox.conversations.find(params[:id])
     render 'v1/conversations/show', status: :ok
   end
 
@@ -12,9 +12,18 @@ class V1::Me::ConversationsController < V1::BaseController
     render 'v1/conversations/show', status: :created
   end
 
+  def reply
+    @message = @user.reply_to_conversation(@conversation, body, subject).message
+    render 'v1/conversations/reply', status: :created
+  end
+
   private
     def set_user
       @user = current_user if current_user
+    end
+
+    def set_conversation
+      @conversation = @user.mailbox.conversations.find(params[:id])
     end
 
     def users_ids

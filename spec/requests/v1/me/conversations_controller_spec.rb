@@ -15,6 +15,7 @@ describe V1::Me::ConversationsController, type: :request do
     friend_one.reply_to_conversation(conversation, "Hi current user", "Reply")
     friend_two.reply_to_conversation(conversation, "Fu.. you", "Reply")
     conversation
+
   end
 
   describe "GET /me/conversations/:id" do
@@ -36,6 +37,17 @@ describe V1::Me::ConversationsController, type: :request do
       expect(response.status).to eq 201
       expect(json["subject"]).to eq("New Conversation")
       expect(json["is_read"]).to eq(true)
+    end
+  end
+
+  describe "POST /me/reply" do
+    it "should reply a conversation, an return the message" do
+      conversation = create_conversation
+      post reply_me_conversation_path(conversation), {body: "Hi again", subject: "Hi!"}, basic_header(current_user.api_token)
+      expect(response.status).to eq 201
+      expect(json["body"]).to eq("Hi again")
+      expect(json["subject"]).to eq("Hi!")
+      expect(json["sender"]["id"]).to eq(current_user.id)
     end
   end
 end
