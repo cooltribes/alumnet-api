@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
     resource :me, only: [:show, :update], controller: 'me' do
       resource :profile, only: [:show, :update], controller: 'me/profiles'
+      resources :posts, controller: 'me/posts'
       resources :friendships, except: :show, controller: 'me/friendships' do
         get :friends, on: :collection
       end
@@ -14,7 +15,6 @@ Rails.application.routes.draw do
     end
 
     resources :users, except: :create do
-      resource :profile, only: [:show, :update]
       resources :posts, controller: 'users/posts'
       resources :memberships, except: :show, controller: 'users/memberships' do
         get :groups, on: :collection
