@@ -18,6 +18,18 @@ describe V1::Me::ConversationsController, type: :request do
 
   end
 
+  describe "GET /me/conversations" do
+    before do
+      current_user.send_message([friend_one], "Hi guy!", "Say Hi to friend on")
+      current_user.send_message([friend_two], "Bye!", "Say adieu to friend two")
+    end
+    it "should return all conversations of current user" do
+      get me_conversations_path, {}, basic_header(current_user.api_token)
+      expect(response.status).to eq 200
+      expect(json.count).to eq(2)
+    end
+  end
+
   describe "GET /me/conversations/:id" do
     it "should return the conversation by id and all messages" do
       conversation = create_conversation
@@ -48,6 +60,16 @@ describe V1::Me::ConversationsController, type: :request do
       expect(json["body"]).to eq("Hi again")
       expect(json["subject"]).to eq("Hi!")
       expect(json["sender"]["id"]).to eq(current_user.id)
+    end
+  end
+
+  describe "DELETE /me/reply" do
+    it "sent the conversation to trash" do
+      conversation = create_conversation
+      expect {
+        delete me_conversation_path(conversation), {}, basic_header(current_user.api_token)
+      }.to change(current_user.mailbox.conversations, :count).by(-1)
+      expect(response.status).to eq 204
     end
   end
 end
