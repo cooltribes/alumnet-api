@@ -8,6 +8,9 @@ class Post < ActiveRecord::Base
   belongs_to :postable_group, foreign_key: :postable_id, class_name: 'Group'
   has_many :likes, as: :likeable
 
+  ### Scopes
+  default_scope -> { order(last_comment_at: :desc) }
+
   ### Validations
   validates_presence_of :body, :user_id
 
