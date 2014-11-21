@@ -31,12 +31,21 @@ describe V1::Me::ConversationsController, type: :request do
   end
 
   describe "GET /me/conversations/:id" do
-    it "should return the conversation by id and all messages" do
+    it "should return the conversation by id and last message" do
       conversation = create_conversation
       get me_conversation_path(conversation), {}, basic_header(current_user.api_token)
       expect(response.status).to eq 200
       expect(json["subject"]).to eq("Say Hi")
       expect(json["is_read"]).to eq(false)
+    end
+  end
+
+  describe "GET /me/conversations/:id/messages" do
+    it "return all messages of a conversation" do
+      conversation = create_conversation
+      get messages_me_conversation_path(conversation), {}, basic_header(current_user.api_token)
+      expect(response.status).to eq 200
+      expect(json.count).to eq(3)
     end
   end
 
@@ -63,7 +72,7 @@ describe V1::Me::ConversationsController, type: :request do
     end
   end
 
-  describe "DELETE /me/reply" do
+  describe "DELETE /me/conversations/:id" do
     it "sent the conversation to trash" do
       conversation = create_conversation
       expect {

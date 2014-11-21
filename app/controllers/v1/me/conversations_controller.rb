@@ -7,6 +7,11 @@ class V1::Me::ConversationsController < V1::BaseController
     render 'v1/conversations/index', status: :ok
   end
 
+  def messages
+    @messages = @conversation.messages
+    render 'v1/conversations/messages', status: :ok
+  end
+
   def show
     render 'v1/conversations/show', status: :ok
   end
