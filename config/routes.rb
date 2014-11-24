@@ -11,7 +11,10 @@ Rails.application.routes.draw do
       resources :friendships, except: :show, controller: 'me/friendships' do
         get :friends, on: :collection
       end
-      # resources :groups, controller: 'user/groups'
+      resources :conversations, except: [:new, :edit, :update], controller: 'me/conversations' do
+        get :messages, on: :member
+        post :reply, on: :member
+      end
     end
 
     resources :users, except: :create do
