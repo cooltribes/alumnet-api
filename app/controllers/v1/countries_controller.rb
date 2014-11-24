@@ -14,6 +14,11 @@ class V1::CountriesController < V1::BaseController
     @cities = @q.result
   end
 
+  def committees
+    @q = @country.committees.search(params[:q])
+    @committees = @q.result
+  end
+
 
   private
     def set_country

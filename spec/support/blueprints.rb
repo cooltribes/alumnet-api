@@ -86,9 +86,15 @@ Country.blueprint do
   tld { '.xx' }
   name { "Country #{sn}"}
   3.times { |x| City.make!(cc_fips: object.cc_fips, name: "City #{x} of #{object.name}") }
+  3.times { |x| Committee.make!(cc_fips: object.cc_fips, name: "Committee #{x} of #{object.name}") }
 end
 
 City.blueprint do
   cc_fips { sn }
   name { "City #{sn}" }
+end
+
+Committee.blueprint do
+  cc_fips { sn }
+  name { "Committee #{sn}" }
 end
