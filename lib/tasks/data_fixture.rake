@@ -61,4 +61,11 @@ namespace :data_fixture do
     Comment.make!(commentable: post, user: user_b)
     Comment.make!(commentable: post, user: user_c)
   end
+
+  desc "create three countries"
+  task countries: :environment do
+    require 'machinist'
+    require Rails.root.join("spec/support/blueprints")
+    3.times { Country.make! }
+  end
 end
