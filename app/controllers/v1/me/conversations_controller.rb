@@ -8,7 +8,7 @@ class V1::Me::ConversationsController < V1::BaseController
   end
 
   def messages
-    @messages = @conversation.messages
+    @messages = @conversation.messages.order(created_at: :asc)
     render 'v1/conversations/messages', status: :ok
   end
 
