@@ -36,7 +36,7 @@ json.members do
     json.id user.id
     json.name user.name
     json.email user.email
-    json.avatar user.avatar.url
+    json.avatar user.avatar.small.url
   end
 end
 

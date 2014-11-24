@@ -9,22 +9,22 @@ json.friendship_type type
 if type == 'sent' ## this is a direct_friendship
   json.requester do
     json.(friendship.user, :id, :name)
-    json.thumb friendship.user.avatar.thumb.url
+    json.avatar friendship.user.avatar.small.url
   end
 
   json.friend do
     json.(friendship.friend, :id, :name)
-    json.thumb friendship.friend.avatar.thumb.url
+    json.avatar friendship.friend.avatar.small.url
   end
 
 elsif type == 'received' ## this is a inverse_friendship
    json.requester do
     json.(friendship.friend, :id, :name)
-    json.thumb friendship.user.avatar.thumb.url
+    json.avatar friendship.user.avatar.small.url
   end
 
   json.friend do
     json.(friendship.user, :id, :name)
-    json.thumb friendship.friend.avatar.thumb.url
+    json.avatar friendship.friend.avatar.small.url
   end
 end

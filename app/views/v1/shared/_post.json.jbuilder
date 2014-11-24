@@ -3,9 +3,7 @@ json.(post, :id, :body, :created_at, :last_comment_at)
 json.user do
   json.(post.user, :id, :name, :email)
 
-  json.avatar do
-    json.thumb post.user.avatar.thumb.url
-  end
+  json.avatar post.user.avatar.small.url
 end
 
 json.likes_count post.likes_count

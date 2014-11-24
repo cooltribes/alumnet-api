@@ -6,7 +6,7 @@ originator = conversation.originator
 json.originator do
   json.id originator.id
   json.name originator.name
-  json.thumb originator.avatar.thumb.url
+  json.avatar originator.avatar.small.url
 end
 
 json.participants do

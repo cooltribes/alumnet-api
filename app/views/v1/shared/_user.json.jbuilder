@@ -2,7 +2,10 @@ json.(user, :id, :name, :email)
 
 json.avatar do
   json.original user.avatar.url
-  json.thumb user.avatar.thumb.url
+  json.small user.avatar.small.url
+  json.medium user.avatar.medium.url
+  json.large user.avatar.large.url
+  json.extralarge user.avatar.extralarge.url
 end
 
 json.groups do

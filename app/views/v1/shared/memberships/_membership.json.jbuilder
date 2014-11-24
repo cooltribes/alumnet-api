@@ -12,8 +12,5 @@ end
 json.user do
   json.id membership.user.id
   json.name membership.user.name
-  json.avatar do
-    json.original membership.user.avatar.url
-    json.thumb membership.user.avatar.thumb.url
-  end
+  json.avatar membership.user.avatar.small.url
 end
