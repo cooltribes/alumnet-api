@@ -23,7 +23,7 @@ class V1::Me::ConversationsController < V1::BaseController
   end
 
   def reply
-    @message = @user.reply_to_conversation(@conversation, body, subject).message
+    @message = @user.reply_to_conversation(@conversation, body).message
     render 'v1/conversations/reply', status: :created
   end
 
@@ -51,6 +51,6 @@ class V1::Me::ConversationsController < V1::BaseController
     end
 
     def subject
-      params.permit(:subject)[:subject]
+      params.permit(:subject)[:subject] || "--"
     end
 end
