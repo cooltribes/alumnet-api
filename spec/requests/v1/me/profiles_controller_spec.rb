@@ -57,5 +57,33 @@ describe V1::Me::ProfilesController, type: :request do
         expect(profile.contact_infos.pluck(:info)).to match_array(["twiter", "facebook", "linkedin"])
       end
     end
+
+    context "Step 3 - contacts completed" do
+      before do
+        @user.profile.first_name = "Armando"
+        @user.profile.last_name = "Mendoza"
+        @user.profile.born = Date.parse("21-08-1980")
+        @user.profile.save
+      end
+
+      it "should add many experiences to profile" do
+        experiences_attributes = { experiences_attributes: [
+          {"exp_type" => 0, "name" => "Name", "description" => "Description",
+           "start_date" => "2011-01-01", "end_date" => "2012-01-01",
+           "city_id" => 1 , "country_id" => 20},
+          {"exp_type" => 1, "name" => "Name 1", "description" => "Description 1",
+           "start_date" => "2011-01-01", "end_date" => "2012-01-01",
+           "city_id" => 1 , "country_id" => 20},
+        ]}
+        profile = @user.profile
+        profile.contact! #change the estatus
+        put me_profile_path(@user), experiences_attributes, basic_header(@user.api_token)
+        expect(response.status).to eq 200
+        profile.reload
+        expect(profile.experiences.count).to eq(2)
+        expect(profile.experiences.pluck(:name)).to match_array(["Name", "Name 1"])
+      end
+    end
   end
 end
+
