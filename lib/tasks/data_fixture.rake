@@ -12,7 +12,7 @@ namespace :data_fixture do
   task users: :environment do
     require 'machinist'
     require Rails.root.join("spec/support/blueprints")
-    4.times { User.make! }
+    6.times { |x| User.make!(email: "user_#{x}@alumnet.com") }
     User.all.each do |user|
       user.profile.update(
         first_name: Faker::Name.first_name,
