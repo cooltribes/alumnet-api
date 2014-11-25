@@ -30,7 +30,7 @@ class V1::Me::ProfilesController < V1::BaseController
       elsif @profile.profile?
         params.permit(contact_infos_attributes: [:contact_type, :info, :privacy])
       elsif @profile.contact?
-        params.permit(experiences_attributes: [:type, :name, :description, :start_date, :end_date, :city_id, :country_id,])
+        params.permit(experiences_attributes: [:exp_type, :name, :description, :start_date, :end_date, :city_id, :country_id,])
         # params.permit(experiences_attr: [:type, :name, :description, :start_date, :end_date, :organization_name, :city_id, :country_id, :internship])
       end
     end
