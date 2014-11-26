@@ -2,29 +2,19 @@ class V1::Me::ConversationsController < V1::BaseController
   before_action :set_user
   before_action :set_conversation, except: [:index, :create]
 
+  ### Conversations
+
   def index
     @conversations = @user.mailbox.conversations
-    render 'v1/conversations/index', status: :ok
-  end
-
-  def messages
-    @messages = @conversation.messages.order(created_at: :asc)
-    render 'v1/conversations/messages', status: :ok
   end
 
   def show
-    render 'v1/conversations/show', status: :ok
   end
 
   def create
     recipients = User.where(id: users_ids)
     @conversation = @user.send_message(recipients, body, subject).conversation
-    render 'v1/conversations/show', status: :created
-  end
-
-  def reply
-    @message = @user.reply_to_conversation(@conversation, body).message
-    render 'v1/conversations/reply', status: :created
+    render :show, status: :created
   end
 
   def destroy

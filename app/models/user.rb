@@ -43,6 +43,9 @@ class User < ActiveRecord::Base
     end
   end
 
+  ### all about Conversations
+
+
   ### all about Post
   def groups_posts
     #return all posts of groups where the user is member

@@ -12,8 +12,7 @@ Rails.application.routes.draw do
         get :friends, on: :collection
       end
       resources :conversations, except: [:new, :edit, :update], controller: 'me/conversations' do
-        get :messages, on: :member
-        post :reply, on: :member
+        resources :receipts, only: [:index, :show, :create], controller: 'me/receipts'
       end
     end
 

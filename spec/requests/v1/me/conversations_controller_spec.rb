@@ -39,15 +39,6 @@ describe V1::Me::ConversationsController, type: :request do
     end
   end
 
-  describe "GET /me/conversations/:id/messages" do
-    it "return all messages of a conversation" do
-      conversation = create_conversation
-      get messages_me_conversation_path(conversation), {}, basic_header(current_user.api_token)
-      expect(response.status).to eq 200
-      expect(json.count).to eq(3)
-    end
-  end
-
   describe "POST /me/conversations" do
     it "should create a conversations and first message" do
       post me_conversations_path, conversation_attributes, basic_header(current_user.api_token)
@@ -57,17 +48,6 @@ describe V1::Me::ConversationsController, type: :request do
       expect(response.status).to eq 201
       expect(json["subject"]).to eq("New Conversation")
       expect(json["is_read"]).to eq(true)
-    end
-  end
-
-  describe "POST /me/reply" do
-    it "should reply a conversation, and return the message" do
-      conversation = create_conversation
-      post reply_me_conversation_path(conversation), {body: "Hi again", subject: "Hi!"}, basic_header(current_user.api_token)
-      expect(response.status).to eq 201
-      expect(json["body"]).to eq("Hi again")
-      # expect(json["subject"]).to eq("Hi!")
-      expect(json["sender"]["id"]).to eq(current_user.id)
     end
   end
 

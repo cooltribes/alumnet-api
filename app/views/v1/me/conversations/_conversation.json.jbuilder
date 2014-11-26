@@ -15,3 +15,5 @@ json.participants do
     json.name participant.name
   end
 end
+
+json.new_messages_count conversation.messages.unread.distinct.count
