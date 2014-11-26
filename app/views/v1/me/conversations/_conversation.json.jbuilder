@@ -16,4 +16,4 @@ json.participants do
   end
 end
 
-json.new_messages_count conversation.messages.unread.distinct.count
+json.unread_messages_count conversation.receipts_for(current_user).is_unread.count

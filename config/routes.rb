@@ -12,7 +12,10 @@ Rails.application.routes.draw do
         get :friends, on: :collection
       end
       resources :conversations, except: [:new, :edit, :update], controller: 'me/conversations' do
-        resources :receipts, only: [:index, :show, :create], controller: 'me/receipts'
+        resources :receipts, only: [:index, :show, :create], controller: 'me/receipts' do
+          put :read, on: :member
+          put :unread, on: :member
+        end
       end
     end
 

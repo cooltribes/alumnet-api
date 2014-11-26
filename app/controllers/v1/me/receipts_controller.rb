@@ -13,6 +13,18 @@ class V1::Me::ReceiptsController < V1::BaseController
     render :show, status: :created
   end
 
+  def read
+    @receipt = @user.receipts.find(params[:id])
+    @receipt.mark_as_read
+    render :show
+  end
+
+  def unread
+    @receipt = @user.receipts.find(params[:id])
+    @receipt.mark_as_unread
+    render :show
+  end
+
   private
     def set_user
       @user = current_user if current_user

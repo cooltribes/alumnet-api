@@ -36,4 +36,29 @@ describe V1::Me::ReceiptsController, type: :request do
     end
   end
 
+  describe "PUT /me/conversations/:id/receipts/:id/read" do
+    it "should mark as read an receipt" do
+      conversation = create_conversation
+      friend_one.reply_to_conversation(conversation, "New Message from Friend One")
+      receipt = current_user.receipts.is_unread.first
+      expect(receipt).to be_is_unread
+      put read_me_conversation_receipt_path(conversation, receipt), {}, basic_header(current_user.api_token)
+      expect(response.status).to eq 200
+      expect(json['body']).to eq("New Message from Friend One")
+      expect(json['is_read']).to eq(true)
+    end
+  end
+
+  describe "PUT /me/conversations/:id/receipts/:id/unread" do
+    it "should mark as unread an receipt" do
+      conversation = create_conversation
+      receipt = current_user.reply_to_conversation(conversation, "New Message from Friend One")
+      expect(receipt).to be_is_read
+      put unread_me_conversation_receipt_path(conversation, receipt), {}, basic_header(current_user.api_token)
+      expect(response.status).to eq 200
+      expect(json['body']).to eq("New Message from Friend One")
+      expect(json['is_read']).to eq(false)
+    end
+  end
+
 end
