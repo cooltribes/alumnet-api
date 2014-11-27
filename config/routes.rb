@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     post '/register', to: 'auth#register', as: :register
 
     resource :me, only: [:show, :update], controller: 'me' do
+      get :messages
       resource :profile, only: [:show, :update], controller: 'me/profiles'
       resources :posts, controller: 'me/posts'
       resources :friendships, except: :show, controller: 'me/friendships' do

@@ -4,9 +4,14 @@ class V1::MeController < V1::BaseController
   def show
   end
 
+  def messages
+    @receipts = @user.receipts.limit(3)
+    render "v1/me/receipts/index", status: :ok
+  end
+
   def update
     if @user.update(user_params)
-      render 'v1/users/show', status: :ok,  location: me_path
+      render :show, status: :ok,  location: me_path
     else
       render json: @user.errors, status: :unprocessable_entity
     end

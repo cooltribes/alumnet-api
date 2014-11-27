@@ -44,7 +44,9 @@ class User < ActiveRecord::Base
   end
 
   ### all about Conversations
-
+  def unread_messages_count
+    receipts.is_unread.count
+  end
 
   ### all about Post
   def groups_posts
