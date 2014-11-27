@@ -6,6 +6,7 @@ class Profile < ActiveRecord::Base
   belongs_to :user
   has_many :contact_infos
   has_many :experiences
+  has_and_belongs_to_many :languages
 
   ###Validations
   validates_presence_of :user_id
@@ -14,6 +15,8 @@ class Profile < ActiveRecord::Base
   ###Nested Atrributes
   accepts_nested_attributes_for :contact_infos, allow_destroy: true
   accepts_nested_attributes_for :experiences, allow_destroy: true
+  accepts_nested_attributes_for :languages, allow_destroy: true
+
 
   ###Instance Methods
 

@@ -6,7 +6,7 @@ RSpec.describe Profile, :type => :model do
   it { should belong_to(:user) }
   it { should have_many(:contact_infos) }
   it { should have_many(:experiences) }
-
+  it { should have_and_belong_to_many(:languages) }
 
 
   describe "instances methods" do
@@ -35,5 +35,4 @@ RSpec.describe Profile, :type => :model do
       end
     end
   end
-
 end
