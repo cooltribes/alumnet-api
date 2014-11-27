@@ -49,5 +49,7 @@ Rails.application.routes.draw do
     end
 
     resources :languages, only: :index
+    resources :skills, only: :index
+
   end
 end

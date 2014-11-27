@@ -102,3 +102,7 @@ end
 Language.blueprint do
   name { "Language #{sn}"}
 end
+
+Skill.blueprint do
+  name { "Skill #{sn}"}
+end

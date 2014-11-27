@@ -7,6 +7,8 @@ RSpec.describe Profile, :type => :model do
   it { should have_many(:contact_infos) }
   it { should have_many(:experiences) }
   it { should have_and_belong_to_many(:languages) }
+  it { should have_and_belong_to_many(:skills) }
+
 
 
   describe "instances methods" do
