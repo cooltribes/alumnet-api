@@ -7,5 +7,5 @@ json.is_read receipt.is_read
 json.sender do
   json.id message.sender.id
   json.name message.sender.name
-  json.avatar message.sender.avatar.small.url
+  json.avatar message.sender.avatar.medium.url
 end
