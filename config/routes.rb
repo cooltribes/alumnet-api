@@ -47,5 +47,7 @@ Rails.application.routes.draw do
       get :cities, on: :member
       get :committees, on: :member
     end
+
+    resources :languages, only: :index
   end
 end

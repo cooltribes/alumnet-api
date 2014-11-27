@@ -98,3 +98,7 @@ Committee.blueprint do
   cc_fips { sn }
   name { "Committee #{sn}" }
 end
+
+Language.blueprint do
+  name { "Language #{sn}"}
+end
