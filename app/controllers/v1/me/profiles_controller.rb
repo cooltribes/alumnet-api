@@ -29,8 +29,12 @@ class V1::Me::ProfilesController < V1::BaseController
         params.permit(:first_name, :last_name, :avatar, :born, :birth_city, :residence_city)
       elsif @profile.profile?
         params.permit(contact_infos_attributes: [:contact_type, :info, :privacy])
-      elsif @profile.contact?
-        params.permit(experiences_attributes: [:exp_type, :name, :description, :start_date, :end_date, :city_id, :country_id])
+      elsif @profile.contact? || @profile.experience_a?
+        params.permit(experiences_attributes: [:exp_type, :name, :description, :start_date, :end_date, :city_id, :country_id])     
+      elsif @profile.experience_b?
+        params.permit(experiences_attributes: [:exp_type, :name, :description, :start_date, :end_date, :city_id, :country_id, :organization_name])
+      elsif @profile.experience_c?
+        params.permit(experiences_attributes: [:exp_type, :name, :description, :start_date, :end_date, :city_id, :country_id, :organization_name, :internship])
         # params.permit(experiences_attr: [:type, :name, :description, :start_date, :end_date, :organization_name, :city_id, :country_id, :internship])
       end
     end
