@@ -35,7 +35,7 @@ class V1::Me::ProfilesController < V1::BaseController
       elsif @profile.experience_c?
         params.permit(experiences_attributes: [:exp_type, :name, :description, :start_date, :end_date, :city_id, :country_id, :organization_name, :internship])
       elsif @profile.experience_d?
-        params.permit(languages_attributes: [:language_id])
+        params.permit(languages_attributes: [], skills_attributes: [])
         
         # params.permit(experiences_attr: [:type, :name, :description, :start_date, :end_date, :organization_name, :city_id, :country_id, :internship])
       end
