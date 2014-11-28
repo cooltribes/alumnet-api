@@ -23,7 +23,7 @@ describe V1::AuthController, type: :request do
         post sign_in_path, { email: user.email, password: "12345678" }, header
         expect(response.status).to eq 200
         expect(json).to eq({"id"=>user.id, "email"=>user.email, "auth_token"=>user.auth_token,
-          "name"=>user.name, "remember_token"=>user.remember_token})
+          "name"=>user.name })
       end
     end
 

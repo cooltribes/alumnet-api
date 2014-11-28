@@ -40,7 +40,6 @@ class User < ActiveRecord::Base
   def ensure_tokens
     self.auth_token = generate_token_for(:auth_token)
     self.auth_token_created_at = Time.current
-    self.remember_token = generate_token_for(:remember_token)
   end
 
   ### all about Conversations

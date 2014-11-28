@@ -73,6 +73,9 @@ namespace :data_fixture do
   task languages_and_skills: :environment do
     require 'machinist'
     require Rails.root.join("spec/support/blueprints")
-    10.times { Language.make!; Skill.make }
+    10.times do
+      Language.make!
+      Skill.make!
+    end
   end
 end
