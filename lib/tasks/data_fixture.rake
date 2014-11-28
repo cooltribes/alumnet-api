@@ -68,4 +68,11 @@ namespace :data_fixture do
     require Rails.root.join("spec/support/blueprints")
     3.times { Country.make! }
   end
+
+  desc "create languages and skills to test"
+  task languages_and_skills: :environment do
+    require 'machinist'
+    require Rails.root.join("spec/support/blueprints")
+    10.times { Language.make!; Skill.make }
+  end
 end

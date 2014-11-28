@@ -1,5 +1,6 @@
 class Language < ActiveRecord::Base
   ### Relations
-  has_and_belongs_to_many :profiles
+  has_many :language_levels
+  has_many :profiles, through: :language_levels
 
 end

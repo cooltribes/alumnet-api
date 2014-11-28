@@ -6,7 +6,8 @@ RSpec.describe Profile, :type => :model do
   it { should belong_to(:user) }
   it { should have_many(:contact_infos) }
   it { should have_many(:experiences) }
-  it { should have_and_belong_to_many(:languages) }
+  it { should have_many(:language_levels) }
+  it { should have_many(:languages) }
   it { should have_and_belong_to_many(:skills) }
 
 
@@ -35,6 +36,32 @@ RSpec.describe Profile, :type => :model do
         profile.update_step
         expect(profile.register_step).to eq("approval")
       end
+    end
+  end
+
+  describe "accept languages attributes" do
+    it "should create a languages to profile" do
+      language_one = Language.make!
+      language_two = Language.make!
+      profile = Profile.make!
+      languages_attributes = { languages_attributes: [
+        { "language_id"=> language_one.id, "level" => 5 },
+        { "language_id"=> language_two.id, "level" => 3 }
+      ]}
+      profile.update(languages_attributes)
+      expect(profile.languages.count).to eq(2)
+    end
+  end
+
+  describe "accept skills attributes" do
+    it "should create a languages to profile" do
+      skill = Skill.make!
+      profile = Profile.make!
+      skills_attributes = { skills_attributes: [
+        "No Existe", skill.name
+      ]}
+      profile.update(skills_attributes)
+      expect(profile.skills.pluck(:name)).to match_array(["No Existe", skill.name])
     end
   end
 end

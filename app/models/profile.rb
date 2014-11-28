@@ -6,7 +6,8 @@ class Profile < ActiveRecord::Base
   belongs_to :user
   has_many :contact_infos
   has_many :experiences
-  has_and_belongs_to_many :languages
+  has_many :language_levels
+  has_many :languages, through: :language_levels
   has_and_belongs_to_many :skills
 
   ###Validations
@@ -22,6 +23,18 @@ class Profile < ActiveRecord::Base
 
 
   ###Instance Methods
+  def languages_attributes=(collection_attributes)
+    collection_attributes.each do |attributes|
+      language_levels.build(language_id: attributes["language_id"], level: attributes["level"])
+    end
+  end
+
+  def skills_attributes=(skill_names)
+    skill_names.each do |name|
+      skill = Skill.find_or_create_by(name: name)
+      skills << skill
+    end
+  end
 
   def update_step
     case register_step

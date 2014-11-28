@@ -22,8 +22,9 @@ class V1::GroupsController < V1::BaseController
 
   def add_group
     @new_group = Group.new(group_params)
+    @new_group.creator_user_id = current_user.id
     if @group.children << @new_group
-      render :show, status: :created,  location: @group
+      render :add_group, status: :created,  location: @group
     else
       render json: @new_group.errors, status: :unprocessable_entity
     end
