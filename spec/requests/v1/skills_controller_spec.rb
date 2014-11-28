@@ -6,7 +6,7 @@ describe V1::SkillsController, type: :request do
   describe "GET /skills" do
     it "return all skills" do
       3.times { Skill.make! }
-      get skills_path, {}, basic_header(user.api_token)
+      get skills_path, {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(3)
     end

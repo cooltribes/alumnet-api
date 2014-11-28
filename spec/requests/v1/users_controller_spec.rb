@@ -22,7 +22,7 @@ describe V1::UsersController, type: :request do
     end
 
     it "return all users" do
-      get users_path, {}, basic_header(admin.api_token)
+      get users_path, {}, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(5) ## dont return the current user
     end
@@ -31,7 +31,7 @@ describe V1::UsersController, type: :request do
   describe "GET /users/:id" do
     it "return a user by id" do
       user = User.make!
-      get user_path(user), {}, basic_header(admin.api_token)
+      get user_path(user), {}, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       expect(json).to have_key('email')
       expect(json['email']).to eq(user.email)
@@ -41,7 +41,7 @@ describe V1::UsersController, type: :request do
   describe "PUT /users/:id" do
     it "edit a user" do
       user = User.make!
-      put user_path(user), { email: "test_email@gmail" }, basic_header(admin.api_token)
+      put user_path(user), { email: "test_email@gmail" }, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       user.reload
       expect(user.email).to eq("test_email@gmail")
@@ -52,7 +52,7 @@ describe V1::UsersController, type: :request do
     it "delete a user" do
       user = User.make!
       expect {
-        delete user_path(user), {}, basic_header(admin.api_token)
+        delete user_path(user), {}, basic_header(admin.auth_token)
       }.to change(User, :count).by(-1)
       expect(response.status).to eq 204
     end

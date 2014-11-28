@@ -19,7 +19,7 @@ describe V1::Posts::CommentsController, type: :request do
     end
 
     it "return all comments of the posts" do
-      get post_comments_path(post_model), {}, basic_header(admin.api_token)
+      get post_comments_path(post_model), {}, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(5)
       #TODO: Validate schema with null value. Groups without parents and children
@@ -30,7 +30,7 @@ describe V1::Posts::CommentsController, type: :request do
   describe "GET /posts/:post_id/comments/:id" do
     it "return a comment of post by id" do
       comment = Comment.make!(commentable: post_model)
-      get post_comment_path(post_model, comment), {}, basic_header(admin.api_token)
+      get post_comment_path(post_model, comment), {}, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       expect(json).to have_key('user')
       expect(json).to have_key('comment')
@@ -43,7 +43,7 @@ describe V1::Posts::CommentsController, type: :request do
     context "with valid attributes" do
       it "create a comment in post" do
         expect {
-          post post_comments_path(post_model), valid_attributes, basic_header(admin.api_token)
+          post post_comments_path(post_model), valid_attributes, basic_header(admin.auth_token)
         }.to change(Comment, :count).by(1)
         expect(response.status).to eq 201
         comment = post_model.comments.last
@@ -56,7 +56,7 @@ describe V1::Posts::CommentsController, type: :request do
     context "with invalid attributes" do
       it "return the errors in format json" do
         expect {
-          post post_comments_path(post_model), invalid_attributes, basic_header(admin.api_token)
+          post post_comments_path(post_model), invalid_attributes, basic_header(admin.auth_token)
         }.to change(Comment, :count).by(0)
         expect(json).to eq({"comment"=>["can't be blank"]})
         expect(response.status).to eq 422
@@ -67,7 +67,7 @@ describe V1::Posts::CommentsController, type: :request do
   describe "PUT /posts/:post_id/comments/:id" do
     it "edit a comment of post" do
       comment = Comment.make!(commentable: post_model)
-      put post_comment_path(post_model, comment), { comment: "New text in comment" }, basic_header(admin.api_token)
+      put post_comment_path(post_model, comment), { comment: "New text in comment" }, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       comment.reload
       expect(comment.comment).to eq("New text in comment")
@@ -79,7 +79,7 @@ describe V1::Posts::CommentsController, type: :request do
     it "delete a post of group" do
       comment = Comment.make!(commentable: post_model)
       expect {
-        delete post_comment_path(post_model, comment), {}, basic_header(admin.api_token)
+        delete post_comment_path(post_model, comment), {}, basic_header(admin.auth_token)
       }.to change(Comment, :count).by(-1)
       expect(response.status).to eq 204
     end
@@ -93,7 +93,7 @@ describe V1::Posts::CommentsController, type: :request do
         post_model = Post.make!(postable: group)
         comment = Comment.make!(commentable: post_model)
         expect {
-          post like_post_comment_path(post_model, comment), {}, basic_header(user.api_token)
+          post like_post_comment_path(post_model, comment), {}, basic_header(user.auth_token)
         }.to change(comment, :likes_count).by(1)
         expect(response.status).to eq 200
         expect(json).to have_key("user_id")
@@ -108,7 +108,7 @@ describe V1::Posts::CommentsController, type: :request do
         comment = Comment.make!(commentable: post_model)
         Like.make!(user: user, likeable: comment)
         expect {
-          post like_post_comment_path(post_model, comment), {}, basic_header(user.api_token)
+          post like_post_comment_path(post_model, comment), {}, basic_header(user.auth_token)
         }.to change(comment, :likes_count).by(0)
         expect(response.status).to eq 422
         expect(json['errors']).to eq(["User already made like!"])

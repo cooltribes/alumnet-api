@@ -20,7 +20,7 @@ describe V1::Groups::PostsController, type: :request do
     end
 
     it "return all posts of group" do
-      get group_posts_path(group), {}, basic_header(admin.api_token)
+      get group_posts_path(group), {}, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(5)
       #TODO: Validate schema with null value. Groups without parents and children
@@ -31,7 +31,7 @@ describe V1::Groups::PostsController, type: :request do
   describe "GET /groups/:group_id/posts/:id" do
     it "return a post of a group by id" do
       post = Post.make!(postable: group)
-      get group_post_path(group, post), {}, basic_header(admin.api_token)
+      get group_post_path(group, post), {}, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       expect(json).to have_key('user')
       expect(json).to have_key('body')
@@ -44,7 +44,7 @@ describe V1::Groups::PostsController, type: :request do
     context "with valid attributes" do
       it "create a post in group" do
         expect {
-          post group_posts_path(group), valid_attributes , basic_header(admin.api_token)
+          post group_posts_path(group), valid_attributes , basic_header(admin.auth_token)
         }.to change(Post, :count).by(1)
         expect(response.status).to eq 201
         post = group.posts.last
@@ -57,7 +57,7 @@ describe V1::Groups::PostsController, type: :request do
     context "with invalid attributes" do
       it "return the errors in format json" do
         expect {
-          post group_posts_path(group), invalid_attributes, basic_header(admin.api_token)
+          post group_posts_path(group), invalid_attributes, basic_header(admin.auth_token)
         }.to change(Post, :count).by(0)
         expect(json).to eq({"body"=>["can't be blank"]})
         expect(response.status).to eq 422
@@ -68,7 +68,7 @@ describe V1::Groups::PostsController, type: :request do
   describe "PUT /groups/:group_id/posts/:id" do
     it "edit a post of group" do
       post = Post.make!(postable: group)
-      put group_post_path(group, post), { body: "New body of post" }, basic_header(admin.api_token)
+      put group_post_path(group, post), { body: "New body of post" }, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       post.reload
       expect(post.body).to eq("New body of post")
@@ -80,7 +80,7 @@ describe V1::Groups::PostsController, type: :request do
     it "delete a post of group" do
       post = Post.make!(postable: group)
       expect {
-        delete group_post_path(group, post), {}, basic_header(admin.api_token)
+        delete group_post_path(group, post), {}, basic_header(admin.auth_token)
       }.to change(Post, :count).by(-1)
       expect(response.status).to eq 204
     end

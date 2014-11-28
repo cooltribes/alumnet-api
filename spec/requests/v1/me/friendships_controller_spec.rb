@@ -7,7 +7,7 @@ describe V1::Me::FriendshipsController, type: :request do
     it "with filter='sent' return a friendships filtered" do
       2.times { Friendship.make!(:accepted, user: user ) }
       3.times { Friendship.make!(:not_accepted, user: user ) }
-      get me_friendships_path, { filter: "sent" }, basic_header(user.api_token)
+      get me_friendships_path, { filter: "sent" }, basic_header(user.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(3)
     end
@@ -15,7 +15,7 @@ describe V1::Me::FriendshipsController, type: :request do
     it "with filter='received' return a friendships filtered" do
       1.times { Friendship.make!(:accepted, friend: user ) }
       2.times { Friendship.make!(:not_accepted, friend: user ) }
-      get me_friendships_path, { filter: "received" }, basic_header(user.api_token)
+      get me_friendships_path, { filter: "received" }, basic_header(user.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(2)
     end
@@ -25,7 +25,7 @@ describe V1::Me::FriendshipsController, type: :request do
     it "return a friendships accepted" do
       2.times { Friendship.make!(:accepted, user: user ) }
       1.times { Friendship.make!(:accepted, friend: user ) }
-      get friends_me_friendships_path, {}, basic_header(user.api_token)
+      get friends_me_friendships_path, {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(3)
     end
@@ -35,7 +35,7 @@ describe V1::Me::FriendshipsController, type: :request do
     it "should create a friendship" do
       friend = User.make!
       expect {
-        post me_friendships_path, { friend_id: friend.id } , basic_header(user.api_token)
+        post me_friendships_path, { friend_id: friend.id } , basic_header(user.auth_token)
       }.to change(Friendship, :count).by(1)
       expect(response.status).to eq 201
       expect(json["friend_id"]).to eq(friend.id)
@@ -51,7 +51,7 @@ describe V1::Me::FriendshipsController, type: :request do
       friend = User.make!
       friendship = Friendship.make!(:not_accepted, user: requester, friend: friend)
       expect(friendship).to_not be_accepted
-      put me_friendship_path(friendship), {}, basic_header(friend.api_token)
+      put me_friendship_path(friendship), {}, basic_header(friend.auth_token)
       expect(json["accepted"]).to eq(true)
     end
   end
@@ -60,7 +60,7 @@ describe V1::Me::FriendshipsController, type: :request do
     it "delete a friendship of current_user" do
       friendship = Friendship.make!(:not_accepted, user: user)
       expect {
-        delete me_friendship_path(friendship), {}, basic_header(user.api_token)
+        delete me_friendship_path(friendship), {}, basic_header(user.auth_token)
       }.to change(Friendship, :count).by(-1)
       expect(response.status).to eq 204
     end

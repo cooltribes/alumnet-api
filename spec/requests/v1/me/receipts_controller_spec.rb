@@ -19,7 +19,7 @@ describe V1::Me::ReceiptsController, type: :request do
     end
     it "should return all conversations of current user" do
       conversation = create_conversation
-      get me_conversation_receipts_path(conversation), {}, basic_header(current_user.api_token)
+      get me_conversation_receipts_path(conversation), {}, basic_header(current_user.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(3)
     end
@@ -29,7 +29,7 @@ describe V1::Me::ReceiptsController, type: :request do
     it "should create a reply in conversation" do
       conversation = create_conversation
       expect {
-        post me_conversation_receipts_path(conversation), { body: "Hi again" }, basic_header(current_user.api_token)
+        post me_conversation_receipts_path(conversation), { body: "Hi again" }, basic_header(current_user.auth_token)
       }.to change(conversation.messages, :count).by(1)
       expect(response.status).to eq 201
       expect(json['body']).to eq("Hi again")
@@ -42,7 +42,7 @@ describe V1::Me::ReceiptsController, type: :request do
       friend_one.reply_to_conversation(conversation, "New Message from Friend One")
       receipt = current_user.receipts.is_unread.first
       expect(receipt).to be_is_unread
-      put read_me_conversation_receipt_path(conversation, receipt), {}, basic_header(current_user.api_token)
+      put read_me_conversation_receipt_path(conversation, receipt), {}, basic_header(current_user.auth_token)
       expect(response.status).to eq 200
       expect(json['body']).to eq("New Message from Friend One")
       expect(json['is_read']).to eq(true)
@@ -54,7 +54,7 @@ describe V1::Me::ReceiptsController, type: :request do
       conversation = create_conversation
       receipt = current_user.reply_to_conversation(conversation, "New Message from Friend One")
       expect(receipt).to be_is_read
-      put unread_me_conversation_receipt_path(conversation, receipt), {}, basic_header(current_user.api_token)
+      put unread_me_conversation_receipt_path(conversation, receipt), {}, basic_header(current_user.auth_token)
       expect(response.status).to eq 200
       expect(json['body']).to eq("New Message from Friend One")
       expect(json['is_read']).to eq(false)

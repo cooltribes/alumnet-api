@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
   ## TODO add format validation for email.
 
   ### Callbacks
-  before_save :ensure_api_token
+  before_create :ensure_tokens
   before_create :set_role_and_create_profile
 
   ### Instance Methods
@@ -37,10 +37,10 @@ class User < ActiveRecord::Base
     email
   end
 
-  def ensure_api_token
-    if api_token.blank?
-      self.api_token = generate_api_token
-    end
+  def ensure_tokens
+    self.auth_token = generate_token_for(:auth_token)
+    self.auth_token_created_at = Time.current
+    self.remember_token = generate_token_for(:remember_token)
   end
 
   ### all about Conversations
@@ -193,16 +193,13 @@ class User < ActiveRecord::Base
     likes.exists?(likeable: likeable)
   end
 
-
-
   private
 
   ### this a temporary solution to authenticate the api
-  def generate_api_token
+  def generate_token_for(column)
     begin
-      return token = SecureRandom.urlsafe_base64(30).tr('lIO0', 'sxyz')
-    end while User.exists?(api_token: token)
-
+      return token = SecureRandom.urlsafe_base64(64).tr('lIO0', 'sxyz')
+    end while User.exists?(column => token)
   end
 
   def set_role_and_create_profile

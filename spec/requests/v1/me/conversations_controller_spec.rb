@@ -23,7 +23,7 @@ describe V1::Me::ConversationsController, type: :request do
       current_user.send_message([friend_two], "Bye!", "Say adieu to friend two")
     end
     it "should return all conversations of current user" do
-      get me_conversations_path, {}, basic_header(current_user.api_token)
+      get me_conversations_path, {}, basic_header(current_user.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(2)
     end
@@ -32,7 +32,7 @@ describe V1::Me::ConversationsController, type: :request do
   describe "GET /me/conversations/:id" do
     it "should return the conversation by id and last message" do
       conversation = create_conversation
-      get me_conversation_path(conversation), {}, basic_header(current_user.api_token)
+      get me_conversation_path(conversation), {}, basic_header(current_user.auth_token)
       expect(response.status).to eq 200
       expect(json["subject"]).to eq("Say Hi")
       expect(json["is_read"]).to eq(false)
@@ -41,7 +41,7 @@ describe V1::Me::ConversationsController, type: :request do
 
   describe "POST /me/conversations" do
     it "should create a conversations and first message" do
-      post me_conversations_path, conversation_attributes, basic_header(current_user.api_token)
+      post me_conversations_path, conversation_attributes, basic_header(current_user.auth_token)
       expect(current_user.mailbox.conversations.count).to eq(1)
       expect(friend_two.mailbox.conversations.count).to eq(1)
       expect(friend_one.mailbox.conversations.count).to eq(1)
@@ -55,7 +55,7 @@ describe V1::Me::ConversationsController, type: :request do
     it "sent the conversation to trash" do
       conversation = create_conversation
       expect {
-        delete me_conversation_path(conversation), {}, basic_header(current_user.api_token)
+        delete me_conversation_path(conversation), {}, basic_header(current_user.auth_token)
       }.to change(current_user.mailbox.conversations, :count).by(-1)
       expect(response.status).to eq 204
     end

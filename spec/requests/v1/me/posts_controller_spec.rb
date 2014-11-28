@@ -24,7 +24,7 @@ describe V1::Me::PostsController, type: :request do
     end
 
     it "return all posts of groups where user is member" do
-      get me_posts_path, {}, basic_header(current_user.api_token)
+      get me_posts_path, {}, basic_header(current_user.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(4)
       #TODO: Validate schema with null value. Groups without parents and children
@@ -35,7 +35,7 @@ describe V1::Me::PostsController, type: :request do
   describe "GET /me/posts/:id" do
     it "return a post of current user by id" do
       post = Post.make!(postable: current_user)
-      get me_post_path(post), {}, basic_header(current_user.api_token)
+      get me_post_path(post), {}, basic_header(current_user.auth_token)
       expect(response.status).to eq 200
       expect(json['body']).to eq(post.body)
       expect(json['user']['name']).to eq(current_user.name)
@@ -47,7 +47,7 @@ describe V1::Me::PostsController, type: :request do
     context "with valid attributes" do
       it "create a post in current user" do
         expect {
-          post me_posts_path, valid_attributes , basic_header(current_user.api_token)
+          post me_posts_path, valid_attributes , basic_header(current_user.auth_token)
         }.to change(Post, :count).by(1)
         expect(response.status).to eq 201
         post = current_user.posts.last
@@ -60,7 +60,7 @@ describe V1::Me::PostsController, type: :request do
     context "with invalid attributes" do
       it "return the errors in format json" do
         expect {
-          post me_posts_path, invalid_attributes, basic_header(current_user.api_token)
+          post me_posts_path, invalid_attributes, basic_header(current_user.auth_token)
         }.to change(Post, :count).by(0)
         expect(json).to eq({"body"=>["can't be blank"]})
         expect(response.status).to eq 422
@@ -71,7 +71,7 @@ describe V1::Me::PostsController, type: :request do
   describe "PUT /me/posts/:id" do
     it "edit a post of current user" do
       post = Post.make!(postable: current_user)
-      put me_post_path(post), { body: "New body of post" }, basic_header(current_user.api_token)
+      put me_post_path(post), { body: "New body of post" }, basic_header(current_user.auth_token)
       expect(response.status).to eq 200
       post.reload
       expect(post.body).to eq("New body of post")
@@ -83,7 +83,7 @@ describe V1::Me::PostsController, type: :request do
     it "delete a post of current user" do
       post = Post.make!(postable: current_user)
       expect {
-        delete me_post_path(post), {}, basic_header(current_user.api_token)
+        delete me_post_path(post), {}, basic_header(current_user.auth_token)
       }.to change(Post, :count).by(-1)
       expect(response.status).to eq 204
     end

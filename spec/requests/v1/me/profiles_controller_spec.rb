@@ -13,7 +13,7 @@ describe V1::Me::ProfilesController, type: :request do
 
     it "return the user profile" do
       profile = @user.profile
-      get me_profile_path, {}, basic_header(@user.api_token)
+      get me_profile_path, {}, basic_header(@user.auth_token)
       expect(response.status).to eq 200
       expect(json['first_name']).to eq(profile.first_name)
       expect(json['last_name']).to eq(profile.last_name)
@@ -27,7 +27,7 @@ describe V1::Me::ProfilesController, type: :request do
 
     context "Step 1 - initial" do
       it "update the user profile" do
-        put me_profile_path, { first_name: "Armando", last_name: "Mendoza" }, basic_header(@user.api_token)
+        put me_profile_path, { first_name: "Armando", last_name: "Mendoza" }, basic_header(@user.auth_token)
         expect(response.status).to eq 200
         expect(json['first_name']).to eq('Armando')
         expect(json['last_name']).to eq('Mendoza')
@@ -50,7 +50,7 @@ describe V1::Me::ProfilesController, type: :request do
         ]}
         profile = @user.profile
         profile.profile! #change the estatus
-        put me_profile_path(@user), contact_infos_attributes, basic_header(@user.api_token)
+        put me_profile_path(@user), contact_infos_attributes, basic_header(@user.auth_token)
         expect(response.status).to eq 200
         profile.reload
         expect(profile.contact_infos.count).to eq(3)
@@ -77,7 +77,7 @@ describe V1::Me::ProfilesController, type: :request do
         ]}
         profile = @user.profile
         profile.contact! #change the estatus
-        put me_profile_path(@user), experiences_attributes, basic_header(@user.api_token)
+        put me_profile_path(@user), experiences_attributes, basic_header(@user.auth_token)
         expect(response.status).to eq 200
         profile.reload
         expect(profile.experiences.count).to eq(2)

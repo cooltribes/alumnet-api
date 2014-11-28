@@ -8,7 +8,7 @@ describe V1::PostsController, type: :request do
   describe "GET /posts/:id" do
     it "return a post by id" do
       post = Post.make!(postable: Group.make!)
-      get post_path(post), {}, basic_header(admin.api_token)
+      get post_path(post), {}, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       expect(json).to have_key('body')
       #expect(valid_schema('post', json)).to be_empty
@@ -21,7 +21,7 @@ describe V1::PostsController, type: :request do
         user = User.make!
         post_model = Post.make!(postable: group)
         expect {
-          post like_post_path(post_model), {}, basic_header(user.api_token)
+          post like_post_path(post_model), {}, basic_header(user.auth_token)
         }.to change(post_model, :likes_count).by(1)
         expect(response.status).to eq 200
         expect(json).to have_key("user_id")
@@ -34,7 +34,7 @@ describe V1::PostsController, type: :request do
         post_model = Post.make!(postable: group)
         Like.make!(user: user, likeable: post_model)
         expect {
-          post like_post_path(post_model), {}, basic_header(user.api_token)
+          post like_post_path(post_model), {}, basic_header(user.auth_token)
         }.to change(post_model, :likes_count).by(0)
         expect(response.status).to eq 422
         expect(json['errors']).to eq(["User already made like!"])
@@ -49,7 +49,7 @@ describe V1::PostsController, type: :request do
         post_model = Post.make!(postable: group)
         Like.make!(user: user, likeable: post_model)
         expect {
-          post unlike_post_path(post_model), {}, basic_header(user.api_token)
+          post unlike_post_path(post_model), {}, basic_header(user.auth_token)
         }.to change(post_model, :likes_count).by(-1)
         expect(json["ok"]).to eq(true)
         expect(response.status).to eq 200
