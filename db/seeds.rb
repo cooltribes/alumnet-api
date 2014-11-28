@@ -10,3 +10,16 @@ SmarterCSV.process(file, options ) do |array|
 end
 file.close
 
+file = File.open('db/data/languages.csv', "r:ISO-8859-5")
+options = { col_sep: "\t"}
+SmarterCSV.process(file, options ) do |array|
+  Language.create( array.first )
+end
+file.close
+
+file = File.open('db/data/skills.csv', "r:ISO-8859-5")
+options = { col_sep: "\t"}
+SmarterCSV.process(file, options ) do |array|
+  Skill.create( array.first )
+end
+file.close
