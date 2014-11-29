@@ -49,7 +49,7 @@ RSpec.describe Profile, :type => :model do
         { "language_id"=> language_two.id, "level" => 3 }
       ]}
       profile.update(languages_attributes)
-      expect(profile.languages.count).to eq(2)
+      expect(profile.languages.pluck(:name)).to match_array([language_one.name, language_two.name])
     end
   end
 

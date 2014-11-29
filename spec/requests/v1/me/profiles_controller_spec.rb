@@ -84,6 +84,31 @@ describe V1::Me::ProfilesController, type: :request do
         expect(profile.experiences.pluck(:name)).to match_array(["Name", "Name 1"])
       end
     end
+
+    context "Step 5 - experiences d completed" do
+      before do
+        @user.profile.first_name = "Armando"
+        @user.profile.last_name = "Mendoza"
+        @user.profile.born = Date.parse("21-08-1980")
+        @user.profile.save
+      end
+
+      it "should add many experiences to profile" do
+        language_one = Language.make!
+        language_two = Language.make!
+        languages_attributes = { languages_attributes: [
+          { "language_id"=> language_one.id, "level" => 5 },
+          { "language_id"=> language_two.id, "level" => 3 }
+        ]}
+        profile = @user.profile
+        profile.experience_d! #change the estatus
+        put me_profile_path(@user), languages_attributes, basic_header(@user.auth_token)
+        expect(response.status).to eq 200
+        profile.reload
+        expect(profile.languages.count).to eq(2)
+        expect(profile.languages.pluck(:name)).to match_array([language_one.name, language_two.name])
+      end
+    end
   end
 end
 
