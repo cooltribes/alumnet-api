@@ -16,6 +16,7 @@ gem 'mailboxer'
 gem 'acts_as_commentable'
 gem 'smarter_csv'
 gem 'pundit'
+gem 'pusher'
 
 group :development do
   gem 'spring'
