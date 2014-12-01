@@ -24,6 +24,10 @@ group :development do
   gem 'binding_of_caller'
   gem 'quiet_assets'
   gem 'lol_dba'
+  gem 'capistrano'
+  gem 'capistrano-rails'
+  gem 'capistrano-rvm'
+  gem 'capistrano-bundler'
 end
 
 group :test, :development do

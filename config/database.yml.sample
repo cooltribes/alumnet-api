@@ -22,5 +22,5 @@ test:
 production:
   <<: *default
   database: alumnet
-  username:
+  username: <%= ENV['ALUMNET-API_DATABASE_USER'] %>
   password: <%= ENV['ALUMNET-API_DATABASE_PASSWORD'] %>
