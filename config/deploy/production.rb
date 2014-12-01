@@ -1,7 +1,7 @@
 server 'cooltribes.com',
   user: 'alumnet',
   password: 'alumnet0987654321',
-  roles: %w{web app db}
+  roles: %w{web app}
 
 # Custom SSH Options
 # ==================
