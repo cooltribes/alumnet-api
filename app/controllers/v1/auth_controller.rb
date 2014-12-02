@@ -15,7 +15,6 @@ class V1::AuthController < V1::BaseController
   def register
     @user = User.new(user_params)
     if @user.save
-      @user.profile.update(profile_params)
       render :user, status: :created,  location: @user
     else
       render json: { errors: @user.errors }, status: :unprocessable_entity
@@ -34,7 +33,4 @@ class V1::AuthController < V1::BaseController
     params.require(:user).permit(:email, :password, :password_confirmation)
   end
 
-  def profile_params
-    params.require(:profile).permit(:first_name, :last_name)
-  end
 end
