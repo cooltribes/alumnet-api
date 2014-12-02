@@ -1,6 +1,16 @@
 json.(group, :id, :name, :description, :official, :created_at)
 
+json.country group.get_country_info
+
+json.city group.get_city_info
+
 json.group_type group.get_group_type_info
+
+if group.last_post.present?
+  json.last_post_at group.last_post.last_comment_at
+else
+  json.last_post_at nil
+end
 
 json.cover do
   json.main group.cover.main.url

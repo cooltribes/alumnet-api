@@ -32,8 +32,20 @@ class Group < ActiveRecord::Base
     children.any?
   end
 
+  def last_post
+    posts.last
+  end
+
   def get_group_type_info
     { text: group_type, value: Group.group_types[group_type] }
+  end
+
+  def get_country_info
+    { text: country.name, value: country_id}
+  end
+
+  def get_city_info
+    { text: city.name, value: city_id}
   end
 
   def creator
