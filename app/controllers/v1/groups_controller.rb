@@ -24,6 +24,7 @@ class V1::GroupsController < V1::BaseController
     @new_group = Group.new(group_params)
     @new_group.creator_user_id = current_user.id
     if @group.children << @new_group
+      Membership.create_membership_for_creator(@new_group, current_user)
       render :add_group, status: :created,  location: @group
     else
       render json: @new_group.errors, status: :unprocessable_entity
