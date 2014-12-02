@@ -2,17 +2,21 @@ require 'rails_helper'
 
 describe V1::GroupsController, type: :request do
   let!(:admin) { User.make! }
+  let!(:country) { Country.make! }
+  let!(:city) { country.cities.last }
 
   def cover_file
     fixture_file_upload("#{Rails.root}/spec/fixtures/cover_test.jpg")
   end
 
   def valid_attributes
-    { name: "Group 1", description: "short description", cover: cover_file }
+    { name: "Group 1", description: "short description", cover: cover_file,
+      country_id: country.id, city_id: city.id }
   end
 
   def invalid_attributes
-    { name: "", description: "short description", cover: cover_file }
+    { name: "", description: "short description", cover: cover_file,
+      country_id: country.id, city_id: city.id }
   end
 
   describe "GET /groups" do

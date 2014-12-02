@@ -7,9 +7,11 @@ class Group < ActiveRecord::Base
   has_many :memberships
   has_many :users, through: :memberships
   has_many :posts, as: :postable
+  belongs_to :country
+  belongs_to :city
 
   ### Validations
-  validates_presence_of :name, :description, :cover, :group_type
+  validates_presence_of :name, :description, :cover, :group_type, :country_id, :city_id
 
   ### Instance Methods
 

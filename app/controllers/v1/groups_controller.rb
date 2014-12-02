@@ -50,7 +50,8 @@ class V1::GroupsController < V1::BaseController
   end
 
   def group_params
-    params.permit(:name, :description, :cover, :group_type, :official)
+    params.permit(:name, :description, :cover, :group_type, :official, :country_id,
+      :city_id)
   end
 
 end

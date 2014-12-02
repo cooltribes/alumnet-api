@@ -21,6 +21,8 @@ Group.blueprint do
   description { Faker::Lorem.sentence }
   cover { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
   group_type { 0 }
+  country { Country.make! }
+  city { object.country.cities.first }
 end
 
 Group.blueprint(:with_parent_and_childen) do
@@ -28,6 +30,8 @@ Group.blueprint(:with_parent_and_childen) do
   description {  Faker::Lorem.sentence }
   cover { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
   group_type { 1 }
+  country { Country.make! }
+  city { object.country.cities.first }
   parent { Group.make! }
   children { [Group.make!, Group.make!] }
 end
@@ -37,6 +41,8 @@ Group.blueprint(:all_relations) do
   description {  Faker::Lorem.sentence }
   cover { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
   group_type { 1 }
+  country { Country.make! }
+  city { object.country.cities.first }
   parent { Group.make! }
   children { [Group.make!, Group.make!] }
   posts(3)
