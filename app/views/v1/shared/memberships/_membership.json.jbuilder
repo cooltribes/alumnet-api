@@ -12,5 +12,5 @@ end
 json.user do
   json.id membership.user.id
   json.name membership.user.name
-  json.avatar membership.user.avatar.small.url
+  json.avatar membership.user.avatar.large.url
 end
