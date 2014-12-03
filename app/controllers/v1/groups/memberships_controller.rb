@@ -5,19 +5,18 @@ class V1::Groups::MembershipsController < V1::BaseController
 
   def index
     @memberships = @group.memberships.pending
-    render 'v1/shared/memberships/index'
   end
 
   def members
-    @q = @group.memberships.accepted.search(params[:q])
+    @q = @group.memberships.accepted.where.not(user_id: current_user.id).search(params[:q])
     @memberships = @q.result
-    render 'v1/shared/memberships/index'
+    render :index
   end
 
   def create
     @membership = @group.build_membership_for(@user)
     if @membership.save
-      render 'v1/shared/memberships/show', status: :created
+      render :show, status: :created
     else
       render json: @membership.errors, status: :unprocessable_entity
     end
@@ -25,7 +24,7 @@ class V1::Groups::MembershipsController < V1::BaseController
 
   def update
     if @membership.update(membership_params)
-      render 'v1/shared/memberships/show'
+      render :show
     else
       render json: @membership.errors, status: :unprocessable_entity
     end
