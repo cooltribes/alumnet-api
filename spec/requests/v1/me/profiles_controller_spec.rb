@@ -27,10 +27,24 @@ describe V1::Me::ProfilesController, type: :request do
 
     context "Step 1 - initial" do
       it "update the user profile" do
-        put me_profile_path, { first_name: "Armando", last_name: "Mendoza" }, basic_header(@user.auth_token)
+        profile_attributes = {
+          "birth_city" => 1,
+          "residence_city" => 1,
+          "birth_country" => 1,
+          "residence_country" => 1,
+          "born" => "2014-08-21",
+          "first_name" => "Armando",
+          "last_name" => "Mendoza"
+        }
+        put me_profile_path, profile_attributes, basic_header(@user.auth_token)
         expect(response.status).to eq 200
         expect(json['first_name']).to eq('Armando')
         expect(json['last_name']).to eq('Mendoza')
+        expect(json['born']).to eq('2014-08-21')
+        expect(json['birth_country']).to eq(1)
+        expect(json['birth_city']).to eq(1)
+        expect(json['residence_country']).to eq(1)
+        expect(json['birth_country']).to eq(1)
       end
     end
 
