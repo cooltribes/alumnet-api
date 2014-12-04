@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :email
+  validates_uniqueness_of :email
   ## TODO add format validation for email.
 
   ### Callbacks
