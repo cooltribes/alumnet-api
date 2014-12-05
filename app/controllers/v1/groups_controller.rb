@@ -6,6 +6,12 @@ class V1::GroupsController < V1::BaseController
     @groups = @q.result
   end
 
+  def subgroups
+    @q = @group.children.search(params[:q])
+    @groups = @q.result
+    render :index, status: :ok
+  end
+
   def show
   end
 

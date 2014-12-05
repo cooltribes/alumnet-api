@@ -49,6 +49,16 @@ describe V1::GroupsController, type: :request do
     end
   end
 
+  describe "GET /groups/:id/subgroups" do
+    it "return all children of group" do
+      group = Group.make!(:with_parent_and_childen)
+      get subgroups_group_path(group), {}, basic_header(admin.auth_token)
+      expect(response.status).to eq 200
+      expect(json.count).to eq(2)
+      expect(json.first["name"]).to eq(group.children.first.name)
+    end
+  end
+
   describe "POST /groups/:id/add_group" do
     it "create a new group on given group" do
       group = Group.make!
