@@ -1,1 +1,0 @@
-json.array! @friendships, partial: 'v1/shared/friendships/friendship', as: :friendship, user: @user

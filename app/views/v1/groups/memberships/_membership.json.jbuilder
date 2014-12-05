@@ -15,4 +15,4 @@ json.user do
   json.avatar membership.user.avatar.large.url
 end
 
-json.is_friend user.is_friend_of?(@current_user)
+json.is_friend membership.user.is_friend_of?(@current_user)

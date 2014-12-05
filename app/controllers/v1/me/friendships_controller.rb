@@ -4,18 +4,16 @@ class V1::Me::FriendshipsController < V1::BaseController
 
   def index
     @friendships = @user.get_pending_friendships(params[:filter])
-    render 'v1/shared/friendships/index'
   end
 
   def friends
     @friends = @user.search_accepted_friends(params[:q])
-    render 'v1/shared/friendships/friends'
   end
 
   def create
     @friendship = @user.create_friendship_for(@friend)
     if @friendship.save
-      render 'v1/shared/friendships/show', status: :created
+      render :show, status: :created
     else
       render json: @friendship.errors, status: :unprocessable_entity
     end
@@ -25,7 +23,7 @@ class V1::Me::FriendshipsController < V1::BaseController
     @friendship = @user.pending_inverse_friendships.find(params[:id])
     #if @friendship.friend_id == current_user.id #this a policy refactor!
     @friendship.accept!
-    render 'v1/shared/friendships/show'
+    render :show
   end
 
   def destroy
