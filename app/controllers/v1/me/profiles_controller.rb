@@ -26,7 +26,7 @@ class V1::Me::ProfilesController < V1::BaseController
     def profile_params
       if @profile.initial?
         params.permit(:first_name, :last_name, :avatar, :born, :birth_city, :residence_city,
-          :birth_country, :residence_country)
+          :birth_country, :residence_country, :genre)
       elsif @profile.profile?
         params.permit(contact_infos_attributes: [:contact_type, :info, :privacy])
       elsif @profile.contact? || @profile.experience_a?

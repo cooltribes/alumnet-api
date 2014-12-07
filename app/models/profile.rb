@@ -11,8 +11,8 @@ class Profile < ActiveRecord::Base
   has_and_belongs_to_many :skills
 
   ###Validations
-  validates_presence_of :user_id
-  validates_presence_of :first_name, on: :update
+  validates_presence_of :user_id, :first_name, :last_name, on: :update
+  validates_inclusion_of :genre, in: ["M", "F"], on: :update
 
   ###Nested Atrributes
   accepts_nested_attributes_for :contact_infos, allow_destroy: true

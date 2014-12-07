@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   acts_as_messageable
 
   ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin", regular: "Regular" }
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
 
   ### Relations
   has_many :memberships
@@ -17,9 +18,7 @@ class User < ActiveRecord::Base
   has_one :profile
 
   ### Validations
-  validates_presence_of :email
-  validates_uniqueness_of :email
-  ## TODO add format validation for email.
+  validates :email, presence: true, uniqueness: true, format: { with: VALID_EMAIL_REGEX }
 
   ### Callbacks
   before_create :ensure_tokens
