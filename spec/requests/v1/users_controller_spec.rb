@@ -41,10 +41,10 @@ describe V1::UsersController, type: :request do
   describe "PUT /users/:id" do
     it "edit a user" do
       user = User.make!
-      put user_path(user), { email: "test_email@gmail" }, basic_header(admin.auth_token)
+      put user_path(user), { email: "test_email@gmail.com" }, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       user.reload
-      expect(user.email).to eq("test_email@gmail")
+      expect(user.email).to eq("test_email@gmail.com")
     end
   end
 

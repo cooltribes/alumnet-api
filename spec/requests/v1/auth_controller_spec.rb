@@ -58,7 +58,7 @@ describe V1::AuthController, type: :request do
         expect {
           post register_path, invalid_attributes, header
         }.to change(User, :count).by(0)
-        expect(json).to eq({"errors" => { "email"=>["can't be blank"] }})
+        expect(json).to eq({"errors" => { "email"=>["can't be blank", "is invalid"] }})
         expect(response.status).to eq 422
       end
     end

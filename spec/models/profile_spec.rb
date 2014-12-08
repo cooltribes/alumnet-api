@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Profile, :type => :model do
-  it { should validate_presence_of(:first_name) }
-  it { should validate_inclusion_of(:genre).in_array(["M", "F"]) }
+  it { should validate_presence_of(:first_name).on(:update) }
+  it { should validate_inclusion_of(:genrer).in_array(["M", "F"]).on(:update) }
   it { should belong_to(:user) }
   it { should have_many(:contact_infos) }
   it { should have_many(:experiences) }
@@ -15,8 +15,7 @@ RSpec.describe Profile, :type => :model do
   describe "instances methods" do
     describe "#update_step" do
       it "should changed the register_step to next step" do
-        user = User.make!
-        profile = user.profile
+        profile = Profile.make!
         profile.update(first_name: "Armando", last_name: "Mendoza")
         expect(profile.register_step).to eq("initial")
         profile.update_step

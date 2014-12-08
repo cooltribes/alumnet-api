@@ -12,7 +12,7 @@ class Profile < ActiveRecord::Base
 
   ###Validations
   validates_presence_of :user_id, :first_name, :last_name, on: :update
-  validates_inclusion_of :genre, in: ["M", "F"], on: :update
+  validates_inclusion_of :genrer, in: ["M", "F"], on: :update
 
   ###Nested Atrributes
   accepts_nested_attributes_for :contact_infos, allow_destroy: true

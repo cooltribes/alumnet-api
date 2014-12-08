@@ -12,10 +12,6 @@ json.groups do
   json.array! user.groups.pluck(:id)
 end
 
-json.profile do
-  user.profile
-end
-
 if user.id == current_user.id
   json.friendship_status "current user"
   json.friendship nil
