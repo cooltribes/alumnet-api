@@ -20,9 +20,34 @@ class Profile < ActiveRecord::Base
   accepts_nested_attributes_for :languages, allow_destroy: true
   accepts_nested_attributes_for :skills, allow_destroy: true
 
-
-
   ###Instance Methods
+
+  def get_birth_city_info
+    City.find_by(id: birth_city)
+  end
+
+  def get_birth_country_info
+    Country.find_by(id: birth_country)
+  end
+
+  def get_residence_city_info
+    City.find_by(id: residence_city)
+  end
+
+  def get_residence_country_info
+    Country.find_by(id: residence_country)
+  end
+
+  def local_committee
+    if first_aiesec_experience
+      first_aiesec_experience.committee if first_aiesec_experience.committee.present?
+    end
+  end
+
+  def first_aiesec_experience
+    experiences.where(exp_type: 0).first
+  end
+
   def languages_attributes=(collection_attributes)
     collection_attributes.each do |attributes|
       language_levels.build(language_id: attributes["language_id"], level: attributes["level"])
