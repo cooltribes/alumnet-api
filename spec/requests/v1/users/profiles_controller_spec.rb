@@ -7,7 +7,7 @@ describe V1::Users::ProfilesController, type: :request do
     @user.profile.first_name = "Armando"
     @user.profile.last_name = "Mendoza"
     @user.profile.born = Date.parse("21-08-1980")
-    @user.profile.genrer = "M"
+    @user.profile.gender = "M"
     @user.profile.save
     @profile = @user.profile
   end

@@ -8,7 +8,7 @@ describe V1::Me::ProfilesController, type: :request do
       @user.profile.first_name = "Armando"
       @user.profile.last_name = "Mendoza"
       @user.profile.born = Date.parse("21-08-1980")
-      @user.profile.genrer = "M"
+      @user.profile.gender = "M"
       @user.profile.save
     end
 
@@ -33,7 +33,7 @@ describe V1::Me::ProfilesController, type: :request do
           "residence_city" => 1,
           "birth_country" => 1,
           "residence_country" => 1,
-          "genrer" => "M",
+          "gender" => "M",
           "born" => "2014-08-21",
           "first_name" => "Armando",
           "last_name" => "Mendoza"
@@ -55,7 +55,7 @@ describe V1::Me::ProfilesController, type: :request do
         @user.profile.first_name = "Armando"
         @user.profile.last_name = "Mendoza"
         @user.profile.born = Date.parse("21-08-1980")
-        @user.profile.genrer = "M"
+        @user.profile.gender = "M"
         @user.profile.save
       end
 
@@ -80,7 +80,7 @@ describe V1::Me::ProfilesController, type: :request do
         @user.profile.first_name = "Armando"
         @user.profile.last_name = "Mendoza"
         @user.profile.born = Date.parse("21-08-1980")
-        @user.profile.genrer = "M"
+        @user.profile.gender = "M"
         @user.profile.save
       end
 
@@ -108,7 +108,7 @@ describe V1::Me::ProfilesController, type: :request do
         @user.profile.first_name = "Armando"
         @user.profile.last_name = "Mendoza"
         @user.profile.born = Date.parse("21-08-1980")
-        @user.profile.genrer = "M"
+        @user.profile.gender = "M"
         @user.profile.save
       end
 
