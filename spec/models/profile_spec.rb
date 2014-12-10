@@ -63,4 +63,15 @@ RSpec.describe Profile, :type => :model do
       expect(profile.skills.pluck(:name)).to match_array(["No Existe", skill.name])
     end
   end
+
+  describe "Validations" do
+    it "valid that user should have more then 20 years" do
+      profile = Profile.make(born: "2010-01-01")
+      profile.save
+      expect(profile.errors[:born]).to eq(["you must have more than 20 years"])
+      profile = Profile.make(born: "1980-01-01")
+      profile.save
+      expect(profile.errors.count).to eq(0)
+    end
+  end
 end

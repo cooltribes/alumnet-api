@@ -13,6 +13,7 @@ class Profile < ActiveRecord::Base
   ###Validations
   validates_presence_of :user_id, :first_name, :last_name, on: :update
   validates_inclusion_of :gender, in: ["M", "F"], on: :update
+  validate :born_date
 
   ###Nested Atrributes
   accepts_nested_attributes_for :contact_infos, allow_destroy: true
@@ -73,4 +74,11 @@ class Profile < ActiveRecord::Base
       when "skills" then approval!
     end
   end
+
+  private
+    def born_date
+      if born.present? && ((Date.current - born).to_i / 365 ) < 20
+        errors.add(:born, 'you must have more than 20 years')
+      end
+    end
 end
