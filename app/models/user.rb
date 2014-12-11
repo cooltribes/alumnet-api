@@ -28,6 +28,28 @@ class User < ActiveRecord::Base
   before_create :set_role
   after_create :create_new_profile
 
+  ### Instance Methods
+  def name
+    "#{profile.first_name} #{profile.last_name}"
+  end
+
+  def avatar
+    profile.avatar if profile.present?
+  end
+
+  def mailboxer_email(object)
+    email
+  end
+
+  def ensure_tokens
+    self.auth_token = generate_token_for(:auth_token)
+    self.auth_token_created_at = Time.current
+  end
+
+  def get_status_info
+    { text: status, value: User.statuses[status] }
+  end
+
   ### Roles
   def activate!
     if profile.skills?
@@ -48,24 +70,6 @@ class User < ActiveRecord::Base
 
   def is_alumnet_admin?
     role == "AlumNetAdmin"
-  end
-
-  ### Instance Methods
-  def name
-    "#{profile.first_name} #{profile.last_name}"
-  end
-
-  def avatar
-    profile.avatar if profile.present?
-  end
-
-  def mailboxer_email(object)
-    email
-  end
-
-  def ensure_tokens
-    self.auth_token = generate_token_for(:auth_token)
-    self.auth_token_created_at = Time.current
   end
 
   ### all about Conversations

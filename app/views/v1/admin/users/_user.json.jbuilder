@@ -1,4 +1,6 @@
-json.(user, :id, :name, :email, :status)
+json.(user, :id, :name, :email)
+
+json.status user.get_status_info
 
 json.avatar do
   json.original user.avatar.url
@@ -14,6 +16,7 @@ json.profile do
   json.last_name profile.last_name
   json.born profile.born
   json.register_step profile.register_step
+  json.gender profile.gender
 
   json.birth_city do
     json.id profile.birth_city.id

@@ -38,9 +38,9 @@ describe V1::Admin::UsersController, type: :request do
     it "change the status of user to active, change register step of profile to approval and return user" do
       user = User.make!
       user.profile.skills!
-      post activate_admin_user_path(user), {}, basic_header(admin.auth_token)
+      put activate_admin_user_path(user), {}, basic_header(admin.auth_token)
       expect(response.status).to eq 200
-      expect(json["status"]).to eq("active")
+      expect(json["status"]["text"]).to eq("active")
       expect(json["profile"]["register_step"]).to eq("approval")
     end
   end
