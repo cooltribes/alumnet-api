@@ -24,7 +24,7 @@ describe V1::UsersController, type: :request do
     it "return all users" do
       get users_path, {}, basic_header(admin.auth_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(5) ## dont return the current user
+      expect(json.count).to eq(6)
     end
   end
 

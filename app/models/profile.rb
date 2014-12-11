@@ -3,6 +3,10 @@ class Profile < ActiveRecord::Base
   enum register_step: [:initial, :profile, :contact, :experience_a, :experience_b, :experience_c, :experience_d, :skills, :approval]
 
   ###Relations
+  belongs_to :birth_city, class_name: 'City'
+  belongs_to :residence_city, class_name: 'City'
+  belongs_to :birth_country, class_name: 'Country'
+  belongs_to :residence_country, class_name: 'Country'
   belongs_to :user
   has_many :contact_infos
   has_many :experiences
@@ -22,22 +26,6 @@ class Profile < ActiveRecord::Base
   accepts_nested_attributes_for :skills, allow_destroy: true
 
   ###Instance Methods
-
-  def get_birth_city_info
-    City.find_by(id: birth_city)
-  end
-
-  def get_birth_country_info
-    Country.find_by(id: birth_country)
-  end
-
-  def get_residence_city_info
-    City.find_by(id: residence_city)
-  end
-
-  def get_residence_country_info
-    Country.find_by(id: residence_country)
-  end
 
   def local_committee
     if first_aiesec_experience

@@ -14,7 +14,7 @@ class V1::Me::PostsController < V1::BaseController
 
   def create
     @post = Post.new(post_params)
-    @post.user = current_user #set the author
+    @post.user = @user
     if @user.posts << @post
       render 'v1/users/posts/show', status: :created,  location: [@user, @post]
     else

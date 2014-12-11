@@ -8,7 +8,7 @@ describe V1::CountriesController, type: :request do
       3.times { Country.make! }
       get countries_path, {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(3)
+      expect(json.count).to eq(5) #+2 of bluprint of user
     end
   end
 

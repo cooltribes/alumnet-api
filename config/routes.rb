@@ -54,5 +54,10 @@ Rails.application.routes.draw do
     resources :languages, only: :index
     resources :skills, only: :index
 
+    namespace :admin do
+      resources :users, except: :create do
+        post :activate, on: :member
+      end
+    end
   end
 end

@@ -38,7 +38,7 @@ describe V1::Me::PostsController, type: :request do
       get me_post_path(post), {}, basic_header(current_user.auth_token)
       expect(response.status).to eq 200
       expect(json['body']).to eq(post.body)
-      expect(json['user']['name']).to eq(current_user.name)
+      expect(json['user']['name']).to eq(post.user.name)
       #expect(valid_schema('current_user', json)).to be_empty
     end
   end

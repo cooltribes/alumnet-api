@@ -15,7 +15,8 @@ RSpec.describe Profile, :type => :model do
   describe "instances methods" do
     describe "#update_step" do
       it "should changed the register_step to next step" do
-        profile = Profile.make!
+        user = User.make!
+        profile = user.profile
         profile.update(first_name: "Armando", last_name: "Mendoza")
         expect(profile.register_step).to eq("initial")
         profile.update_step
@@ -42,7 +43,8 @@ RSpec.describe Profile, :type => :model do
     it "should create a languages to profile" do
       language_one = Language.make!
       language_two = Language.make!
-      profile = Profile.make!
+      user = User.make!
+      profile = user.profile
       languages_attributes = { languages_attributes: [
         { "language_id"=> language_one.id, "level" => 5 },
         { "language_id"=> language_two.id, "level" => 3 }
@@ -55,7 +57,8 @@ RSpec.describe Profile, :type => :model do
   describe "accept skills attributes" do
     it "should create a languages to profile" do
       skill = Skill.make!
-      profile = Profile.make!
+      user = User.make!
+      profile = user.profile
       skills_attributes = { skills_attributes: [
         "No Existe", skill.name
       ]}
@@ -66,6 +69,8 @@ RSpec.describe Profile, :type => :model do
 
   describe "Validations" do
     it "valid that user should have more then 20 years" do
+      user = User.make!
+      profile = user.profile
       profile = Profile.make(born: "2010-01-01")
       profile.save
       expect(profile.errors[:born]).to eq(["you must have more than 20 years"])

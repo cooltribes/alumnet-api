@@ -1,5 +1,5 @@
-class V1::UsersController < V1::BaseController
-  before_action :set_user, except: [:index, :create]
+class V1::Admin::UsersController < V1::AdminController
+  before_action :set_user, except: :index
 
   def index
     @q = User.includes(:profile).search(params[:q])
@@ -17,6 +17,14 @@ class V1::UsersController < V1::BaseController
     end
   end
 
+  def activate
+    if @user.activate!
+      render :show, status: :ok,  location: @user
+    else
+      render json: ['the register is incompleted!'], status: :unprocessable_entity
+    end
+  end
+
   def destroy
     @user.destroy
     head :no_content
@@ -29,7 +37,7 @@ class V1::UsersController < V1::BaseController
   end
 
   def user_params
-    params.permit(:email, :password, :password_confirmation, :avatar, :name)
+    params.permit(:email, :password, :password_confirmation)
   end
 
   def check_if_current_user_can_invite_on_group
