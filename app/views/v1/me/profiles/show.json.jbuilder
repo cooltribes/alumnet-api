@@ -1,5 +1,5 @@
-json.(@profile, :id, :first_name, :last_name, :born, :birth_city, :residence_city,
-  :birth_country, :residence_country, :register_step)
+json.(@profile, :id, :first_name, :last_name, :born, :birth_city_id, :residence_city_id,
+  :birth_country_id, :residence_country_id, :register_step)
 
 json.avatar do
   json.original @profile.avatar.url

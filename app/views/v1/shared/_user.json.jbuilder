@@ -25,3 +25,6 @@ else
     json.friendship nil
   end
 end
+
+json.is_alumnet_admin user.is_alumnet_admin?
+json.is_system_admin user.is_system_admin?

@@ -5,6 +5,9 @@ class User < ActiveRecord::Base
   ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin", regular: "Regular" }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
 
+  ### Enum
+  enum status: [:inactive, :active, :banned]
+
   ### Relations
   has_many :memberships
   has_many :groups, -> { where("memberships.approved = ?", true) }, through: :memberships
@@ -22,7 +25,8 @@ class User < ActiveRecord::Base
 
   ### Callbacks
   before_create :ensure_tokens
-  before_create :set_role_and_create_profile
+  before_create :set_role
+  after_create :create_new_profile
 
   ### Instance Methods
   def name
@@ -40,6 +44,32 @@ class User < ActiveRecord::Base
   def ensure_tokens
     self.auth_token = generate_token_for(:auth_token)
     self.auth_token_created_at = Time.current
+  end
+
+  def get_status_info
+    { text: status, value: User.statuses[status] }
+  end
+
+  ### Roles
+  def activate!
+    if profile.skills?
+      active!
+      profile.approval!
+    else
+      false
+    end
+  end
+
+  def is_regular?
+    role == "Regular"
+  end
+
+  def is_system_admin?
+    role == "SystemAdmin"
+  end
+
+  def is_alumnet_admin?
+    role == "AlumNetAdmin"
   end
 
   ### all about Conversations
@@ -201,8 +231,11 @@ class User < ActiveRecord::Base
     end while User.exists?(column => token)
   end
 
-  def set_role_and_create_profile
-    self[:role] = ROLES[:regular]
-    build_profile unless profile.present?
+  def set_role
+    self[:role] = ROLES[:regular] unless role.present?
+  end
+
+  def create_new_profile
+    create_profile unless profile.present?
   end
 end

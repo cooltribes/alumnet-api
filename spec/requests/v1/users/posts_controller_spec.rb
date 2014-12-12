@@ -30,7 +30,7 @@ describe V1::Users::PostsController, type: :request do
 
   describe "GET /users/:user_id/posts/:id" do
     it "return a post of a user by id" do
-      post = Post.make!(postable: user)
+      post = Post.make!(postable: user, user: author)
       get user_post_path(user, post), {}, basic_header(author.auth_token)
       expect(response.status).to eq 200
       expect(json['body']).to eq(post.body)
