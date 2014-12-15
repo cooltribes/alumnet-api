@@ -10,17 +10,17 @@ class V1::PasswordResetsController < V1::BaseController
       user.send_password_reset
       render json: { message: "Email sent with password reset instructions"}, status: :ok
     else
-      render json: { error: "email not registered" }, status: 401
+      render json: { errors: { email: ["not registered"] } }, status: 401
     end
   end
 
   def update
     if @user.password_reset_token_expired?
-      render json: { error: "Password reset Token has expired" }, status: 401
+      render json: { errors: { token: ["has expired"]} }, status: 401
     elsif @user.update(update_params)
       render json: { message: "Password has been reset"}, status: :ok
     else
-      render json: { error: @user.errors }, status: 401
+      render json: { errors: @user.errors }, status: 401
     end
   end
 
@@ -28,13 +28,13 @@ class V1::PasswordResetsController < V1::BaseController
 
   def check_params
     unless params[:email].present?
-      render json: { error: "must provide credentials" }, status: 401
+      render json: { errors: { email: ["must provide credentials"] } }, status: 401
     end
   end
 
   def check_user
     unless @user = User.find_by(password_reset_token: params[:id])
-      render json: { error: "Invalid token" }, status: 401
+      render json: { errors: { token: ["is invalid"] } }, status: 401
     end
   end
 

@@ -163,6 +163,7 @@ GEM
       rspec-mocks (~> 3.1.0)
       rspec-support (~> 3.1.0)
     rspec-support (3.1.2)
+    settingslogic (2.0.9)
     shoulda-matchers (2.7.0)
       activesupport (>= 3.0.0)
     signature (0.1.7)
@@ -226,6 +227,7 @@ DEPENDENCIES
   rails-api
   ransack!
   rspec-rails
+  settingslogic
   shoulda-matchers
   smarter_csv
   spring

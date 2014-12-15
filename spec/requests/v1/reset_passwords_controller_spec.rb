@@ -22,7 +22,7 @@ describe V1::PasswordResetsController, type: :request do
       it "return a error message" do
         post password_resets_path, { email: "armando@gmail.com" }, header
         expect(response.status).to eq 401
-        expect(json).to eq({"error"=>"email not registered"})
+        expect(json).to eq({ "errors"=> {"email" => ["not registered"]} })
       end
     end
 
@@ -30,7 +30,7 @@ describe V1::PasswordResetsController, type: :request do
       it "return a error message" do
         post password_resets_path, { email: "" }, header
         expect(response.status).to eq 401
-        expect(json).to eq({"error"=>"must provide credentials"})
+        expect(json).to eq({ "errors"=> {"email" => ["must provide credentials"]} })
       end
     end
   end
@@ -55,18 +55,17 @@ describe V1::PasswordResetsController, type: :request do
         put password_reset_path(token), { password: "314460978",
           password_confirmation: "314460978" }, header
         expect(response.status).to eq 401
-        expect(json).to eq({"error"=>"Password reset Token has expired"})
+        expect(json).to eq({"errors"=> { "token" => ["has expired"]} })
         travel_back
       end
     end
 
     context "with expired token" do
       it "return a error message and not update the password of user" do
-        token = user.password_reset_token
         put password_reset_path("UNEXISTENTTOKEN"), { password: "314460978",
           password_confirmation: "314460978" }, header
         expect(response.status).to eq 401
-        expect(json).to eq({"error"=>"Invalid token"})
+        expect(json).to eq({"errors"=> { "token" => ["is invalid"]}})
       end
     end
 
@@ -77,7 +76,7 @@ describe V1::PasswordResetsController, type: :request do
         put password_reset_path(token), { password: "3333314460978",
           password_confirmation: "314460978" }, header
         expect(response.status).to eq 401
-        expect(json).to eq({"error"=>{"password_confirmation"=>["doesn't match Password"]}})
+        expect(json).to eq({"errors"=>{"password_confirmation"=>["doesn't match Password"]}})
       end
     end
   end

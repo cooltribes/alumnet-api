@@ -17,6 +17,7 @@ gem 'acts_as_commentable'
 gem 'smarter_csv'
 gem 'pundit'
 gem 'pusher'
+gem 'settingslogic'
 
 group :development do
   gem 'spring'
