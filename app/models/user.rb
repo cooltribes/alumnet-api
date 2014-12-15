@@ -41,6 +41,13 @@ class User < ActiveRecord::Base
     email
   end
 
+  def send_password_reset
+    self.password_reset_token = generate_token_for(:password_reset_token)
+    self.password_reset_send_at = Time.current
+    save!
+    UserMailer.password_reset(self).deliver
+  end
+
   def ensure_tokens
     self.auth_token = generate_token_for(:auth_token)
     self.auth_token_created_at = Time.current
