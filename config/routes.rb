@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     post '/sign_in', to: 'auth#sign_in', as: :sign_in
     post '/register', to: 'auth#register', as: :register
 
-    resources :reset_passwords
+    resources :password_resets
 
     resource :me, only: [:show, :update], controller: 'me' do
       get :messages
