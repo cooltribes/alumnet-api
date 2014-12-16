@@ -18,6 +18,7 @@ class V1::Admin::UsersController < V1::AdminController
   end
 
   def activate
+    # render :show, status: :ok,  location: @user
     if @user.activate!
       render :show, status: :ok,  location: @user
     else
