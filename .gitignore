@@ -12,6 +12,7 @@
 /db/*.sqlite3-journal
 /db/schema.rb
 /config/database.yml
+/config/application.yml
 /public/uploads/*
 
 # Ignore all logfiles and tempfiles.

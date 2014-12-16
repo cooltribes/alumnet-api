@@ -1,0 +1,9 @@
+defaults: &defaults
+  ui_endpoint: http://localhost:3000
+  ui_endpoint_domain: localhost:3000
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
