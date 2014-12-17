@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
 
   ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin", regular: "Regular" }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
-
+  VALID_PASSWORD_REGEX = /\A(?=.*[a-zA-Z])(?=.*[0-9]).{8,}\z/
   ### Enum
   enum status: [:inactive, :active, :banned]
 
@@ -22,7 +22,8 @@ class User < ActiveRecord::Base
 
   ### Validations
   validates :email, presence: true, uniqueness: true, format: { with: VALID_EMAIL_REGEX }
-
+  validates :password, length: { minimum: 8, message: "is too short" },
+    format: { with: VALID_PASSWORD_REGEX, message: "must have at least a number and a letter" }
   ### Callbacks
   before_create :ensure_tokens
   before_create :set_role
