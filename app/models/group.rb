@@ -3,6 +3,7 @@ class Group < ActiveRecord::Base
   mount_uploader :cover, CoverUploader
   enum group_type: [:open, :closed, :secret]
 
+
   ### Relations
   has_many :memberships
   has_many :users, through: :memberships
@@ -11,13 +12,22 @@ class Group < ActiveRecord::Base
   belongs_to :city
 
   ### Validations
-  validates_presence_of :name, :description, :cover, :group_type, :country_id, :city_id
+  validates_presence_of :name, :description, :cover, :group_type, :country_id,
+    :city_id, :join_process
 
   ### Instance Methods
 
   ### all membership
   def members
     users.where("memberships.approved = ?", true)
+  end
+
+  def admins
+    members.where("memberships.admin = ?", true)
+  end
+
+  def user_is_admin?(user)
+    admins.where("users.id = ?", user.id).any?
   end
 
   def build_membership_for(user)

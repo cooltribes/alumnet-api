@@ -51,6 +51,11 @@ class V1::Groups::MembershipsController < V1::BaseController
     end
 
     def membership_params
-      params.permit(:approved) ##TODO select the attributes for update
+      if @group.user_is_admin?(current_user)
+        params.permit(:approved, :invite_users, :moderate_members, :edit_information,
+          :create_subgroups, :change_member_type )
+      else
+        params.permit(:approved)
+      end
     end
 end

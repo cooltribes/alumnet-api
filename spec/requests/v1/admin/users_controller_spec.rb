@@ -36,7 +36,6 @@ describe V1::Admin::UsersController, type: :request do
 
   describe "PUT admin/users/:id/activate" do
     it "change the status of user to active, change register step of profile to approval and return user" do
-      user = User.make!
       user.profile.skills!
       put activate_admin_user_path(user), {}, basic_header(admin.auth_token)
       expect(response.status).to eq 200

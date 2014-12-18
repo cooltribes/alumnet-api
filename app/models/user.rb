@@ -23,7 +23,8 @@ class User < ActiveRecord::Base
   ### Validations
   validates :email, presence: true, uniqueness: true, format: { with: VALID_EMAIL_REGEX }
   validates :password, length: { minimum: 8, message: "is too short" },
-    format: { with: VALID_PASSWORD_REGEX, message: "must have at least a number and a letter" }
+    format: { with: VALID_PASSWORD_REGEX, message: "must have at least a number and a letter" },
+    if: 'password.present?'
   ### Callbacks
   before_create :ensure_tokens
   before_create :set_role

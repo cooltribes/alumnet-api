@@ -11,12 +11,12 @@ describe V1::GroupsController, type: :request do
 
   def valid_attributes
     { name: "Group 1", description: "short description", cover: cover_file,
-      country_id: country.id, city_id: city.id }
+      country_id: country.id, city_id: city.id, join_process: 0 }
   end
 
   def invalid_attributes
     { name: "", description: "short description", cover: cover_file,
-      country_id: country.id, city_id: city.id }
+      country_id: country.id, city_id: city.id, join_process: 0 }
   end
 
   describe "GET /groups" do

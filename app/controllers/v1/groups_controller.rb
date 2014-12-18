@@ -58,7 +58,7 @@ class V1::GroupsController < V1::BaseController
 
   def group_params
     params.permit(:name, :description, :cover, :group_type, :official, :country_id,
-      :city_id)
+      :city_id, :join_process)
   end
 
 end

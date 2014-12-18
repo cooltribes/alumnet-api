@@ -3,15 +3,15 @@ require 'faker'
 
 User.blueprint do
   email { Faker::Internet.email }
-  password { "12345678" }
-  password_confirmation { "12345678" }
+  password { "12345678A" }
+  password_confirmation { "12345678A" }
   profile { Profile.make! }
 end
 
 User.blueprint(:admin) do
   email { Faker::Internet.email }
-  password { "12345678" }
-  password_confirmation { "12345678" }
+  password { "12345678A" }
+  password_confirmation { "12345678A" }
   role { User::ROLES[:system_admin] }
   profile { Profile.make! }
 end
@@ -34,6 +34,7 @@ Group.blueprint do
   description { Faker::Lorem.sentence }
   cover { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
   group_type { 0 }
+  join_process { 0 }
   country { Country.make! }
   city { object.country.cities.first }
 end

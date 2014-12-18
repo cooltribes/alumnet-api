@@ -43,6 +43,8 @@ describe V1::Groups::MembershipsController, type: :request do
       put group_membership_path(group, membership), { approved: true }, basic_header(user.auth_token)
       expect(json["approved"]).to eq(true)
     end
+
+    ###TODO: test when user is admin of group
   end
 
   describe "DELETE /groups/:id/memberships/:id" do

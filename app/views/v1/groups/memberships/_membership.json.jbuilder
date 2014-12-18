@@ -1,4 +1,4 @@
-json.(membership, :id, :approved, :mode)
+json.(membership, :id, :approved, :mode, :group_id, :user_id)
 
 json.group do
   json.id membership.group.id
@@ -16,3 +16,8 @@ json.user do
 end
 
 json.is_friend membership.user.is_friend_of?(@current_user)
+
+if membership.group.user_is_admin?(@current_user)
+  json.(membership, :invite_users, :moderate_members, :edit_information,
+    :create_subgroups, :change_member_type)
+end

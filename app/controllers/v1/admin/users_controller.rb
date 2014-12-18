@@ -39,10 +39,4 @@ class V1::Admin::UsersController < V1::AdminController
   def user_params
     params.permit(:email, :password, :password_confirmation)
   end
-
-  def check_if_current_user_can_invite_on_group
-    unless current_user.can_invite_on_group?(@group)
-      render nothing: true, status: 401
-    end
-  end
 end

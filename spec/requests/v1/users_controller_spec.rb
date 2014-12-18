@@ -8,12 +8,12 @@ describe V1::UsersController, type: :request do
   end
 
   def valid_attributes
-    { email: "test_email@gmail.com", password: "12345678", password_confirmation: "12345678",
+    { email: "test_email@gmail.com", password: "12345678A", password_confirmation: "12345678A",
       avatar: user_file, name: "name test" }
   end
 
   def invalid_attributes
-    { email: "", password: "12345678", password_confirmation: "12345678" }
+    { email: "", password: "12345678A", password_confirmation: "12345678A" }
   end
 
   describe "GET /users" do

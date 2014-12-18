@@ -1,24 +1,24 @@
 require 'rails_helper'
 
 describe V1::AuthController, type: :request do
-  let!(:user) { User.make!(password: "12345678") }
+  let!(:user) { User.make!(password: "12345678A") }
 
   def header
     { 'Accept' => 'application/vnd.alumnet+json;version=1' }
   end
 
   def valid_attributes
-    { user: { email: "test_email@gmail.com", password: "12345678", password_confirmation: "12345678" } }
+    { user: { email: "test_email@gmail.com", password: "12345678A", password_confirmation: "12345678A" } }
   end
 
   def invalid_attributes
-    { user: { email: "", password: "12345678", password_confirmation: "12345678" } }
+    { user: { email: "", password: "12345678A", password_confirmation: "12345678A" } }
   end
 
   describe "POST /sign_in" do
     context "with valid credentials" do
       it "return the user" do
-        post sign_in_path, { email: user.email, password: "12345678" }, header
+        post sign_in_path, { email: user.email, password: "12345678A" }, header
         expect(response.status).to eq 200
         expect(json).to eq({"id"=>user.id, "email"=>user.email, "auth_token"=>user.auth_token,
           "name"=>user.name })

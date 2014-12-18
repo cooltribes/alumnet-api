@@ -2,7 +2,7 @@ require 'rails_helper'
 include ActiveSupport::Testing::TimeHelpers
 
 describe V1::PasswordResetsController, type: :request do
-  let!(:user) { User.make!(password: "12345678") }
+  let!(:user) { User.make!(password: "12345678A") }
 
   def header
     { 'Accept' => 'application/vnd.alumnet+json;version=1' }
@@ -40,8 +40,8 @@ describe V1::PasswordResetsController, type: :request do
       it "return a message and update the password of user" do
         user.send_password_reset
         token = user.password_reset_token
-        put password_reset_path(token), { password: "314460978",
-          password_confirmation: "314460978" }, header
+        put password_reset_path(token), { password: "314460978A",
+          password_confirmation: "314460978A" }, header
         expect(response.status).to eq 200
         expect(json).to eq({"message"=>"Password has been reset"})
       end
@@ -76,7 +76,8 @@ describe V1::PasswordResetsController, type: :request do
         put password_reset_path(token), { password: "3333314460978",
           password_confirmation: "314460978" }, header
         expect(response.status).to eq 401
-        expect(json).to eq({"errors"=>{"password_confirmation"=>["doesn't match Password"]}})
+        expect(json).to eq({"errors"=>{"password_confirmation"=>["doesn't match Password"],
+          "password"=>["must have at least a number and a letter"]}})
       end
     end
   end
