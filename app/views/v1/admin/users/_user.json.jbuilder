@@ -12,29 +12,53 @@ end
 
 profile = user.profile
 json.profileData do
-  json.first_name profile.first_name
-  json.last_name profile.last_name
-  json.born profile.born
-  json.register_step profile.register_step
-  json.gender profile.gender
+  json.first_name profile.first_name || nil
+  json.last_name profile.last_name || nil
+  json.born profile.born || nil
+  json.register_step profile.register_step || nil
+  json.gender profile.gender || nil
 
-  json.birth_city do
-    json.id profile.birth_city.id
-    json.text profile.birth_city.name
+  if profile.birth_city.present?
+    json.birth_city do
+      json.id profile.birth_city.id
+      json.text profile.birth_city.name
+    end
+  else
+    json.birth_city nil
   end
-  json.birth_country do
-    json.id profile.birth_country.id
-    json.text profile.birth_country.name
+
+  if profile.birth_country.present?
+    json.birth_country do
+      json.id profile.birth_country.id
+      json.text profile.birth_country.name
+    end
+  else
+    json.birth_country nil
   end
-  json.residence_city do
-    json.id profile.residence_city.id
-    json.text profile.residence_city.name
+
+  if profile.residence_city.present?
+    json.residence_city do
+      json.id profile.residence_city.id
+      json.text profile.residence_city.name
+    end
+  else
+    json.residence_city nil
   end
-  json.residence_country do
-    json.id profile.residence_country.id
-    json.text profile.residence_country.name
+
+  if profile.residence_country.present?
+    json.residence_country do
+      json.id profile.residence_country.id
+      json.text profile.residence_country.name
+    end
+  else
+    json.residence_country nil
   end
-  json.local_committee profile.local_committee
+
+  if profile.local_committee.present?
+    json.local_committee profile.local_committee
+  else
+    json.local_committee nil
+  end
 end
 
 json.is_alumnet_admin user.is_alumnet_admin?
