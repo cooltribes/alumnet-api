@@ -19,7 +19,8 @@ namespace :data_fixture do
         last_name: Faker::Name.last_name,
         avatar: File.open("#{Rails.root}/spec/fixtures/user_test.png"),
         born: Date.parse("21/08/1980"),
-        register_step: 1
+        register_step: 1,
+        gender: (rand(1) == 0) ? "M" : "F"
       )
     end
     me = User.make!(email: "fcoarmandomendoza@gmail.com", password: "210880", password_confirmation: "210880")
@@ -28,7 +29,8 @@ namespace :data_fixture do
       last_name: "Mendoza Granda",
       avatar: File.open("#{Rails.root}/spec/fixtures/user_test.png"),
       born: Date.parse("21/08/1980"),
-      register_step: 1
+      register_step: 1,
+      gender: "M"
     )
   end
 

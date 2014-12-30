@@ -11,7 +11,7 @@ json.avatar do
 end
 
 profile = user.profile
-json.profile do
+json.profileData do
   json.first_name profile.first_name
   json.last_name profile.last_name
   json.born profile.born
