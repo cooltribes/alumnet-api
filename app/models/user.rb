@@ -20,6 +20,10 @@ class User < ActiveRecord::Base
   has_many :likes
   has_one :profile
 
+  ### Scopes
+  scope :active, -> { where(status: 1) }
+  scope :inactive, -> { where(status: 0) }
+
   ### Validations
   validates :email, presence: true, uniqueness: true, format: { with: VALID_EMAIL_REGEX }
   validates :password, length: { minimum: 8, message: "is too short" },
@@ -73,16 +77,16 @@ class User < ActiveRecord::Base
     end
   end
 
-  def is_regular?
-    role == "Regular"
-  end
-
   def is_system_admin?
     role == "SystemAdmin"
   end
 
   def is_alumnet_admin?
     role == "AlumNetAdmin"
+  end
+
+  def is_regular?
+    role == "Regular"
   end
 
   ### all about Conversations
@@ -97,18 +101,6 @@ class User < ActiveRecord::Base
     Post.joins(:postable_group).where("groups.id in(?)", groups_ids)
   end
 
-  ### all about Roles
-  def is_system_admin?
-    role == "SystemAdmin"
-  end
-
-  def is_alumnet_admin?
-    role == "AlumNetAdmin"
-  end
-
-  def is_regular?
-    role == "Regular"
-  end
 
   ### all about friends
   def create_friendship_for(user)
