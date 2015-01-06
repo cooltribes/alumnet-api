@@ -40,7 +40,7 @@ describe V1::Admin::UsersController, type: :request do
       put activate_admin_user_path(user), {}, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       expect(json["status"]["text"]).to eq("active")
-      expect(json["profile"]["register_step"]).to eq("approval")
+      expect(json["profileData"]["register_step"]).to eq("approval")
     end
   end
 

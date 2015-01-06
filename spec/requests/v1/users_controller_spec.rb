@@ -18,13 +18,17 @@ describe V1::UsersController, type: :request do
 
   describe "GET /users" do
     before do
-      5.times { User.make! }
+      5.times do
+        u = User.make!
+        u.profile.skills!
+        u.activate!
+      end
     end
 
     it "return all users" do
       get users_path, {}, basic_header(admin.auth_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(6)
+      expect(json.count).to eq(5) #admin not activate.
     end
   end
 
