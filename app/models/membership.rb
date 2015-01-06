@@ -1,6 +1,4 @@
 class Membership < ActiveRecord::Base
-  ### Constants
-  MODES = ["creation", "request", "invitation"]
 
   ### Relations
   belongs_to :group
@@ -31,29 +29,27 @@ class Membership < ActiveRecord::Base
 
   def self.create_membership_for_creator(group, user)
     attrs = {
-      mode:                "creation",
-      group:               group,
-      user:                user,
-      invite_users:        true,
-      moderate_members:    true,
-      edit_information:    true,
-      create_subgroups:    true,
-      change_member_type:  true,
-      approve_register:    true,
-      make_group_official: true,
-      admin:               true,
+      group:                group,
+      user:                 user,
+      edit_group:           3,
+      create_subgroup:      3,
+      delete_member:        3,
+      change_join_process:  3,
+      moderate_posts:       3,
+      make_admin:           3,
+      admin:                true,
     }
     create!(attrs).approved!
   end
 
   def self.create_membership_for_invitation(group, user)
-    create!(mode: "invitation", user: user, group: group)
+    create!(user: user, group: group)
     Notification.notify_invitation_to_users(user, group)
     #Notification.notify_invitation_to_admins()
   end
 
   def self.create_membership_for_request(group, user)
-    membership = create!(mode: "request", user: user, group: group)
+    membership = create!(user: user, group: group)
     if group.open?
       membership.approved!
       Notification.notify_join_to_users(user, group)

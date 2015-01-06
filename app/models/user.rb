@@ -197,30 +197,7 @@ class User < ActiveRecord::Base
 
   ### about groups and Membership
   def build_membership_for(group)
-    attrs = if group.open?
-      { mode: "request", approved: true, group: group }
-    else
-      { mode: "request", approved: false, group: group }
-    end
-    memberships.build(attrs)
-  end
-
-  def is_admin_of_group?(group)
-    membership = memberships.find_by(group_id: group.id)
-    if membership
-      membership.admin? || is_alumnet_admin? || is_system_admin?
-    else
-      false
-    end
-  end
-
-  def can_invite_on_group?(group)
-    membership = memberships.find_by(group_id: group.id)
-    if membership
-      membership.invite_users == 1
-    else
-      false
-    end
+    memberships.build(group: group)
   end
 
   def has_like_in?(likeable)

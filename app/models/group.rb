@@ -31,7 +31,7 @@ class Group < ActiveRecord::Base
   end
 
   def build_membership_for(user)
-    memberships.build(mode: "invitation", user: user)
+    memberships.build(user: user)
   end
 
   def has_parent?
