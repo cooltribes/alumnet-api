@@ -1,1 +1,1 @@
-json.partial! 'v1/groups/memberships/membership', membership: @membership
+json.partial! 'v1/shared/membership', membership: @membership

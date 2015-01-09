@@ -58,19 +58,14 @@ end
 membership = group.membership_of_user(current_user)
 
 if membership
-  json.is_admin current_user.is_admin_of_group?(group)
+  json.admin group.user_is_admin?(current_user)
   json.membership_status membership.status
   json.permissions do
-    json.can_moderate_members membership.try(:moderate_members)
-    json.can_edit_information membership.try(:edit_information)
-    json.can_create_subgroups membership.try(:create_subgroups)
-    json.can_change_member_type membership.try(:change_member_type)
-    json.can_approve_register membership.try(:approve_register)
-    json.can_invite_users membership.try(:invite_users)
-    json.can_make_group_official membership.try(:make_group_official)
+    json.(membership, :edit_group, :create_subgroup, :delete_member,
+      :change_join_process, :moderate_posts, :make_admin)
   end
 else
-  json.is_admin false
+  json.admin false
   json.membership_status "none"
   json.permissions nil
 end

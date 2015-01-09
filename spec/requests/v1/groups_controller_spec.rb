@@ -76,7 +76,7 @@ describe V1::GroupsController, type: :request do
           post groups_path, valid_attributes , basic_header(admin.auth_token)
         }.to change(Group, :count).by(1)
         expect(response.status).to eq 201
-        expect(admin.memberships.last.mode).to eq("creation")
+        expect(admin.memberships.last.admin).to eq(true)
         expect(admin.groups).to eq([Group.last])
       end
     end

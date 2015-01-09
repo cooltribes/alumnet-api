@@ -5,7 +5,7 @@ class V1::MeController < V1::BaseController
   end
 
   def messages
-    @receipts = @user.receipts.limit(3)
+    @receipts = @user.receipts.messages_receipts.limit(3)
     render "v1/me/receipts/index", status: :ok
   end
 
