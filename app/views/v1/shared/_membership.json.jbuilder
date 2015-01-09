@@ -7,15 +7,15 @@ json.group do
     json.main membership.group.cover.main.url
     json.card membership.group.cover.card.url
   end
-  json.is_admin membership.group.user_is_admin?(@current_user)
 end
+json.is_admin membership.group.user_is_admin?(@current_user)
 
 json.user do
   json.id membership.user.id
   json.name membership.user.name
   json.avatar membership.user.avatar.large.url
-  json.is_friend membership.user.is_friend_of?(@current_user)
 end
+json.is_friend membership.user.is_friend_of?(@current_user)
 
 json.permissions do
   json.(membership, :edit_group, :create_subgroup, :delete_member,

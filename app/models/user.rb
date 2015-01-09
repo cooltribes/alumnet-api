@@ -91,7 +91,7 @@ class User < ActiveRecord::Base
 
   ### all about Conversations
   def unread_messages_count
-    receipts.is_unread.count
+    mailbox.inbox.where("mailboxer_receipts.is_read = false").count
   end
 
   ### all about Post
