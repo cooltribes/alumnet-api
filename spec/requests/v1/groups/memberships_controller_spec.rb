@@ -32,7 +32,6 @@ describe V1::Groups::MembershipsController, type: :request do
       expect(response.status).to eq 201
       expect(json["group"]["id"]).to eq(group.id)
       expect(json["user"]["id"]).to eq(user_to_invite.id)
-      expect(json["approved"]).to eq(false)
     end
   end
 

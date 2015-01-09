@@ -14,8 +14,10 @@ class V1::Groups::MembershipsController < V1::BaseController
   end
 
   def create
-    @membership = @group.build_membership_for(@user)
+    admin = @group.user_is_admin?(current_user)
+    @membership = @group.build_membership_for(@user, admin)
     if @membership.save
+      @group.notify(@user, admin)
       render :show, status: :created
     else
       render json: @membership.errors, status: :unprocessable_entity

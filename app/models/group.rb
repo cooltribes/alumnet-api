@@ -30,8 +30,32 @@ class Group < ActiveRecord::Base
     admins.where("users.id = ?", user.id).any?
   end
 
-  def build_membership_for(user)
-    memberships.build(user: user)
+  def build_membership_for(user, admin = false)
+    if join_process == 0
+      memberships.build(user: user, approved: true)
+    elsif join_process == 1
+      memberships.build(user: user, approved: false)
+    elsif join_process == 2
+      memberships.build(user: user, approved: admin)
+    end
+  end
+
+  ## TODO: refactor this
+  def notify(user, admin)
+    if join_process == 0
+      Notification.notify_join_to_users(user, self)
+      Notification.notify_join_to_admins(admins.to_a, user, self)
+    elsif join_process == 1
+      Notification.notify_request_to_users(user, self)
+      Notification.notify_request_to_admins(admins.to_a, user, self)
+    elsif join_process == 2
+      if admin
+        Notification.notify_join_to_users(user, self)
+      else
+        Notification.notify_request_to_users(user, self)
+        Notification.notify_request_to_admins(admins.to_a, user, self)
+      end
+    end
   end
 
   def has_parent?
