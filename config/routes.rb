@@ -53,6 +53,12 @@ Rails.application.routes.draw do
       get :committees, on: :member
     end
 
+    resources :profiles, only: [:show, :update] do
+      resources :experiences, except: [:show, :new, :edit], controller: 'profiles/experiences'
+      resources :skills, except: [:show, :new, :edit], controller: 'profiles/skills'
+
+    end
+
     resources :languages, only: :index
     resources :skills, only: :index
 

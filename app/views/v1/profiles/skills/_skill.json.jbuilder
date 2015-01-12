@@ -1,0 +1,1 @@
+json.(skill, :id, :name)

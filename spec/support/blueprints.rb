@@ -29,6 +29,20 @@ Profile.blueprint do
   residence_city { object.residence_country.cities.first }
 end
 
+Experience.blueprint do
+  exp_type { 0 }
+  name { "Experience #{sn}"}
+  description { Faker::Lorem.sentence }
+  start_date { Date.parse("01/08/2000") }
+  end_date { Date.parse("01/08/2001") }
+  organization_name { "Organization #{sn}" }
+  internship { false }
+  committee { Committee.make! }
+  city { City.make! }
+  country { Country.make! }
+  profile { Profile.make! }
+end
+
 Group.blueprint do
   name { "Group #{sn}"}
   description { Faker::Lorem.sentence }

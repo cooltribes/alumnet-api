@@ -9,7 +9,6 @@ class V1::Users::ProfilesController < V1::BaseController
     if @profile.update(profile_params)
       render :show
     else
-      byebug
       render json: @profile.errors, status: :unprocessable_entity
     end
   end
