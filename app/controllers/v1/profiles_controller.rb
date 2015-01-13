@@ -1,10 +1,12 @@
 class V1::ProfilesController < V1::BaseController
+  include Pundit
   before_action :set_profile
 
   def show
   end
 
   def update
+    authorize @profile
     if @profile.update(profile_params)
       render :show
     else

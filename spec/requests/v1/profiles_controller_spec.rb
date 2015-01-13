@@ -48,4 +48,19 @@ describe V1::ProfilesController, type: :request do
       expect(json['birth_country_id']).to eq(1)
     end
   end
+
+  context "testing authorization" do
+    before do
+      @user = User.make!
+      @other = User.make!
+    end
+
+    describe "PUT /profile" do
+      it "should not authorize the action" do
+      profile = @user.profile
+      put profile_path(profile), { "born" => ""}, basic_header(@other.auth_token)
+      expect(response.status).to eq 403
+      end
+    end
+  end
 end

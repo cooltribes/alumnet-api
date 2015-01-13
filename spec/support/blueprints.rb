@@ -140,3 +140,10 @@ end
 Skill.blueprint do
   name { "Skill #{sn}"}
 end
+
+ContactInfo.blueprint(:email) do
+  contact_type { 0 }
+  info { Faker::Internet.email }
+  privacy { 1 }
+  profile { Profile.make! }
+end

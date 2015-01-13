@@ -1,4 +1,5 @@
 class V1::Profiles::ExperiencesController < V1::BaseController
+  include Pundit
   before_action :set_profile
   before_action :set_experience, except: [:index, :create]
 
@@ -8,6 +9,7 @@ class V1::Profiles::ExperiencesController < V1::BaseController
 
   def create
     @experience = Experience.new(experience_params)
+    authorize @profile
     if @profile.experiences << @experience
       render :show, status: :created
     else
@@ -16,6 +18,7 @@ class V1::Profiles::ExperiencesController < V1::BaseController
   end
 
   def update
+    authorize @profile
     if @experience.update(experience_params)
       render :show, status: :ok
     else
@@ -24,6 +27,7 @@ class V1::Profiles::ExperiencesController < V1::BaseController
   end
 
   def destroy
+    authorize @profile
     @experience.destroy
     head :no_content
   end

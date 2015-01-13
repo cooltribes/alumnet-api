@@ -5,6 +5,8 @@ class ApplicationController < ActionController::API
   before_action :authenticate
   before_action :set_request_format
 
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
   def current_user
     @current_user
   end
@@ -22,6 +24,10 @@ class ApplicationController < ActionController::API
 
   def set_request_format
     request.format = :json
+  end
+
+  def user_not_authorized
+    head 403
   end
 
 end

@@ -1,0 +1,1 @@
+json.(contact_info, :id, :contact_type, :info, :privacy, :profile_id)

@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe V1::Profiles::ExperiencesController, type: :request do
   let!(:user) { User.make! }
+  let!(:other) { User.make! }
 
   def valid_attributes
     { "exp_type" => 0, "name" => "Name", "description" => "Description",
@@ -47,6 +48,16 @@ describe V1::Profiles::ExperiencesController, type: :request do
         delete profile_experience_path(@profile, experience), {}, basic_header(user.auth_token)
       }.to change(Experience, :count).by(-1)
       expect(response.status).to eq 204
+    end
+  end
+
+  context "testing authorization" do
+    describe "PUT /profiles/:id/experiences/:id" do
+      it "should not authorize the action" do
+        experience = Experience.make!(profile: @profile)
+        put profile_experience_path(@profile, experience), { name: "New Experience Name"} , basic_header(other.auth_token)
+        expect(response.status).to eq 403
+      end
     end
   end
 end
