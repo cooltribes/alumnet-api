@@ -37,6 +37,10 @@ class Profile < ActiveRecord::Base
     experiences.where(exp_type: 0).first
   end
 
+  def last_experience
+    experiences.where.not(exp_type: 2).last    
+  end
+
   def languages_attributes=(collection_attributes)
     collection_attributes.each do |attributes|
       language_levels.build(language_id: attributes["language_id"], level: attributes["level"])
