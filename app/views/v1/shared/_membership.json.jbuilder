@@ -19,5 +19,5 @@ json.is_friend membership.user.is_friend_of?(@current_user)
 
 json.permissions do
   json.(membership, :edit_group, :create_subgroup, :delete_member,
-    :change_join_process, :moderate_posts, :make_admin)
+    :change_join_process, :moderate_posts, :make_admin, :admin)
 end

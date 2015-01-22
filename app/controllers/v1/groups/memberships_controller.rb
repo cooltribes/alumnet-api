@@ -54,8 +54,8 @@ class V1::Groups::MembershipsController < V1::BaseController
 
     def membership_params
       if @group.user_is_admin?(current_user)
-        params.permit(:approved, :invite_users, :moderate_members, :edit_information,
-          :create_subgroups, :change_member_type )
+        params.permit(:approved, :edit_group, :create_subgroup, :delete_member,
+          :change_join_process, :moderate_posts, :make_admin )
       else
         params.permit(:approved)
       end

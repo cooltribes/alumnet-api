@@ -7,7 +7,15 @@ class Membership < ActiveRecord::Base
   ### Validations
   validates_uniqueness_of :group_id, scope: [:user_id]
 
+  ### CallBacks
+  before_update :set_admin
+
   ### Instances Methods
+
+  def permissions_attributes
+    [:edit_group, :create_subgroup, :delete_member,
+     :change_join_process, :moderate_posts, :make_admin ]
+  end
 
   def status
     approved ? "approved" : "pending"
@@ -31,12 +39,12 @@ class Membership < ActiveRecord::Base
     attrs = {
       group:                group,
       user:                 user,
-      edit_group:           3,
-      create_subgroup:      3,
-      delete_member:        3,
-      change_join_process:  3,
-      moderate_posts:       3,
-      make_admin:           3,
+      edit_group:           2,
+      create_subgroup:      2,
+      delete_member:        2,
+      change_join_process:  2,
+      moderate_posts:       2,
+      make_admin:           2,
       admin:                true,
     }
     create!(attrs).approved!
@@ -59,4 +67,12 @@ class Membership < ActiveRecord::Base
     end
   end
 
+  private
+    def set_admin
+      if permissions_attributes.all? { |pa| send(pa) == 0 }
+        update_column(:admin, false) if admin
+      else
+        update_column(:admin, true) if not admin
+      end
+    end
 end
