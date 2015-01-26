@@ -1,5 +1,7 @@
 json.(user, :id, :name, :email)
 
+json.last_experience user.last_experience.try(:name)
+
 json.avatar do
   json.original user.avatar.url
   json.small user.avatar.small.url

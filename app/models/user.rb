@@ -47,6 +47,10 @@ class User < ActiveRecord::Base
     email
   end
 
+  def last_experience
+    profile.experiences.where.not(exp_type: 2).last
+  end
+
   def send_password_reset
     self.password_reset_token = generate_token_for(:password_reset_token)
     self.password_reset_sent_at = Time.current
