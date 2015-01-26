@@ -1,0 +1,1 @@
+json.array! @friendships, partial: 'v1/me/friendships/friendship', as: :friendship, user: @user

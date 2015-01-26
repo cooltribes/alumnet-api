@@ -28,6 +28,10 @@ Rails.application.routes.draw do
       resources :memberships, except: :show, controller: 'users/memberships' do
         get :groups, on: :collection
       end
+      resources :friendships, except: :show, controller: 'users/friendships' do
+        get :friends, on: :collection
+        get :commons, on: :collection
+      end
     end
 
     resources :groups do
