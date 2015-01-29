@@ -3,6 +3,11 @@ class Group < ActiveRecord::Base
   mount_uploader :cover, CoverUploader
   enum group_type: [:open, :closed, :secret]
 
+  #join_process
+  # "0" -> All Members can invite
+  # "1" -> All Members can invite, but the admins approved
+  # "2" -> Only the admins can invite
+
 
   ### Relations
   has_many :memberships
@@ -34,7 +39,7 @@ class Group < ActiveRecord::Base
     if join_process == 0
       memberships.build(user: user, approved: true)
     elsif join_process == 1
-      memberships.build(user: user, approved: false)
+      memberships.build(user: user, approved: admin)
     elsif join_process == 2
       memberships.build(user: user, approved: admin)
     end
