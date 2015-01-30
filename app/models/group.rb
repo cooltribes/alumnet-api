@@ -16,10 +16,23 @@ class Group < ActiveRecord::Base
   belongs_to :country
   belongs_to :city
 
+  ### Scopes
+
+  scope :open, -> { where(group_type: 0) }
+  scope :closed, -> { where(group_type: 1) }
+  scope :secret, -> { where(group_type: 2) }
+
+  scope :official, -> { where(official: true) }
+  scope :non_official, -> { where(official: false) }
+
+
   ### Validations
   validates_presence_of :name, :description, :cover, :group_type, :join_process
 
-  ### Instance Methods
+  ### class Methods
+  def self.without_secret
+    where.not(group_type: 2)
+  end
 
   ### all membership
   def members

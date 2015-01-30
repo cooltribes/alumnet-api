@@ -2,7 +2,7 @@ class V1::GroupsController < V1::BaseController
   before_action :set_group, except: [:index, :create]
 
   def index
-    @q = Group.search(params[:q])
+    @q = Group.without_secret.search(params[:q])
     @groups = @q.result
   end
 
