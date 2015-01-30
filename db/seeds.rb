@@ -30,3 +30,9 @@ SmarterCSV.process(file) do |array|
 end
 file.close
 
+file = File.open('db/data/regions.csv')
+options = { col_sep: "\t"}
+SmarterCSV.process(file, options ) do |array|
+  Region.create( array.first )
+end
+file.close
