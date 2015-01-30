@@ -199,6 +199,10 @@ class User < ActiveRecord::Base
     inverse_friendships.where(accepted: false)
   end
 
+  def common_friends_with(user)
+    accepted_friends & user.accepted_friends
+  end
+
   ### about groups and Membership
   def build_membership_for(group)
     memberships.build(group: group)
