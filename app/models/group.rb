@@ -17,8 +17,7 @@ class Group < ActiveRecord::Base
   belongs_to :city
 
   ### Validations
-  validates_presence_of :name, :description, :cover, :group_type, :country_id,
-    :city_id, :join_process
+  validates_presence_of :name, :description, :cover, :group_type, :join_process
 
   ### Instance Methods
 
@@ -80,11 +79,19 @@ class Group < ActiveRecord::Base
   end
 
   def get_country_info
-    { text: country.name, value: country_id}
+    if country
+      { text: country.name, value: country_id}
+    else
+      { text: "", value: ""}
+    end
   end
 
   def get_city_info
-    { text: city.name, value: city_id}
+    if city
+      { text: city.name, value: city_id}
+    else
+      { text: "", value: ""}
+    end
   end
 
   def creator
