@@ -8,3 +8,5 @@ json.avatar do
   json.large @profile.avatar.large.url
   json.extralarge @profile.avatar.extralarge.url
 end
+
+json.last_experience @user.last_experience.try(:name)
