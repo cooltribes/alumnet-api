@@ -115,6 +115,10 @@ Friendship.blueprint(:not_accepted) do
   accepted { false }
 end
 
+Region.blueprint do
+  name { "Region #{sn}" }
+end
+
 Country.blueprint do
   cc_fips { sn }
   cc_iso { sn }

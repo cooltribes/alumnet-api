@@ -52,6 +52,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :regions, only: [:index, :show]
+
     resources :countries, only: [:index, :show] do
       get :cities, on: :member
       get :committees, on: :member
