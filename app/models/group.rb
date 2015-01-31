@@ -16,11 +16,27 @@ class Group < ActiveRecord::Base
   belongs_to :country
   belongs_to :city
 
-  ### Validations
-  validates_presence_of :name, :description, :cover, :group_type, :country_id,
-    :city_id, :join_process
+  ### Scopes
 
-  ### Instance Methods
+  scope :open, -> { where(group_type: 0) }
+  scope :closed, -> { where(group_type: 1) }
+  scope :secret, -> { where(group_type: 2) }
+
+  scope :official, -> { where(official: true) }
+  scope :non_official, -> { where(official: false) }
+
+
+  ### Validations
+  validates_presence_of :name, :description, :cover, :group_type, :join_process
+  validate :validate_join_process, on: :create
+
+  ### Callbacks
+  before_update :check_join_process
+
+  ### class Methods
+  def self.without_secret
+    where.not(group_type: 2)
+  end
 
   ### all membership
   def members
@@ -80,11 +96,19 @@ class Group < ActiveRecord::Base
   end
 
   def get_country_info
-    { text: country.name, value: country_id}
+    if country
+      { text: country.name, value: country_id}
+    else
+      { text: "", value: ""}
+    end
   end
 
   def get_city_info
-    { text: city.name, value: city_id}
+    if city
+      { text: city.name, value: city_id}
+    else
+      { text: "", value: ""}
+    end
   end
 
   def creator
@@ -94,4 +118,19 @@ class Group < ActiveRecord::Base
   def membership_of_user(user)
     memberships.find_by(user_id: user.id)
   end
+
+  private
+    def validate_join_process
+      if (group_type == "secret" && join_process < 2) || (group_type == "closed" && join_process == 0)
+        errors.add(:join_process, "invalid option")
+      end
+    end
+
+    def check_join_process
+      ## this change the join process automatically on update
+      if (group_type == "secret" && join_process < 2) || (group_type == "closed" && join_process == 0)
+        self[:join_process] = 2
+      end
+
+    end
 end

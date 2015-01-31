@@ -57,11 +57,12 @@ Group.blueprint(:with_parent_and_childen) do
   name { "Group #{sn}"}
   description {  Faker::Lorem.sentence }
   cover { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
-  group_type { 1 }
+  group_type { 0 }
   country { Country.make! }
   city { object.country.cities.first }
   parent { Group.make! }
   children { [Group.make!, Group.make!] }
+  join_process { 0 }
 end
 
 Group.blueprint(:all_relations) do
@@ -112,6 +113,10 @@ Friendship.blueprint(:not_accepted) do
   user { User.make! }
   friend { User.make! }
   accepted { false }
+end
+
+Region.blueprint do
+  name { "Region #{sn}" }
 end
 
 Country.blueprint do

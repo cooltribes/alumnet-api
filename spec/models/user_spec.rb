@@ -46,6 +46,32 @@ RSpec.describe User, type: :model do
         expect(user.has_like_in?(post)).to eq(true)
       end
     end
+
+    describe "commons_friends_with(user)" do
+      it "should return the common friends between two users" do
+        user_one = User.make!
+        friend_one = User.make!
+        user_two = User.make!
+        friend_two = User.make!
+        common_user = User.make!
+
+        user_one.create_friendship_for(common_user).save
+        user_one.friendships.last.accept!
+        user_two.create_friendship_for(common_user).save
+        user_two.friendships.last.accept!
+
+        user_one.create_friendship_for(friend_one).save
+        user_one.friendships.last.accept!
+        user_two.create_friendship_for(friend_two).save
+        user_two.friendships.last.accept!
+
+
+        expect(user_one.accepted_friends).to match_array([common_user, friend_one])
+        expect(user_two.accepted_friends).to match_array([common_user, friend_two])
+
+        expect(user_one.common_friends_with(user_two)).to eq([common_user])
+      end
+    end
   end
 
 end

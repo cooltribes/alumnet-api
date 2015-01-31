@@ -10,6 +10,6 @@ json.you_like post.has_like_for?(current_user)
 
 condition = post.user == current_user
 json.permissions do
-  json.canEdit = condition
-  json.canDelete = condition
+  json.canEdit condition
+  json.canDelete condition
 end
