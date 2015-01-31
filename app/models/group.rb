@@ -28,6 +28,10 @@ class Group < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :name, :description, :cover, :group_type, :join_process
+  validate :validate_join_process, on: :create
+
+  ### Callbacks
+  before_update :check_join_process
 
   ### class Methods
   def self.without_secret
@@ -114,4 +118,19 @@ class Group < ActiveRecord::Base
   def membership_of_user(user)
     memberships.find_by(user_id: user.id)
   end
+
+  private
+    def validate_join_process
+      if (group_type == "secret" && join_process < 2) || (group_type == "closed" && join_process == 0)
+        errors.add(:join_process, "invalid option")
+      end
+    end
+
+    def check_join_process
+      ## this change the join process automatically on update
+      if (group_type == "secret" && join_process < 2) || (group_type == "closed" && join_process == 0)
+        self[:join_process] = 2
+      end
+
+    end
 end
