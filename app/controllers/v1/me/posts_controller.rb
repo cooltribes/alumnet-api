@@ -3,8 +3,8 @@ class V1::Me::PostsController < V1::BaseController
   before_action :set_post, except: [:index, :create]
 
   def index
-    @q = @user.groups_posts.search(params[:q])
-    @posts = @q.result
+    @q = @user.all_posts(params[:q])
+    @posts = @q
     render 'v1/users/posts/index'
   end
 

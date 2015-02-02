@@ -3,8 +3,8 @@ class V1::Users::PostsController < V1::BaseController
   before_action :set_post, except: [:index, :create]
 
   def index
-    @q = @user.posts.search(params[:q])
-    @posts = @q.result
+    @q = @user.my_posts(params[:q])
+    @posts = @q
   end
 
   def show
