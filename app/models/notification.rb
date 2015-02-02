@@ -8,6 +8,9 @@ class Notification
       "You've joined to #{group.name}!",
       "Welcome! You've joined to #{group.name}"
     )
+    recipients.each do |user|
+      UserMailer.join_to_group(user, group).deliver
+    end
   end
 
   def self.notify_join_to_admins(admins, user, group)
@@ -17,6 +20,9 @@ class Notification
       "A new user was join to the group #{group.name}",
       "The user #{user.name} was join to the group #{group.name}"
     )
+    recipients.each do |admin|
+      AdminMailer.user_was_joined(admin, user, group).deliver
+    end
   end
 
   def self.notify_request_to_users(users, group)
@@ -32,8 +38,11 @@ class Notification
     recipients = admins.is_a?(Array) ? admins : [admins]
     Mailboxer::Notification.notify_all(
       recipients,
-      "A new user request to join in group #{group.name}",
-      "The user #{user.name} was sent request to join in group #{group.name}"
+      "A new user request to join the group #{group.name}",
+      "The user #{user.name} sent a request to join the group #{group.name}"
     )
+    recipients.each do |admin|
+      AdminMailer.user_request_to_join(admin, user, group).deliver
+    end
   end
 end
