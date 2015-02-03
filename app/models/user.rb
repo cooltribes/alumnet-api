@@ -220,6 +220,20 @@ class User < ActiveRecord::Base
     likes.exists?(likeable: likeable)
   end
 
+  ### Counts
+
+  def friends_count
+    friends.count
+  end
+
+  def pending_received_friendships_count
+    pending_inverse_friendships.count
+  end
+
+  def pending_sent_friendships_count
+    pending_friendships.count
+  end
+
   private
 
   ### this a temporary solution to authenticate the api
