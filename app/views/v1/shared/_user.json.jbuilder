@@ -32,5 +32,3 @@ json.is_alumnet_admin user.is_alumnet_admin?
 json.is_system_admin user.is_system_admin?
 
 json.friends_count user.friends_count
-json.pending_received_friendships_count user.pending_received_friendships_count
-json.pending_sent_friendships_count user.pending_sent_friendships_count
