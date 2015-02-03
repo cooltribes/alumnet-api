@@ -223,7 +223,7 @@ class User < ActiveRecord::Base
   ### Counts
 
   def friends_count
-    friends.count
+    my_friends.count
   end
 
   def pending_received_friendships_count
@@ -232,6 +232,10 @@ class User < ActiveRecord::Base
 
   def pending_sent_friendships_count
     pending_friendships.count
+  end
+
+  def mutual_friends_count(user)
+    common_friends_with(user).count
   end
 
   private
