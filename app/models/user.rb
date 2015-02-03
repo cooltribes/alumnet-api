@@ -234,6 +234,10 @@ class User < ActiveRecord::Base
     pending_friendships.count
   end
 
+  def mutual_friends_count(user)
+    common_friends_with(user).count
+  end
+
   private
 
   ### this a temporary solution to authenticate the api

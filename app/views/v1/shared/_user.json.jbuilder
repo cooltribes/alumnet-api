@@ -32,3 +32,4 @@ json.is_alumnet_admin user.is_alumnet_admin?
 json.is_system_admin user.is_system_admin?
 
 json.friends_count user.friends_count
+json.mutual_friends_count current_user.mutual_friends_count(user)
