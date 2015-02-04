@@ -1,1 +1,1 @@
-json.(country, :id, :name, :cc_fips)
+json.(country, :id, :name, :cc_fips, :aiesec)

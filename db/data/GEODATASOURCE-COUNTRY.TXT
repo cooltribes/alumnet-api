@@ -1,267 +1,266 @@
-CC_FIPS	CC_ISO	TLD	COUNTRY_NAME
-AA	AW	.aw	Aruba
-AC	AG	.ag	Antigua and Barbuda
-AE	AE	.ae	United Arab Emirates
-AF	AF	.af	Afghanistan
-AG	DZ	.dz	Algeria
-AJ	AZ	.az	Azerbaijan
-AL	AL	.al	Albania
-AM	AM	.am	Armenia
-AN	AD	.ad	Andorra
-AO	AO	.ao	Angola
-AQ	AS	.as	American Samoa
-AR	AR	.ar	Argentina
-AS	AU	.au	Australia
-AT	-	-	Ashmore and Cartier Islands
-AU	AT	.at	Austria
-AV	AI	.ai	Anguilla
--	AX	.ax	Åland Islands
-AY	AQ	.aq	Antarctica
-BA	BH	.bh	Bahrain
-BB	BB	.bb	Barbados
-BC	BW	.bw	Botswana
-BD	BM	.bm	Bermuda
-BE	BE	.be	Belgium
-BF	BS	.bs	Bahamas, The
-BG	BD	.bd	Bangladesh
-BH	BZ	.bz	Belize
-BK	BA	.ba	Bosnia and Herzegovina
-BL	BO	.bo	Bolivia
-TB	BL	.bl	Saint Barthelemy
-BM	MM	.mm	Myanmar
-BN	BJ	.bj	Benin
-BO	BY	.by	Belarus
-BP	SB	.sb	Solomon Islands
-BQ	-	-	Navassa Island
-BR	BR	.br	Brazil
-BS	-	-	Bassas da India
-BT	BT	.bt	Bhutan
-BU	BG	.bg	Bulgaria
-BV	BV	.bv	Bouvet Island
-BX	BN	.bn	Brunei
-BY	BI	.bi	Burundi
-CA	CA	.ca	Canada
-CB	KH	.kh	Cambodia
-CD	TD	.td	Chad
-CE	LK	.lk	Sri Lanka
-CF	CG	.cg	Congo, Republic of the
-CG	CD	.cd	Congo, Democratic Republic of the
-CH	CN	.cn	China
-CI	CL	.cl	Chile
-CJ	KY	.ky	Cayman Islands
-CK	CC	.cc	Cocos (Keeling) Islands
-CM	CM	.cm	Cameroon
-CN	KM	.km	Comoros
-CO	CO	.co	Colombia
-CQ	MP	.mp	Northern Mariana Islands
-CR	-	-	Coral Sea Islands
-CS	CR	.cr	Costa Rica
-CT	CF	.cf	Central African Republic
-CU	CU	.cu	Cuba
-CV	CV	.cv	Cape Verde
-CW	CK	.ck	Cook Islands
-CY	CY	.cy	Cyprus
-DA	DK	.dk	Denmark
-DJ	DJ	.dj	Djibouti
-DO	DM	.dm	Dominica
-DR	DO	.do	Dominican Republic
-DX	-	-	Dhekelia Sovereign Base Area
-EC	EC	.ec	Ecuador
-EG	EG	.eg	Egypt
-EI	IE	.ie	Ireland
-EK	GQ	.gq	Equatorial Guinea
-EN	EE	.ee	Estonia
-ER	ER	.er	Eritrea
-ES	SV	.sv	El Salvador
-ET	ET	.et	Ethiopia
-EU	-	-	Europa Island
-EZ	CZ	.cz	Czech Republic
-FG	GF	.gf	French Guiana
-FI	FI	.fi	Finland
-FJ	FJ	.fj	Fiji
-FK	FK	.fk	Falkland Islands (Islas Malvinas)
-FM	FM	.fm	Micronesia, Federated States of
-FO	FO	.fo	Faroe Islands
-FP	PF	.pf	French Polynesia
-FR	FR	.fr	France
-FS	TF	.tf	French Southern and Antarctic Lands
-GA	GM	.gm	Gambia, The
-GB	GA	.ga	Gabon
-GG	GE	.ge	Georgia
-GH	GH	.gh	Ghana
-GI	GI	.gi	Gibraltar
-GJ	GD	.gd	Grenada
-GK	GG	.gg	Guernsey
-GL	GL	.gl	Greenland
-GM	DE	.de	Germany
-GO	-	-	Glorioso Islands
-GP	GP	.gp	Guadeloupe
-GQ	GU	.gu	Guam
-GR	GR	.gr	Greece
-GT	GT	.gt	Guatemala
-GV	GN	.gn	Guinea
-GY	GY	.gy	Guyana
-GZ	-	-	Gaza Strip
-HA	HT	.ht	Haiti
-HK	HK	.hk	Hong Kong
-HM	HM	.hm	Heard Island and McDonald Islands
-HO	HN	.hn	Honduras
-HR	HR	.hr	Croatia
-HU	HU	.hu	Hungary
-IC	IS	.is	Iceland
-ID	ID	.id	Indonesia
-IM	IM	.im	Isle of Man
-IN	IN	.in	India
-IO	IO	.io	British Indian Ocean Territory
-IP	-	-	Clipperton Island
-IR	IR	.ir	Iran
-IS	IL	.il	Israel
-IT	IT	.it	Italy
-IV	CI	.ci	Cote d'Ivoire
-IZ	IQ	.iq	Iraq
-JA	JP	.jp	Japan
-JE	JE	.je	Jersey
-JM	JM	.jm	Jamaica
-JN	SJ	-	Jan Mayen
-JO	JO	.jo	Jordan
-JU	-	-	Juan de Nova Island
-KE	KE	.ke	Kenya
-KG	KG	.kg	Kyrgyzstan
-KN	KP	.kp	Korea, North
-KR	KI	.ki	Kiribati
-KS	KR	.kr	Korea, South
-KT	CX	.cx	Christmas Island
-KU	KW	.kw	Kuwait
-KV	XK	-	Kosovo
-KZ	KZ	.kz	Kazakhstan
-LA	LA	.la	Laos
-LE	LB	.lb	Lebanon
-LG	LV	.lv	Latvia
-LH	LT	.lt	Lithuania
-LI	LR	.lr	Liberia
-LO	SK	.sk	Slovakia
--	UM	.us	United States Minor Outlying Islands
-LS	LI	.li	Liechtenstein
-LT	LS	.ls	Lesotho
-LU	LU	.lu	Luxembourg
-LY	LY	.ly	Libyan Arab
-MA	MG	.mg	Madagascar
-MB	MQ	.mq	Martinique
-MC	MO	.mo	Macau
-MD	MD	.md	Moldova, Republic of
-MF	YT	.yt	Mayotte
-MG	MN	.mn	Mongolia
-MH	MS	.ms	Montserrat
-MI	MW	.mw	Malawi
-MJ	ME	.me	Montenegro
-MK	MK	.mk	The Former Yugoslav Republic of Macedonia
-ML	ML	.ml	Mali
-MN	MC	.mc	Monaco
-MO	MA	.ma	Morocco
-MP	MU	.mu	Mauritius
-MR	MR	.mr	Mauritania
-MT	MT	.mt	Malta
-MU	OM	.om	Oman
-MV	MV	.mv	Maldives
-MX	MX	.mx	Mexico
-MY	MY	.my	Malaysia
-MZ	MZ	.mz	Mozambique
-NC	NC	.nc	New Caledonia
-NE	NU	.nu	Niue
-NF	NF	.nf	Norfolk Island
-NG	NE	.ne	Niger
-NH	VU	.vu	Vanuatu
-NI	NG	.ng	Nigeria
-NL	NL	.nl	Netherlands
-NM			No Man's Land
-NO	NO	.no	Norway
-NP	NP	.np	Nepal
-NR	NR	.nr	Nauru
-NS	SR	.sr	Suriname
--	BQ	.bq	Bonaire, Sint Eustatius and Saba
-NU	NI	.ni	Nicaragua
-NZ	NZ	.nz	New Zealand
-PA	PY	.py	Paraguay
-PC	PN	.pn	Pitcairn Islands
-PE	PE	.pe	Peru
-PF	-	-	Paracel Islands
-PG	-	-	Spratly Islands
-PK	PK	.pk	Pakistan
-PL	PL	.pl	Poland
-PM	PA	.pa	Panama
-PO	PT	.pt	Portugal
-PP	PG	.pg	Papua New Guinea
-PS	PW	.pw	Palau
-PU	GW	.gw	Guinea-Bissau
-QA	QA	.qa	Qatar
-RE	RE	.re	Reunion
-RI	RS	.rs	Serbia
-RM	MH	.mh	Marshall Islands
-RN	MF	-	Saint Martin
-RO	RO	.ro	Romania
-RP	PH	.ph	Philippines
-RQ	PR	.pr	Puerto Rico
-RS	RU	.ru	Russia
-RW	RW	.rw	Rwanda
-SA	SA	.sa	Saudi Arabia
-SB	PM	.pm	Saint Pierre and Miquelon
-SC	KN	.kn	Saint Kitts and Nevis
-SE	SC	.sc	Seychelles
-SF	ZA	.za	South Africa
-SG	SN	.sn	Senegal
-SH	SH	.sh	Saint Helena
-SI	SI	.si	Slovenia
-SL	SL	.sl	Sierra Leone
-SM	SM	.sm	San Marino
-SN	SG	.sg	Singapore
-SO	SO	.so	Somalia
-SP	ES	.es	Spain
--	SS	.ss	South Sudan
-ST	LC	.lc	Saint Lucia
-SU	SD	.sd	Sudan
-SV	SJ	.sj	Svalbard
-SW	SE	.se	Sweden
-SX	GS	.gs	South Georgia and the Islands
-NN	SX	.sx	Sint Maarten
-SY	SY	.sy	Syrian Arab Republic
-SZ	CH	.ch	Switzerland
-TD	TT	.tt	Trinidad and Tobago
-TE	-	-	Tromelin Island
-TH	TH	.th	Thailand
-TI	TJ	.tj	Tajikistan
-TK	TC	.tc	Turks and Caicos Islands
-TL	TK	.tk	Tokelau
-TN	TO	.to	Tonga
-TO	TG	.tg	Togo
-TP	ST	.st	Sao Tome and Principe
-TS	TN	.tn	Tunisia
-TT	TL	.tl	East Timor
-TU	TR	.tr	Turkey
-TV	TV	.tv	Tuvalu
-TW	TW	.tw	Taiwan
-TX	TM	.tm	Turkmenistan
-TZ	TZ	.tz	Tanzania, United Republic of
-UC	CW	.cw	Curacao
-UG	UG	.ug	Uganda
-UK	GB	.uk	United Kingdom
-UP	UA	.ua	Ukraine
-US	US	.us	United States
-UV	BF	.bf	Burkina Faso
-UY	UY	.uy	Uruguay
-UZ	UZ	.uz	Uzbekistan
-VC	VC	.vc	Saint Vincent and the Grenadines
-VE	VE	.ve	Venezuela
-VI	VG	.vg	British Virgin Islands
-VM	VN	.vn	Vietnam
-VQ	VI	.vi	Virgin Islands (US)
-VT	VA	.va	Holy See (Vatican City)
-WA	NA	.na	Namibia
-WE	PS	.ps	State of Palestine
-WF	WF	.wf	Wallis and Futuna
-WI	EH	.eh	Western Sahara
-WS	WS	.ws	Samoa
-WZ	SZ	.sz	Swaziland
-YI	CS	.yu	Serbia and Montenegro
-YM	YE	.ye	Yemen
-ZA	ZM	.zm	Zambia
-ZI	ZW	.zw	Zimbabwe
+CC_FIPS,CC_ISO,TLD,COUNTRY_NAME ,AIESEC
+AA,AW,.aw,Aruba,0
+AC,AG,.ag,Antigua and Barbuda,0
+AE,AE,.ae,United Arab Emirates,1
+AF,AF,.af,Afghanistan,1
+AG,DZ,.dz,Algeria,1
+AJ,AZ,.az,Azerbaijan,1
+AL,AL,.al,Albania,0
+AM,AM,.am,Armenia,1
+AN,AD,.ad,Andorra,0
+AO,AO,.ao,Angola,0
+AQ,AS,.as,American Samoa,0
+AR,AR,.ar,Argentina,1
+AS,AU,.au,Australia,1
+AT,-,-,Ashmore and Cartier Islands,0
+AU,AT,.at,Austria,1
+AV,AI,.ai,Anguilla,0
+-,AX,.ax,Ã…land Islands,0
+AY,AQ,.aq,Antarctica,0
+BA,BH,.bh,Bahrain,1
+BB,BB,.bb,Barbados,1
+BC,BW,.bw,Botswana,1
+BD,BM,.bm,Bermuda,0
+BE,BE,.be,Belgium,1
+BF,BS,.bs,"Bahamas, The ",0
+BG,BD,.bd,Bangladesh,1
+BH,BZ,.bz,Belize,0
+BK,BA,.ba,Bosnia and Herzegovina,1
+BL,BO,.bo,Bolivia,1
+TB,BL,.bl,Saint Barthelemy,0
+BM,MM,.mm,Myanmar,1
+BN,BJ,.bj,Benin,1
+BO,BY,.by,Belarus,0
+BP,SB,.sb,Solomon Islands,0
+BQ,-,-,Navassa Islands ,0
+BR,BR,.br,Brazil,1
+BS,-,-,Bassas da India ,0
+BT,BT,.bt,Bhutan ,0
+BU,BG,.bg,Bulgaria,1
+BV,BV,.bv,Bouvet Island ,0
+BX,BN,.bn,Brunei,0
+BY,BI,.bi,Burundi ,0
+CA,CA,.ca,Canada,1
+CB,KH,.kh,Cambodia ,1
+CD,TD,.td,Chad ,0
+CE,LK,.lk,Sri Lanka,1
+CF,CG,.cg,"Congo, Republic of the ",0
+CG,CD,.cd,"Congo, Democratic Republic of the ",0
+CH,CN,.cn,China,1
+CI,CL,.cl,Chile,1
+CJ,KY,.ky,Cayman Islands ,0
+CK,CC,.cc,Cocos (Keeling) Islands ,0
+CM,CM,.cm,Cameroon,1
+CN,KM,.km,Comoros                                  ,0
+CO,CO,.co,Colombia,1
+CQ,MP,.mp,Northern Mariana Islands ,0
+CR,-,-,Coral Sea Islands ,0
+CS,CR,.cr,Costa Rica,1
+CT,CF,.cf,Central African Republic ,0
+CU,CU,.cu,Cuba ,0
+CV,CV,.cv,Cape Verde,1
+CW,CK,.ck,Cook Islands  ,0
+CY,CY,.cy,Cyprus ,0
+DA,DK,.dk,Denmark,1
+DJ,DJ,.dj,Djibouti,0
+DO,DM,.dm,Dominica ,0
+DR,DO,.do,Dominican Republic,1
+DX,-,-,Dhekelia Sovereign Base Area ,0
+EC,EC,.ec,Ecuador,1
+EG,EG,.eg,Egypt,1
+EI,IE,.ie,Ireland,1
+EK,GQ,.gq,Equatorial Guinea,0
+EN,EE,.ee,Estonia,1
+ER,ER,.er,Eritrea ,0
+ES,SV,.sv,El Salvador,1
+ET,ET,.et,Ethiopia,1
+EU,-,-,Europa Island ,0
+EZ,CZ,.cz,Czech Republic,1
+FG,GF,.gf,French Guiana ,0
+FI,FI,.fi,Finland,1
+FJ,FJ,.fj,Fiji ,0
+FK,FK,.fk,Falkland Islands (Islas Malvinas) ,0
+FM,FM,.fm,"Micronesia, Federated States of ",0
+FO,FO,.fo,Faroe Islands ,0
+FP,PF,.pf,French Polynesia ,0
+FR,FR,.fr,France,1
+FS,TF,.tf,French Southern and Antarctic Lands ,0
+GA,GM,.gm,"Gambia, The ",0
+GB,GA,.ga,Gabon,1
+GG,GE,.ge,Georgia,1
+GH,GH,.gh,Ghana,1
+GI,GI,.gi,Gibraltar ,0
+GJ,GD,.gd,Grenada ,0
+GK,GG,.gg,Guernsey ,0
+GL,GL,.gl,Greenland ,0
+GM,DE,.de,Germany,1
+GO,-,-,Glorioso Islands ,0
+GP,GP,.gp,Guadeloupe ,0
+GQ,GU,.gu,Guam ,0
+GR,GR,.gr,Greece,1
+GT,GT,.gt,Guatemala,1
+GV,GN,.gn,Guinea ,0
+GY,GY,.gy,Guyana ,0
+GZ,-,-,Gaza Strip ,0
+HA,HT,.ht,Haiti ,0
+HK,HK,.hk,Hong Kong,1
+HM,HM,.hm,Heard Island and McDonald Islands ,0
+HO,HN,.hn,Honduras ,0
+HR,HR,.hr,Croatia,1
+HU,HU,.hu,Hungary,1
+IC,IS,.is,Iceland,1
+ID,ID,.id,Indonesia,1
+IM,IM,.im,Isle of Man ,0
+IN,IN,.in,India,1
+IO,IO,.io,British Indian Ocean Territory ,0
+IP,-,-,Clipperton Island ,0
+IR,IR,.ir,Iran,1
+IS,IL,.il,Israel,0
+IT,IT,.it,Italy,1
+IV,CI,.ci,Cote d'Ivoire,1
+IZ,IQ,.iq,Iraq ,0
+JA,JP,.jp,Japan,1
+JE,JE,.je,Jersey ,0
+JM,JM,.jm,Jamaica ,0
+JN,SJ,-,Jan Mayen ,0
+JO,JO,.jo,Jordan,1
+JU,-,-,Juan de Nova Island ,0
+KE,KE,.ke,Kenya,1
+KG,KG,.kg,Kyrgyzstan,1
+KN,KP,.kp,"Korea, North",0
+KR,KI,.ki,Kiribati ,0
+KS,KR,.kr,"Korea, South",1
+KT,CX,.cx,Christmas Island ,0
+KU,KW,.kw,Kuwait,1
+KV,XK,-,Kosovo ,0
+KZ,KZ,.kz,Kazakhstan,1
+LA,LA,.la,Laos,1
+LE,LB,.lb,Lebanon,1
+LG,LV,.lv,Latvia,1
+LH,LT,.lt,Lithuania,1
+LI,LR,.lr,Liberia,1
+LO,SK,.sk,Slovakia,1
+-,UM,.us,United States Minor Outlying Islands        ,0
+LS,LI,.li,Liechtenstein ,0
+LT,LS,.ls,Lesotho ,0
+LU,LU,.lu,Luxembourg,1
+LY,LY,.ly,Libyan Arab ,0
+MA,MG,.mg,Madagascar ,0
+MB,MQ,.mq,Martinique ,0
+MC,MO,.mo,Macau ,0
+MD,MD,.md,"Moldova, Republic of",1
+MF,YT,.yt,Mayotte ,0
+MG,MN,.mn,Mongolia,1
+MH,MS,.ms,Montserrat ,0
+MI,MW,.mw,Malawi,0
+MJ,ME,.me,Montenegro,1
+MK,MK,.mk,The Former Yugoslav Republic of Macedonia,1
+ML,ML,.ml,Mali  ,0
+MN,MC,.mc,Monaco ,0
+MO,MA,.ma,Morocco,1
+MP,MU,.mu,Mauritius,1
+MR,MR,.mr,Mauritania ,0
+MT,MT,.mt,Malta,1
+MU,OM,.om,Oman,1
+MV,MV,.mv,Maldives ,0
+MX,MX,.mx,Mexico,1
+MY,MY,.my,Malaysia,1
+MZ,MZ,.mz,Mozambique,1
+NC,NC,.nc,New Caledonia ,0
+NE,NU,.nu,Niue ,0
+NF,NF,.nf,Norfolk Island ,0
+NG,NE,.ne,Niger ,0
+NH,VU,.vu,Vanuatu ,0
+NI,NG,.ng,Nigeria,1
+NL,NL,.nl,Netherlands,1
+NO,NO,.no,Norway,1
+NP,NP,.np,Nepal,1
+NR,NR,.nr,Nauru ,0
+NS,SR,.sr,Suriname ,0
+-,BQ,.bq,"Bonaire, Sint Eustatius and Saba ",0
+NU,NI,.ni,Nicaragua,1
+NZ,NZ,.nz,New Zealand,1
+PA,PY,.py,Paraguay,1
+PC,PN,.pn,Pitcairn Islands ,0
+PE,PE,.pe,Peru,1
+PF,-,-,Paracel Islands ,0
+PG,-,-,Spratly Islands ,0
+PK,PK,.pk,Pakistan,1
+PL,PL,.pl,Poland,1
+PM,PA,.pa,Panama,1
+PO,PT,.pt,Portugal,1
+PP,PG,.pg,Papua New Guinea,1
+PS,PW,.pw,Palau ,0
+PU,GW,.gw,Guinea-Bissau ,0
+QA,QA,.qa,Qatar,1
+RE,RE,.re,Reunion ,0
+RI,RS,.rs,Serbia   ,0
+RM,MH,.mh,Marshall Islands ,0
+RN,MF,-,Saint Martin ,0
+RO,RO,.ro,Romania,1
+RP,PH,.ph,Philippines,1
+RQ,PR,.pr,Puerto Rico,1
+RS,RU,.ru,Russia,1
+RW,RW,.rw,Rwanda,1
+SA,SA,.sa,Saudi Arabia ,0
+SB,PM,.pm,Saint Pierre and Miquelon ,0
+SC,KN,.kn,Saint Kitts and Nevis ,0
+SE,SC,.sc,Seychelles,0
+SF,ZA,.za,South Africa,1
+SG,SN,.sn,Senegal,1
+SH,SH,.sh,Saint Helena ,0
+SI,SI,.si,Slovenia,1
+SL,SL,.sl,Sierra Leone ,0
+SM,SM,.sm,San Marino ,0
+SN,SG,.sg,Singapore,1
+SO,SO,.so,Somalia ,0
+SP,ES,.es,Spain,1
+-,SS,.ss,South Sudan ,0
+ST,LC,.lc,Saint Lucia ,0
+SU,SD,.sd,Sudan ,0
+SV,SJ,.sj,Svalbard ,0
+SW,SE,.se,Sweden,1
+SX,GS,.gs,South Georgia and the Islands ,0
+NN,SX,.sx,Sint Maarten ,0
+SY,SY,.sy,Syrian Arab Republic ,0
+SZ,CH,.ch,Switzerland,1
+TD,TT,.tt,Trinidad and Tobago ,0
+TE,-,-,Tromelin Island ,0
+TH,TH,.th,Thailand,1
+TI,TJ,.tj,Tajikistan,1
+TK,TC,.tc,Turks and Caicos Islands ,0
+TL,TK,.tk,Tokelau ,0
+TN,TO,.to,Tonga ,0
+TO,TG,.tg,Togo,1
+TP,ST,.st,Sao Tome and Principe ,0
+TS,TN,.tn,Tunisia,1
+TT,TL,.tl,East Timor ,0
+TU,TR,.tr,Turkey,1
+TV,TV,.tv,Tuvalu ,0
+TW,TW,.tw,Taiwan,1
+TX,TM,.tm,Turkmenistan ,0
+TZ,TZ,.tz,"Tanzania, United Republic of",1
+UC,CW,.cw,Curacao ,0
+UG,UG,.ug,Uganda,1
+UK,GB,.uk,United Kingdom,1
+UP,UA,.ua,Ukraine,1
+US,US,.us,United States,1
+UV,BF,.bf,Burkina Faso,1
+UY,UY,.uy,Uruguay,1
+UZ,UZ,.uz,Uzbekistan ,0
+VC,VC,.vc,Saint Vincent and the Grenadines ,0
+VE,VE,.ve,Venezuela,1
+VI,VG,.vg,British Virgin Islands ,0
+VM,VN,.vn,Vietnam,1
+VQ,VI,.vi,Virgin Islands (US) ,0
+VT,VA,.va,Holy See (Vatican City),0
+WA,NA,.na,Namibia,1
+WE,PS,.ps,State of Palestine ,0
+WF,WF,.wf,Wallis and Futuna,0
+WI,EH,.eh,Western Sahara ,0
+WS,WS,.ws,Samoa ,0
+WZ,SZ,.sz,Swaziland ,0
+YI,CS,.yu,Serbia and Montenegro,1
+YM,YE,.ye,Yemen ,0
+ZA,ZM,.zm,Zambia ,0
+ZI,ZW,.zw,Zimbabwe,1
