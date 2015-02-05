@@ -1,3 +1,3 @@
 CarrierWave.configure do |config|
-  config.asset_host = "http://localhost:4000"
+  config.asset_host = Settings.localhost
 end

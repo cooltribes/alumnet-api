@@ -17,6 +17,13 @@ class Post < ActiveRecord::Base
   ### Callbacks
   before_create :set_last_comment_at
 
+  ### Instance Methods
+  def postable_info
+    if postable.present?
+      { type: postable_type, id: postable.id, name: postable.name }
+    end
+  end
+
   private
     def set_last_comment_at
       self[:last_comment_at] ||= Time.current

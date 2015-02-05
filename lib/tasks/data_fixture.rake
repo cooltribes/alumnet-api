@@ -13,6 +13,7 @@ namespace :data_fixture do
     require 'machinist'
     require Rails.root.join("spec/support/blueprints")
     3.times { Country.make! }
+    3.times { Country.make!(aiesec: true) }
   end
 
   desc "create languages and skills to test"

@@ -124,6 +124,7 @@ Country.blueprint do
   cc_iso { sn }
   tld { '.xx' }
   name { "Country #{sn}"}
+  aiesec { false }
   3.times { |x| City.make!(cc_fips: object.cc_fips, name: "City #{x} of #{object.name}") }
   3.times { |x| Committee.make!(cc_fips: object.cc_fips, name: "Committee #{x} of #{object.name}") }
 end
