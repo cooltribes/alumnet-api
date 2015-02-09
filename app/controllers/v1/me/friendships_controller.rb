@@ -13,6 +13,7 @@ class V1::Me::FriendshipsController < V1::BaseController
   def create
     @friendship = @user.create_friendship_for(@friend)
     if @friendship.save
+      Notification.notify_friendship_request_to_user(@user, @friend)
       render :show, status: :created
     else
       render json: @friendship.errors, status: :unprocessable_entity
