@@ -45,4 +45,24 @@ class Notification
       AdminMailer.user_request_to_join(admin, user, group).deliver
     end
   end
+
+  def self.notify_friendship_request_to_user(user, friend)
+    recipients = [friend]
+    Mailboxer::Notification.notify_all(
+      recipients,
+      "You have a new friendship request",
+      "The user #{user.name} sent you a friendship request"
+    )
+    UserMailer.user_request_friendship(user, friend).deliver
+  end
+
+  def self.notify_accepted_friendship_to_user(user, friend)
+    recipients = [user]
+    Mailboxer::Notification.notify_all(
+      recipients,
+      "You have a new friend!",
+      "The user #{friend.name} has accepted your friendship request"
+    )
+    UserMailer.friend_accept_friendship(user, friend).deliver
+  end
 end
