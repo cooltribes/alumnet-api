@@ -12,8 +12,9 @@ namespace :data_fixture do
   task countries: :environment do
     require 'machinist'
     require Rails.root.join("spec/support/blueprints")
-    3.times { Country.make! }
-    3.times { Country.make!(aiesec: true) }
+    3.times do
+      Country.make!(:with_local_committee)
+    end
   end
 
   desc "create languages and skills to test"
@@ -24,5 +25,12 @@ namespace :data_fixture do
       Language.make!
       Skill.make!
     end
+  end
+
+  desc "create three countries"
+  task cities: :environment do
+    require 'machinist'
+    require Rails.root.join("spec/support/blueprints")
+    5.times { City.make!(cc_fips: "VE") }
   end
 end

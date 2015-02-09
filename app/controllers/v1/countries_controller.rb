@@ -2,8 +2,14 @@ class V1::CountriesController < V1::BaseController
   before_action :set_country, except: [:index]
 
   def index
-    @q = Country.search(params[:q])
-    @countries = @q.result
+    ## Too dirty!
+    if params[:committee_type]
+      cc_fips = Committee.where(committee_type: params[:committee_type]).pluck(:cc_fips).uniq
+      @countries = Country.where(cc_fips: cc_fips)
+    else
+      @q = Country.search(params[:q])
+      @countries = @q.result
+    end
   end
 
   def show
