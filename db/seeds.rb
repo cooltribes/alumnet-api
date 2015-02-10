@@ -46,8 +46,8 @@ english = Language.find_by(name: "English")
 ####Initial Groups
 # alumnet = Group.create!(name: "AlumNet", description: "This is the official group of AlumNet",
 #   group_type: 1, join_process: 2)
-# international = Group.create!(name: "International", description: "This is the official group International",
-#   group_type: 1, join_process: 2)
+international = Group.create!(name: "International", description: "This is the official group International",
+  group_type: 1, join_process: 2)
 
 ### Initial admin
 admin = User.create!(email: "alumnet@cooltribes.com", password: "AlumNet2015",
