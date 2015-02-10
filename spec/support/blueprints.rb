@@ -126,8 +126,34 @@ Country.blueprint do
   name { "Country #{sn}"}
   aiesec { false }
   3.times { |x| City.make!(cc_fips: object.cc_fips, name: "City #{x} of #{object.name}") }
-  3.times { |x| Committee.make!(cc_fips: object.cc_fips, name: "Committee #{x} of #{object.name}") }
+  2.times { |x| Committee.make!(cc_fips: object.cc_fips, name: "Committee #{x} of #{object.name}",
+    committee_type: "National") }
+  3.times { |x| Committee.make!(cc_fips: object.cc_fips, name: "Committee #{x} of #{object.name}",
+    committee_type: "Local") }
 end
+
+Country.blueprint(:with_local_committee) do
+  cc_fips { sn }
+  cc_iso { sn }
+  tld { '.xx' }
+  name { "Country #{sn}"}
+  aiesec { false }
+  3.times { |x| City.make!(cc_fips: object.cc_fips, name: "City #{x} of #{object.name}") }
+  3.times { |x| Committee.make!(cc_fips: object.cc_fips, name: "Committee #{x} of #{object.name}",
+    committee_type: "Local") }
+end
+
+Country.blueprint(:with_national_committee) do
+  cc_fips { sn }
+  cc_iso { sn }
+  tld { '.xx' }
+  name { "Country #{sn}"}
+  aiesec { false }
+  3.times { |x| City.make!(cc_fips: object.cc_fips, name: "City #{x} of #{object.name}") }
+  3.times { |x| Committee.make!(cc_fips: object.cc_fips, name: "Committee #{x} of #{object.name}",
+    committee_type: "National") }
+end
+
 
 City.blueprint do
   cc_fips { sn }
@@ -137,6 +163,7 @@ end
 Committee.blueprint do
   cc_fips { sn }
   name { "Committee #{sn}" }
+  committee_type { "Local" }
 end
 
 Language.blueprint do

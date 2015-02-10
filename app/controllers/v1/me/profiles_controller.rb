@@ -31,10 +31,10 @@ class V1::Me::ProfilesController < V1::BaseController
         params.permit(contact_infos_attributes: [:contact_type, :info, :privacy])
       elsif @profile.contact? || @profile.experience_a?
         params.permit(experiences_attributes: [:exp_type, :name, :description, :start_date,
-          :end_date, :city_id, :country_id, :committee_id])
+          :end_date, :city_id, :country_id, :aiesec_experience, :committee_id])
       elsif @profile.experience_b?
         params.permit(experiences_attributes: [:exp_type, :name, :description, :start_date,
-          :end_date, :city_id, :country_id, :organization_name, :committee_id])
+          :end_date, :city_id, :country_id, :organization_name, :aiesec_experience, :committee_id])
       elsif @profile.experience_c?
         params.permit(experiences_attributes: [:exp_type, :name, :description, :start_date,
           :end_date, :city_id, :country_id, :organization_name, :internship, :committee_id])

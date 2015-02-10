@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h2>Greetings <%= "#{ @user.name }" %></h2>
+    <p>
+      The user <%= "#{@friend.name}" %> has accepted your friendship request <br>
+      Click <a href=<%= "#{Settings.ui_endpoint}/#users/#{@friend.id}/about" %>>here</a> to see the profile of you new friend!
+    </p>
+  </body>
+</html>
