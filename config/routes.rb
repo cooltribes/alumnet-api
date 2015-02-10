@@ -20,6 +20,7 @@ Rails.application.routes.draw do
           put :unread, on: :member
         end
       end
+      resources :notifications, only: [:index, :destroy], controller: 'me/notifications'
     end
 
     resources :users, except: :create do

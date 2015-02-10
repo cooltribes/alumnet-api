@@ -1,0 +1,1 @@
+json.(notification, :id, :body, :subject, :created_at)
