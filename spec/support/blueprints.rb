@@ -51,6 +51,7 @@ Group.blueprint do
   join_process { 0 }
   country { Country.make! }
   city { object.country.cities.first }
+  official { false }
 end
 
 Group.blueprint(:with_parent_and_childen) do
@@ -63,6 +64,7 @@ Group.blueprint(:with_parent_and_childen) do
   parent { Group.make! }
   children { [Group.make!, Group.make!] }
   join_process { 0 }
+  official { false }
 end
 
 Group.blueprint(:all_relations) do
@@ -75,6 +77,7 @@ Group.blueprint(:all_relations) do
   parent { Group.make! }
   children { [Group.make!, Group.make!] }
   posts(3)
+  official { false }
 end
 
 Membership.blueprint(:approved) do
