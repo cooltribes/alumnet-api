@@ -1,56 +1,85 @@
 Rails.application.routes.draw do
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
 
-  # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  api_version(:module => "V1", :header => {:name => "Accept", :value => "application/vnd.alumnet+json;version=1"}) do
 
-  # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
+    post '/sign_in', to: 'auth#sign_in', as: :sign_in
+    post '/register', to: 'auth#register', as: :register
 
-  # Example of named route that can be invoked with purchase_url(id: product.id)
-  #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
+    resources :password_resets, only: [:create, :update]
 
-  # Example resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
+    resource :me, only: [:show, :update], controller: 'me' do
+      get :messages
+      resource :profile, only: [:show, :update], controller: 'me/profiles'
+      resources :posts, controller: 'me/posts'
+      resources :friendships, except: :show, controller: 'me/friendships' do
+        get :friends, on: :collection
+      end
+      resources :conversations, except: [:new, :edit, :update], controller: 'me/conversations' do
+        resources :receipts, only: [:index, :show, :create], controller: 'me/receipts' do
+          put :read, on: :member
+          put :unread, on: :member
+        end
+      end
+      resources :notifications, only: [:index, :destroy], controller: 'me/notifications' do
+        put :mark_all_read, on: :collection
+        put :mark_as_read, on: :member
+        put :mark_as_unread, on: :member
+      end
+    end
 
-  # Example resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
+    resources :users, except: :create do
+      resource :profile, only: [:show, :update], controller: 'users/profiles'
+      resources :posts, controller: 'users/posts'
+      resources :memberships, except: :show, controller: 'users/memberships' do
+        get :groups, on: :collection
+      end
+      resources :friendships, except: :show, controller: 'users/friendships' do
+        get :friends, on: :collection
+        get :commons, on: :collection
+      end
+    end
 
-  # Example resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
+    resources :groups do
+      post :add_group, on: :member
+      get :subgroups, on: :member
+      resources :posts, controller: 'groups/posts'
+      resources :memberships, except: :show, controller: 'groups/memberships' do
+        get :members, on: :collection
+      end
+    end
 
-  # Example resource route with more complex sub-resources:
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', on: :collection
-  #     end
-  #   end
+    resources :posts, only: :show do
+      post :like, on: :member
+      post :unlike, on: :member
+      resources :comments, controller: 'posts/comments' do
+        post :like, on: :member
+        post :unlike, on: :member
+      end
+    end
 
-  # Example resource route with concerns:
-  #   concern :toggleable do
-  #     post 'toggle'
-  #   end
-  #   resources :posts, concerns: :toggleable
-  #   resources :photos, concerns: :toggleable
+    resources :regions, only: [:index, :show]
 
-  # Example resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
+    resources :countries, only: [:index, :show] do
+      get :cities, on: :member
+      get :committees, on: :member
+    end
+
+    resources :committees, only: [:index]
+
+    resources :profiles, only: [:show, :update] do
+      resources :experiences, except: [:show, :new, :edit], controller: 'profiles/experiences'
+      resources :skills, except: [:show, :new, :edit], controller: 'profiles/skills'
+      resources :language_levels, except: [:show, :new, :edit], controller: 'profiles/language_levels'
+      resources :contact_infos, except: [:show, :new, :edit], controller: 'profiles/contact_infos'
+    end
+
+    resources :languages, only: :index
+    resources :skills, only: :index
+
+    namespace :admin do
+      resources :users, except: :create do
+        put :activate, on: :member
+      end
+    end
+  end
 end

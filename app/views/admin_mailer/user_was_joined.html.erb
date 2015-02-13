@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h2>Greetings <%= "#{ @admin.name }" %></h2>
+    <p>
+      The user <%= "#{@user.name}" %> was joined to the group <%= "#{@group.name}" %>
+      Click <a href=<%= "#{Settings.ui_endpoint}/#groups/#{@group.id}/members" %>>here</a> to visit the group.
+    </p>
+  </body>
+</html>

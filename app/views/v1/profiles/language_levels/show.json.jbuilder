@@ -1,0 +1,1 @@
+json.partial! 'language_level', language_level: @language_level

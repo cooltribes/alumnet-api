@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Group",
+  "description": "A group from Alumnet's groups",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "avatar": {
+      "type": "object",
+      "properties": {
+        "original": {
+          "type": "string"
+        },
+        "thumb": {
+          "type": "string"
+        }
+      }
+    },
+    "group_type": {
+      "type": "integer"
+    },
+    "official": {
+      "type": "boolean"
+    },
+    "parent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "object",
+          "properties": {
+            "original": {
+              "type": "string"
+            },
+            "thumb": {
+              "type": "string"
+            }
+          }
+        },
+        "group_type": {
+          "type": "integer"
+        }
+      }
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "object",
+            "properties": {
+              "original": {
+                "type": "string"
+              },
+              "thumb": {
+                "type": "string"
+              }
+            }
+          },
+          "group_type": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  },
+  "required": ["id", "name", "description", "group_type", "official"]
+}
