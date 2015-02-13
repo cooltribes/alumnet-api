@@ -20,6 +20,11 @@ Rails.application.routes.draw do
           put :unread, on: :member
         end
       end
+      resources :notifications, only: [:index, :destroy], controller: 'me/notifications' do
+        put :mark_all_read, on: :collection
+        put :mark_as_read, on: :member
+        put :mark_as_unread, on: :member
+      end
     end
 
     resources :users, except: :create do
