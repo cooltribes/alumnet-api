@@ -3,8 +3,8 @@ lock '3.3.3'
 
 set :application, 'alumnet-api'
 set :repo_url, 'https://ArmandoMendoza:14941830famg@github.com/cooltribes/alumnet-api.git '#'git@github.com:cooltribes/alumnet-api.git'
-set :deploy_to, '/home/ec2-user/alumnet/alumnet-api'
-set :branch, 'deploy'
+set :deploy_to, '/home/ec2-user/deploy_tests/alumnet-api'
+set :branch, 'deploy_tests'
 set :scm, :git
 
 set :linked_files, %w{config/database.yml config/application.yml}
