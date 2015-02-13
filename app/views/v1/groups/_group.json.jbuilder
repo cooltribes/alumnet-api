@@ -1,4 +1,5 @@
-json.(group, :id, :name, :description, :official, :created_at, :join_process)
+json.(group, :id, :name, :description, :official, :created_at, :join_process,
+  :can_be_official?, :can_be_unofficial?)
 
 json.group_type group.get_group_type_info
 
