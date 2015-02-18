@@ -1,0 +1,1 @@
+﻿\copy cities (cc_fips, name) FROM '~/GEODATASOURCE-CITIES-FREE.TXT' DELIMITER E'\t' ENCODING 'ISO-8859-5'

@@ -98,6 +98,10 @@ class User < ActiveRecord::Base
     mailbox.inbox.where("mailboxer_receipts.is_read = false").count
   end
 
+  def unread_notifications_count
+    mailbox.notifications.unread.count
+  end
+
   ### all about Post
   def groups_posts(q)
     #return all posts of groups where the user is member

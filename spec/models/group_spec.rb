@@ -13,6 +13,27 @@ RSpec.describe Group, :type => :model do
   it { should belong_to(:country) }
   it { should belong_to(:city) }
 
+  describe "Custom validations" do
+    describe "validate_officiality" do
+      it "validate if a group can be official or not" do
+        parent = Group.make!
+        child = Group.make!
+        parent.children << child
+        expect(child.can_be_official?).to eq(false)
+        child.official = true
+        expect(child.save).to eq(false)
+        expect(child.errors[:official]).to eq(["the group can not be official"])
+        parent.official = true
+        parent.save
+        expect(child.can_be_official?).to eq(true)
+        child.official = true
+        child.save
+        parent.official = false
+        expect(parent.save).to eq(false)
+        expect(parent.errors[:official]).to eq(["the group can be official"])
+      end
+    end
+  end
 
   describe "Callbacks" do
     describe "check_join_process" do

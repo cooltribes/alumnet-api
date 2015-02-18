@@ -37,17 +37,11 @@ SmarterCSV.process(file, options ) do |array|
 end
 file.close
 
-### Search Cities
+### Data
 venezuela = Country.find_by(name: "Venezuela")
-san_cristobal = venezuela.cities.find_by(name: "San Cristobal")
 belgium = Country.find_by(name: "Belgium")
-brussels = belgium.cities.find_by(name: "Brussels")
 english = Language.find_by(name: "English")
-####Initial Groups
-# alumnet = Group.create!(name: "AlumNet", description: "This is the official group of AlumNet",
-#   group_type: 1, join_process: 2)
-international = Group.create!(name: "International", description: "This is the official group International",
-  group_type: 1, join_process: 2)
+committee = Committee.find_by(name: "Europe")
 
 ### Initial admin
 admin = User.create!(email: "alumnet@cooltribes.com", password: "AlumNet2015",
@@ -59,8 +53,14 @@ profile.save(validate: false)
 profile.contact_infos.build(contact_type: 0, info: admin.email, privacy: 1)
 profile.experiences.build(name: "AlumNet SuperAdmin", description: "AlumNet SuperAdmin",
   start_date: "1910-01-01", end_date: "1910-06-01", aiesec_experience: "International",
-  country_id: belgium.id, committee_id: international.id, exp_type: 0)
+  country_id: belgium.id, committee_id: committee.id, exp_type: 0)
 profile.skills << Skill.first
 profile.language_levels << LanguageLevel.new(language_id: english.id, level: 5)
 profile.skills!
 admin.activate!
+
+####Initial Groups
+# alumnet = Group.create!(name: "AlumNet", description: "This is the official group of AlumNet",
+#   group_type: 1, join_process: 2, creator_user_id: admin.id )
+# international = Group.create!(name: "International", description: "This is the official group International",
+#   group_type: 1, join_process: 2, creator_user_id: admin.id)

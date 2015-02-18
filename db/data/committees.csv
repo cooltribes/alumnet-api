@@ -1,12 +1,12 @@
 name,cc_fips,committee_type
 Other,,
-AI – Global AIESEC,,International
+International,,International
 Asia Pacific,,International
-Central and Eastern Europe,,International
-Middle East and North Africa,,International
+Europe,,International
+Middle East,,International
 Africa,,International
 Iberoamerica,,International
-Western Europe and North America,,International
+North America,,International
 Afghanistan,AF,National
 Albania ,AL,National
 Algeria,AG,National
@@ -1630,7 +1630,7 @@ AIESEC UC,VE,Local
 AIESEC UNIMET,VE,Local
 AIESEC MERIDA,VE,Local
 AIESEC USB,VE,Local
-AIESEC  HANOI,VM,Local
+AIESEC HANOI,VM,Local
 AIESEC DANANG,VM,Local
 AIESEC FTU HCM,VM,Local
 AIESEC HO CHI MINH CITY,VM,Local

@@ -27,8 +27,9 @@ class Group < ActiveRecord::Base
 
 
   ### Validations
-  validates_presence_of :name, :description, :group_type, :join_process
+  validates_presence_of :name, :description, :group_type, :join_process, :cover
   validate :validate_join_process, on: :create
+  validate :validate_officiality
 
   ### Callbacks
   before_update :check_join_process
@@ -87,6 +88,25 @@ class Group < ActiveRecord::Base
     children.any?
   end
 
+  def has_official_parent?
+    has_parent? && parent.official?
+  end
+
+  def has_official_children?
+    has_children? ? children.where(official:true).any? : false
+  end
+
+  def can_be_official?
+    return true unless has_parent?
+    return true if has_official_parent?
+    false
+  end
+
+  def can_be_unofficial?
+    return true unless has_official_children?
+    false
+  end
+
   def last_post
     posts.last
   end
@@ -126,11 +146,18 @@ class Group < ActiveRecord::Base
       end
     end
 
+    def validate_officiality
+      if official? and not can_be_official?
+        errors.add(:official, "the group can not be official")
+      elsif not official? and not can_be_unofficial?
+        errors.add(:official, "the group can be official")
+      end
+    end
+
     def check_join_process
       ## this change the join process automatically on update
       if (group_type == "secret" && join_process < 2) || (group_type == "closed" && join_process == 0)
         self[:join_process] = 2
       end
-
     end
 end
