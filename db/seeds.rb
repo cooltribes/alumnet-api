@@ -41,7 +41,7 @@ file.close
 venezuela = Country.find_by(name: "Venezuela")
 belgium = Country.find_by(name: "Belgium")
 english = Language.find_by(name: "English")
-committee = Committee.find_by(name: "Western Europe and North America")
+committee = Committee.find_by(name: "Europe")
 
 ### Initial admin
 admin = User.create!(email: "alumnet@cooltribes.com", password: "AlumNet2015",

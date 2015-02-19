@@ -26,8 +26,8 @@ class User < ActiveRecord::Base
 
   ### Validations
   validates :email, presence: true, uniqueness: true, format: { with: VALID_EMAIL_REGEX }
-  validates :password, length: { minimum: 8, message: "Passwords must contain at least eight (8) characters." },
-    format: { with: VALID_PASSWORD_REGEX, message: "The password must be a combination of numbers and letters" },
+  validates :password, length: { minimum: 8, message: "must contain at least eight (8) characters." },
+    format: { with: VALID_PASSWORD_REGEX, message: "must be a combination of numbers and letters" },
     if: 'password.present?'
   ### Callbacks
   before_create :ensure_tokens
@@ -96,6 +96,10 @@ class User < ActiveRecord::Base
   ### all about Conversations
   def unread_messages_count
     mailbox.inbox.where("mailboxer_receipts.is_read = false").count
+  end
+
+  def unread_notifications_count
+    mailbox.notifications.unread.count
   end
 
   ### all about Post

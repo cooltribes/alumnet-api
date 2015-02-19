@@ -8,7 +8,7 @@ set :branch, 'deploy'
 set :scm, :git
 
 set :linked_files, %w{config/database.yml config/application.yml}
-
+set :linked_dirs, %w{public/uploads}
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
