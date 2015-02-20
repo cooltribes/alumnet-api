@@ -78,9 +78,10 @@ Rails.application.routes.draw do
     resources :skills, only: :index
 
     namespace :admin do
-      resources :users, except: :create do
+      resources :users, except: [:new, :edit] do
         put :activate, on: :member
       end
+      resources :groups, except: [:new, :edit]
     end
   end
 end

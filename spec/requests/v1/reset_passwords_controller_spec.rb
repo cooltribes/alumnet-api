@@ -77,7 +77,7 @@ describe V1::PasswordResetsController, type: :request do
           password_confirmation: "314460978" }, header
         expect(response.status).to eq 401
         expect(json).to eq({"errors"=>{"password_confirmation"=>["doesn't match Password"],
-          "password"=>["must have at least a number and a letter"]}})
+          "password"=>["must be a combination of numbers and letters"]}})
       end
     end
   end
