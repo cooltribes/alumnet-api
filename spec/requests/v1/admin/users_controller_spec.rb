@@ -17,7 +17,7 @@ describe V1::Admin::UsersController, type: :request do
     end
 
     context "if user is regular" do
-      it "return all users" do
+      it "return 204 response" do
         get admin_users_path, {}, basic_header(user.auth_token)
         expect(response.status).to eq 204
       end
