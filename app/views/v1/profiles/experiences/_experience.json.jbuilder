@@ -1,5 +1,5 @@
-json.(experience, :id, :aiesec_experience, :exp_type, :name, :description, :start_date, :end_date, :organization_name,
-  :internship, :profile_id)
+json.(experience, :id, :exp_type, :name, :description, :start_date, :end_date, :organization_name,
+  :internship, :aiesec_experience, :profile_id)
 
 json.region experience.get_info_region
 json.country experience.get_info_country
