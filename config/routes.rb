@@ -80,7 +80,9 @@ Rails.application.routes.draw do
       resources :users, except: [:new, :edit] do
         put :activate, on: :member
       end
-      resources :groups, except: [:new, :edit]
+      resources :groups, except: [:new, :edit] do
+        get :subgroups, on: :member
+      end
     end
   end
 end
