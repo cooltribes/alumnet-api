@@ -45,6 +45,16 @@ describe V1::Admin::GroupsController, type: :request do
     end
   end
 
+  describe "GET /groups/:id/subgroups" do
+    it "return all children of group" do
+      group = Group.make!(:with_parent_and_childen)
+      get subgroups_admin_group_path(group), {}, basic_header(admin.auth_token)
+      expect(response.status).to eq 200
+      expect(json.count).to eq(2)
+      expect(json.first["name"]).to eq(group.children.first.name)
+    end
+  end
+
   describe "POST admin/groups" do
     context "with valid attributes" do
       it "create a group and membership for user" do
