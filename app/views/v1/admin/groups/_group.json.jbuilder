@@ -20,6 +20,7 @@ end
 json.cover do
   json.main group.cover.main.url
   json.card group.cover.card.url
+  json.admin group.cover.admin.url
 end
 
 json.parent do

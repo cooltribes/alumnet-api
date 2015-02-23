@@ -14,6 +14,10 @@ class CoverUploader < CarrierWave::Uploader::Base
     process :resize_to_fill => [212,225]
   end
 
+  version :admin do
+    process :resize_to_fill => [60, 60]
+  end
+
   def store_dir
     "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
   end
