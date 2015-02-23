@@ -7,6 +7,9 @@ class V1::Profiles::ExperiencesController < V1::BaseController
     @experiences = @profile.experiences
   end
 
+  def show
+  end
+
   def create
     @experience = Experience.new(experience_params)
     authorize @profile
@@ -44,7 +47,7 @@ class V1::Profiles::ExperiencesController < V1::BaseController
 
   def experience_params
     params.permit(:exp_type, :name, :description, :start_date, :end_date, :city_id,
-      :country_id, :organization_name, :internship, :committee_id)
+      :country_id, :organization_name, :internship, :committee_id, :aiesec_experience)
   end
 
 end
