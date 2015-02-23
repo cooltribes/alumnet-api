@@ -67,7 +67,8 @@ Rails.application.routes.draw do
     resources :committees, only: [:index]
 
     resources :profiles, only: [:show, :update] do
-      resources :experiences, except: [:show, :new, :edit], controller: 'profiles/experiences'
+      resources :experiences, except: [:new, :edit], controller: 'profiles/experiences'
+      # resources :experiences, except: [:show, :new, :edit], controller: 'profiles/experiences'
       resources :skills, except: [:show, :new, :edit], controller: 'profiles/skills'
       resources :language_levels, except: [:show, :new, :edit], controller: 'profiles/language_levels'
       resources :contact_infos, except: [:show, :new, :edit], controller: 'profiles/contact_infos'
@@ -77,9 +78,10 @@ Rails.application.routes.draw do
     resources :skills, only: :index
 
     namespace :admin do
-      resources :users, except: :create do
+      resources :users, except: [:new, :edit] do
         put :activate, on: :member
       end
+      resources :groups, except: [:new, :edit]
     end
   end
 end
