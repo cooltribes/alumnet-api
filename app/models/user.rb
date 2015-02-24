@@ -262,7 +262,7 @@ class User < ActiveRecord::Base
   end
 
   def create_privacies
-    ActionPrivacy.all.each do |action|
+    PrivacyAction.all.each do |action|
       privacies.create(privacy_action_id: action.id, value: 0)
     end
   end

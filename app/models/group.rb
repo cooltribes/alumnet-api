@@ -1,5 +1,5 @@
 class Group < ActiveRecord::Base
-  acts_as_tree order: "name"
+  acts_as_tree order: "name", dependent: :nullify
   mount_uploader :cover, CoverUploader
   enum group_type: [:open, :closed, :secret]
 
