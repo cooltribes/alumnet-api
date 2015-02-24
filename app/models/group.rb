@@ -8,11 +8,10 @@ class Group < ActiveRecord::Base
   # "1" -> All Members can invite, but the admins approved
   # "2" -> Only the admins can invite
 
-
   ### Relations
-  has_many :memberships
+  has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships
-  has_many :posts, as: :postable
+  has_many :posts, as: :postable, dependent: :destroy
   belongs_to :country
   belongs_to :city
 
