@@ -1,5 +1,6 @@
 class V1::GroupsController < V1::BaseController
   before_action :set_group, except: [:index, :create]
+  #TODO: implement security logic
 
   def index
     @q = Group.without_secret.search(params[:q])

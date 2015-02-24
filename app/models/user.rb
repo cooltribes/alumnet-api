@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
   has_many :posts, as: :postable
   has_many :publications, class_name: "Post"
   has_many :likes
+  has_many :privacies
   has_one :profile
 
   ### Scopes
