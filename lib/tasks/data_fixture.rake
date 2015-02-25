@@ -27,10 +27,17 @@ namespace :data_fixture do
     end
   end
 
-  desc "create three countries"
+  desc "create five cities to Venezuela"
   task cities: :environment do
     require 'machinist'
     require Rails.root.join("spec/support/blueprints")
     5.times { City.make!(cc_fips: "VE") }
+  end
+
+  desc "create ten privacies actions"
+  task privacy_actions: :environment do
+    require 'machinist'
+    require Rails.root.join("spec/support/blueprints")
+    5.times { PrivacyAction.make! }
   end
 end

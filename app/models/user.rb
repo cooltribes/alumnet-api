@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
   has_many :posts, as: :postable
   has_many :publications, class_name: "Post"
   has_many :likes
+  has_many :privacies
   has_one :profile
 
   ### Scopes
@@ -33,6 +34,7 @@ class User < ActiveRecord::Base
   before_create :ensure_tokens
   before_create :set_role
   after_create :create_new_profile
+  after_create :create_privacies
 
   ### Instance Methods
   def name
@@ -257,5 +259,11 @@ class User < ActiveRecord::Base
 
   def create_new_profile
     create_profile unless profile.present?
+  end
+
+  def create_privacies
+    PrivacyAction.all.each do |action|
+      privacies.create(privacy_action_id: action.id, value: 0)
+    end
   end
 end

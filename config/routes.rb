@@ -25,6 +25,7 @@ Rails.application.routes.draw do
         put :mark_as_read, on: :member
         put :mark_as_unread, on: :member
       end
+      resources :privacies, except: :show, controller: 'me/privacies'
     end
 
     resources :users, except: :create do

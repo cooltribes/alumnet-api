@@ -3,7 +3,7 @@ class Comment < ActiveRecord::Base
   include LikeableMethods
 
   ### Relations
-  has_many :likes, as: :likeable
+  has_many :likes, as: :likeable, dependent: :destroy
   belongs_to :commentable, polymorphic: true
   belongs_to :user
 
