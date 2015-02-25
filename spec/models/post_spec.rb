@@ -5,6 +5,9 @@ RSpec.describe Post, :type => :model do
   it { should belong_to(:postable) }
   it { should have_many(:likes) }
 
+  it "should have paranoia" do
+    expect(Post.paranoid?).to eq(true)
+  end
 
   describe "acts_as_commentable" do
     it "should have methods to handle comments" do

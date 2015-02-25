@@ -1,4 +1,5 @@
 class Post < ActiveRecord::Base
+  acts_as_paranoid
   acts_as_commentable
   include LikeableMethods
 
