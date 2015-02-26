@@ -20,7 +20,7 @@ class V1::Me::ProfilesController < V1::BaseController
     end
 
     def set_profile
-      @profile = @user.profile
+      @profile = @user.profile.decorate
     end
 
     def profile_params

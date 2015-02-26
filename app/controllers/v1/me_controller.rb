@@ -23,6 +23,6 @@ class V1::MeController < V1::BaseController
     end
 
     def set_user
-      @user = current_user if current_user
+      @user = current_user.decorate if current_user
     end
 end

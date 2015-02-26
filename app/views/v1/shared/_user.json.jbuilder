@@ -1,10 +1,6 @@
 json.(user, :id, :email)
 
-if user.permit('see-name', current_user)
-  json.name user.name
-else
-  json.name user.hidden_name
-end
+json.name user.permit_name(current_user)
 
 json.last_experience user.last_experience.try(:name)
 

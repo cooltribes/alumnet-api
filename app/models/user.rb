@@ -37,13 +37,13 @@ class User < ActiveRecord::Base
   after_create :create_privacies
 
   ### Instance Methods
-  def name
-    "#{profile.first_name} #{profile.last_name}"
-  end
+  # def name
+  #   "#{profile.first_name} #{profile.last_name}"
+  # end
 
-  def hidden_name
-    "#{profile.first_name} #{profile.hidden_last_name}"
-  end
+  # def hidden_name
+  #   "#{profile.first_name} #{profile.hidden_last_name}"
+  # end
 
   def avatar
     profile.avatar if profile.present?
