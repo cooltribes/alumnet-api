@@ -33,17 +33,5 @@ namespace :data_fixture do
     require Rails.root.join("spec/support/blueprints")
     5.times { City.make!(cc_fips: "VE") }
   end
-
-  desc "create first privacy actions"
-  task privacy_actions: :environment do
-    require 'machinist'
-    require Rails.root.join("spec/support/blueprints")
-    PrivacyAction.make!(name: "see-name", description: "Who can see my name")
-    PrivacyAction.make!(name: "see-avatar", description: "Who can see my profile picture")
-    PrivacyAction.make!(name: "see-birthdate", description: "Who can see my Birth date")
-    PrivacyAction.make!(name: "see-friends", description: "Who can see the list of my friends")
-    PrivacyAction.make!(name: "see-job", description: "Who can see my current job position")
-    PrivacyAction.make!(name: "see-born", description: "Who can see my city/country of origin")
-    PrivacyAction.make!(name: "see-residence", description: "Who can see my city/country of residence")
-  end
+  
 end
