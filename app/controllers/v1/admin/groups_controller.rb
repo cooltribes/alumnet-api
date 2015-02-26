@@ -9,6 +9,12 @@ class V1::Admin::GroupsController < V1::AdminController
   def show
   end
 
+  def subgroups
+    @q = @group.children.search(params[:q])
+    @groups = @q.result
+    render :index, status: :ok
+  end
+
   def create
     @group = Group.new(group_params)
     @group.creator_user_id = current_user.id
@@ -41,6 +47,6 @@ class V1::Admin::GroupsController < V1::AdminController
 
   def group_params
     params.permit(:name, :description, :cover, :group_type, :official, :country_id,
-      :city_id, :join_process)
+      :city_id, :join_process, :parent_id)
   end
 end

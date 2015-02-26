@@ -115,6 +115,8 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.1)
+    paranoia (2.1.0)
+      activerecord (~> 4.0)
     pg (0.17.1)
     polyamorous (1.1.0)
       activerecord (>= 3.0)
@@ -221,6 +223,7 @@ DEPENDENCIES
   machinist
   mailboxer
   mini_magick
+  paranoia (~> 2.0)
   pg
   pundit
   pusher

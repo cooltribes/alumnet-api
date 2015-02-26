@@ -13,6 +13,10 @@ RSpec.describe Group, :type => :model do
   it { should belong_to(:country) }
   it { should belong_to(:city) }
 
+  it "should have paranoia" do
+    expect(Group.paranoid?).to eq(true)
+  end
+
   describe "Custom validations" do
     describe "validate_officiality" do
       it "validate if a group can be official or not" do
