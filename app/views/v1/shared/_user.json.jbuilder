@@ -1,13 +1,27 @@
-json.(user, :id, :name, :email)
+json.(user, :id, :email)
+
+if user.permit('see-name', current_user)
+  json.name user.name
+else
+  json.name user.hidden_name
+end
 
 json.last_experience user.last_experience.try(:name)
 
 json.avatar do
-  json.original user.avatar.url
-  json.small user.avatar.small.url
-  json.medium user.avatar.medium.url
-  json.large user.avatar.large.url
-  json.extralarge user.avatar.extralarge.url
+  if user.permit('see-avatar', current_user)
+    json.original user.avatar.url
+    json.small user.avatar.small.url
+    json.medium user.avatar.medium.url
+    json.large user.avatar.large.url
+    json.extralarge user.avatar.extralarge.url
+  else
+    json.original user.avatar.default_url
+    json.small user.avatar.small.default_url
+    json.medium user.avatar.medium.default_url
+    json.large user.avatar.large.default_url
+    json.extralarge user.avatar.extralarge.default_url
+  end
 end
 
 json.groups do

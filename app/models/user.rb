@@ -41,6 +41,10 @@ class User < ActiveRecord::Base
     "#{profile.first_name} #{profile.last_name}"
   end
 
+  def hidden_name
+    "#{profile.first_name} #{profile.hidden_last_name}"
+  end
+
   def avatar
     profile.avatar if profile.present?
   end
@@ -244,6 +248,18 @@ class User < ActiveRecord::Base
     common_friends_with(user).count
   end
 
+  #### Privacy Methods
+  def permit(action, user)
+    privacy = privacies.joins(:privacy_action).find_by('privacy_actions.name = ?', action)
+    if privacy
+      return true if privacy.value == 2
+      return (is_friend_of?(user) || user == self) if privacy.value == 1
+      return (user == self) if privacy.value == 0
+    else
+      false
+    end
+  end
+
   private
 
   ### this a temporary solution to authenticate the api
@@ -263,7 +279,10 @@ class User < ActiveRecord::Base
 
   def create_privacies
     PrivacyAction.all.each do |action|
-      privacies.create(privacy_action_id: action.id, value: 0)
+      unless privacies.exists?(privacy_action_id: action.id)
+        privacies.create(privacy_action_id: action.id, value: 2)
+      end
     end
   end
+
 end

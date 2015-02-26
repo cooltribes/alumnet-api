@@ -27,6 +27,10 @@ class Profile < ActiveRecord::Base
 
   ###Instance Methods
 
+  def hidden_last_name
+    "#{last_name.first}."
+  end
+
   def local_committee
     if first_aiesec_experience
       first_aiesec_experience.committee if first_aiesec_experience.committee.present?
@@ -38,7 +42,7 @@ class Profile < ActiveRecord::Base
   end
 
   def last_experience
-    experiences.where.not(exp_type: 2).last    
+    experiences.where.not(exp_type: 2).last
   end
 
   def languages_attributes=(collection_attributes)
