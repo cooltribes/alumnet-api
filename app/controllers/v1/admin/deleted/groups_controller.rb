@@ -6,7 +6,7 @@ class V1::Admin::Deleted::GroupsController < V1::AdminController
     @groups = @q.result
   end
 
-  def restore
+  def update
     Group.restore(@group.id, recursive: true)
   end
 

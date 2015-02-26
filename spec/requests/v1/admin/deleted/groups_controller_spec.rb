@@ -28,11 +28,11 @@ describe V1::Admin::Deleted::GroupsController, type: :request do
     end
   end
 
-  describe "GET admin/groups/:id/restore" do
+  describe "PUT admin/groups/:id" do
     it "restore a group by id" do
       group = Group.make!
       group.destroy
-      get restore_admin_deleted_group_path(group), {}, basic_header(admin.auth_token)
+      put admin_deleted_group_path(group), {}, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       expect(json).to have_key('description')
       expect(json['description']).to eq(group.description)

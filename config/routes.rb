@@ -87,9 +87,7 @@ Rails.application.routes.draw do
       end
 
       namespace :deleted do
-        resources :groups, only: [:index, :destroy] do
-          get :restore, on: :member
-        end
+        resources :groups, only: [:index, :update, :destroy]
       end
     end
   end
