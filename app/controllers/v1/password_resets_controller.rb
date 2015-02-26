@@ -28,7 +28,7 @@ class V1::PasswordResetsController < V1::BaseController
 
   def check_params
     unless params[:email].present?
-      render json: { errors: { email: ["must provide credentials"] } }, status: 401
+      render json: { errors: { email: ["Please enter your email address"] } }, status: 401
     end
   end
 

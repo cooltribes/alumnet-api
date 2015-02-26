@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   scope :inactive, -> { where(status: 0) }
 
   ### Validations
-  validates :email, presence: true, uniqueness: true, format: { with: VALID_EMAIL_REGEX }
+  validates :email, presence: true, uniqueness: true, format: { with: VALID_EMAIL_REGEX, message: "Please enter a valid e-mail address" }
   validates :password, length: { minimum: 8, message: "must contain at least eight (8) characters." },
     format: { with: VALID_PASSWORD_REGEX, message: "must be a combination of numbers and letters" },
     if: 'password.present?'
@@ -262,7 +262,7 @@ class User < ActiveRecord::Base
   end
 
   def create_privacies
-    ActionPrivacy.all.each do |action|
+    PrivacyAction.all.each do |action|
       privacies.create(privacy_action_id: action.id, value: 0)
     end
   end
