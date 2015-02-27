@@ -3,7 +3,7 @@ class V1::UsersController < V1::BaseController
 
   def index
     @q = User.active.includes(:profile).search(params[:q])
-    @users = @q.result.decorate
+    @users = @q.result
   end
 
   def show
@@ -25,7 +25,7 @@ class V1::UsersController < V1::BaseController
   private
 
   def set_user
-    @user = User.find(params[:id]).decorate
+    @user = User.find(params[:id])
   end
 
   def user_params

@@ -2,7 +2,8 @@ json.(user, :id, :email)
 
 json.name user.permit_name(current_user)
 
-json.last_experience user.last_experience.try(:name)
+json.last_experience user.permit_last_experience(current_user)
+
 
 json.avatar do
   if user.permit('see-avatar', current_user)
@@ -41,5 +42,5 @@ end
 json.is_alumnet_admin user.is_alumnet_admin?
 json.is_system_admin user.is_system_admin?
 
-json.friends_count user.friends_count
+json.friends_count user.permit_friends_count(0)
 json.mutual_friends_count current_user.mutual_friends_count(user)

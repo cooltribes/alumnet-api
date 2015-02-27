@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   has_secure_password
   acts_as_messageable
+  include UserHelpers
 
   ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin", regular: "Regular" }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
@@ -37,9 +38,9 @@ class User < ActiveRecord::Base
   after_create :create_privacies
 
   ### Instance Methods
-  # def name
-  #   "#{profile.first_name} #{profile.last_name}"
-  # end
+  def name
+    "#{profile.first_name} #{profile.last_name}"
+  end
 
   # def hidden_name
   #   "#{profile.first_name} #{profile.hidden_last_name}"
@@ -54,7 +55,7 @@ class User < ActiveRecord::Base
   end
 
   def last_experience
-    profile.experiences.where.not(exp_type: 2).last
+    profile.last_experience
   end
 
   def send_password_reset
