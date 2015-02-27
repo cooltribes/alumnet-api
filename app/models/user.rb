@@ -250,16 +250,38 @@ class User < ActiveRecord::Base
   end
 
   #### Privacy Methods
+  # def permit(action, user)
+  #   return true if user == self
+  #   privacy = privacies.joins(:privacy_action).find_by('privacy_actions.name = ?', action)
+  #   if privacy
+  #     return true if privacy.value == 2
+  #     return is_friend_of?(user) if privacy.value == 1
+  #     return (user == self) if privacy.value == 0
+  #   else
+  #     false
+  #   end
+  # end
+
   def permit(action, user)
     return true if user == self
-    privacy = privacies.joins(:privacy_action).find_by('privacy_actions.name = ?', action)
+    @privacies ||= get_privacies_hash
+    privacy = @privacies[action]
     if privacy
-      return true if privacy.value == 2
-      return is_friend_of?(user) if privacy.value == 1
-      return (user == self) if privacy.value == 0
+      return true if privacy == 2
+      return is_friend_of?(user) if privacy == 1
+      return (user == self) if privacy == 0
     else
       false
     end
+  end
+
+  def get_privacies_hash
+    hash = {}
+    privacies.includes(:privacy_action).each do |privacy|
+      name = privacy.privacy_action.name
+      hash[name] = privacy.value
+    end
+    hash
   end
 
   private
