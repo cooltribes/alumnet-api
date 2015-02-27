@@ -4,8 +4,11 @@ RSpec.describe Membership, :type => :model do
   it { should belong_to(:group) }
   it { should belong_to(:user) }
 
-  describe "callbacks" do
+  it "should have paranoia" do
+    expect(Membership.paranoid?).to eq(true)
+  end
 
+  describe "callbacks" do
     describe "set admin" do
       it "set admin to true if any permissions attributes is greater than 0" do
         membership = Membership.make!(:not_approved)

@@ -85,6 +85,10 @@ Rails.application.routes.draw do
       resources :groups, except: [:new, :edit] do
         get :subgroups, on: :member
       end
+
+      namespace :deleted do
+        resources :groups, only: [:index, :update, :destroy]
+      end
     end
   end
 end

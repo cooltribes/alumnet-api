@@ -25,7 +25,7 @@ class V1::AuthController < V1::BaseController
 
   def check_params
     unless params[:email].present? && params[:password].present?
-      render json: { error: "must provide credentials" } , status: 401
+      render json: { error: "Please enter your email address and your password" } , status: 401
     end
   end
 

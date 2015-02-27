@@ -185,7 +185,7 @@ ContactInfo.blueprint(:email) do
 end
 
 PrivacyAction.blueprint do
-  name { "action #{sn}" }
+  name { "see-name" }
   description { Faker::Lorem.paragraph }
 end
 

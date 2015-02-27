@@ -18,7 +18,7 @@ gem 'smarter_csv'
 gem 'pundit'
 gem 'pusher'
 gem 'settingslogic'
-gem "paranoia", "~> 2.0"
+gem 'paranoia', '~> 2.0'
 
 group :development do
   gem 'spring'

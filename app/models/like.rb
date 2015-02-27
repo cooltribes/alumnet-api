@@ -1,4 +1,5 @@
 class Like < ActiveRecord::Base
+  acts_as_paranoid
 
   ### Ralations
   belongs_to :user

@@ -1,6 +1,7 @@
 class Profile < ActiveRecord::Base
   mount_uploader :avatar, AvatarUploader
   enum register_step: [:initial, :profile, :contact, :experience_a, :experience_b, :experience_c, :experience_d, :skills, :approval]
+  include ProfileHelpers
 
   ###Relations
   belongs_to :birth_city, class_name: 'City'
@@ -27,6 +28,10 @@ class Profile < ActiveRecord::Base
 
   ###Instance Methods
 
+  def hidden_last_name
+    "#{last_name.first}."
+  end
+
   def local_committee
     if first_aiesec_experience
       first_aiesec_experience.committee if first_aiesec_experience.committee.present?
@@ -38,7 +43,7 @@ class Profile < ActiveRecord::Base
   end
 
   def last_experience
-    experiences.where.not(exp_type: 2).last    
+    experiences.where.not(exp_type: 2).last
   end
 
   def languages_attributes=(collection_attributes)
