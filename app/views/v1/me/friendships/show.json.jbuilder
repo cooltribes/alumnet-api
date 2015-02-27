@@ -1,1 +1,1 @@
-json.partial! 'v1/me/friendships/friendship', friendship: @friendship, user: @user
+json.partial! 'v1/shared/friendship', friendship: @friendship, current_user: @user

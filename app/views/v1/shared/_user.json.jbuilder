@@ -1,13 +1,24 @@
-json.(user, :id, :name, :email)
+json.(user, :id, :email)
 
-json.last_experience user.last_experience.try(:name)
+json.name user.permit_name(current_user)
+
+json.last_experience user.permit_last_experience(current_user)
+
 
 json.avatar do
-  json.original user.avatar.url
-  json.small user.avatar.small.url
-  json.medium user.avatar.medium.url
-  json.large user.avatar.large.url
-  json.extralarge user.avatar.extralarge.url
+  if user.permit('see-avatar', current_user)
+    json.original user.avatar.url
+    json.small user.avatar.small.url
+    json.medium user.avatar.medium.url
+    json.large user.avatar.large.url
+    json.extralarge user.avatar.extralarge.url
+  else
+    json.original user.avatar.default_url
+    json.small user.avatar.small.default_url
+    json.medium user.avatar.medium.default_url
+    json.large user.avatar.large.default_url
+    json.extralarge user.avatar.extralarge.default_url
+  end
 end
 
 json.groups do
@@ -31,5 +42,5 @@ end
 json.is_alumnet_admin user.is_alumnet_admin?
 json.is_system_admin user.is_system_admin?
 
-json.friends_count user.friends_count
+json.friends_count user.permit_friends_count(0)
 json.mutual_friends_count current_user.mutual_friends_count(user)

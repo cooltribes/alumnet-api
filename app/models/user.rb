@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   has_secure_password
   acts_as_messageable
+  include UserHelpers
 
   ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin", regular: "Regular" }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
@@ -41,6 +42,10 @@ class User < ActiveRecord::Base
     "#{profile.first_name} #{profile.last_name}"
   end
 
+  # def hidden_name
+  #   "#{profile.first_name} #{profile.hidden_last_name}"
+  # end
+
   def avatar
     profile.avatar if profile.present?
   end
@@ -50,7 +55,7 @@ class User < ActiveRecord::Base
   end
 
   def last_experience
-    profile.experiences.where.not(exp_type: 2).last
+    profile.last_experience
   end
 
   def send_password_reset
@@ -244,6 +249,41 @@ class User < ActiveRecord::Base
     common_friends_with(user).count
   end
 
+  #### Privacy Methods
+  # def permit(action, user)
+  #   return true if user == self
+  #   privacy = privacies.joins(:privacy_action).find_by('privacy_actions.name = ?', action)
+  #   if privacy
+  #     return true if privacy.value == 2
+  #     return is_friend_of?(user) if privacy.value == 1
+  #     return (user == self) if privacy.value == 0
+  #   else
+  #     false
+  #   end
+  # end
+
+  def permit(action, user)
+    return true if user == self
+    @privacies ||= get_privacies_hash
+    privacy = @privacies[action]
+    if privacy
+      return true if privacy == 2
+      return is_friend_of?(user) if privacy == 1
+      return (user == self) if privacy == 0
+    else
+      false
+    end
+  end
+
+  def get_privacies_hash
+    hash = {}
+    privacies.includes(:privacy_action).each do |privacy|
+      name = privacy.privacy_action.name
+      hash[name] = privacy.value
+    end
+    hash
+  end
+
   private
 
   ### this a temporary solution to authenticate the api
@@ -263,7 +303,10 @@ class User < ActiveRecord::Base
 
   def create_privacies
     PrivacyAction.all.each do |action|
-      privacies.create(privacy_action_id: action.id, value: 0)
+      unless privacies.exists?(privacy_action_id: action.id)
+        privacies.create(privacy_action_id: action.id, value: 2)
+      end
     end
   end
+
 end

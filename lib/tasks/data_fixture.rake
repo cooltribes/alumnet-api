@@ -33,11 +33,5 @@ namespace :data_fixture do
     require Rails.root.join("spec/support/blueprints")
     5.times { City.make!(cc_fips: "VE") }
   end
-
-  desc "create ten privacies actions"
-  task privacy_actions: :environment do
-    require 'machinist'
-    require Rails.root.join("spec/support/blueprints")
-    5.times { PrivacyAction.make! }
-  end
+  
 end
