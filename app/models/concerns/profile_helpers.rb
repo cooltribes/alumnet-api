@@ -41,14 +41,16 @@ module ProfileHelpers
   end
 
   def permit_born(user)
-    if self.user.permit('see-birthdate', user) && self.user.permit('see-birth-year', user)
-      { day: self.born.day, month: self.born.month, year: self.born.year }
-    elsif self.user.permit('see-birthdate', user)
-      { day: self.born.day, month: self.born.month, year: nil }
-    elsif self.user.permit('see-birth-year', user)
-      { day: nil, month: nil, year: self.born.year }
-    else
-      { day: nil, month: nil, year: nil }
+    if self.born
+      if self.user.permit('see-birthdate', user) && self.user.permit('see-birth-year', user)
+        { day: self.born.day, month: self.born.month, year: self.born.year }
+      elsif self.user.permit('see-birthdate', user)
+        { day: self.born.day, month: self.born.month, year: nil }
+      elsif self.user.permit('see-birth-year', user)
+        { day: nil, month: nil, year: self.born.year }
+      else
+        { day: nil, month: nil, year: nil }
+      end
     end
   end
 end
