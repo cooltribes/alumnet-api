@@ -9,8 +9,7 @@ end
 json.likes_count comment.likes_count
 json.you_like comment.has_like_for?(current_user)
 
-condition = comment.user == current_user
 json.permissions do
-  json.canEdit condition
-  json.canDelete condition
+  json.canEdit comment.can_edited_by(current_user)
+  json.canDelete comment.can_deleted_by(current_user)
 end
