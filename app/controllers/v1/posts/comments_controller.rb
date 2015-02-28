@@ -1,4 +1,5 @@
 class V1::Posts::CommentsController < V1::BaseController
+  include Pundit
   before_action :set_post
   before_action :set_comment, except: [:index, :create]
 
@@ -20,6 +21,7 @@ class V1::Posts::CommentsController < V1::BaseController
   end
 
   def update
+    authorize @comment
     if @comment.update(comment_params)
       render :show, status: :ok,  location: [@post, @comment]
     else
@@ -28,6 +30,7 @@ class V1::Posts::CommentsController < V1::BaseController
   end
 
   def destroy
+    authorize @comment
     @comment.destroy
     head :no_content
   end

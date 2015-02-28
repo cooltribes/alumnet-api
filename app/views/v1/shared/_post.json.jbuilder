@@ -10,8 +10,9 @@ json.you_like post.has_like_for?(current_user)
 
 json.postable_info post.postable_info
 
-condition = post.user == current_user
 json.permissions do
-  json.canEdit condition
-  json.canDelete condition
+  json.canEdit post.can_edited_by(current_user)
+  json.canDelete post.can_deleted_by(current_user)
 end
+
+json.resource_path post.resource_path
