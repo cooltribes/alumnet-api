@@ -1,9 +1,13 @@
 json.(comment, :id, :comment, :created_at)
 
 json.user do
-  json.(comment.user, :id, :name, :email)
-
-  json.avatar comment.user.avatar.medium.url
+  json.(comment.user, :id, :email)
+  json.name comment.user.permit_name(current_user)
+  if comment.user.permit('see-avatar', current_user)
+    json.avatar comment.user.avatar.medium.url
+  else
+    json.avatar comment.user.avatar.medium.default_url
+  end
 end
 
 json.likes_count comment.likes_count

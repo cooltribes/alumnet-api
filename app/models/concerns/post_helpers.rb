@@ -10,8 +10,14 @@ module PostHelpers
     return true if user == self.user
   end
 
-  def postable_info
-    { type: postable_type, id: postable.id, name: postable.name } if postable.present?
+  def postable_info(user)
+    if postable.present?
+      if postable_type == "User"
+        { type: postable_type, id: postable.id, name: postable.permit_name(user) }
+      else
+        { type: postable_type, id: postable.id, name: postable.name }
+      end
+    end
   end
 
   def resource_path
