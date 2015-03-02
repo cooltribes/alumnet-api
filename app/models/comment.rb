@@ -2,6 +2,7 @@ class Comment < ActiveRecord::Base
   acts_as_paranoid
   include ActsAsCommentable::Comment
   include LikeableMethods
+  include CommentHelpers
 
   ### Relations
   has_many :likes, as: :likeable, dependent: :destroy
