@@ -25,6 +25,7 @@ Rails.application.routes.draw do
         put :mark_as_read, on: :member
         put :mark_as_unread, on: :member
       end
+      resources :privacies, except: :show, controller: 'me/privacies'
     end
 
     resources :users, except: :create do
@@ -81,7 +82,13 @@ Rails.application.routes.draw do
       resources :users, except: [:new, :edit] do
         put :activate, on: :member
       end
-      resources :groups, except: [:new, :edit]
+      resources :groups, except: [:new, :edit] do
+        get :subgroups, on: :member
+      end
+
+      namespace :deleted do
+        resources :groups, only: [:index, :update, :destroy]
+      end
     end
   end
 end

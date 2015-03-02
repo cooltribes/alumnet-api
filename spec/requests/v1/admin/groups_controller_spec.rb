@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe V1::Admin::GroupsController, type: :request do
-  let!(:admin) { User.make!(role: User::ROLES[:system_admin]) }
+  let!(:admin) { User.make!(:admin) }
   let!(:user) { User.make! }
   let!(:country) { Country.make! }
   let!(:city) { City.make! }
@@ -45,6 +45,16 @@ describe V1::Admin::GroupsController, type: :request do
     end
   end
 
+  describe "GET /groups/:id/subgroups" do
+    it "return all children of group" do
+      group = Group.make!(:with_parent_and_childen)
+      get subgroups_admin_group_path(group), {}, basic_header(admin.auth_token)
+      expect(response.status).to eq 200
+      expect(json.count).to eq(2)
+      expect(json.first["name"]).to eq(group.children.first.name)
+    end
+  end
+
   describe "POST admin/groups" do
     context "with valid attributes" do
       it "create a group and membership for user" do
@@ -52,7 +62,6 @@ describe V1::Admin::GroupsController, type: :request do
           post admin_groups_path, valid_attributes , basic_header(admin.auth_token)
         }.to change(Group, :count).by(1)
         expect(response.status).to eq 201
-        expect(admin.memberships.last.admin).to eq(true)
         expect(admin.groups).to eq([Group.last])
       end
     end

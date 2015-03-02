@@ -8,12 +8,17 @@ class V1::Users::FriendshipsController < V1::BaseController
   end
 
   def friends
-    @friends = @user.search_accepted_friends(params[:q])
+    @friends = if @user.permit('see-friends', current_user)
+      @user.search_accepted_friends(params[:q])
+    else
+      []
+    end
+
   end
 
   def commons
-    friendsA = @current_u.search_accepted_friends(params[:q])    
-    friendsB = @user.search_accepted_friends(params[:q]) 
+    friendsA = @current_u.search_accepted_friends(params[:q])
+    friendsB = @user.search_accepted_friends(params[:q])
     @friends = friendsA & friendsB
   end
 
@@ -22,6 +27,6 @@ class V1::Users::FriendshipsController < V1::BaseController
       @user = User.find(params[:user_id])
     end
     def set_current_user
-      @current_u = current_user if current_user      
+      @current_u = current_user if current_user
     end
 end

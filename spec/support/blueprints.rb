@@ -183,3 +183,14 @@ ContactInfo.blueprint(:email) do
   privacy { 1 }
   profile { Profile.make! }
 end
+
+PrivacyAction.blueprint do
+  name { "see-name" }
+  description { Faker::Lorem.paragraph }
+end
+
+Privacy.blueprint do
+  user { User.make! }
+  privacy_action { PrivacyAction.make! }
+  value { 1 }
+end

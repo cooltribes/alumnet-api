@@ -1,12 +1,14 @@
 class Post < ActiveRecord::Base
+  acts_as_paranoid
   acts_as_commentable
   include LikeableMethods
+  include PostHelpers
 
   ### Relations
   belongs_to :user
   belongs_to :postable, polymorphic: true
   belongs_to :postable_group, foreign_key: :postable_id, class_name: 'Group'
-  has_many :likes, as: :likeable
+  has_many :likes, as: :likeable, dependent: :destroy
 
   ### Scopes
   default_scope -> { order(last_comment_at: :desc) }
@@ -18,11 +20,6 @@ class Post < ActiveRecord::Base
   before_create :set_last_comment_at
 
   ### Instance Methods
-  def postable_info
-    if postable.present?
-      { type: postable_type, id: postable.id, name: postable.name }
-    end
-  end
 
   private
     def set_last_comment_at

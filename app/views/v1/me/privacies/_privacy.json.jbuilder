@@ -1,0 +1,1 @@
+json.(privacy, :id, :user_id, :privacy_action_id, :value, :description)

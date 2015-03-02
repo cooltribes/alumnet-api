@@ -1,4 +1,5 @@
 class V1::Users::PostsController < V1::BaseController
+  include Pundit
   before_action :set_user
   before_action :set_post, except: [:index, :create]
 
@@ -21,6 +22,7 @@ class V1::Users::PostsController < V1::BaseController
   end
 
   def update
+    authorize @post
     if @post.update(post_params)
       render :show, status: :ok,  location: [@user, @post]
     else
@@ -29,6 +31,7 @@ class V1::Users::PostsController < V1::BaseController
   end
 
   def destroy
+    authorize @post
     @post.destroy
     head :no_content
   end

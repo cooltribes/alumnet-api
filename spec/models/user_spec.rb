@@ -72,6 +72,43 @@ RSpec.describe User, type: :model do
         expect(user_one.common_friends_with(user_two)).to eq([common_user])
       end
     end
+
+    describe "permit(action, user)" do
+      context "if privacy setting is 0" do
+        it "return true if user is current user" do
+          user = User.make!
+          Privacy.make!(user: user, value: 0)
+          expect(user.permit('see-name', user)).to eq(true)
+        end
+        it "return false if user is another user" do
+          user = User.make!
+          other = User.make!
+          Privacy.make!(user: user, value: 0)
+          expect(user.permit('see-name', other)).to eq(false)
+        end
+      end
+      context "if privacy setting is 1" do
+        it "return true if user is current user" do
+          user = User.make!
+          Privacy.make!(user: user, value: 1)
+          expect(user.permit('see-name', user)).to eq(true)
+        end
+        it "return false if user is not friend of current user" do
+          user = User.make!
+          other = User.make!
+          Privacy.make!(user: user, value: 1)
+          expect(user.permit('see-name', other)).to eq(false)
+        end
+        it "return true if user is friend of current user" do
+          user = User.make!
+          friend = User.make!
+          friend.create_friendship_for(user).save
+          friend.friendships.last.accept!
+          Privacy.make!(user: user, value: 1)
+          expect(user.permit('see-name', friend)).to eq(true)
+        end
+      end
+    end
   end
 
 end
