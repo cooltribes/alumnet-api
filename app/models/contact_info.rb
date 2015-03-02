@@ -1,4 +1,7 @@
 class ContactInfo < ActiveRecord::Base
+  
+  include ContactInfoHelpers
+
   ###Constants
   CONTACT_TYPE = { 0 => 'Email', 1 => 'Phone', 2 => 'Skype', 3 => 'Yahoo',
     4 => 'Facebook', 5 => 'Twitter', 6 => 'IRC', 7 => 'Web Site' }
