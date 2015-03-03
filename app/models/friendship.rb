@@ -1,4 +1,6 @@
 class Friendship < ActiveRecord::Base
+  acts_as_paranoid
+
   ###relations
   belongs_to :user
   belongs_to :friend, class_name: "User"

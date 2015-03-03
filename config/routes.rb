@@ -88,6 +88,8 @@ Rails.application.routes.draw do
 
       namespace :deleted do
         resources :groups, only: [:index, :update, :destroy]
+        resources :users, only: [:index, :update, :destroy]
+
       end
     end
   end
