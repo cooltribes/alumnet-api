@@ -90,6 +90,18 @@ class User < ActiveRecord::Base
     end
   end
 
+  def set_system_admin!
+    update_column(:role, ROLES[:system_admin])
+  end
+
+  def set_alumnet_admin!
+    update_column(:role, ROLES[:alumnet_admin])
+  end
+
+  def set_regular!
+    update_column(:role, ROLES[:regular])
+  end
+
   def is_system_admin?
     role == "SystemAdmin"
   end

@@ -82,6 +82,7 @@ Rails.application.routes.draw do
       resources :users, except: [:new, :edit] do
         put :activate, on: :member
         put :inactivate, on: :member
+        put :change_role, on: :member
       end
       resources :groups, except: [:new, :edit] do
         get :subgroups, on: :member

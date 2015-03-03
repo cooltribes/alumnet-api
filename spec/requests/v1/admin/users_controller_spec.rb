@@ -54,6 +54,21 @@ describe V1::Admin::UsersController, type: :request do
     end
   end
 
+  describe "PUT admin/user/:id/change_role" do
+    it "change the role of user" do
+      user = User.make!
+      expect(user.role).to eq(User::ROLES[:regular])
+      put change_role_admin_user_path(user), { role: "alumnet"}, basic_header(admin.auth_token)
+      expect(response.status).to eq 200
+      user.reload
+      expect(user.role).to eq(User::ROLES[:alumnet_admin])
+      put change_role_admin_user_path(user), { role: "regular"}, basic_header(admin.auth_token)
+      expect(response.status).to eq 200
+      user.reload
+      expect(user.role).to eq(User::ROLES[:regular])
+    end
+  end
+
   describe "DELETE admin/users/:id" do
     it "delete a user" do
       user = User.make!

@@ -38,6 +38,14 @@ class V1::Admin::UsersController < V1::AdminController
     end
   end
 
+  def change_role
+    param = params[:role]
+    @user.set_regular! if param == "regular"
+    @user.set_system_admin! if param == "system"
+    @user.set_alumnet_admin! if param == "alumnet"
+    render :show, status: :ok
+  end
+
   def destroy
     @user.destroy
     head :no_content
