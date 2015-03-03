@@ -82,7 +82,7 @@ class User < ActiveRecord::Base
 
   ### Roles
   def activate!
-    if profile.skills?
+    if profile.skills? || profile.approval?
       active!
       profile.approval!
     else
