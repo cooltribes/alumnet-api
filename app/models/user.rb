@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  acts_as_paranoid
+
   has_secure_password
   acts_as_messageable
   include UserHelpers
@@ -10,17 +12,17 @@ class User < ActiveRecord::Base
   enum status: [:inactive, :active, :banned]
 
   ### Relations
-  has_many :memberships
+  has_many :memberships, dependent: :destroy
   has_many :groups, -> { where("memberships.approved = ?", true) }, through: :memberships
-  has_many :friendships
+  has_many :friendships, dependent: :destroy
   has_many :inverse_friendships, class_name: "Friendship", foreign_key: "friend_id"
   has_many :friends, through: :friendships
   has_many :inverse_friends, through: :inverse_friendships, source: :user
-  has_many :posts, as: :postable
-  has_many :publications, class_name: "Post"
-  has_many :likes
-  has_many :privacies
-  has_one :profile
+  has_many :posts, as: :postable, dependent: :destroy
+  has_many :publications, class_name: "Post", dependent: :destroy
+  has_many :likes, dependent: :destroy
+  has_many :privacies, dependent: :destroy
+  has_one :profile, dependent: :destroy
 
   ### Scopes
   scope :active, -> { where(status: 1) }
@@ -42,9 +44,9 @@ class User < ActiveRecord::Base
     "#{profile.first_name} #{profile.last_name}"
   end
 
-  # def hidden_name
-  #   "#{profile.first_name} #{profile.hidden_last_name}"
-  # end
+  def profile
+    Profile.unscoped { super }
+  end
 
   def avatar
     profile.avatar if profile.present?
@@ -80,12 +82,24 @@ class User < ActiveRecord::Base
 
   ### Roles
   def activate!
-    if profile.skills?
+    if profile.skills? || profile.approval?
       active!
       profile.approval!
     else
       false
     end
+  end
+
+  def set_system_admin!
+    update_column(:role, ROLES[:system_admin])
+  end
+
+  def set_alumnet_admin!
+    update_column(:role, ROLES[:alumnet_admin])
+  end
+
+  def set_regular!
+    update_column(:role, ROLES[:regular])
   end
 
   def is_system_admin?

@@ -11,19 +11,39 @@ class V1::Admin::UsersController < V1::AdminController
 
   def update
     if @user.update(user_params)
-      render :show, status: :ok,  location: @user
+      render :show, status: :ok
     else
       render json: @user.errors, status: :unprocessable_entity
     end
   end
 
   def activate
-    # render :show, status: :ok,  location: @user
-    if @user.activate!
-      render :show, status: :ok,  location: @user
+    if @user.active?
+      render json: ["the user is already activated"], status: :unprocessable_entity
     else
-      render json: ['the register is incompleted!'], status: :unprocessable_entity
+      if @user.activate!
+        render :show, status: :ok
+      else
+        render json: ['the register is incompleted!'], status: :unprocessable_entity
+      end
     end
+  end
+
+  def inactivate
+    if @user.active?
+      @user.inactive!
+      render :show, status: :ok
+    else
+      render json: ["the user is already inactivated"]
+    end
+  end
+
+  def change_role
+    param = params[:role]
+    @user.set_regular! if param == "regular"
+    @user.set_system_admin! if param == "system"
+    @user.set_alumnet_admin! if param == "alumnet"
+    render :show, status: :ok
   end
 
   def destroy

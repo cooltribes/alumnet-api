@@ -1,4 +1,5 @@
 class Profile < ActiveRecord::Base
+  acts_as_paranoid
   mount_uploader :avatar, AvatarUploader
   enum register_step: [:initial, :profile, :contact, :experience_a, :experience_b, :experience_c, :experience_d, :skills, :approval]
   include ProfileHelpers
@@ -9,9 +10,9 @@ class Profile < ActiveRecord::Base
   belongs_to :birth_country, class_name: 'Country'
   belongs_to :residence_country, class_name: 'Country'
   belongs_to :user
-  has_many :contact_infos
-  has_many :experiences
-  has_many :language_levels
+  has_many :contact_infos, dependent: :destroy
+  has_many :experiences, dependent: :destroy
+  has_many :language_levels, dependent: :destroy
   has_many :languages, through: :language_levels
   has_and_belongs_to_many :skills
 
