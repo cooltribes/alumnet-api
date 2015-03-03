@@ -10,9 +10,9 @@ json.requester do
   json.name requester.permit_name(current_user)
 
   if requester.permit('see-avatar', current_user)
-    json.avatar friendship.user.avatar.large.url
+    json.avatar requester.avatar.large.url
   else
-    json.avatar friendship.user.avatar.large.default_url
+    json.avatar requester.avatar.large.default_url
   end
 end
 
@@ -21,8 +21,8 @@ json.friend do
   json.name friend.permit_name(current_user)
 
   if friend.permit('see-avatar', current_user)
-    json.avatar friendship.user.avatar.large.url
+    json.avatar friend.avatar.large.url
   else
-    json.avatar friendship.user.avatar.large.default_url
+    json.avatar friend.avatar.large.default_url
   end
 end
