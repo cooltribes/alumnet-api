@@ -1,6 +1,7 @@
-json.(user, :id, :email)
+json.(user, :id)
 
 json.name user.permit_name(current_user)
+json.email user.permit_email(current_user)
 
 json.last_experience user.permit_last_experience(current_user)
 
