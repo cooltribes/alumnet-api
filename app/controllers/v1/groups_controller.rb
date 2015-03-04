@@ -1,6 +1,6 @@
 class V1::GroupsController < V1::BaseController
+  include Pundit
   before_action :set_group, except: [:index, :create]
-  #TODO: implement security logic
 
   def index
     @q = Group.without_secret.search(params[:q])
@@ -39,6 +39,7 @@ class V1::GroupsController < V1::BaseController
   end
 
   def update
+    authorize @group
     if @group.update(group_params)
       render :show, status: :ok,  location: @group
     else
@@ -47,6 +48,7 @@ class V1::GroupsController < V1::BaseController
   end
 
   def destroy
+    authorize @group
     @group.destroy
     head :no_content
   end
