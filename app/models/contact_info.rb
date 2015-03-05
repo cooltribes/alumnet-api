@@ -1,4 +1,6 @@
 class ContactInfo < ActiveRecord::Base
+  
+  include ContactInfoHelpers
   acts_as_paranoid
 
   ###Constants

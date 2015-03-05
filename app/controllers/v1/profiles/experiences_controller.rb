@@ -47,7 +47,7 @@ class V1::Profiles::ExperiencesController < V1::BaseController
 
   def experience_params
     params.permit(:exp_type, :name, :description, :start_date, :end_date, :city_id,
-      :country_id, :organization_name, :internship, :committee_id, :aiesec_experience)
+      :country_id, :organization_name, :internship, :committee_id, :aiesec_experience, :privacy)
   end
 
 end

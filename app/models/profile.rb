@@ -30,7 +30,11 @@ class Profile < ActiveRecord::Base
   ###Instance Methods
 
   def hidden_last_name
-    "#{last_name.first}."
+    if last_name    
+      "#{last_name.first}."
+    else
+      nil
+    end
   end
 
   def local_committee
