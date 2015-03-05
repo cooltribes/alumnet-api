@@ -1,4 +1,5 @@
 class Experience < ActiveRecord::Base
+  include ExperienceHelpers
   acts_as_paranoid
 
   ### Relations
