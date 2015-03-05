@@ -81,6 +81,8 @@ Rails.application.routes.draw do
     namespace :admin do
       resources :users, except: [:new, :edit] do
         put :activate, on: :member
+        put :inactivate, on: :member
+        put :change_role, on: :member
       end
       resources :groups, except: [:new, :edit] do
         get :subgroups, on: :member
@@ -88,6 +90,7 @@ Rails.application.routes.draw do
 
       namespace :deleted do
         resources :groups, only: [:index, :update, :destroy]
+        resources :users, only: [:index, :update, :destroy]
       end
     end
   end

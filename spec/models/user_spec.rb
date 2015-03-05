@@ -12,6 +12,10 @@ RSpec.describe User, type: :model do
   it { should have_many(:likes) }
   it { should have_one(:profile) }
 
+  it "should have paranoia" do
+    expect(User.paranoid?).to eq(true)
+  end
+
   describe "callbacks" do
     it "should set a api_key on save" do
       user = User.make
