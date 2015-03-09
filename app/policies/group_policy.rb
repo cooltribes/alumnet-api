@@ -4,7 +4,7 @@ class GroupPolicy < ApplicationPolicy
     true
   end
 
-  def members?
+  def subgroups?
     true
   end
 
@@ -21,15 +21,10 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def update?
-    true
+    record.user_is_admin?(user) || user.is_system_admin? || user.is_alumnet_admin?
   end
 
   def destroy?
-    true
+    record.user_is_admin?(user) || user.is_system_admin? || user.is_alumnet_admin?
   end
-
-  def join?
-    true
-  end
-
 end
