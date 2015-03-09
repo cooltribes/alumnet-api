@@ -2,9 +2,9 @@ json.(@profile, :id, :first_name, :born, :birth_city_id, :residence_city_id,
   :birth_country_id, :residence_country_id, :register_step, :gender)
 
 if @profile.user.permit('see-name', @current_user)
-  json.last_name profile.last_name
+  json.last_name @profile.last_name
 else
-  json.last_name profile.hidden_last_name
+  json.last_name @profile.hidden_last_name
 end
 
 json.avatar do
