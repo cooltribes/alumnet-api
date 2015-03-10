@@ -10,6 +10,7 @@ RSpec.describe Group, :type => :model do
   it { should have_many(:memberships) }
   it { should have_many(:users).through(:memberships) }
   it { should have_many(:posts) }
+  it { should have_many(:events) }
   it { should belong_to(:country) }
   it { should belong_to(:city) }
 
