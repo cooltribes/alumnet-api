@@ -194,3 +194,19 @@ Privacy.blueprint do
   privacy_action { PrivacyAction.make! }
   value { 1 }
 end
+
+Event.blueprint do
+  name { "Event #{sn}"}
+  description { Faker::Lorem.sentence }
+  cover { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
+  event_type { 0 }
+  invitation_process { 0 }
+  country { Country.make! }
+  city { object.country.cities.first }
+  address { Faker::Address.street_address }
+  date_init { Date.today }
+  date_end { Date.today + 20 }
+  hour_init { "8" }
+  hour_init { "16" }
+  capacity { 20 }
+end
