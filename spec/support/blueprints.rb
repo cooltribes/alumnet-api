@@ -211,3 +211,9 @@ Event.blueprint do
   capacity { 20 }
   creator { User.make }
 end
+
+Attendance.blueprint do
+  status { 0 }
+  event { Event.make! }
+  user { User.make! }
+end
