@@ -12,7 +12,7 @@ class V1::Groups::EventsController < V1::BaseController
 
   def create
     @event = Event.new(event_params)
-    @event.user = current_user
+    @event.creator = current_user
     if @group.events << @event
       render :show, status: :created
     else

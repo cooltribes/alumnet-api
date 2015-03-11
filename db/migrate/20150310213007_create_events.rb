@@ -13,7 +13,7 @@ class CreateEvents < ActiveRecord::Migration
       t.string :end_hour
       t.integer :capacity
       t.integer :invitation_process
-      t.references :user
+      t.references :creator
       t.references :city
       t.references :country
       t.references :eventable, polymorphic: true

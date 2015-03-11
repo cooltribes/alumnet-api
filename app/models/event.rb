@@ -3,7 +3,7 @@ class Event < ActiveRecord::Base
   enum event_type: [:open, :closed, :secret]
 
   ### Relations
-  belongs_to :user #as creator
+  belongs_to :creator, class_name: "User"
   belongs_to :country
   belongs_to :city
   belongs_to :eventable, polymorphic: true
@@ -19,7 +19,7 @@ class Event < ActiveRecord::Base
   scope :official, -> { where(official: true) }
   scope :non_official, -> { where(official: false) }
 
-  def creator
-    user
-  end
+  # def creator
+  #   user
+  # end
 end
