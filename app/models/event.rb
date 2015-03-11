@@ -1,4 +1,5 @@
 class Event < ActiveRecord::Base
+  include EventHelpers
   mount_uploader :cover, CoverUploader
   enum event_type: [:open, :closed, :secret]
 
@@ -20,7 +21,20 @@ class Event < ActiveRecord::Base
   scope :official, -> { where(official: true) }
   scope :non_official, -> { where(official: false) }
 
-  # def creator
-  #   user
-  # end
+  ### Instance methods
+  def create_attendance_for(user)
+    attendances.create(user: user)
+  end
+
+  def attendance_for(user)
+    attendances.find_by(user_id: user.id)
+  end
+
+  def contacts_for(user, query)
+    if eventable_type == 'Group'
+      group_members = eventable.members.search(query).result
+      user_friends = user.search_accepted_friends(query)
+    end
+    group_members | user_friends
+  end
 end

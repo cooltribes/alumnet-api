@@ -300,6 +300,11 @@ class User < ActiveRecord::Base
     hash
   end
 
+  ###Attendances
+  def attendance_for(event)
+    attendances.find_by(event_id: event.id)
+  end
+
   private
 
   ### this a temporary solution to authenticate the api
