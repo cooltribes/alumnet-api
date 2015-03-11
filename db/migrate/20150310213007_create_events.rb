@@ -4,8 +4,8 @@ class CreateEvents < ActiveRecord::Migration
       t.string :name
       t.string :description
       t.string :cover
-      t.string :event_type
-      t.boolean :official
+      t.string :event_type, default: 0
+      t.boolean :official, default: false
       t.string :address
       t.date :date_init
       t.string :hour_init
