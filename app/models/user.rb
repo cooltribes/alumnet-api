@@ -23,6 +23,7 @@ class User < ActiveRecord::Base
   has_many :likes, dependent: :destroy
   has_many :privacies, dependent: :destroy
   has_many :albums, as: :albumable, dependent: :destroy
+  has_many :attendances, dependent: :destroy
   has_one :profile, dependent: :destroy
 
   ### Scopes

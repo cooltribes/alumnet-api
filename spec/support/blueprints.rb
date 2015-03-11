@@ -186,7 +186,7 @@ end
 
 PrivacyAction.blueprint do
   name { "see-name" }
-  description { Faker::Lorem.paragraph }
+  description { "This is a description" }
 end
 
 Privacy.blueprint do
