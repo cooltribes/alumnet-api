@@ -40,7 +40,7 @@ class V1::AttendancesController < V1::BaseController
     end
 
     def create_params
-      params.permit(:user_id, :event_id)
+      params.permit(:user_id, :event_id, :status)
     end
 
     def update_params
