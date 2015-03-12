@@ -11,7 +11,7 @@ class V1::AttendancesController < V1::BaseController
   def create
     @attendance = Attendance.new(create_params)
     if @attendance.save
-      # Notificar al usuario
+      Notification.notify_invitation_event_to_user(@attendance)
       render :show, status: :created
     else
       render json: @attendance.errors, status: :unprocessable_entity

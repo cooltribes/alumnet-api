@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h2>Greetings <%= "#{ @user.name }" %></h2>
+    <p>
+      The user <%= "#{@event.creator.name}" %> is inviting you to assist the event <%= "#{@event.name}" %> <br>
+      Click <a href=<%= "#{Settings.ui_endpoint}/#events/#{@event.id}/posts" %>>here</a> to visit the group.
+    </p>
+  </body>
+</html>
