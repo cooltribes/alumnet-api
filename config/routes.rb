@@ -31,6 +31,7 @@ Rails.application.routes.draw do
     resources :users, except: :create do
       resource :profile, only: [:show, :update], controller: 'users/profiles'
       resources :posts, controller: 'users/posts'
+      resources :albums, controller: 'users/albums'
       resources :memberships, except: :show, controller: 'users/memberships' do
         get :groups, on: :collection
       end
