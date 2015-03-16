@@ -52,6 +52,7 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :events
     resources :attendances
 
     resources :posts, only: :show do
