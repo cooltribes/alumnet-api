@@ -28,8 +28,8 @@ describe V1::AttendancesController, type: :request do
   describe "PUT attendances/:id" do
     it "should update a attendances" do
       attendance = Attendance.make!(user: user)
-      put attendance_path(attendance), { status: 1 }, basic_header(user.auth_token)
-      expect(json["status"]).to eq(1)
+      put attendance_path(attendance), { status: 'maybe' }, basic_header(user.auth_token)
+      expect(json["status"]).to eq('maybe')
     end
     it "should not update if user is not owner of attendance" do
       attendance = Attendance.make!

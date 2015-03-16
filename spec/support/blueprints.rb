@@ -200,7 +200,6 @@ Event.blueprint do
   description { Faker::Lorem.sentence }
   cover { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
   event_type { 0 }
-  invitation_process { 0 }
   country { Country.make! }
   city { object.country.cities.first }
   address { Faker::Address.street_address }
@@ -213,7 +212,7 @@ Event.blueprint do
 end
 
 Attendance.blueprint do
-  status { 0 }
+  status { 'going' }
   event { Event.make! }
   user { User.make! }
 end

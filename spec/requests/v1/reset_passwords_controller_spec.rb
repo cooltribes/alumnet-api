@@ -30,7 +30,7 @@ describe V1::PasswordResetsController, type: :request do
       it "return a error message" do
         post password_resets_path, { email: "" }, header
         expect(response.status).to eq 401
-        expect(json).to eq({ "errors"=> {"email" => ["must provide credentials"]} })
+        expect(json).to eq({ "errors"=> {"email" => ["Please enter your email address"]} })
       end
     end
   end
