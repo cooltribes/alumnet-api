@@ -17,3 +17,5 @@ if attendance
 else
   json.attendance_info nil
 end
+
+json.admin event.is_admin?(current_user)

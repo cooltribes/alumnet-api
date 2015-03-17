@@ -14,9 +14,9 @@ class Event < ActiveRecord::Base
   validates_presence_of :name, :description
 
   ### Scopes
-  scope :open, -> { where(group_type: 0) }
-  scope :closed, -> { where(group_type: 1) }
-  scope :secret, -> { where(group_type: 2) }
+  scope :open, -> { where(event_type: 0) }
+  scope :closed, -> { where(event_type: 1) }
+  scope :secret, -> { where(event_type: 2) }
 
   scope :official, -> { where(official: true) }
   scope :non_official, -> { where(official: false) }
@@ -36,5 +36,19 @@ class Event < ActiveRecord::Base
       user_friends = user.search_accepted_friends(query)
     end
     group_members | user_friends
+  end
+
+  def group_admins
+    if eventable_type == 'Group'
+      eventable.admins
+    else
+      []
+    end
+  end
+
+  def is_admin?(user)
+    return true if user == creator
+    return true if group_admins.include?(user)
+    false
   end
 end
