@@ -13,6 +13,8 @@ class Group < ActiveRecord::Base
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships
   has_many :posts, as: :postable, dependent: :destroy
+  has_many :albums, as: :albunable, dependent: :destroy
+  has_many :events, as: :eventable, dependent: :destroy
   belongs_to :country
   belongs_to :city
 
