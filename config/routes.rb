@@ -52,7 +52,9 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :events
+    resources :events do
+      resources :posts, controller: 'events/posts'
+    end
     resources :attendances
 
     resources :posts, only: :show do

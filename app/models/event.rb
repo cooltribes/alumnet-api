@@ -9,6 +9,8 @@ class Event < ActiveRecord::Base
   belongs_to :city
   belongs_to :eventable, polymorphic: true
   has_many :attendances, dependent: :destroy
+  has_many :posts, as: :postable, dependent: :destroy
+
 
   ### Validations
   validates_presence_of :name, :description
