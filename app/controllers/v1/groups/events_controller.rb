@@ -7,13 +7,18 @@ class V1::Groups::EventsController < V1::BaseController
     @events = @q.result
   end
 
+  def contacts
+    @contacts = @event.contacts_for(current_user, params[:q])
+  end
+
   def show
   end
 
   def create
     @event = Event.new(event_params)
-    @event.user = current_user
+    @event.creator = current_user
     if @group.events << @event
+      @event.create_attendance_for(current_user)
       render :show, status: :created
     else
       render json: @event.errors, status: :unprocessable_entity
@@ -49,7 +54,7 @@ class V1::Groups::EventsController < V1::BaseController
 
   def event_params
     params.permit(:name, :description, :cover, :event_type, :official, :address,
-      :date_init, :hour_init, :date_end, :hour_end, :capacity, :city_id, :country_id)
+      :start_date, :start_hour, :end_date, :end_hour, :capacity, :city_id, :country_id)
   end
 
 end
