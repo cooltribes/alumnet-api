@@ -23,6 +23,8 @@ class User < ActiveRecord::Base
   has_many :likes, dependent: :destroy
   has_many :privacies, dependent: :destroy
   has_many :albums, as: :albumable, dependent: :destroy
+  has_many :user_subscriptions, dependent: :destroy
+  has_many :subscriptions, through: :user_subscriptions
   has_one :profile, dependent: :destroy
 
   ### Scopes
@@ -79,6 +81,10 @@ class User < ActiveRecord::Base
 
   def get_status_info
     { text: status, value: User.statuses[status] }
+  end
+
+  def get_member_info
+    member
   end
 
   ### Roles
