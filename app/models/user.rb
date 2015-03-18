@@ -25,6 +25,7 @@ class User < ActiveRecord::Base
   has_many :albums, as: :albumable, dependent: :destroy
   has_many :user_subscriptions, dependent: :destroy
   has_many :subscriptions, through: :user_subscriptions
+  has_many :attendances, dependent: :destroy
   has_one :profile, dependent: :destroy
 
   ### Scopes
@@ -303,6 +304,11 @@ class User < ActiveRecord::Base
       hash[name] = privacy.value
     end
     hash
+  end
+
+  ###Attendances
+  def attendance_for(event)
+    attendances.find_by(event_id: event.id)
   end
 
   private
