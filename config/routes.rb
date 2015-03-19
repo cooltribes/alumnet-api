@@ -58,6 +58,12 @@ Rails.application.routes.draw do
         post :unlike, on: :member
       end
     end
+    resources :albums do     
+      resources :pictures, controller: 'albums/pictures' do
+        # post :like, on: :member
+        # post :unlike, on: :member
+      end
+    end
 
     resources :regions, only: [:index, :show]
 
