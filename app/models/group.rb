@@ -54,6 +54,10 @@ class Group < ActiveRecord::Base
     admins.where("users.id = ?", user.id).any?
   end
 
+  def which_friends_in(user) 
+    members & user.my_friends
+  end
+
   def build_membership_for(user, admin = false)
     if join_process == 0
       memberships.build(user: user, approved: true)
