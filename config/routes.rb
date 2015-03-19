@@ -76,6 +76,7 @@ Rails.application.routes.draw do
     resources :committees, only: [:index]
 
     resources :profiles, only: [:show, :update] do
+      post :cropping, on: :member
       resources :experiences, except: [:new, :edit], controller: 'profiles/experiences'
       # resources :experiences, except: [:show, :new, :edit], controller: 'profiles/experiences'
       resources :skills, except: [:show, :new, :edit], controller: 'profiles/skills'

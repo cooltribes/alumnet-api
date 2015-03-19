@@ -4,6 +4,9 @@ class Profile < ActiveRecord::Base
   enum register_step: [:initial, :profile, :contact, :experience_a, :experience_b, :experience_c, :experience_d, :skills, :approval]
   include ProfileHelpers
 
+  ##Crop avatar
+  attr_accessor :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH
+
   ###Relations
   belongs_to :birth_city, class_name: 'City'
   belongs_to :residence_city, class_name: 'City'
@@ -29,8 +32,12 @@ class Profile < ActiveRecord::Base
 
   ###Instance Methods
 
+  def crop_avatar
+    avatar.recreate_versions! if imgX1.present?
+  end
+
   def hidden_last_name
-    if last_name    
+    if last_name
       "#{last_name.first}."
     else
       nil
