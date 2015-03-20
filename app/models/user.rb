@@ -24,6 +24,8 @@ class User < ActiveRecord::Base
   has_many :privacies, dependent: :destroy
   has_many :albums, as: :albumable, dependent: :destroy
   has_many :attendances, dependent: :destroy
+  has_many :events, as: :eventable, dependent: :destroy
+  has_many :invited_events, through: :attendances, source: :event
   has_one :profile, dependent: :destroy
 
   ### Scopes
