@@ -34,6 +34,7 @@ Rails.application.routes.draw do
       resources :events, controller: 'users/events' do
         get :contacts, on: :member
       end
+      resources :albums, controller: 'users/albums'
       resources :memberships, except: :show, controller: 'users/memberships' do
         get :groups, on: :collection
       end
@@ -66,6 +67,12 @@ Rails.application.routes.draw do
       resources :comments, controller: 'posts/comments' do
         post :like, on: :member
         post :unlike, on: :member
+      end
+    end
+    resources :albums do
+      resources :pictures, controller: 'albums/pictures' do
+        # post :like, on: :member
+        # post :unlike, on: :member
       end
     end
 

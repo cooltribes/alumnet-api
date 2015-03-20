@@ -73,3 +73,12 @@ else
   json.membership_status "none"
   json.permissions nil
 end
+
+json.friends_in do
+  json.array! group.which_friends_in(current_user) do |user|
+    json.id user.id
+    json.avatar user.profile.avatar
+    json.first_name user.profile.first_name
+    json.last_name user.profile.last_name
+  end
+end
