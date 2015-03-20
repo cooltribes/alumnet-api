@@ -45,10 +45,16 @@ Rails.application.routes.draw do
       post :add_group, on: :member
       get :subgroups, on: :member
       resources :posts, controller: 'groups/posts'
+      resources :events, controller: 'groups/events' do
+        get :contacts, on: :member
+      end
       resources :memberships, except: :show, controller: 'groups/memberships' do
         get :members, on: :collection
       end
     end
+
+    resources :events
+    resources :attendances
 
     resources :posts, only: :show do
       post :like, on: :member
@@ -88,7 +94,7 @@ Rails.application.routes.draw do
     namespace :admin do
       resources :users, except: [:new, :edit] do
         put :activate, on: :member
-        put :inactivate, on: :member
+        put :banned, on: :member
         put :change_role, on: :member
       end
       resources :groups, except: [:new, :edit] do

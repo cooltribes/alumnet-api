@@ -186,11 +186,33 @@ end
 
 PrivacyAction.blueprint do
   name { "see-name" }
-  description { Faker::Lorem.paragraph }
+  description { "This is a description" }
 end
 
 Privacy.blueprint do
   user { User.make! }
   privacy_action { PrivacyAction.make! }
   value { 1 }
+end
+
+Event.blueprint do
+  name { "Event #{sn}"}
+  description { Faker::Lorem.sentence }
+  cover { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
+  event_type { 0 }
+  country { Country.make! }
+  city { object.country.cities.first }
+  address { Faker::Address.street_address }
+  start_date { Date.today }
+  end_date { Date.today + 20 }
+  start_hour { "8:00" }
+  end_hour { "16:30" }
+  capacity { 20 }
+  creator { User.make }
+end
+
+Attendance.blueprint do
+  status { 'going' }
+  event { Event.make! }
+  user { User.make! }
 end

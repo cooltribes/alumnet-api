@@ -66,7 +66,7 @@ describe V1::Posts::CommentsController, type: :request do
 
   describe "PUT /posts/:post_id/comments/:id" do
     it "edit a comment of post" do
-      comment = Comment.make!(commentable: post_model)
+      comment = Comment.make!(commentable: post_model, user: admin)
       put post_comment_path(post_model, comment), { comment: "New text in comment" }, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       comment.reload
@@ -77,7 +77,7 @@ describe V1::Posts::CommentsController, type: :request do
 
   describe "DELETE /posts/:post_id/comments/:id" do
     it "delete a post of group" do
-      comment = Comment.make!(commentable: post_model)
+      comment = Comment.make!(commentable: post_model, user: admin)
       expect {
         delete post_comment_path(post_model, comment), {}, basic_header(admin.auth_token)
       }.to change(Comment, :count).by(-1)

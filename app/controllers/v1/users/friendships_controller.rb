@@ -13,7 +13,6 @@ class V1::Users::FriendshipsController < V1::BaseController
     else
       []
     end
-
   end
 
   def commons

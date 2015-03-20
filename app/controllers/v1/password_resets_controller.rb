@@ -8,7 +8,7 @@ class V1::PasswordResetsController < V1::BaseController
     user = User.find_by(email: reset_params['email'])
     if user
       user.send_password_reset
-      render json: { message: "Email sent with password reset instructions"}, status: :ok
+      render json: { message: "We've sent you an email to reset your password!"}, status: :ok
     else
       render json: { errors: { email: ["not registered"] } }, status: 401
     end

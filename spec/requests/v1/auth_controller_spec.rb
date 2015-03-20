@@ -37,7 +37,7 @@ describe V1::AuthController, type: :request do
       it "return the user" do
         post sign_in_path, {}, header
         expect(response.status).to eq 401
-        expect(json).to eq({"error"=>"must provide credentials"})
+        expect(json).to eq({"error"=>"Please enter your email address and your password"})
       end
     end
   end
@@ -58,7 +58,7 @@ describe V1::AuthController, type: :request do
         expect {
           post register_path, invalid_attributes, header
         }.to change(User, :count).by(0)
-        expect(json).to eq({"errors" => { "email"=>["can't be blank", "is invalid"] }})
+        expect(json).to eq({"errors" => { "email"=>["can't be blank", "Please enter a valid e-mail address"] }})
         expect(response.status).to eq 422
       end
     end

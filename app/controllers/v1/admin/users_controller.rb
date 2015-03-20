@@ -29,12 +29,12 @@ class V1::Admin::UsersController < V1::AdminController
     end
   end
 
-  def inactivate
+  def banned
     if @user.active?
-      @user.inactive!
+      @user.banned!
       render :show, status: :ok
     else
-      render json: ["the user is already inactivated"]
+      render json: ["the user is already banned"]
     end
   end
 
