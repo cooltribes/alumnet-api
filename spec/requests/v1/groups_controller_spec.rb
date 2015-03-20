@@ -94,6 +94,7 @@ describe V1::GroupsController, type: :request do
   describe "PUT /groups/1" do
     it "edit a group" do
       group = Group.make!(:with_parent_and_childen)
+      Membership.create_membership_for_creator(group, user)
       put group_path(group), { name: "New name group" }, basic_header(user.auth_token)
       expect(response.status).to eq 200
       group.reload
@@ -105,6 +106,7 @@ describe V1::GroupsController, type: :request do
   describe "DELETE /groups/1" do
     it "delete a group" do
       group = Group.make!
+      Membership.create_membership_for_creator(group, user)
       expect {
         delete group_path(group), {}, basic_header(user.auth_token)
       }.to change(Group, :count).by(-1)
