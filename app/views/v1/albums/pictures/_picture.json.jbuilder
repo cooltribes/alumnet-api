@@ -1,4 +1,12 @@
-json.(picture, :id, :title, :picture, :created_at, :date_taken)
+json.(picture, :id, :title, :created_at, :date_taken)
+
+json.picture do
+    json.original picture.picture.url
+    json.main picture.picture.main.url
+    json.card picture.picture.card.url
+end
+
+json.otra picture.picture
 
 # json.user do
 #   json.(comment.user, :id, :email)

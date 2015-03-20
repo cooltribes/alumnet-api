@@ -18,3 +18,4 @@ json.country do
   end
 end
 
+json.pictures_count album.pictures_count

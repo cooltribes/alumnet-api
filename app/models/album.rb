@@ -11,4 +11,8 @@ class Album < ActiveRecord::Base
     user
   end
 
+  def pictures_count
+    self.pictures.count
+  end
+
 end
