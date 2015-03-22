@@ -21,17 +21,17 @@ class V1::Albums::PicturesController < V1::BaseController
   end
 
   def update
-    authorize @comment
-    if @comment.update(comment_params)
-      render :show, status: :ok,  location: [@album, @comment]
+    authorize @picture
+    if @picture.update(update_picture_params)
+      render :show, status: :ok,  location: [@album, @picture]
     else
-      render json: @comment.errors, status: :unprocessable_entity
+      render json: @picture.errors, status: :unprocessable_entity
     end
   end
 
   def destroy
-    authorize @comment
-    @comment.destroy
+    authorize @picture
+    @picture.destroy
     head :no_content
   end
 
@@ -65,5 +65,8 @@ class V1::Albums::PicturesController < V1::BaseController
 
   def picture_params
     params.permit(:title, :picture)
+  end
+  def update_picture_params
+    params.permit(:title)
   end
 end
