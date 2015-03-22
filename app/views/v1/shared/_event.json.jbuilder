@@ -10,6 +10,18 @@ json.cover do
   json.card event.cover.card.url
 end
 
+json.creator do
+  json.id event.creator.id
+  json.name event.creator.permit_name(current_user)
+  if event.creator.permit('see-avatar', current_user)
+    json.avatar event.creator.avatar.large.url
+  else
+    json.avatar event.creator.avatar.large.default_url
+  end
+end
+
+json.attendances_count event.attendances.count
+
 attendance = event.attendance_for(current_user)
 
 if attendance

@@ -31,6 +31,9 @@ Rails.application.routes.draw do
     resources :users, except: :create do
       resource :profile, only: [:show, :update], controller: 'users/profiles'
       resources :posts, controller: 'users/posts'
+      resources :events, controller: 'users/events' do
+        get :contacts, on: :member
+      end
       resources :albums, controller: 'users/albums'
       resources :memberships, except: :show, controller: 'users/memberships' do
         get :groups, on: :collection
@@ -53,7 +56,9 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :events
+    resources :events do
+      resources :posts, controller: 'events/posts'
+    end
     resources :attendances
 
     resources :posts, only: :show do
@@ -64,7 +69,7 @@ Rails.application.routes.draw do
         post :unlike, on: :member
       end
     end
-    resources :albums do     
+    resources :albums do
       resources :pictures, controller: 'albums/pictures' do
         # post :like, on: :member
         # post :unlike, on: :member
@@ -81,6 +86,7 @@ Rails.application.routes.draw do
     resources :committees, only: [:index]
 
     resources :profiles, only: [:show, :update] do
+      post :cropping, on: :member
       resources :experiences, except: [:new, :edit], controller: 'profiles/experiences'
       # resources :experiences, except: [:show, :new, :edit], controller: 'profiles/experiences'
       resources :skills, except: [:show, :new, :edit], controller: 'profiles/skills'
