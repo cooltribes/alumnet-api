@@ -253,6 +253,15 @@ class User < ActiveRecord::Base
     likes.exists?(likeable: likeable)
   end
 
+  ### premium subscriptions
+  def build_subscription(params, current_user)
+    if(params[:lifetime] == "true")
+      user_subscriptions.build(subscription: params[:subscription_id], start_date: params[:begin], subscription_id: 1, creator_id: current_user.id, ownership_type: 1)
+    else
+      user_subscriptions.build(subscription: params[:subscription_id], start_date: params[:begin], end_date: params[:end], subscription_id: 2, creator_id: current_user.id, ownership_type: 1)
+    end
+  end
+
   ### Counts
 
   def friends_count

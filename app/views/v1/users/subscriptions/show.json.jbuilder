@@ -1,0 +1,1 @@
+json.partial! 'v1/shared/subscription', user_subscription: @user_subscription

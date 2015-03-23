@@ -38,6 +38,9 @@ Rails.application.routes.draw do
         get :friends, on: :collection
         get :commons, on: :collection
       end
+      resources :subscriptions, except: :show, controller: 'users/subscriptions' do
+        #get :subscriptions, on: :collection
+      end
     end
 
     resources :groups do
