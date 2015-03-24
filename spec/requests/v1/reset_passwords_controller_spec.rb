@@ -13,7 +13,7 @@ describe V1::PasswordResetsController, type: :request do
       it "return a message and send a email with instructions" do
         post password_resets_path, { email: user.email }, header
         expect(response.status).to eq 200
-        expect(json).to eq({"message"=>"Email sent with password reset instructions"})
+        expect(json).to eq({"message"=>"We've sent you an email to reset your password!"})
         ### test the mail
       end
     end
