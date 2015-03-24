@@ -23,4 +23,10 @@ class UserMailer < ActionMailer::Base
     @friend = friend
     mail to: user.email, subject: "You have a new friend!"
   end
+
+  def invitation_to_event(user, event)
+    @user = user
+    @event = event
+    mail to: user.email, subject: "You have a new invitation!"
+  end
 end

@@ -28,11 +28,13 @@ describe V1::Me::ProfilesController, type: :request do
 
     context "Step 1 - initial" do
       it "update the user profile" do
+        country = Country.make!
+        city = country.cities.first
         profile_attributes = {
-          "birth_city_id" => 1,
-          "residence_city_id" => 1,
-          "birth_country_id" => 1,
-          "residence_country_id" => 1,
+          "birth_city_id" => city.id,
+          "residence_city_id" => city.id,
+          "birth_country_id" => country.id,
+          "residence_country_id" => country.id,
           "gender" => "M",
           "born" => "1980-08-21",
           "first_name" => "Armando",
@@ -42,11 +44,7 @@ describe V1::Me::ProfilesController, type: :request do
         expect(response.status).to eq 200
         expect(json['first_name']).to eq('Armando')
         expect(json['last_name']).to eq('Mendoza')
-        expect(json['born']).to eq('1980-08-21')
-        expect(json['birth_country_id']).to eq(1)
-        expect(json['birth_city_id']).to eq(1)
-        expect(json['residence_country_id']).to eq(1)
-        expect(json['birth_country_id']).to eq(1)
+        expect(json['born']).to eq({"day"=>21, "month"=>8, "year"=>1980})
       end
     end
 

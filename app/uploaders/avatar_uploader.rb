@@ -7,19 +7,42 @@ class AvatarUploader < CarrierWave::Uploader::Base
   # storage :fog
 
   version :small do
+    process :crop!
     process :resize_to_fill => [20,20]
   end
 
   version :medium do
+    process :crop!
     process :resize_to_fill => [40,40]
   end
 
   version :large do
+    process :crop!
     process :resize_to_fill => [80,80]
   end
 
   version :extralarge do
+    process :crop!
     process :resize_to_fill => [240,240]
+  end
+
+  version :crop do
+    process :crop!
+  end
+
+  def crop!
+    if model.imgX1.present?
+      imgW = model.imgW.to_i
+      imgH = model.imgH.to_i
+      imgX1 = model.imgX1.to_i
+      imgY1 = model.imgY1.to_i
+      cropW = model.cropW.to_i
+      cropH = model.cropH.to_i
+      resize_to_limit(imgW, imgH)
+      manipulate! do |img|
+        img.crop "#{cropW}x#{cropH}+#{imgX1}+#{imgY1}"
+      end
+    end
   end
 
   def store_dir

@@ -23,8 +23,16 @@ describe V1::Me::FriendshipsController, type: :request do
 
   describe "GET /me/friendships/friends" do
     it "return a friendships accepted" do
-      2.times { Friendship.make!(:accepted, user: user ) }
-      1.times { Friendship.make!(:accepted, friend: user ) }
+      2.times do
+        friendship = Friendship.make!(:accepted, user: user)
+        ContactInfo.make!(:email, profile: user.profile )
+        ContactInfo.make!(:email, profile: friendship.friend.profile)
+      end
+      1.times do
+        friendship = Friendship.make!(:accepted, friend: user)
+        ContactInfo.make!(:email, profile: user.profile )
+        ContactInfo.make!(:email, profile: friendship.user.profile)
+      end
       get friends_me_friendships_path, {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(3)

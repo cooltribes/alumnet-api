@@ -38,7 +38,7 @@ describe V1::Me::PostsController, type: :request do
       get me_post_path(post), {}, basic_header(current_user.auth_token)
       expect(response.status).to eq 200
       expect(json['body']).to eq(post.body)
-      expect(json['user']['name']).to eq(post.user.name)
+      expect(json['user']['name']).to eq(post.user.permit_name(current_user))
       #expect(valid_schema('current_user', json)).to be_empty
     end
   end
@@ -70,7 +70,7 @@ describe V1::Me::PostsController, type: :request do
 
   describe "PUT /me/posts/:id" do
     it "edit a post of current user" do
-      post = Post.make!(postable: current_user)
+      post = Post.make!(postable: current_user, user: current_user)
       put me_post_path(post), { body: "New body of post" }, basic_header(current_user.auth_token)
       expect(response.status).to eq 200
       post.reload
@@ -81,7 +81,7 @@ describe V1::Me::PostsController, type: :request do
 
   describe "DELETE /me/posts/:id" do
     it "delete a post of current user" do
-      post = Post.make!(postable: current_user)
+      post = Post.make!(postable: current_user, user: current_user)
       expect {
         delete me_post_path(post), {}, basic_header(current_user.auth_token)
       }.to change(Post, :count).by(-1)
