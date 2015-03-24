@@ -4,11 +4,21 @@ describe V1::AttendancesController, type: :request do
   let!(:user) { User.make! }
 
   describe "GET attendances" do
-    it "return all attendances" do
+    it "return all attendances " do
       3.times { Attendance.make! }
       get attendances_path,{}, basic_header(user.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(3)
+    end
+
+    it "return all attendances of event if params event_id is given" do
+      event = Event.make!
+      3.times { Attendance.make! }
+      5.times { Attendance.make!(event: event) }
+      get attendances_path, { event_id: event.id }, basic_header(user.auth_token)
+      expect(response.status).to eq 200
+      expect(json.count).to eq(5)
+      expect(json.first['event']['name']).to eq(event.name)
     end
   end
 

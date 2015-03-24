@@ -6,7 +6,7 @@ json.picture do
     json.card picture.picture.card.url
 end
 
-json.otra picture.picture
+# json.otra picture.picture
 
 # json.user do
 #   json.(comment.user, :id, :email)

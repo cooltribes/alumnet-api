@@ -1,4 +1,6 @@
 class V1::Users::AlbumsController < V1::BaseController
+  include Pundit
+
   before_action :set_user
   before_action :set_album, except: [:index, :create]
   
@@ -20,6 +22,12 @@ class V1::Users::AlbumsController < V1::BaseController
     end
   end
 
+  def destroy
+    authorize @album
+    @album.destroy
+    head :no_content
+  end
+
   private
 
   def set_user
@@ -28,7 +36,7 @@ class V1::Users::AlbumsController < V1::BaseController
 
   def set_album
     if @user
-      @album = @user.album.find(params[:id])
+      @album = @user.albums.find(params[:id])
     else
       render json: 'TODO get this error'
     end
