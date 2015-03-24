@@ -11,6 +11,8 @@ class V1::Users::SubscriptionsController < V1::BaseController
     #render json: @user_subscription.errors, status: :unprocessable_entity
     @user_subscription = @user.build_subscription(params, current_user)
     if @user_subscription.save
+      @user.member = 1
+      @user.save
       render :show, status: :created
     else
       render json: @user_subscription.errors, status: :unprocessable_entity

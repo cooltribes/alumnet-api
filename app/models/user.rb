@@ -118,6 +118,10 @@ class User < ActiveRecord::Base
     role == "AlumNetAdmin"
   end
 
+  def is_premium?
+    member == 1
+  end
+
   def is_regular?
     role == "Regular"
   end
@@ -260,6 +264,8 @@ class User < ActiveRecord::Base
     else
       user_subscriptions.build(subscription: params[:subscription_id], start_date: params[:begin], end_date: params[:end], subscription_id: 2, creator_id: current_user.id, ownership_type: 1)
     end
+    #self.member = 1;
+    #self.save
   end
 
   ### Counts
