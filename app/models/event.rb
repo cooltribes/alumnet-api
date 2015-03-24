@@ -13,7 +13,7 @@ class Event < ActiveRecord::Base
 
 
   ### Validations
-  validates_presence_of :name, :description
+  validates_presence_of :name, :description, :start_date, :end_date, :country_id
 
   ### Scopes
   scope :open, -> { where(event_type: 0) }
