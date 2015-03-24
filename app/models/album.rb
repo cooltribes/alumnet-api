@@ -11,6 +11,11 @@ class Album < ActiveRecord::Base
     user
   end
 
+  def cover_picture
+    pictures.first.try(:picture)
+  end
+
+
   def pictures_count
     self.pictures.count
   end
