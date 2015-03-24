@@ -7,12 +7,25 @@ class Album < ActiveRecord::Base
 
   has_many :pictures, dependent: :destroy
 
+  before_create :check_date_taken
+
   def creator
     user
   end
 
+  def cover_picture
+    pictures.first.try(:picture)
+  end
+
+
   def pictures_count
     self.pictures.count
   end
+
+  private
+
+    def check_date_taken
+      self.date_taken ||= Date.today
+    end
 
 end

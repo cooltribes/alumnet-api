@@ -19,3 +19,14 @@ json.country do
 end
 
 json.pictures_count album.pictures_count
+
+json.cover_picture do
+  if album.cover_picture.present? 
+    json.original album.cover_picture.url
+    json.main album.cover_picture.main.url
+    json.card album.cover_picture.card.url
+  else
+    nil
+  end
+end
+
