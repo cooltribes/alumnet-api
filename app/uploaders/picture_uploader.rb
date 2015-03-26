@@ -19,6 +19,10 @@ class PictureUploader < CarrierWave::Uploader::Base
     process :resize_to_fill => [212,225]
   end
 
+  version :modal do
+    process :resize_to_fill => [800, 600]
+  end
+
 
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
