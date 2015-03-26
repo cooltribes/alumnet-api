@@ -33,3 +33,4 @@ json.cover_picture do
     nil
   end
 end
+

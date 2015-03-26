@@ -18,8 +18,8 @@ class Notification
     recipients = admins.is_a?(Array) ? admins : [admins]
     notification = Mailboxer::Notification.notify_all(
       recipients,
-      "A new user was join to the group #{group.name}",
-      "The user #{user.name} was join to the group #{group.name}"
+      "A new user was invited to join the group #{group.name}",
+      "The user #{user.name} was invited to join the group #{group.name}"
     )
     recipients.each do |admin|
       AdminMailer.user_was_joined(admin, user, group).deliver

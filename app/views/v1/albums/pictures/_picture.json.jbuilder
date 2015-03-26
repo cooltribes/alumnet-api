@@ -29,8 +29,8 @@ json.country do
   end
 end
 
-# json.otra picture.picture
 
+# json.otra picture.picture
 # json.user do
 #   json.(comment.user, :id, :email)
 #   json.name comment.user.permit_name(current_user)
