@@ -17,6 +17,8 @@ module PostHelpers
       else
         { type: postable_type, id: postable.id, name: postable.name }
       end
+    else
+      { type: nil, id: nil, name: nil }
     end
   end
 

@@ -16,6 +16,7 @@ end
 
 json.is_alumnet_admin @user.is_alumnet_admin?
 json.is_system_admin @user.is_system_admin?
+json.is_premium @user.is_premium?
 
 json.friends_count @user.friends_count
 json.pending_received_friendships_count @user.pending_received_friendships_count

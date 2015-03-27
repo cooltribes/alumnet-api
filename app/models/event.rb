@@ -13,7 +13,7 @@ class Event < ActiveRecord::Base
 
 
   ### Validations
-  validates_presence_of :name, :description
+  validates_presence_of :name, :description, :start_date, :end_date, :country_id
 
   ### Scopes
   scope :open, -> { where(event_type: 0) }
@@ -36,8 +36,11 @@ class Event < ActiveRecord::Base
     if eventable_type == 'Group'
       group_members = eventable.members.search(query).result
       user_friends = user.search_accepted_friends(query)
+      users = group_members | user_friends
+    elsif eventable_type == 'User'
+      users = user.search_accepted_friends(query)
     end
-    group_members | user_friends
+    users
   end
 
   def group_admins
