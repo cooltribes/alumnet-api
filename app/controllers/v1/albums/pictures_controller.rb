@@ -1,5 +1,5 @@
 class V1::Albums::PicturesController < V1::BaseController
-  # include Pundit
+  include Pundit
   before_action :set_album
   before_action :set_picture, except: [:index, :create]
 
@@ -57,7 +57,7 @@ class V1::Albums::PicturesController < V1::BaseController
 
   def set_picture
     if @album
-      @comment = @album.comments.find(params[:id])
+      @picture = @album.pictures.find(params[:id])
     else
       render json: 'TODO get this error'
     end
