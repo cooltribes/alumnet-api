@@ -1,4 +1,4 @@
-json.(user, :id)
+json.(user, :id, :member)
 
 json.name user.permit_name(current_user)
 json.email user.permit_email(current_user)

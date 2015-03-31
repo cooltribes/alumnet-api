@@ -1,4 +1,4 @@
-json.(@user, :id, :name, :email, :unread_messages_count, :unread_notifications_count)
+json.(@user, :id, :name, :member, :email, :unread_messages_count, :unread_notifications_count)
 
 json.status @user.get_status_info
 

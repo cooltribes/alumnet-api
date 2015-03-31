@@ -2,11 +2,12 @@ server 'alumnet-test.aiesec-alumni.org',
   roles: %w{web app},
   ssh_options: {
     user: 'ec2-user',
-    keys: %w(/home/armando/alumnet.pem),
+    keys: %w(~/alumnet.pem),
     forward_agent: true,
     auth_methods: %w(publickey)
   }
-
+set :deploy_to, '/home/ec2-user/alumnet_production/alumnet-api'
+set :branch, 'master'
 # Custom SSH Options
 # ==================
 # You may pass any option but keep in mind that net/ssh understands a
