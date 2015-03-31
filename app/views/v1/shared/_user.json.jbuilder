@@ -1,4 +1,4 @@
-json.(user, :id)
+json.(user, :id, :member)
 
 json.name user.permit_name(current_user)
 json.email user.permit_email(current_user)
@@ -42,6 +42,7 @@ end
 
 json.is_alumnet_admin user.is_alumnet_admin?
 json.is_system_admin user.is_system_admin?
+json.is_premium user.is_premium?
 
 json.friends_count user.permit_friends_count(current_user)
 json.mutual_friends_count current_user.mutual_friends_count(user)

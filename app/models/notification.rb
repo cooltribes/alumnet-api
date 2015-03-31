@@ -18,8 +18,8 @@ class Notification
     recipients = admins.is_a?(Array) ? admins : [admins]
     notification = Mailboxer::Notification.notify_all(
       recipients,
-      "A new user was join to the group #{group.name}",
-      "The user #{user.name} was join to the group #{group.name}"
+      "A new user was invited to join the group #{group.name}",
+      "The user #{user.name} was invited to join the group #{group.name}"
     )
     recipients.each do |admin|
       AdminMailer.user_was_joined(admin, user, group).deliver
@@ -69,6 +69,19 @@ class Notification
       "The user #{friend.name} has accepted your friendship request"
     )
     UserMailer.friend_accept_friendship(user, friend).deliver
+    PusherDelegator.notifiy_new_notification(notification, recipients)
+  end
+
+  def self.notify_invitation_event_to_user(attendance)
+    user = attendance.user
+    event = attendance.event
+    recipients = [user]
+    notification = Mailboxer::Notification.notify_all(
+      recipients,
+      "You have a new invitation!",
+      "The user #{event.creator.name} is inviting you to assist the event #{event.name}"
+    )
+    UserMailer.invitation_to_event(user, event).deliver
     PusherDelegator.notifiy_new_notification(notification, recipients)
   end
 end

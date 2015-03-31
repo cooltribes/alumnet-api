@@ -66,7 +66,7 @@ describe V1::Users::PostsController, type: :request do
 
   describe "PUT /users/:user_id/posts/:id" do
     it "edit a post of user" do
-      post = Post.make!(postable: user)
+      post = Post.make!(postable: user, user: author)
       put user_post_path(user, post), { body: "New body of post" }, basic_header(author.auth_token)
       expect(response.status).to eq 200
       post.reload
@@ -77,7 +77,7 @@ describe V1::Users::PostsController, type: :request do
 
   describe "DELETE /users/:user_id/posts/:id" do
     it "delete a post of user" do
-      post = Post.make!(postable: user)
+      post = Post.make!(postable: user, user: author)
       expect {
         delete user_post_path(user, post), {}, basic_header(author.auth_token)
       }.to change(Post, :count).by(-1)

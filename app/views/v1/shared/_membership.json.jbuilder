@@ -4,6 +4,7 @@ group = membership.group
 json.group do
   json.id group.id
   json.name group.name
+  json.updated_at group.updated_at
   json.official group.official
   json.cover do
     json.main group.cover.main.url

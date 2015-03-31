@@ -23,6 +23,11 @@ class User < ActiveRecord::Base
   has_many :likes, dependent: :destroy
   has_many :privacies, dependent: :destroy
   has_many :albums, as: :albumable, dependent: :destroy
+  has_many :user_subscriptions, dependent: :destroy
+  has_many :subscriptions, through: :user_subscriptions
+  has_many :attendances, dependent: :destroy
+  has_many :events, as: :eventable, dependent: :destroy
+  has_many :invited_events, through: :attendances, source: :event
   has_one :profile, dependent: :destroy
 
   ### Scopes
@@ -81,6 +86,10 @@ class User < ActiveRecord::Base
     { text: status, value: User.statuses[status] }
   end
 
+  def get_member_info
+    member
+  end
+
   ### Roles
   def activate!
     if profile.skills? || profile.approval?
@@ -109,6 +118,10 @@ class User < ActiveRecord::Base
 
   def is_alumnet_admin?
     role == "AlumNetAdmin"
+  end
+
+  def is_premium?
+    member == 1
   end
 
   def is_regular?
@@ -246,6 +259,17 @@ class User < ActiveRecord::Base
     likes.exists?(likeable: likeable)
   end
 
+  ### premium subscriptions
+  def build_subscription(params, current_user)
+    if(params[:lifetime] == "true")
+      user_subscriptions.build(subscription: params[:subscription_id], start_date: params[:begin], subscription_id: 1, creator_id: current_user.id, ownership_type: 1)
+    else
+      user_subscriptions.build(subscription: params[:subscription_id], start_date: params[:begin], end_date: params[:end], subscription_id: 2, creator_id: current_user.id, ownership_type: 1)
+    end
+    #self.member = 1;
+    #self.save
+  end
+
   ### Counts
 
   def friends_count
@@ -297,6 +321,11 @@ class User < ActiveRecord::Base
       hash[name] = privacy.value
     end
     hash
+  end
+
+  ###Attendances
+  def attendance_for(event)
+    attendances.find_by(event_id: event.id)
   end
 
   private

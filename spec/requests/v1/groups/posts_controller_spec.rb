@@ -67,7 +67,7 @@ describe V1::Groups::PostsController, type: :request do
 
   describe "PUT /groups/:group_id/posts/:id" do
     it "edit a post of group" do
-      post = Post.make!(postable: group)
+      post = Post.make!(postable: group, user: admin)
       put group_post_path(group, post), { body: "New body of post" }, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       post.reload
@@ -78,7 +78,7 @@ describe V1::Groups::PostsController, type: :request do
 
   describe "DELETE /groups/:group_id/posts/:id" do
     it "delete a post of group" do
-      post = Post.make!(postable: group)
+      post = Post.make!(postable: group, user: admin)
       expect {
         delete group_post_path(group, post), {}, basic_header(admin.auth_token)
       }.to change(Post, :count).by(-1)
