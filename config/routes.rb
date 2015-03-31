@@ -57,6 +57,7 @@ Rails.application.routes.draw do
       resources :memberships, except: :show, controller: 'groups/memberships' do
         get :members, on: :collection
       end
+      resources :albums, controller: 'groups/albums'
     end
 
     resources :events do

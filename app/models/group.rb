@@ -17,6 +17,8 @@ class Group < ActiveRecord::Base
   has_many :events, as: :eventable, dependent: :destroy
   belongs_to :country
   belongs_to :city
+  has_many :albums, as: :albumable, dependent: :destroy
+  
 
   ### Scopes
 

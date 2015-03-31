@@ -34,3 +34,14 @@ json.cover_picture do
   end
 end
 
+json.creator do
+  json.(album.creator, :id)
+  json.name album.creator.permit_name(current_user)
+  if album.creator.permit('see-avatar', current_user)
+    json.avatar album.creator.avatar.large.url
+  else
+    json.avatar album.creator.avatar.large.default_url
+  end
+end
+
+
