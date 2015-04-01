@@ -62,6 +62,7 @@ Rails.application.routes.draw do
 
     resources :events do
       resources :posts, controller: 'events/posts'
+      resources :albums, controller: 'events/albums'      
     end
     resources :attendances
 

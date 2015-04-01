@@ -10,6 +10,7 @@ class Event < ActiveRecord::Base
   belongs_to :eventable, polymorphic: true
   has_many :attendances, dependent: :destroy
   has_many :posts, as: :postable, dependent: :destroy
+  has_many :albums, as: :albumable, dependent: :destroy
 
 
   ### Validations
