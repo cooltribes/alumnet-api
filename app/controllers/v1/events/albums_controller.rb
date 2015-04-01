@@ -31,7 +31,7 @@ class V1::Events::AlbumsController < V1::BaseController
   private
 
   def set_event
-    @event = Event.find(params[:group_id])
+    @event = Event.find(params[:event_id])
   end
 
   def set_album
