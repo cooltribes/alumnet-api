@@ -1,5 +1,5 @@
 require 'rake'
-namespace :db do
+namespace :app do
   desc "load cities from csv file"
   task load_cities: :environment do
     ENV['RAILS_ENV'] ||= 'staging'
