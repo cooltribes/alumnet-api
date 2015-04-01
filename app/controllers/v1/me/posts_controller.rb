@@ -53,7 +53,7 @@ class V1::Me::PostsController < V1::BaseController
   end
 
   def post_params
-    params.permit(:body)
+    params.permit(:body, picture_ids:[])
   end
 
 end

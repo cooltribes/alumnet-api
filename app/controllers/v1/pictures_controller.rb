@@ -9,15 +9,15 @@ class V1::PicturesController < V1::BaseController
   end
 
   def create
-    if params[:file]
-      picture = params[:file]
-      title = params[:name]
-      @picture = Picture.new(title: title, picture: picture)
+    if params.key?(:file)
+      @picture = Picture.new(create_picture_params)
       if @picture.save
         render :show, status: :created,  location: @picture
       else
         render json: @picture.errors, status: :unprocessable_entity
       end
+    else
+      render json: { error: "Not file given" }, status: :unprocessable_entity
     end
   end
 
@@ -40,4 +40,11 @@ class V1::PicturesController < V1::BaseController
     @picture = Picture.find(params[:id])
   end
 
+  def picture_params
+    params.permit(:title)
+  end
+
+  def create_picture_params
+    { title: params[:name], picture: params[:file]}
+  end
 end

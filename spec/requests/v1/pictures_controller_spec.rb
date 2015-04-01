@@ -8,7 +8,7 @@ describe V1::PicturesController, type: :request do
   end
 
   def valid_attributes
-    { title: "Picture New", picture: picture_file }
+    { name: "picture_new.jpg", file: picture_file }
   end
 
 

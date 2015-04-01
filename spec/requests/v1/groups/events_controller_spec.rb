@@ -12,12 +12,14 @@ describe V1::Groups::EventsController, type: :request do
 
   def valid_attributes
     { name: "Event 1", description: "short description", cover: cover_file,
-      country_id: country.id, city_id: city.id, invitation_process: 0 }
+      country_id: country.id, city_id: city.id, invitation_process: 0,
+      start_date: "2015-01-01", end_date: "2015-01-15" }
   end
 
   def invalid_attributes
     { name: "", description: "short description", cover: cover_file,
-      country_id: country.id, city_id: city.id, invitation_process: 0 }
+      country_id: country.id, city_id: city.id, invitation_process: 0,
+      start_date: "2015-01-01", end_date: "2015-01-15" }
   end
 
 
