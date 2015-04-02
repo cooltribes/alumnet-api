@@ -1,0 +1,1 @@
+json.array! @albums, partial: 'v1/shared/album', as: :album, current_user: @current_user

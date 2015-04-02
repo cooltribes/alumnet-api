@@ -1,11 +1,11 @@
-class V1::Users::AlbumsController < V1::BaseController
+class V1::Events::AlbumsController < V1::BaseController
   include Pundit
 
-  before_action :set_user
+  before_action :set_event
   before_action :set_album, except: [:index, :create]
   
   def index
-    @q = @user.albums.search(params[:q])
+    @q = @event.albums.search(params[:q])
     @albums = @q.result
   end  
 
@@ -15,17 +15,8 @@ class V1::Users::AlbumsController < V1::BaseController
   def create
     @album = Album.new(album_params)
     @album.user = current_user #set the creator
-    if @user.albums << @album
-      render :show, status: :created,  location: [@user, @album]
-    else
-      render json: @album.errors, status: :unprocessable_entity
-    end
-  end
-
-  def update
-    authorize @album
-    if @album.update(album_params)
-      render :show, status: :ok,  location: [@user, @album]
+    if @event.albums << @album
+      render :show, status: :created,  location: [@event, @album]
     else
       render json: @album.errors, status: :unprocessable_entity
     end
@@ -39,13 +30,13 @@ class V1::Users::AlbumsController < V1::BaseController
 
   private
 
-  def set_user
-    @user = User.find(params[:user_id])
+  def set_event
+    @event = Event.find(params[:event_id])
   end
 
   def set_album
-    if @user
-      @album = @user.albums.find(params[:id])
+    if @event
+      @album = @event.albums.find(params[:id])
     else
       render json: 'TODO get this error'
     end

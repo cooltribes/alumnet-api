@@ -1,23 +1,23 @@
-class AlbumPolicy < ApplicationPolicy
+class PicturePolicy < ApplicationPolicy
 
   def index?
-    record.user == user
+    record.album.user == user
   end
 
   def show?
-    record.user == user
+    record.album.user == user
   end
 
   def create?
-    record.user == user
+    record.album.user == user
   end
 
   def update?
-    record.user == user
+    record.album.user == user
   end
 
   def destroy?
-    record.user == user
+    record.album.user == user
   end
 
 end

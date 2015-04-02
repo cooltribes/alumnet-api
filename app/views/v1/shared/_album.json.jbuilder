@@ -1,10 +1,12 @@
-json.(album, :id, :name, :description, :cover, :date_taken)
+json.(album, :id, :name, :description, :date_taken)
 
 json.city do
   if album.city.present? 
     json.id album.city.id
     json.text album.city.name
   else
+    # json.id nil
+    # json.text nil
     nil
   end      
 end
@@ -14,6 +16,8 @@ json.country do
     json.id album.country.id
     json.text album.country.name
   else
+    # json.id nil
+    # json.text nil
     nil
   end
 end
@@ -29,4 +33,15 @@ json.cover_picture do
     nil
   end
 end
+
+json.creator do
+  json.(album.creator, :id)
+  json.name album.creator.permit_name(current_user)
+  if album.creator.permit('see-avatar', current_user)
+    json.avatar album.creator.avatar.large.url
+  else
+    json.avatar album.creator.avatar.large.default_url
+  end
+end
+
 
