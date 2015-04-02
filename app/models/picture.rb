@@ -11,11 +11,14 @@ class Picture < ActiveRecord::Base
   private
 
     def check_date_taken
-      self.date_taken ||= self.album.date_taken
+      self.date_taken ||= self.album.date_taken if self.album.present?
     end
+
     def check_location
-      self.city_id ||= self.album.city_id
-      self.country_id ||= self.album.country_id
+      if self.album.present?
+        self.city_id ||= self.album.city_id
+        self.country_id ||= self.album.country_id
+      end
     end
 
 end
