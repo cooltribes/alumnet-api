@@ -24,7 +24,7 @@ json.resource_path post.resource_path
 
 if post.pictures.any?
   count = 0
-  json.pictures post.pictures do |picture|
+  json.pictures post.with_pictures(3) do |picture|
     count += 1;
     json.id picture.id
     json.url picture.picture.url

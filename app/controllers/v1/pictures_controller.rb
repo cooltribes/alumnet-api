@@ -11,6 +11,7 @@ class V1::PicturesController < V1::BaseController
   def create
     if params.key?(:file)
       @picture = Picture.new(create_picture_params)
+      @picture.uploader = current_user
       if @picture.save
         render :show, status: :created,  location: @picture
       else
