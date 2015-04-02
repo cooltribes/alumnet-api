@@ -66,6 +66,7 @@ class V1::Albums::PicturesController < V1::BaseController
   def picture_params
     params.permit(:title, :picture)
   end
+
   def update_picture_params
     params.permit(:title)
   end

@@ -6,9 +6,10 @@ class V1::ProfilesController < V1::BaseController
   end
 
   def cropping
+    image = params[:image]
     @profile.assign_attributes(crop_params)
-    @profile.crop_avatar
-    render json: { status: 'success', url: @profile.avatar.crop.url }
+    @profile.crop(image)
+    render json: { status: 'success', url: @profile.crop_url(image) }
   end
 
   def update
@@ -27,7 +28,7 @@ class V1::ProfilesController < V1::BaseController
 
     def profile_params
       params.permit(:first_name, :last_name, :avatar, :born, :birth_city_id, :residence_city_id,
-          :birth_country_id, :residence_country_id, :gender)
+        :birth_country_id, :residence_country_id, :gender, :cover)
     end
 
     def crop_params

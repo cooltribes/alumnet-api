@@ -51,7 +51,7 @@ class V1::Events::PostsController < V1::BaseController
   end
 
   def post_params
-    params.permit(:body)
+    params.permit(:body, picture_ids:[])
   end
 
 end

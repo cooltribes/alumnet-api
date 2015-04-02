@@ -25,7 +25,10 @@ describe V1::Users::EventsController, type: :request do
   describe "GET /users/:user_id/events" do
 
     before do
-      5.times { Event.make!(eventable: user)  }
+      5.times do
+        event = Event.make!(eventable: user)
+        event.create_attendance_for(user)
+      end
     end
 
     it "return all events of user" do

@@ -21,3 +21,15 @@ json.permissions do
 end
 
 json.resource_path post.resource_path
+
+if post.pictures.any?
+  count = 0
+  json.pictures post.pictures do |picture|
+    count += 1;
+    json.id picture.id
+    json.url picture.picture.url
+    json.index count
+  end
+else
+  json.pictures nil
+end
