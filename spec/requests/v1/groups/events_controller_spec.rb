@@ -73,7 +73,7 @@ describe V1::Groups::EventsController, type: :request do
 
   describe "PUT /groups/:group_id/events/:id" do
     it "edit a event of group" do
-      event = Event.make!(eventable: group)
+      event = Event.make!(eventable: group, creator: user)
       put group_event_path(group, event), { description: "New description of event" }, basic_header(user.auth_token)
       expect(response.status).to eq 200
       event.reload
