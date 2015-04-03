@@ -58,6 +58,10 @@ class User < ActiveRecord::Base
     profile.avatar if profile.present?
   end
 
+  def cover
+    profile.cover if profile.present?
+  end
+
   def mailboxer_email(object)
     email
   end

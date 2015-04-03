@@ -12,7 +12,7 @@ class V1::Albums::PicturesController < V1::BaseController
 
   def create
     @picture = Picture.new(picture_params)
-    # @picture.user = current_user
+    @picture.uploader = current_user
     if @album.pictures << @picture
       render :show, status: :created,  location: [@album, @picture]
     else
@@ -66,6 +66,7 @@ class V1::Albums::PicturesController < V1::BaseController
   def picture_params
     params.permit(:title, :picture)
   end
+
   def update_picture_params
     params.permit(:title)
   end

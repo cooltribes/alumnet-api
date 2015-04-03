@@ -10,6 +10,11 @@ json.avatar do
   json.extralarge @user.avatar.extralarge.url
 end
 
+json.cover do
+  json.original @user.cover.url
+  json.main @user.cover.main.url
+end
+
 json.groups do
   json.array! @user.groups.pluck(:id)
 end

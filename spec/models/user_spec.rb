@@ -24,6 +24,20 @@ RSpec.describe User, type: :model do
       expect(user.auth_token).to_not be_blank
       expect(user.is_regular?).to eq(true)
     end
+
+    it "should have an album with the picture of avatar" do
+      profile = Profile.make(avatar: File.open("#{Rails.root}/spec/fixtures/user_test.png"))
+      user = User.make(profile: profile)
+      user.save
+      expect(user).to be_valid
+      expect(user.albums.count).to eq(1)
+      expect(user.albums.last.name).to eq("avatars")
+      album = user.albums.find_by(name: "avatars")
+      expect(album.pictures.count).to eq(1)
+      user.profile.avatar = File.open("#{Rails.root}/spec/fixtures/cover_test.jpg")
+      user.profile.save
+      expect(album.pictures.count).to eq(2)
+    end
   end
 
   describe "instance methods" do

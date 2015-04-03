@@ -62,8 +62,11 @@ Rails.application.routes.draw do
 
     resources :events do
       resources :posts, controller: 'events/posts'
+      resources :albums, controller: 'events/albums'      
     end
     resources :attendances
+
+    resources :pictures
 
     resources :posts, only: :show do
       post :like, on: :member

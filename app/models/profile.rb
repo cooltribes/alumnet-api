@@ -1,6 +1,7 @@
 class Profile < ActiveRecord::Base
   acts_as_paranoid
   mount_uploader :avatar, AvatarUploader
+  mount_uploader :cover, UserCoverUploader
   enum register_step: [:initial, :profile, :contact, :experience_a, :experience_b, :experience_c, :experience_d, :skills, :approval]
   include ProfileHelpers
 
@@ -30,10 +31,25 @@ class Profile < ActiveRecord::Base
   accepts_nested_attributes_for :languages, allow_destroy: true
   accepts_nested_attributes_for :skills, allow_destroy: true
 
+  after_save :save_avatar_in_album
+
+
   ###Instance Methods
 
-  def crop_avatar
-    avatar.recreate_versions! if imgX1.present?
+  def crop(image)
+    if image == "avatar"
+      avatar.recreate_versions! if imgX1.present?
+    elsif image == "cover"
+      cover.recreate_versions! if imgX1.present?
+    end
+  end
+
+  def crop_url(image)
+    if image == "avatar"
+      avatar.crop.url
+    elsif image == "cover"
+      cover.crop.url
+    end
   end
 
   def hidden_last_name
@@ -88,6 +104,21 @@ class Profile < ActiveRecord::Base
     def born_date
       if born.present? && ((Date.current - born).to_i / 365 ) < 20
         errors.add(:born, 'you must have more than 20 years')
+      end
+    end
+
+    def save_avatar_in_album
+      if avatar_changed?
+        album = user.albums.create_with(name: 'avatars').find_or_create_by(album_type: Album::TYPES[:avatar])
+        picture = Picture.new(uploader: user)
+        picture.picture = avatar
+        album.pictures << picture
+      end
+      if cover_changed?
+        album = user.albums.create_with(name: 'covers').find_or_create_by(album_type: Album::TYPES[:cover])
+        picture = Picture.new(uploader: user)
+        picture.picture = cover
+        album.pictures << picture
       end
     end
 end
