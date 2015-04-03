@@ -44,7 +44,6 @@ class User < ActiveRecord::Base
   before_create :set_role
   after_create :create_new_profile
   after_create :create_privacies
-  after_create :create_avatars_album
 
   ### Instance Methods
   def name
@@ -356,10 +355,6 @@ class User < ActiveRecord::Base
         privacies.create(privacy_action_id: action.id, value: 2)
       end
     end
-  end
-
-  def create_avatars_album
-    albums.find_or_create_by(name: 'avatars')
   end
 
 end
