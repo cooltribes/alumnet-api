@@ -42,6 +42,7 @@ describe V1::PicturesController, type: :request do
         }.to change(Picture, :count).by(1)
         expect(response.status).to eq 201
         expect(json['title']).to eq(Picture.last.title)
+        expect(Picture.last.uploader).to eq(user)
       end
     end
   end

@@ -109,14 +109,14 @@ class Profile < ActiveRecord::Base
 
     def save_avatar_in_album
       if avatar_changed?
-        album = user.albums.find_or_create_by(name: "avatars")
-        picture = Picture.new
+        album = user.albums.create_with(name: 'avatars').find_or_create_by(album_type: Album::TYPES[:avatar])
+        picture = Picture.new(uploader: user)
         picture.picture = avatar
         album.pictures << picture
       end
       if cover_changed?
-        album = user.albums.find_or_create_by(name: "covers")
-        picture = Picture.new
+        album = user.albums.create_with(name: 'covers').find_or_create_by(album_type: Album::TYPES[:cover])
+        picture = Picture.new(uploader: user)
         picture.picture = cover
         album.pictures << picture
       end

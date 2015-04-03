@@ -6,7 +6,7 @@ class Picture < ActiveRecord::Base
   belongs_to :city, foreign_key: "city_id", class_name: 'City'
   belongs_to :country, foreign_key: "country_id", class_name: 'Country'
   belongs_to :pictureable, polymorphic: true
-
+  belongs_to :uploader, class_name: 'User'
 
   private
 
