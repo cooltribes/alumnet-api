@@ -25,6 +25,11 @@ json.country do
   end
 end
 
+json.uploader do
+  json.id picture.uploader.id
+  json.name picture.uploader.permit_name(current_user)
+end
+
 
 # json.otra picture.picture
 # json.user do

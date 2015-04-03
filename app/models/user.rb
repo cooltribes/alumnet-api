@@ -266,9 +266,9 @@ class User < ActiveRecord::Base
   ### premium subscriptions
   def build_subscription(params, current_user)
     if(params[:lifetime] == "true")
-      user_subscriptions.build(subscription: params[:subscription_id], start_date: params[:begin], subscription_id: 1, creator_id: current_user.id, ownership_type: 1)
+      user_subscriptions.build(subscription: params[:subscription_id], start_date: params[:begin], subscription_id: 1, creator_id: current_user.id, ownership_type: 1, reference: params[:reference])
     else
-      user_subscriptions.build(subscription: params[:subscription_id], start_date: params[:begin], end_date: params[:end], subscription_id: 2, creator_id: current_user.id, ownership_type: 1)
+      user_subscriptions.build(subscription: params[:subscription_id], start_date: params[:begin], end_date: params[:end], subscription_id: 2, creator_id: current_user.id, ownership_type: 1, reference: params[:reference])
     end
     #self.member = 1;
     #self.save

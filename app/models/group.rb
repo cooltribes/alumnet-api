@@ -3,6 +3,7 @@ class Group < ActiveRecord::Base
   acts_as_paranoid
   mount_uploader :cover, CoverUploader
   enum group_type: [:open, :closed, :secret]
+  attr_accessor :cover_uploader
 
   #join_process
   # "0" -> All Members can invite
@@ -15,10 +16,11 @@ class Group < ActiveRecord::Base
   has_many :posts, as: :postable, dependent: :destroy
   has_many :albums, as: :albumable, dependent: :destroy
   has_many :events, as: :eventable, dependent: :destroy
+  belongs_to :creator, class_name: 'User'
   belongs_to :country
   belongs_to :city
   has_many :albums, as: :albumable, dependent: :destroy
-  
+
 
   ### Scopes
 
@@ -37,6 +39,7 @@ class Group < ActiveRecord::Base
 
   ### Callbacks
   before_update :check_join_process
+  after_save :save_cover_in_album
 
   ### class Methods
   def self.without_secret
@@ -56,7 +59,7 @@ class Group < ActiveRecord::Base
     admins.where("users.id = ?", user.id).any?
   end
 
-  def which_friends_in(user) 
+  def which_friends_in(user)
     members & user.my_friends
   end
 
@@ -139,10 +142,6 @@ class Group < ActiveRecord::Base
     end
   end
 
-  def creator
-    creator_user_id.present? ? User.find_by(id: creator_user_id) : nil
-  end
-
   def membership_of_user(user)
     memberships.find_by(user_id: user.id)
   end
@@ -166,6 +165,15 @@ class Group < ActiveRecord::Base
       ## this change the join process automatically on update
       if (group_type == "secret" && join_process < 2) || (group_type == "closed" && join_process == 0)
         self[:join_process] = 2
+      end
+    end
+
+    def save_cover_in_album
+      if cover_changed?
+        album = albums.create_with(name: 'covers').find_or_create_by(album_type: Album::TYPES[:cover])
+        picture = Picture.new(uploader: cover_uploader)
+        picture.picture = cover
+        album.pictures << picture
       end
     end
 end
