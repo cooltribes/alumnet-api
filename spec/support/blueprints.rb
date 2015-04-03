@@ -221,4 +221,5 @@ Picture.blueprint do
   title { "Picture #{sn}"}
   picture { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
   date_taken { nil }
+  uploader { User.make! }
 end

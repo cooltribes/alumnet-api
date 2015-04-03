@@ -1,6 +1,5 @@
 class V1::Users::EventsController < V1::BaseEventsController
 
-
   private
 
   def set_eventable

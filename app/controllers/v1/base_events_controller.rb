@@ -45,7 +45,6 @@ class V1::BaseEventsController < V1::BaseController
   private
 
   def set_eventable
-    @eventable = Group.find(params[:group_id])
   end
 
   def set_event
