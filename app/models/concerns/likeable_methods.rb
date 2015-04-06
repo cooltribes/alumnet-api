@@ -1,5 +1,9 @@
 module LikeableMethods
 
+  def self.included(base)
+    base.has_many :likes, as: :likeable, dependent: :destroy
+  end
+
   def likes_count
     self.likes.count
   end
