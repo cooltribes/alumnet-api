@@ -2,6 +2,7 @@ class Event < ActiveRecord::Base
   include EventHelpers
   mount_uploader :cover, CoverUploader
   enum event_type: [:open, :closed, :secret]
+  attr_accessor :cover_uploader
 
   ### Relations
   belongs_to :creator, class_name: "User"
@@ -12,6 +13,8 @@ class Event < ActiveRecord::Base
   has_many :posts, as: :postable, dependent: :destroy
   has_many :albums, as: :albumable, dependent: :destroy
 
+  ### Callbacks
+  after_save :save_cover_in_album
 
   ### Validations
   validates_presence_of :name, :description, :start_date, :end_date, :country_id
@@ -57,4 +60,15 @@ class Event < ActiveRecord::Base
     return true if group_admins.include?(user)
     false
   end
+
+  private
+
+    def save_cover_in_album
+      if cover_changed?
+        album = albums.create_with(name: 'covers').find_or_create_by(album_type: Album::TYPES[:cover])
+        picture = Picture.new(uploader: cover_uploader)
+        picture.picture = cover
+        album.pictures << picture
+      end
+    end
 end

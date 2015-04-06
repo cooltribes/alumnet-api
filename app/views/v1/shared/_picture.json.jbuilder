@@ -8,25 +8,26 @@ json.picture do
 end
 
 json.city do
-  if picture.city.present? 
+  if picture.city.present?
     json.id picture.city.id
     json.text picture.city.name
   else
-    # json.id nil
-    # json.text nil
     nil
-  end      
+  end
 end
 
 json.country do
-  if picture.country.present? 
+  if picture.country.present?
     json.id picture.country.id
     json.text picture.country.name
   else
-    # json.id nil
-    # json.text nil
     nil
   end
+end
+
+json.uploader do
+  json.id picture.uploader.id
+  json.name picture.uploader.permit_name(current_user)
 end
 
 

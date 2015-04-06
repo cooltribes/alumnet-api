@@ -12,12 +12,14 @@ describe V1::Groups::EventsController, type: :request do
 
   def valid_attributes
     { name: "Event 1", description: "short description", cover: cover_file,
-      country_id: country.id, city_id: city.id, invitation_process: 0 }
+      country_id: country.id, city_id: city.id, invitation_process: 0,
+      start_date: "2015-01-01", end_date: "2015-01-15" }
   end
 
   def invalid_attributes
     { name: "", description: "short description", cover: cover_file,
-      country_id: country.id, city_id: city.id, invitation_process: 0 }
+      country_id: country.id, city_id: city.id, invitation_process: 0,
+      start_date: "2015-01-01", end_date: "2015-01-15" }
   end
 
 
@@ -71,7 +73,7 @@ describe V1::Groups::EventsController, type: :request do
 
   describe "PUT /groups/:group_id/events/:id" do
     it "edit a event of group" do
-      event = Event.make!(eventable: group)
+      event = Event.make!(eventable: group, creator: user)
       put group_event_path(group, event), { description: "New description of event" }, basic_header(user.auth_token)
       expect(response.status).to eq 200
       event.reload

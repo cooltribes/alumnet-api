@@ -22,6 +22,15 @@ class V1::Events::AlbumsController < V1::BaseController
     end
   end
 
+  def update
+    authorize @album
+    if @album.update(album_params)
+      render :show, status: :ok,  location: [@event, @album]
+    else
+      render json: @album.errors, status: :unprocessable_entity
+    end
+  end
+
   def destroy
     authorize @album
     @album.destroy
@@ -31,7 +40,7 @@ class V1::Events::AlbumsController < V1::BaseController
   private
 
   def set_event
-    @event = Event.find(params[:group_id])
+    @event = Event.find(params[:event_id])
   end
 
   def set_album

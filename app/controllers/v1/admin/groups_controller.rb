@@ -17,7 +17,7 @@ class V1::Admin::GroupsController < V1::AdminController
 
   def create
     @group = Group.new(group_params)
-    @group.creator_user_id = current_user.id
+    @group.creator = current_user
     if @group.save
       Membership.create_membership_for_creator(@group, current_user)
       render :show, status: :created,  location: @group

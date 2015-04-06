@@ -18,7 +18,8 @@ class V1::GroupsController < V1::BaseController
 
   def create
     @group = Group.new(group_params)
-    @group.creator_user_id = current_user.id
+    @group.creator = current_user
+    @group.cover_uploader = current_user
     if @group.save
       Membership.create_membership_for_creator(@group, current_user)
       render :show, status: :created,  location: @group
@@ -29,7 +30,8 @@ class V1::GroupsController < V1::BaseController
 
   def add_group
     @new_group = Group.new(group_params)
-    @new_group.creator_user_id = current_user.id
+    @new_group.creator = current_user
+    @new_group.cover_uploader = current_user
     if @group.children << @new_group
       Membership.create_membership_for_creator(@new_group, current_user)
       render :add_group, status: :created,  location: @group
@@ -40,6 +42,7 @@ class V1::GroupsController < V1::BaseController
 
   def update
     authorize @group
+    @group.cover_uploader = current_user
     if @group.update(group_params)
       render :show, status: :ok,  location: @group
     else
