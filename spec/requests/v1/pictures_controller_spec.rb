@@ -67,4 +67,46 @@ describe V1::PicturesController, type: :request do
       expect(response.status).to eq 204
     end
   end
+
+  describe "POST /pictures/:id/like" do
+    context "without like from user" do
+      it "add like a post" do
+        user = User.make!
+        picture = Picture.make!
+        expect {
+          post like_picture_path(picture), {}, basic_header(user.auth_token)
+        }.to change(picture, :likes_count).by(1)
+        expect(response.status).to eq 200
+        expect(json).to have_key("user_id")
+      end
+    end
+
+    context "with like from user" do
+      it "return a json with error" do
+        user = User.make!
+        picture = Picture.make!
+        Like.make!(user: user, likeable: picture)
+        expect {
+          post like_picture_path(picture), {}, basic_header(user.auth_token)
+        }.to change(picture, :likes_count).by(0)
+        expect(response.status).to eq 422
+        expect(json['errors']).to eq(["User already made like!"])
+      end
+    end
+  end
+
+  describe "POST /pictures/:id/unlike" do
+    context "with a like" do
+      it "remove like of post" do
+        user = User.make!
+        picture = Picture.make!
+        Like.make!(user: user, likeable: picture)
+        expect {
+          post unlike_picture_path(picture), {}, basic_header(user.auth_token)
+        }.to change(picture, :likes_count).by(-1)
+        expect(json["ok"]).to eq(true)
+        expect(response.status).to eq 200
+      end
+    end
+  end
 end
