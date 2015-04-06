@@ -1,6 +1,10 @@
 class V1::EventsController < V1::BaseEventsController
-  include Pundit
   skip_before_action :set_eventable
+
+  def index
+    @q = Event.open.search(params[:q])
+    @events = @q.result
+  end
 
   private
 
