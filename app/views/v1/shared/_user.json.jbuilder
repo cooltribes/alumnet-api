@@ -6,6 +6,7 @@ json.email user.permit_email(current_user)
 json.last_experience user.permit_last_experience(current_user)
 
 
+
 json.avatar do
   if user.permit('see-avatar', current_user)
     json.original user.avatar.url
@@ -20,11 +21,6 @@ json.avatar do
     json.large user.avatar.large.default_url
     json.extralarge user.avatar.extralarge.default_url
   end
-end
-
-json.cover do
-  json.original user.cover.url
-  json.main user.cover.main.url
 end
 
 json.groups do
