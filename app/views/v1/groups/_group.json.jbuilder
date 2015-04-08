@@ -18,6 +18,7 @@ else
 end
 
 json.cover do
+  json.original group.cover.url
   json.main group.cover.main.url
   json.card group.cover.card.url
 end
