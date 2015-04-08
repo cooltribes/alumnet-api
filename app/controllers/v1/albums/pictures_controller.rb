@@ -11,16 +11,24 @@ class V1::Albums::PicturesController < V1::BaseController
   end
 
   def create
-    if params.key?(:file)
-      @picture = Picture.new(create_picture_params)
-      @picture.uploader = current_user
-      if @album.pictures << @picture
-        render :show, status: :created,  location: [@ilbum, @picture]
-      else
-        render json: @picture.errors, status: :unprocessable_entity
-      end
+    # if params.key?(:file)
+    #   @picture = Picture.new(create_picture_params)
+    #   @picture.uploader = current_user
+    #   if @album.pictures << @picture
+    #     render :show, status: :created,  location: [@ilbum, @picture]
+    #   else
+    #     render json: @picture.errors, status: :unprocessable_entity
+    #   end
+    # else
+    #   render json: { error: "Not file given" }, status: :unprocessable_entity
+    # end
+    # -----------------------------------
+    @picture = Picture.new(picture_params)
+    @picture.uploader = current_user
+    if @album.pictures << @picture
+      render :show, status: :created,  location: [@album, @picture]
     else
-      render json: { error: "Not file given" }, status: :unprocessable_entity
+      render json: @picture.errors, status: :unprocessable_entity
     end
   end
 
