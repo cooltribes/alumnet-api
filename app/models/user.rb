@@ -251,7 +251,7 @@ class User < ActiveRecord::Base
   end
 
   def common_friends_with(user)
-    accepted_friends & user.accepted_friends
+    my_friends & user.my_friends
   end
 
   ### about groups and Membership
