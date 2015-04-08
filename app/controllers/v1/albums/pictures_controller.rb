@@ -62,6 +62,7 @@ class V1::Albums::PicturesController < V1::BaseController
   end
 
   def create_picture_params
-    { title: params[:name], picture: params[:file]}
+    # { title: params[:title], picture: params[:file]}
+    {picture: params[:file]}
   end
 end
