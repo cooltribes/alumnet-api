@@ -2,7 +2,10 @@ class Event < ActiveRecord::Base
   include EventHelpers
   mount_uploader :cover, CoverUploader
   enum event_type: [:open, :closed, :secret]
+
+  ## Virtual Attributes
   attr_accessor :cover_uploader
+  attr_accessor :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH
 
   ### Relations
   belongs_to :creator, class_name: "User"
@@ -28,6 +31,12 @@ class Event < ActiveRecord::Base
   scope :non_official, -> { where(official: false) }
 
   ### Instance methods
+
+  ### Croping Cover
+  def crop
+    cover.recreate_versions! if imgX1.present?
+  end
+
   def create_attendance_for(user)
     attendances.create(user: user)
   end

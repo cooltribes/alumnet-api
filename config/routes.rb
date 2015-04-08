@@ -48,6 +48,7 @@ Rails.application.routes.draw do
     end
 
     resources :groups do
+      post :cropping, on: :member
       post :add_group, on: :member
       get :subgroups, on: :member
       resources :posts, controller: 'groups/posts'
@@ -61,6 +62,7 @@ Rails.application.routes.draw do
     end
 
     resources :events do
+      post :cropping, on: :member
       resources :posts, controller: 'events/posts'
       resources :albums, controller: 'events/albums'
     end
