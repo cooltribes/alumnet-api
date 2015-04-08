@@ -26,3 +26,4 @@ json.is_premium @user.is_premium?
 json.friends_count @user.friends_count
 json.pending_received_friendships_count @user.pending_received_friendships_count
 json.pending_sent_friendships_count @user.pending_sent_friendships_count
+json.days_membership @user.days_membership

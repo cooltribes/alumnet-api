@@ -62,11 +62,18 @@ Rails.application.routes.draw do
 
     resources :events do
       resources :posts, controller: 'events/posts'
-      resources :albums, controller: 'events/albums'      
+      resources :albums, controller: 'events/albums'
     end
     resources :attendances
 
-    resources :pictures
+    resources :pictures do
+      post :like, on: :member
+      post :unlike, on: :member
+      resources :comments, controller: 'pictures/comments' do
+        post :like, on: :member
+        post :unlike, on: :member
+      end
+    end
 
     resources :posts, only: :show do
       post :like, on: :member
@@ -76,11 +83,9 @@ Rails.application.routes.draw do
         post :unlike, on: :member
       end
     end
+
     resources :albums do
-      resources :pictures, controller: 'albums/pictures' do
-        # post :like, on: :member
-        # post :unlike, on: :member
-      end
+      resources :pictures, controller: 'albums/pictures'
     end
 
     resources :regions, only: [:index, :show]
