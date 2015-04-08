@@ -1,0 +1,1 @@
+json.array! @memberships, partial: 'v1/shared/membership', as: :membership

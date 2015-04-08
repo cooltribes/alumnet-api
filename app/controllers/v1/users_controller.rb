@@ -1,20 +1,12 @@
 class V1::UsersController < V1::BaseController
-  before_filter :set_user, except: [:index, :create]
+  before_action :set_user, except: [:index, :create]
 
   def index
-    @users = User.all
+    @q = User.active.includes(:profile).search(params[:q])
+    @users = @q.result
   end
 
   def show
-  end
-
-  def create
-    @user = User.new(user_params)
-    if @user.save
-      render :show, status: :created,  location: @user
-    else
-      render json: @user.errors, status: :unprocessable_entity
-    end
   end
 
   def update
@@ -37,6 +29,12 @@ class V1::UsersController < V1::BaseController
   end
 
   def user_params
-    params.require(:user).permit(:email, :password, :password_confirmation)
+    params.permit(:email, :password, :password_confirmation, :avatar, :name)
+  end
+
+  def check_if_current_user_can_invite_on_group
+    unless current_user.can_invite_on_group?(@group)
+      render nothing: true, status: 401
+    end
   end
 end

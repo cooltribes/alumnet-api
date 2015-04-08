@@ -1,0 +1,1 @@
+json.partial! 'experience', experience: @experience, current_user: @current_user

@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Group",
+  "description": "A user from Alumnet",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "avatar": {
+      "type": "object",
+      "properties": {
+        "original": {
+          "type": "string"
+        },
+        "thumb": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "required": ["id", "name", "email"]
+}

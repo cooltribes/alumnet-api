@@ -1,8 +1,16 @@
 class V1::GroupsController < V1::BaseController
-  before_filter :set_group, except: [:index, :create]
+  include Pundit
+  before_action :set_group, except: [:index, :create]
 
   def index
-    @groups = Group.all
+    @q = Group.without_secret.search(params[:q])
+    @groups = @q.result
+  end
+
+  def subgroups
+    @q = @group.children.search(params[:q])
+    @groups = @q.result
+    render :index, status: :ok
   end
 
   def show
@@ -10,7 +18,10 @@ class V1::GroupsController < V1::BaseController
 
   def create
     @group = Group.new(group_params)
+    @group.creator = current_user
+    @group.cover_uploader = current_user
     if @group.save
+      Membership.create_membership_for_creator(@group, current_user)
       render :show, status: :created,  location: @group
     else
       render json: @group.errors, status: :unprocessable_entity
@@ -19,14 +30,19 @@ class V1::GroupsController < V1::BaseController
 
   def add_group
     @new_group = Group.new(group_params)
+    @new_group.creator = current_user
+    @new_group.cover_uploader = current_user
     if @group.children << @new_group
-      render :show, status: :created,  location: @group
+      Membership.create_membership_for_creator(@new_group, current_user)
+      render :add_group, status: :created,  location: @group
     else
       render json: @new_group.errors, status: :unprocessable_entity
     end
   end
 
   def update
+    authorize @group
+    @group.cover_uploader = current_user
     if @group.update(group_params)
       render :show, status: :ok,  location: @group
     else
@@ -35,6 +51,7 @@ class V1::GroupsController < V1::BaseController
   end
 
   def destroy
+    authorize @group
     @group.destroy
     head :no_content
   end
@@ -46,6 +63,8 @@ class V1::GroupsController < V1::BaseController
   end
 
   def group_params
-    params.permit(:name, :description, :avatar, :group_type)
+    params.permit(:name, :description, :cover, :group_type, :official, :country_id,
+      :city_id, :join_process)
   end
+
 end

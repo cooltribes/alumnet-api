@@ -1,0 +1,1 @@
+json.array! @contact_infos, partial: 'contact_info', as: :contact_info, current_user: @current_user

@@ -1,0 +1,1 @@
+json.partial! 'v1/me/receipts/message', receipt: @receipt
