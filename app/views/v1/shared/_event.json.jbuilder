@@ -6,6 +6,7 @@ json.country event.country_info
 json.city event.city_info
 
 json.cover do
+  json.original event.cover.url
   json.main event.cover.main.url
   json.card event.cover.card.url
 end
