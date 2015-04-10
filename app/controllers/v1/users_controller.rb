@@ -4,9 +4,6 @@ class V1::UsersController < V1::BaseController
   def index
     @q = User.active.includes(:profile).search(params[:q])
     @users = @q.result
-
-    #@q = User.active.ransack(params[:q])
-    #@users = @q.result.includes(:profile, :employees)
   end
 
   def show
