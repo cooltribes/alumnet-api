@@ -56,6 +56,12 @@ class Event < ActiveRecord::Base
     users
   end
 
+  def can_attend?(user)
+    return true if open?
+    return true if is_admin?(user)
+    return true if close? && attendance_for(user)
+  end
+
   def group_admins
     if eventable_type == 'Group'
       eventable.admins
