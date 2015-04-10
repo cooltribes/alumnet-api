@@ -6,7 +6,7 @@ class Notification
     notification = Mailboxer::Notification.notify_all(
       recipients,
       "You've joined to #{group.name}!",
-      "Welcome! You've joined to #{group.name}"
+      "Welcome! You've joined to #{group.name} group"
     )
     recipients.each do |user|
       UserMailer.join_to_group(user, group).deliver
