@@ -7,15 +7,37 @@ class CoverUploader < CarrierWave::Uploader::Base
   # storage :fog
 
   version :main do
+    process :crop!
     process :resize_to_fill => [1360,430]
   end
 
   version :card do
+    process :crop!
     process :resize_to_fill => [212,225]
   end
 
   version :admin do
+    process :crop!
     process :resize_to_fill => [60, 60]
+  end
+
+  version :crop do
+    process :crop!
+  end
+
+  def crop!
+    if model.imgX1.present?
+      imgW = model.imgW.to_i
+      imgH = model.imgH.to_i
+      imgX1 = model.imgX1.to_i
+      imgY1 = model.imgY1.to_i
+      cropW = model.cropW.to_i
+      cropH = model.cropH.to_i
+      resize_to_limit(imgW, imgH)
+      manipulate! do |img|
+        img.crop "#{cropW}x#{cropH}+#{imgX1}+#{imgY1}"
+      end
+    end
   end
 
   def store_dir

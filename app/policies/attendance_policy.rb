@@ -13,7 +13,7 @@ class AttendancePolicy < ApplicationPolicy
   end
 
   def destroy?
-    record.user == user
+    record.event.is_admin?(user)
   end
 
 end

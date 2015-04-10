@@ -5,7 +5,6 @@ json.email user.permit_email(current_user)
 
 json.last_experience user.permit_last_experience(current_user)
 
-
 json.avatar do
   if user.permit('see-avatar', current_user)
     json.original user.avatar.url

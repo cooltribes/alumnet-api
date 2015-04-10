@@ -12,7 +12,7 @@ json.city do
     json.id picture.city.id
     json.text picture.city.name
   else
-    nil
+    json.nil!
   end
 end
 
@@ -21,13 +21,20 @@ json.country do
     json.id picture.country.id
     json.text picture.country.name
   else
-    nil
+    json.nil!
   end
 end
 
 json.uploader do
   json.id picture.uploader.id
   json.name picture.uploader.permit_name(current_user)
+  json.avatar do
+  if picture.uploader.permit('see-avatar', current_user)
+    json.large picture.uploader.avatar.large.url
+  else
+    json.large picture.uploader.avatar.large.default_url
+  end
+end
 end
 
 

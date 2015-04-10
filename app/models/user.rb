@@ -251,7 +251,7 @@ class User < ActiveRecord::Base
   end
 
   def common_friends_with(user)
-    accepted_friends & user.accepted_friends
+    my_friends & user.my_friends
   end
 
   ### about groups and Membership
@@ -263,7 +263,18 @@ class User < ActiveRecord::Base
     likes.exists?(likeable: likeable)
   end
 
+  def days_membership
+    if(self.member==2)
+      sub= UserSubscription.find_by(user_id:self.id, status:1)
+      return Integer((sub.end_date-sub.start_date)/(3600*24))
+    else
+      return false
+    end 
+  end
+
   ### premium subscriptions
+  #User.member
+  #0-> no member, 1-> Subscription for a year, 2-> Subscription for a year (30 days left or less), 3-> Lifetime 
   def build_subscription(params, current_user)
     if(params[:lifetime] == "true")
       user_subscriptions.build(subscription: params[:subscription_id], start_date: params[:begin], subscription_id: 1, creator_id: current_user.id, ownership_type: 1, reference: params[:reference])
