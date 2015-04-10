@@ -71,7 +71,9 @@ class Profile < ActiveRecord::Base
   end
 
   def last_experience
-    experiences.where.not(exp_type: 2).last
+    # experiences.where.not(exp_type: 2).last
+    #Getting the last experience added if is Current or not.
+    experiences.where.not(exp_type: 2).order(end_date: :desc, id: :desc).first
   end
 
   def languages_attributes=(collection_attributes)
