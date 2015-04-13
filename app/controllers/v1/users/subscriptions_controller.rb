@@ -14,7 +14,11 @@ class V1::Users::SubscriptionsController < V1::BaseController
       if(params[:lifetime] == "true")
         @user.member = 3
       else
-        @user.member = 1
+        if((params[:end].to_date-params[:begin].to_date).to_i<30) 
+          @user.member = 2
+        else
+          @user.member = 1
+        end
       end
       @user.save
       render :show, status: :created

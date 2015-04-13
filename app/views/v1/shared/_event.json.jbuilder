@@ -32,3 +32,4 @@ else
 end
 
 json.admin event.is_admin?(current_user)
+json.can_attend event.can_attend?(current_user)
