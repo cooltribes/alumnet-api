@@ -1,3 +1,4 @@
 class Region < ActiveRecord::Base
-  has_and_belongs_to_many :countries
+  ### Relations
+  has_many :countries
 end
