@@ -37,6 +37,6 @@ class V1::Admin::RegionsController < V1::AdminController
     end
 
     def region_params
-      params.permit(:name, country_ids: [])
+      params.permit(:name, country_ids:[])
     end
 end
