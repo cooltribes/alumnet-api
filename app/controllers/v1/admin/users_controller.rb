@@ -39,10 +39,11 @@ class V1::Admin::UsersController < V1::AdminController
   end
 
   def change_role
-    param = params[:role]
-    @user.set_regular! if param == "regular"
-    @user.set_system_admin! if param == "system"
-    @user.set_alumnet_admin! if param == "alumnet"
+    if params[:role] == "regular"
+      @user.set_regular!
+    else
+      @user.set_admin_role(params)
+    end
     render :show, status: :ok
   end
 
