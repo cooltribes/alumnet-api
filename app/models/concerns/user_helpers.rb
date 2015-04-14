@@ -25,4 +25,12 @@ module UserHelpers
       nil
     end
   end
+
+  def admin_location_info
+    if admin_location.present?
+      { id: admin_location.id, text: admin_location.name }
+    else
+      { id: nil, text: nil}
+    end
+  end
 end

@@ -88,8 +88,6 @@ Rails.application.routes.draw do
       resources :pictures, controller: 'albums/pictures'
     end
 
-    resources :regions, only: [:index, :show]
-
     resources :countries, only: [:index, :show] do
       get :cities, on: :member
       get :committees, on: :member
@@ -118,6 +116,7 @@ Rails.application.routes.draw do
       resources :groups, except: [:new, :edit] do
         get :subgroups, on: :member
       end
+      resources :regions
 
       namespace :deleted do
         resources :groups, only: [:index, :update, :destroy]
