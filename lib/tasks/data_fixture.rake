@@ -34,4 +34,10 @@ namespace :data_fixture do
     5.times { City.make!(cc_fips: "VE") }
   end
   
+  desc "change expired user_subscriptions status and corresponding user member field"
+  task check: :environment do
+    User.where("member = 1 OR member = 2").each do |user|
+      user.validate_subscription()
+    end
+  end
 end

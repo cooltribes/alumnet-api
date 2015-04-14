@@ -281,8 +281,22 @@ class User < ActiveRecord::Base
     else
       user_subscriptions.build(subscription: params[:subscription_id], start_date: params[:begin], end_date: params[:end], subscription_id: 2, creator_id: current_user.id, ownership_type: 1, reference: params[:reference])
     end
-    #self.member = 1;
-    #self.save
+  end
+
+  ### Function to validate users subcription every day
+
+  def validate_subscription
+    user_subscriptions.where('status = 1').each do |s|
+      if(s.end_date)
+        if(s.end_date.past?)
+          s.status = 0
+          s.save
+          self.member = 0
+          self.save
+          puts 'expired - user_id: '+self.id.to_s+' - '+s.end_date.to_s
+        end
+      end
+    end
   end
 
   ### Counts
