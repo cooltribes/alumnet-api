@@ -2,16 +2,19 @@ class Event < ActiveRecord::Base
   include EventHelpers
   mount_uploader :cover, CoverUploader
   enum event_type: [:open, :closed, :secret]
+
+  ## Virtual Attributes
   attr_accessor :cover_uploader
+  attr_accessor :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH
 
   ### Relations
+  has_many :attendances, dependent: :destroy
+  has_many :posts, as: :postable, dependent: :destroy
+  has_many :albums, as: :albumable, dependent: :destroy
   belongs_to :creator, class_name: "User"
   belongs_to :country
   belongs_to :city
   belongs_to :eventable, polymorphic: true
-  has_many :attendances, dependent: :destroy
-  has_many :posts, as: :postable, dependent: :destroy
-  has_many :albums, as: :albumable, dependent: :destroy
 
   ### Callbacks
   after_save :save_cover_in_album
@@ -28,6 +31,12 @@ class Event < ActiveRecord::Base
   scope :non_official, -> { where(official: false) }
 
   ### Instance methods
+
+  ### Croping Cover
+  def crop
+    cover.recreate_versions! if imgX1.present?
+  end
+
   def create_attendance_for(user)
     attendances.create(user: user)
   end
@@ -45,6 +54,12 @@ class Event < ActiveRecord::Base
       users = user.search_accepted_friends(query)
     end
     users
+  end
+
+  def can_attend?(user)
+    return true if open?
+    return true if is_admin?(user)
+    return true if closed? && attendance_for(user)
   end
 
   def group_admins

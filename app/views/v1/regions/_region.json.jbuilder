@@ -1,1 +1,0 @@
-json.(region, :id, :name)

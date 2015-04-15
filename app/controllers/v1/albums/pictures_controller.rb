@@ -11,6 +11,18 @@ class V1::Albums::PicturesController < V1::BaseController
   end
 
   def create
+    # if params.key?(:file)
+    #   @picture = Picture.new(create_picture_params)
+    #   @picture.uploader = current_user
+    #   if @album.pictures << @picture
+    #     render :show, status: :created,  location: [@ilbum, @picture]
+    #   else
+    #     render json: @picture.errors, status: :unprocessable_entity
+    #   end
+    # else
+    #   render json: { error: "Not file given" }, status: :unprocessable_entity
+    # end
+    # -----------------------------------
     @picture = Picture.new(picture_params)
     @picture.uploader = current_user
     if @album.pictures << @picture
@@ -35,20 +47,6 @@ class V1::Albums::PicturesController < V1::BaseController
     head :no_content
   end
 
-  def like
-    like = @comment.add_like_by(current_user)
-    if like.valid?
-      render json: like, status: :ok
-    else
-      render json: { errors: like.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
-
-  def unlike
-    response = @comment.remove_like_of(current_user)
-    render json: { ok: response}, status: :ok
-  end
-
   private
 
   def set_album
@@ -69,5 +67,10 @@ class V1::Albums::PicturesController < V1::BaseController
 
   def update_picture_params
     params.permit(:title)
+  end
+
+  def create_picture_params
+    # { title: params[:title], picture: params[:file]}
+    {picture: params[:file]}
   end
 end

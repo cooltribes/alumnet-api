@@ -8,7 +8,6 @@ class Post < ActiveRecord::Base
   belongs_to :user ##Creator
   belongs_to :postable, polymorphic: true
   belongs_to :postable_group, foreign_key: :postable_id, class_name: 'Group'
-  has_many :likes, as: :likeable, dependent: :destroy
   has_many :pictures, as: :pictureable, dependent: :destroy
 
   ### Scopes

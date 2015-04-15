@@ -3,7 +3,10 @@ class Group < ActiveRecord::Base
   acts_as_paranoid
   mount_uploader :cover, CoverUploader
   enum group_type: [:open, :closed, :secret]
+
+  ## Virtual Attributes
   attr_accessor :cover_uploader
+  attr_accessor :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH
 
   #join_process
   # "0" -> All Members can invite
@@ -20,7 +23,6 @@ class Group < ActiveRecord::Base
   belongs_to :country
   belongs_to :city
   has_many :albums, as: :albumable, dependent: :destroy
-
 
   ### Scopes
 
@@ -44,6 +46,11 @@ class Group < ActiveRecord::Base
   ### class Methods
   def self.without_secret
     where.not(group_type: 2)
+  end
+
+  ### Croping Cover
+  def crop
+    cover.recreate_versions! if imgX1.present?
   end
 
   ### all membership

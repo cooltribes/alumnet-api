@@ -31,7 +31,7 @@ module AlumnetApi
         origins '*'
 
         resource '*',
-          :headers => :any,
+          :headers => ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
           :methods => [:get, :post, :delete, :put, :options, :head],
           :max_age => 0
       end

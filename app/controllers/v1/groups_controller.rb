@@ -7,6 +7,12 @@ class V1::GroupsController < V1::BaseController
     @groups = @q.result
   end
 
+  def cropping
+    @group.assign_attributes(crop_params)
+    @group.crop
+    render json: { status: 'success', url: @group.cover.crop.url }
+  end
+
   def subgroups
     @q = @group.children.search(params[:q])
     @groups = @q.result
@@ -65,6 +71,10 @@ class V1::GroupsController < V1::BaseController
   def group_params
     params.permit(:name, :description, :cover, :group_type, :official, :country_id,
       :city_id, :join_process)
+  end
+
+  def crop_params
+    params.permit(:imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH)
   end
 
 end
