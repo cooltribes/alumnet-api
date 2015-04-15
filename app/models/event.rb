@@ -59,7 +59,7 @@ class Event < ActiveRecord::Base
   def can_attend?(user)
     return true if open?
     return true if is_admin?(user)
-    return true if close? && attendance_for(user)
+    return true if closed? && attendance_for(user)
   end
 
   def group_admins

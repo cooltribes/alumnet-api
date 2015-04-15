@@ -14,7 +14,7 @@ class V1::Users::SubscriptionsController < V1::BaseController
       if(params[:lifetime] == "true")
         @user.member = 3
       else
-        if((params[:end].to_date-params[:begin].to_date).to_i<30) 
+        if((params[:end].to_date-params[:begin].to_date).to_i<30)
           @user.member = 2
         else
           @user.member = 1
@@ -45,7 +45,7 @@ class V1::Users::SubscriptionsController < V1::BaseController
       @user = User.find(params[:user_id])
     end
 
-    def set_subscription
+    def set_user_subscription
       @user_subscription = @user.user_subscriptions.find(params[:id])
     end
 
