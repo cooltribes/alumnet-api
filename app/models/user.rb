@@ -126,6 +126,10 @@ class User < ActiveRecord::Base
     update_column(:role, ROLES[:regular])
   end
 
+  def is_admin?
+    is_system_admin? || is_alumnet_admin? || is_nacional_admin? || is_regional_admin
+  end
+
   def is_system_admin?
     role == "SystemAdmin"
   end
