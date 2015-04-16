@@ -24,7 +24,6 @@ class Group < ActiveRecord::Base
   belongs_to :city
   has_many :albums, as: :albumable, dependent: :destroy
 
-
   ### Scopes
 
   scope :open, -> { where(group_type: 0) }

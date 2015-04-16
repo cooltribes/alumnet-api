@@ -8,13 +8,13 @@ class Event < ActiveRecord::Base
   attr_accessor :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH
 
   ### Relations
+  has_many :attendances, dependent: :destroy
+  has_many :posts, as: :postable, dependent: :destroy
+  has_many :albums, as: :albumable, dependent: :destroy
   belongs_to :creator, class_name: "User"
   belongs_to :country
   belongs_to :city
   belongs_to :eventable, polymorphic: true
-  has_many :attendances, dependent: :destroy
-  has_many :posts, as: :postable, dependent: :destroy
-  has_many :albums, as: :albumable, dependent: :destroy
 
   ### Callbacks
   after_save :save_cover_in_album
@@ -59,7 +59,7 @@ class Event < ActiveRecord::Base
   def can_attend?(user)
     return true if open?
     return true if is_admin?(user)
-    return true if close? && attendance_for(user)
+    return true if closed? && attendance_for(user)
   end
 
   def group_admins

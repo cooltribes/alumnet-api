@@ -1,4 +1,5 @@
 class UserSubscription < ActiveRecord::Base
+  ### Relations
   belongs_to :user
   belongs_to :subscription
   belongs_to :creator, class_name: "User"

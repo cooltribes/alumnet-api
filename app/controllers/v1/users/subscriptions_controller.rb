@@ -11,6 +11,7 @@ class V1::Users::SubscriptionsController < V1::BaseController
     @user_subscription = @user.build_subscription(subscription_params, current_user)
     #render json: @user_subscription
     if @user_subscription.save
+<<<<<<< HEAD
       # if(params[:lifetime] == "true")
       #   @user.member = 3
       # else
@@ -21,6 +22,18 @@ class V1::Users::SubscriptionsController < V1::BaseController
       #   end
       # end
       # @user.save
+=======
+      if(params[:lifetime] == "true")
+        @user.member = 3
+      else
+        if((params[:end].to_date-params[:begin].to_date).to_i<30)
+          @user.member = 2
+        else
+          @user.member = 1
+        end
+      end
+      @user.save
+>>>>>>> 4e3163a021b371685a20509db61e8d17b7ae8918
       render :show, status: :created
     else
       render json: @user_subscription.errors, status: :unprocessable_entity
@@ -45,7 +58,7 @@ class V1::Users::SubscriptionsController < V1::BaseController
       @user = User.find(params[:user_id])
     end
 
-    def set_subscription
+    def set_user_subscription
       @user_subscription = @user.user_subscriptions.find(params[:id])
     end
 

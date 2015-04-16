@@ -1,11 +1,11 @@
 class User < ActiveRecord::Base
-  acts_as_paranoid
-
   has_secure_password
+  acts_as_paranoid
   acts_as_messageable
   include UserHelpers
 
-  ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin", regular: "Regular" }
+  ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin",
+    regional_admin: "RegionalAdmin", nacional_admin: "NacionalAdmin", regular: "Regular" }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
   VALID_PASSWORD_REGEX = /\A(?=.*[a-zA-Z])(?=.*[0-9]).{8,}\z/
   ### Enum
@@ -29,6 +29,7 @@ class User < ActiveRecord::Base
   has_many :events, as: :eventable, dependent: :destroy
   has_many :invited_events, through: :attendances, source: :event
   has_one :profile, dependent: :destroy
+  belongs_to :admin_location, polymorphic: true
 
   ### Scopes
   scope :active, -> { where(status: 1) }
@@ -104,16 +105,29 @@ class User < ActiveRecord::Base
     end
   end
 
-  def set_system_admin!
-    update_column(:role, ROLES[:system_admin])
+  def set_admin_role(params)
+    if params[:admin_location_id].present?
+      if params[:role] == "nacional"
+        location = Country.find(params[:admin_location_id])
+        update(admin_location: location)
+      elsif params[:role] == "regional"
+        location = Region.find(params[:admin_location_id])
+        update(admin_location: location)
+      end
+    end
+    set_admin!(params[:role])
   end
 
-  def set_alumnet_admin!
-    update_column(:role, ROLES[:alumnet_admin])
+  def set_admin!(type)
+    update_column(:role, ROLES[:"#{type}_admin"])
   end
 
   def set_regular!
     update_column(:role, ROLES[:regular])
+  end
+
+  def is_admin?
+    is_system_admin? || is_alumnet_admin? || is_nacional_admin? || is_regional_admin
   end
 
   def is_system_admin?
@@ -122,6 +136,14 @@ class User < ActiveRecord::Base
 
   def is_alumnet_admin?
     role == "AlumNetAdmin"
+  end
+
+  def is_nacional_admin?
+    role == "NacionalAdmin"
+  end
+
+  def is_regional_admin?
+    role == "RegionalAdmin"
   end
 
   def is_premium?
@@ -268,12 +290,12 @@ class User < ActiveRecord::Base
       return user_subscriptions.find_by(status:1).days_left
     else
       return false
-    end 
+    end
   end
 
   ### premium subscriptions
   #User.member
-  #0-> no member, 1-> Subscription for a year, 2-> Subscription for a year (30 days left or less), 3-> Lifetime 
+  #0-> no member, 1-> Subscription for a year, 2-> Subscription for a year (30 days left or less), 3-> Lifetime
   def build_subscription(params, current_user)
     user_subscription = user_subscriptions.build(params)
     user_subscription.ownership_type = 1
