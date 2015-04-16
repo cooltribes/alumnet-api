@@ -264,9 +264,8 @@ class User < ActiveRecord::Base
   end
 
   def days_membership
-    if(self.member==2)
-      sub= UserSubscription.find_by(user_id:self.id, status:1)
-      return Integer((sub.end_date-sub.start_date)/(3600*24))
+    if(member==2)
+      return user_subscriptions.find_by(status:1).days_left
     else
       return false
     end 
@@ -276,24 +275,26 @@ class User < ActiveRecord::Base
   #User.member
   #0-> no member, 1-> Subscription for a year, 2-> Subscription for a year (30 days left or less), 3-> Lifetime 
   def build_subscription(params, current_user)
-    if(params[:lifetime] == "true")
-      user_subscriptions.build(subscription: params[:subscription_id], start_date: params[:begin], subscription_id: 1, creator_id: current_user.id, ownership_type: 1, reference: params[:reference])
+    user_subscription = user_subscriptions.build(params)
+    user_subscription.ownership_type = 1
+    if user_subscription.lifetime?
+      user_subscription.subscription_id = Subscription.where("name='Premium'").first.id
     else
-      user_subscriptions.build(subscription: params[:subscription_id], start_date: params[:begin], end_date: params[:end], subscription_id: 2, creator_id: current_user.id, ownership_type: 1, reference: params[:reference])
+      user_subscription.subscription_id = Subscription.where("name='Premium Lifetime'").first.id
     end
+    user_subscription.creator_id = current_user.id
+    return user_subscription
   end
 
   ### Function to validate users subcription every day
 
   def validate_subscription
-    user_subscriptions.where('status = 1').each do |s|
-      if(s.end_date)
-        if(s.end_date.past?)
-          s.status = 0
-          s.save
-          self.member = 0
-          self.save
-          puts 'expired - user_id: '+self.id.to_s+' - '+s.end_date.to_s
+    user_subscriptions.where('status = 1').each do |subscription|
+      if(subscription.end_date)
+        if(subscription.end_date.past?)
+          subscription.update_column(:status, 0)
+          update_column(:member, 0)
+          "expired - user_id: #{id} - #{subscription.end_date}"
         end
       end
     end
