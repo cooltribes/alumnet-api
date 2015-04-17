@@ -2,7 +2,11 @@ class V1::Admin::Deleted::GroupsController < V1::AdminController
   before_action :set_group, except: :index
 
   def index
-    @q = Group.only_deleted.search(params[:q])
+    @q = if @admin_location
+      @admin_location.groups.only_deleted.search(params[:q])
+    else
+      Group.only_deleted.search(params[:q])
+    end
     @groups = @q.result
   end
 
