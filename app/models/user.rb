@@ -127,7 +127,7 @@ class User < ActiveRecord::Base
   end
 
   def is_admin?
-    is_system_admin? || is_alumnet_admin? || is_nacional_admin? || is_regional_admin
+    is_system_admin? || is_alumnet_admin? || is_nacional_admin? || is_regional_admin?
   end
 
   def is_system_admin?
