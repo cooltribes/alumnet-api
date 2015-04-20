@@ -6,6 +6,19 @@ RSpec.describe Event, :type => :model do
   it { should belong_to(:country) }
   it { should have_many(:attendances) }
 
+  describe "Callbacks" do
+    describe "#send_invites" do
+      it "if invite_group_members is true then create attendances for all members of group" do
+        group = Group.make!
+        4.times { Membership.make!(:approved, group: group) }
+        event = Event.make!(eventable: group, creator: User.first, invite_group_members: "true")
+        event.group_members.each do |member|
+          expect(member.attendance_for(event)).not_to be_nil
+        end
+      end
+    end
+  end
+
   describe "#group_admins" do
     it "return the group admins if belong to a group" do
       group = Group.make!

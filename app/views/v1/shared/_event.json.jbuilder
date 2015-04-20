@@ -22,6 +22,9 @@ json.creator do
 end
 
 json.attendances_count event.attendances.count
+json.going_count event.attendances.going.count
+json.maybe_count event.attendances.maybe.count
+json.not_going_count event.attendances.not_going.count
 
 attendance = event.attendance_for(current_user)
 

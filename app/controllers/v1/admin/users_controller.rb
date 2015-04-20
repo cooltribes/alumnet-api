@@ -2,7 +2,11 @@ class V1::Admin::UsersController < V1::AdminController
   before_action :set_user, except: :index
 
   def index
-    @q = User.includes(:profile).search(params[:q])
+    @q = if @admin_location
+      @admin_location.users.includes(:profile).search(params[:q])
+    else
+      User.includes(:profile).search(params[:q])
+    end
     @users = @q.result
   end
 
