@@ -95,6 +95,11 @@ class User < ActiveRecord::Base
     member
   end
 
+  def first_committee
+    com=self.profile.experiences.where(exp_type: 0).first.committee_id
+    return Committee.find_by(id:com).name
+  end
+
   ### Roles
   def activate!
     if profile.skills? || profile.approval?
@@ -127,7 +132,7 @@ class User < ActiveRecord::Base
   end
 
   def is_admin?
-    is_system_admin? || is_alumnet_admin? || is_nacional_admin? || is_regional_admin
+    is_system_admin? || is_alumnet_admin? || is_nacional_admin? || is_regional_admin?
   end
 
   def is_system_admin?

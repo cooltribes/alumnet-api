@@ -2,7 +2,11 @@ class V1::Admin::Deleted::UsersController < V1::AdminController
   before_action :set_user, except: :index
 
   def index
-    @q = User.only_deleted.search(params[:q])
+    @q = if @admin_location
+      @admin_location.users.only_deleted.search(params[:q])
+    else
+      User.only_deleted.search(params[:q])
+    end
     @users = @q.result
   end
 
