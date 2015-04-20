@@ -95,6 +95,11 @@ class User < ActiveRecord::Base
     member
   end
 
+  def first_committee
+    com=self.profile.experiences.where(exp_type: 0).first.committee_id
+    return Committee.find_by(id:com).name
+  end
+
   ### Roles
   def activate!
     if profile.skills? || profile.approval?
