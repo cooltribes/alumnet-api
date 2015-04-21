@@ -305,24 +305,22 @@ class User < ActiveRecord::Base
     user_subscription = user_subscriptions.build(params)
     user_subscription.ownership_type = 1
     if user_subscription.lifetime?
-      user_subscription.subscription_id = Subscription.where("name='Premium'").first.id
+      user_subscription.subscription = Subscription.premium.first
     else
-      user_subscription.subscription_id = Subscription.where("name='Premium Lifetime'").first.id
+      user_subscription.subscription = Subscription.lifetime.first
     end
-    user_subscription.creator_id = current_user.id
-    return user_subscription
+    user_subscription.creator = current_user
+    user_subscription
   end
 
   ### Function to validate users subcription every day
 
   def validate_subscription
     user_subscriptions.where('status = 1').each do |subscription|
-      if(subscription.end_date)
-        if(subscription.end_date.past?)
-          subscription.update_column(:status, 0)
-          update_column(:member, 0)
-          "expired - user_id: #{id} - #{subscription.end_date}"
-        end
+      if subscription.end_date && subscription.end_date.past?
+        subscription.update_column(:status, 0)
+        update_column(:member, 0)
+        "expired - user_id: #{id} - #{subscription.end_date}"
       end
     end
   end

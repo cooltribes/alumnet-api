@@ -3,7 +3,9 @@ module UserHelpers
   def permit_email(user)
     return email if self == user
     email_contact = profile.contact_infos.where(contact_type: 0).first
-    email_contact.permit(user) ? email : nil
+    if email_contact
+      email_contact.permit(user) ? email : nil
+    end
   end
 
   def permit_name(user)

@@ -4,6 +4,10 @@ class UserSubscription < ActiveRecord::Base
   belongs_to :subscription
   belongs_to :creator, class_name: "User"
 
+  ### Validations
+  validates_presence_of :start_date
+
+  ### Callbacks
   after_save :set_user_membership
 
   def days_left
@@ -17,8 +21,8 @@ class UserSubscription < ActiveRecord::Base
   	return 0
   end
 
-  private 
+  private
   	def set_user_membership
   		user.update_column(:member, member_value)
-	end
+    end
 end

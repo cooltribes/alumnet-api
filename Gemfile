@@ -19,6 +19,7 @@ gem 'pundit'
 gem 'pusher'
 gem 'settingslogic'
 gem 'paranoia', '~> 2.0'
+gem 'fog'
 
 group :development do
   gem 'spring'

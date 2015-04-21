@@ -42,6 +42,7 @@ class Profile < ActiveRecord::Base
     elsif image == "cover"
       cover.recreate_versions! if imgX1.present?
     end
+    save!
   end
 
   def crop_url(image)
@@ -111,13 +112,21 @@ class Profile < ActiveRecord::Base
       if avatar_changed?
         album = user.albums.create_with(name: 'avatars').find_or_create_by(album_type: Album::TYPES[:avatar])
         picture = Picture.new(uploader: user)
-        picture.picture = avatar
+        if Rails.env.production? || Rails.env.staging?
+          picture.remote_picture_url = avatar.url
+        else
+          picture.picture = avatar
+        end
         album.pictures << picture
       end
       if cover_changed?
         album = user.albums.create_with(name: 'covers').find_or_create_by(album_type: Album::TYPES[:cover])
         picture = Picture.new(uploader: user)
-        picture.picture = cover
+        if Rails.env.production? || Rails.env.staging?
+          picture.remote_picture_url = cover.url
+        else
+          picture.picture = cover
+        end
         album.pictures << picture
       end
     end
