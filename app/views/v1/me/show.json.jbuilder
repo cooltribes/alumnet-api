@@ -19,8 +19,12 @@ json.groups do
   json.array! @user.groups.pluck(:id)
 end
 
+json.is_admin @user.is_admin?
+json.is_regional_admin @user.is_regional_admin?
+json.is_nacional_admin @user.is_nacional_admin?
 json.is_alumnet_admin @user.is_alumnet_admin?
 json.is_system_admin @user.is_system_admin?
+
 json.is_premium @user.is_premium?
 
 json.friends_count @user.friends_count

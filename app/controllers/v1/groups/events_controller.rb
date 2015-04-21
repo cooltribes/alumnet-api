@@ -6,4 +6,11 @@ class V1::Groups::EventsController < V1::BaseEventsController
     @eventable = Group.find(params[:group_id])
   end
 
+
+  def event_params
+    params.permit(:name, :description, :cover, :event_type, :official, :address,
+      :start_date, :start_hour, :end_date, :end_hour, :capacity, :city_id, :country_id,
+      :invite_group_members)
+  end
+
 end
