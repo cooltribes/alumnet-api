@@ -7,22 +7,22 @@ class AvatarUploader < CarrierWave::Uploader::Base
 
   version :small do
     process :crop!
-    process :resize_to_fill => [20,20]
+    process :resize_to_fill => [20, 20]
   end
 
   version :medium do
     process :crop!
-    process :resize_to_fill => [40,40]
+    process :resize_to_fill => [40, 40]
   end
 
   version :large do
     process :crop!
-    process :resize_to_fill => [80,80]
+    process :resize_to_fill => [80, 80]
   end
 
   version :extralarge do
     process :crop!
-    process :resize_to_fill => [240,240]
+    process :resize_to_fill => [240, 240]
   end
 
   version :crop do

@@ -7,12 +7,12 @@ class CoverUploader < CarrierWave::Uploader::Base
 
   version :main do
     process :crop!
-    process :resize_to_fill => [1360,430]
+    process :resize_to_fill => [1360, 430]
   end
 
   version :card do
     process :crop!
-    process :resize_to_fill => [212,225]
+    process :resize_to_fill => [212, 225]
   end
 
   version :admin do
