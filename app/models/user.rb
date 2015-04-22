@@ -96,8 +96,8 @@ class User < ActiveRecord::Base
   end
 
   def first_committee
-    com=self.profile.experiences.where(exp_type: 0).first.committee_id
-    return Committee.find_by(id:com).name
+    experience = profile.experiences.where(exp_type: 0).first
+    experience ? experience.committee : ""
   end
 
   ### Roles
@@ -291,11 +291,7 @@ class User < ActiveRecord::Base
   end
 
   def days_membership
-    if(member==2)
-      return user_subscriptions.find_by(status:1).days_left
-    else
-      return false
-    end
+    member == 2 ? user_subscriptions.find_by(status:1).days_left : false
   end
 
   ### premium subscriptions
