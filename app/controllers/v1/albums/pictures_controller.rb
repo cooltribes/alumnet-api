@@ -21,15 +21,7 @@ class V1::Albums::PicturesController < V1::BaseController
       end
     else
       render json: { error: "Not file given" }, status: :unprocessable_entity
-    end
-    # -----------------------------------
-    # @picture = Picture.new(picture_params)
-    # @picture.uploader = current_user
-    # if @album.pictures << @picture
-    #   render :show, status: :created,  location: [@album, @picture]
-    # else
-    #   render json: @picture.errors, status: :unprocessable_entity
-    # end
+    end   
   end
 
   def update

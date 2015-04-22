@@ -27,6 +27,6 @@ module PostHelpers
   end
 
   def default_url_options
-    { host: Settings.api_domain}
+    { host: Settings.api_endpoint}
   end
 end

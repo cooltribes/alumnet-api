@@ -31,9 +31,7 @@ Rails.application.routes.draw do
     resources :users, except: :create do
       resource :profile, only: [:show, :update], controller: 'users/profiles'
       resources :posts, controller: 'users/posts'
-      resources :events, controller: 'users/events' do
-        get :contacts, on: :member
-      end
+      resources :events, controller: 'users/events'
       resources :albums, controller: 'users/albums'
       resources :memberships, except: :show, controller: 'users/memberships' do
         get :groups, on: :collection
@@ -52,9 +50,7 @@ Rails.application.routes.draw do
       post :add_group, on: :member
       get :subgroups, on: :member
       resources :posts, controller: 'groups/posts'
-      resources :events, controller: 'groups/events' do
-        get :contacts, on: :member
-      end
+      resources :events, controller: 'groups/events'
       resources :memberships, except: :show, controller: 'groups/memberships' do
         get :members, on: :collection
       end
@@ -62,10 +58,12 @@ Rails.application.routes.draw do
     end
 
     resources :events do
+      get :contacts, on: :member
       post :cropping, on: :member
       resources :posts, controller: 'events/posts'
       resources :albums, controller: 'events/albums'
     end
+
     resources :attendances
 
     resources :pictures do
@@ -89,8 +87,6 @@ Rails.application.routes.draw do
     resources :albums do
       resources :pictures, controller: 'albums/pictures'
     end
-
-    resources :regions, only: [:index, :show]
 
     resources :countries, only: [:index, :show] do
       get :cities, on: :member
@@ -120,6 +116,7 @@ Rails.application.routes.draw do
       resources :groups, except: [:new, :edit] do
         get :subgroups, on: :member
       end
+      resources :regions
 
       namespace :deleted do
         resources :groups, only: [:index, :update, :destroy]

@@ -24,7 +24,6 @@ class Group < ActiveRecord::Base
   belongs_to :city
   has_many :albums, as: :albumable, dependent: :destroy
 
-
   ### Scopes
 
   scope :open, -> { where(group_type: 0) }
@@ -52,6 +51,7 @@ class Group < ActiveRecord::Base
   ### Croping Cover
   def crop
     cover.recreate_versions! if imgX1.present?
+    save!
   end
 
   ### all membership

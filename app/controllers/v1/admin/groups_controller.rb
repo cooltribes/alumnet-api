@@ -2,7 +2,11 @@ class V1::Admin::GroupsController < V1::AdminController
   before_action :set_group, except: [:index, :create]
 
   def index
-    @q = Group.search(params[:q])
+    @q = if @admin_location
+      @admin_location.groups.search(params[:q])
+    else
+      Group.search(params[:q])
+    end
     @groups = @q.result
   end
 

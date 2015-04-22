@@ -1,3 +1,11 @@
 class Region < ActiveRecord::Base
-  has_and_belongs_to_many :countries
+  include RegionHelpers
+  ### Relations
+  has_many :countries, dependent: :nullify
+  has_many :users, through: :countries
+  has_many :groups, through: :countries
+  has_many :events, through: :countries
+
+  ### Validations
+  validates_presence_of :name
 end

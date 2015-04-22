@@ -33,7 +33,7 @@ class V1::AttendancesController < V1::BaseController
   end
 
   def destroy
-   authorize @attendance
+    authorize @attendance
     @attendance.destroy
     head :no_content
   end
