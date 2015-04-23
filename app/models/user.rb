@@ -30,6 +30,8 @@ class User < ActiveRecord::Base
   has_many :invited_events, through: :attendances, source: :event
   has_one :profile, dependent: :destroy
   belongs_to :admin_location, polymorphic: true
+  has_many :approval_requests, dependent: :destroy
+  has_many :pending_approval_requests, class_name: "ApprovalRequest", foreign_key: "approver_id"
 
   ### Scopes
   scope :active, -> { where(status: 1) }
@@ -377,6 +379,11 @@ class User < ActiveRecord::Base
   ###Attendances
   def attendance_for(event)
     attendances.find_by(event_id: event.id)
+  end
+
+  ##Approval Process
+  def create_aproval_request_for(user)
+    approval_requests.build(approver_id: user.id)
   end
 
   private
