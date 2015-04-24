@@ -12,26 +12,26 @@ class V1::Me::ApprovalController < V1::BaseController
   # end
 
   def create
-    @aproval_request = @user.create_aproval_request_for(@approver)
-    if @aproval_request.save
+    @approval_request = @user.create_approval_request_for(@approver)
+    if @approval_request.save
       # Notification.notify_friendship_request_to_user(@user, @friend)
       render :show, status: :created
     else
-      render json: @aproval_request.errors, status: :unprocessable_entity
+      render json: @approval_request.errors, status: :unprocessable_entity
     end
   end
 
   def update
-    @aproval_request = @user.pending_approval_requests.find(params[:id])
+    @approval_request = @user.pending_approval_requests.find(params[:id])
     #if @friendship.friend_id == current_user.id #this a policy refactor!
-    @aproval_request.accept!
+    @approval_request.accept!
     render :show
   end
 
   def destroy
-    @aproval_request = ApprovalRequest.find(params[:id])
+    @approval_request = ApprovalRequest.find(params[:id])
     #if @friendship.friend_id == current_user.id || @friendship.user_id == current_user.id
-    @aproval_request.destroy
+    @approval_request.destroy
     head :no_content
   end
 

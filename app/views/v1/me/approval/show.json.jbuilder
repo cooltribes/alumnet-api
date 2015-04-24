@@ -1,1 +1,1 @@
-json.partial! 'v1/shared/friendship', friendship: @friendship, current_user: @user
+json.(@approval_request, :id, :user_id, :approver_id, :accepted)

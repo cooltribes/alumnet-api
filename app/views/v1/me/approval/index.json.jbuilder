@@ -1,1 +1,1 @@
-json.array! @friendships, partial: 'v1/shared/friendship', as: :friendship, current_user: @user
+json.array! @requests, partial: '_show', as: :approval_request
