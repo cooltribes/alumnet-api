@@ -22,6 +22,15 @@ class V1::Groups::AlbumsController < V1::BaseController
     end
   end
 
+  def update
+    authorize @album
+    if @album.update(album_params)
+      render :show, status: :ok,  location: [@group, @album]
+    else
+      render json: @album.errors, status: :unprocessable_entity
+    end
+  end
+
   def destroy
     authorize @album
     @album.destroy

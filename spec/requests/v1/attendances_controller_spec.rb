@@ -50,7 +50,8 @@ describe V1::AttendancesController, type: :request do
 
   describe "DELETE attendances/:id" do
     it "delete a attendance of group" do
-      attendance = Attendance.make!(user: user)
+      event = Event.make!(creator: user)
+      attendance = Attendance.make!(user: user, event: event)
       expect {
         delete attendance_path(attendance), {}, basic_header(user.auth_token)
       }.to change(Attendance, :count).by(-1)

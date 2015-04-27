@@ -14,8 +14,9 @@ end
 
 user = attendance.user
 json.user do
-  json.(user, :id, :email)
+  json.id user.id
   json.name user.permit_name(current_user)
+  json.last_experience user.permit_last_experience(current_user)
   if user.permit('see-avatar', current_user)
     json.avatar user.avatar.large.url
   else

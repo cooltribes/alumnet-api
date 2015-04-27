@@ -216,3 +216,44 @@ Attendance.blueprint do
   event { Event.make! }
   user { User.make! }
 end
+
+Picture.blueprint do
+  title { "Picture #{sn}"}
+  picture { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
+  date_taken { nil }
+  uploader { User.make! }
+end
+
+Subscription.blueprint(:lifetime) do
+  name { "LifeTime"}
+  subscription_type { Subscription::TYPES[:lifetime] }
+  status { 1 }
+end
+
+Subscription.blueprint(:premium) do
+  name { "LifeTime"}
+  subscription_type { Subscription::TYPES[:premium] }
+  status { 1 }
+end
+
+UserSubscription.blueprint(:lifetime) do
+  start_date { Date.today }
+  end_date { nil }
+  status { 1 }
+  ownership_type { 1 }
+  user { User.make! }
+  subscription { Subscription.make!(:lifetime) }
+  creator { User.make! }
+  reference { "XXXX-XXXX"}
+end
+
+UserSubscription.blueprint(:premium) do
+  start_date { Date.today }
+  end_date { Date.today + 365 }
+  status { 1 }
+  ownership_type { 1 }
+  user { User.make! }
+  subscription { Subscription.make!(:premium) }
+  creator { User.make! }
+  reference { "XXXX-XXXX"}
+end

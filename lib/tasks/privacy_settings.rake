@@ -1,5 +1,5 @@
 require 'rake'
-namespace :privacy_settings do
+namespace :app do
   desc "create all privacy actions"
   task privacy_actions: :environment do
     PrivacyAction.create!(name: "see-name", description: "Who can see my name")

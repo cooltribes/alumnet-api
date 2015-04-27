@@ -7,6 +7,12 @@ class V1::GroupsController < V1::BaseController
     @groups = @q.result
   end
 
+  def cropping
+    @group.assign_attributes(crop_params)
+    @group.crop
+    render json: { status: 'success', url: @group.cover.crop.url }
+  end
+
   def subgroups
     @q = @group.children.search(params[:q])
     @groups = @q.result
@@ -18,7 +24,8 @@ class V1::GroupsController < V1::BaseController
 
   def create
     @group = Group.new(group_params)
-    @group.creator_user_id = current_user.id
+    @group.creator = current_user
+    @group.cover_uploader = current_user
     if @group.save
       Membership.create_membership_for_creator(@group, current_user)
       render :show, status: :created,  location: @group
@@ -29,7 +36,8 @@ class V1::GroupsController < V1::BaseController
 
   def add_group
     @new_group = Group.new(group_params)
-    @new_group.creator_user_id = current_user.id
+    @new_group.creator = current_user
+    @new_group.cover_uploader = current_user
     if @group.children << @new_group
       Membership.create_membership_for_creator(@new_group, current_user)
       render :add_group, status: :created,  location: @group
@@ -40,6 +48,7 @@ class V1::GroupsController < V1::BaseController
 
   def update
     authorize @group
+    @group.cover_uploader = current_user
     if @group.update(group_params)
       render :show, status: :ok,  location: @group
     else
@@ -62,6 +71,10 @@ class V1::GroupsController < V1::BaseController
   def group_params
     params.permit(:name, :description, :cover, :group_type, :official, :country_id,
       :city_id, :join_process)
+  end
+
+  def crop_params
+    params.permit(:imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH)
   end
 
 end

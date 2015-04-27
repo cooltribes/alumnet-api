@@ -1,11 +1,12 @@
 class Profile < ActiveRecord::Base
   acts_as_paranoid
   mount_uploader :avatar, AvatarUploader
+  mount_uploader :cover, UserCoverUploader
   enum register_step: [:initial, :profile, :contact, :experience_a, :experience_b, :experience_c, :experience_d, :skills, :approval]
   include ProfileHelpers
 
   ##Crop avatar
-  attr_accessor :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH
+  attr_accessor :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH, :avatar_url
 
   ###Relations
   belongs_to :birth_city, class_name: 'City'
@@ -30,10 +31,26 @@ class Profile < ActiveRecord::Base
   accepts_nested_attributes_for :languages, allow_destroy: true
   accepts_nested_attributes_for :skills, allow_destroy: true
 
+  after_save :save_avatar_in_album
+
+
   ###Instance Methods
 
-  def crop_avatar
-    avatar.recreate_versions! if imgX1.present?
+  def crop(image)
+    if image == "avatar"
+      avatar.recreate_versions! if imgX1.present?
+    elsif image == "cover"
+      cover.recreate_versions! if imgX1.present?
+    end
+    save!
+  end
+
+  def crop_url(image)
+    if image == "avatar"
+      avatar.crop.url
+    elsif image == "cover"
+      cover.crop.url
+    end
   end
 
   def hidden_last_name
@@ -55,7 +72,9 @@ class Profile < ActiveRecord::Base
   end
 
   def last_experience
-    experiences.where.not(exp_type: 2).last
+    # experiences.where.not(exp_type: 2).last
+    #Getting the last experience added if is Current or not.
+    experiences.where.not(exp_type: 2).order(end_date: :desc, id: :desc).first
   end
 
   def languages_attributes=(collection_attributes)
@@ -84,10 +103,40 @@ class Profile < ActiveRecord::Base
     end
   end
 
+  ## virtual method to set a remote url to avatar if url is present and avatar is nil
+  def avatar_url=(value)
+    if value.present?
+      self.remote_avatar_url = value
+    end
+  end
+
   private
     def born_date
       if born.present? && ((Date.current - born).to_i / 365 ) < 20
         errors.add(:born, 'you must have more than 20 years')
+      end
+    end
+
+    def save_avatar_in_album
+      if avatar_changed?
+        album = user.albums.create_with(name: 'avatars').find_or_create_by(album_type: Album::TYPES[:avatar])
+        picture = Picture.new(uploader: user)
+        if Rails.env.production? || Rails.env.staging?
+          picture.remote_picture_url = avatar.url
+        else
+          picture.picture = avatar
+        end
+        album.pictures << picture
+      end
+      if cover_changed?
+        album = user.albums.create_with(name: 'covers').find_or_create_by(album_type: Album::TYPES[:cover])
+        picture = Picture.new(uploader: user)
+        if Rails.env.production? || Rails.env.staging?
+          picture.remote_picture_url = cover.url
+        else
+          picture.picture = cover
+        end
+        album.pictures << picture
       end
     end
 end

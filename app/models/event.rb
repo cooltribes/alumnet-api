@@ -3,14 +3,23 @@ class Event < ActiveRecord::Base
   mount_uploader :cover, CoverUploader
   enum event_type: [:open, :closed, :secret]
 
+  ## Virtual Attributes
+  attr_accessor :cover_uploader
+  attr_accessor :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH
+  attr_accessor :invite_group_members
+
   ### Relations
+  has_many :attendances, dependent: :destroy
+  has_many :posts, as: :postable, dependent: :destroy
+  has_many :albums, as: :albumable, dependent: :destroy
   belongs_to :creator, class_name: "User"
   belongs_to :country
   belongs_to :city
   belongs_to :eventable, polymorphic: true
-  has_many :attendances, dependent: :destroy
-  has_many :posts, as: :postable, dependent: :destroy
 
+  ### Callbacks
+  after_save :save_cover_in_album
+  after_create :send_invites
 
   ### Validations
   validates_presence_of :name, :description, :start_date, :end_date, :country_id
@@ -24,8 +33,14 @@ class Event < ActiveRecord::Base
   scope :non_official, -> { where(official: false) }
 
   ### Instance methods
+
+  ### Croping Cover
+  def crop
+    cover.recreate_versions! if imgX1.present?
+  end
+
   def create_attendance_for(user)
-    attendances.create(user: user)
+    attendances.find_or_create_by(user: user)
   end
 
   def attendance_for(user)
@@ -43,12 +58,18 @@ class Event < ActiveRecord::Base
     users
   end
 
+  def can_attend?(user)
+    return true if open?
+    return true if is_admin?(user)
+    return true if closed? && attendance_for(user)
+  end
+
   def group_admins
-    if eventable_type == 'Group'
-      eventable.admins
-    else
-      []
-    end
+    return eventable_type == 'Group' ? eventable.admins : []
+  end
+
+  def group_members
+    return eventable_type == 'Group' ? eventable.members : []
   end
 
   def is_admin?(user)
@@ -56,4 +77,23 @@ class Event < ActiveRecord::Base
     return true if group_admins.include?(user)
     false
   end
+
+  private
+
+    def save_cover_in_album
+      if cover_changed?
+        album = albums.create_with(name: 'covers').find_or_create_by(album_type: Album::TYPES[:cover])
+        picture = Picture.new(uploader: cover_uploader)
+        picture.picture = cover
+        album.pictures << picture
+      end
+    end
+
+    def send_invites
+      if invite_group_members == "true"
+        group_members.each do |member|
+          create_attendance_for(member)
+        end
+      end
+    end
 end

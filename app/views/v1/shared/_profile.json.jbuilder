@@ -26,3 +26,8 @@ json.avatar do
     json.extralarge profile.avatar.extralarge.default_url
   end
 end
+
+json.cover do
+  json.original profile.cover.url
+  json.main profile.cover.main.url
+end

@@ -25,7 +25,10 @@ describe V1::Users::EventsController, type: :request do
   describe "GET /users/:user_id/events" do
 
     before do
-      5.times { Event.make!(eventable: user)  }
+      5.times do
+        event = Event.make!(eventable: user)
+        event.create_attendance_for(user)
+      end
     end
 
     it "return all events of user" do
@@ -37,7 +40,7 @@ describe V1::Users::EventsController, type: :request do
 
   describe "GET /users/:user_id/events/:id" do
     it "return a event of a user by id" do
-      event = Event.make!(eventable: user)
+      event = Event.make!(eventable: user, creator: user)
       get user_event_path(user, event), {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
       expect(json).to have_key('name')
@@ -72,7 +75,7 @@ describe V1::Users::EventsController, type: :request do
 
   describe "PUT /users/:user_id/events/:id" do
     it "edit a event of user" do
-      event = Event.make!(eventable: user)
+      event = Event.make!(eventable: user, creator: user)
       put user_event_path(user, event), { description: "New description of event" }, basic_header(user.auth_token)
       expect(response.status).to eq 200
       event.reload

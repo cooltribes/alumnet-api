@@ -1,21 +1,31 @@
-class Picture < ActiveRecord::Base  
+class Picture < ActiveRecord::Base
+  acts_as_commentable
+  include LikeableMethods
 
   mount_uploader :picture, PictureUploader
-  before_create :check_date_taken, :check_location
-  
+
+  ### Relations
   belongs_to :album
   belongs_to :city, foreign_key: "city_id", class_name: 'City'
   belongs_to :country, foreign_key: "country_id", class_name: 'Country'
+  belongs_to :pictureable, polymorphic: true
+  belongs_to :uploader, class_name: 'User'
+
+  ### Callbacks
+  before_create :check_date_taken, :check_location
 
 
   private
 
     def check_date_taken
-      self.date_taken ||= self.album.date_taken
+      self.date_taken ||= self.album.date_taken if self.album.present?
     end
+
     def check_location
-      self.city_id ||= self.album.city_id
-      self.country_id ||= self.album.country_id
+      if self.album.present?
+        self.city_id ||= self.album.city_id
+        self.country_id ||= self.album.country_id
+      end
     end
 
 end

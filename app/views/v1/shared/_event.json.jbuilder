@@ -6,6 +6,7 @@ json.country event.country_info
 json.city event.city_info
 
 json.cover do
+  json.original event.cover.url
   json.main event.cover.main.url
   json.card event.cover.card.url
 end
@@ -21,6 +22,9 @@ json.creator do
 end
 
 json.attendances_count event.attendances.count
+json.going_count event.attendances.going.count
+json.maybe_count event.attendances.maybe.count
+json.not_going_count event.attendances.not_going.count
 
 attendance = event.attendance_for(current_user)
 
@@ -31,3 +35,4 @@ else
 end
 
 json.admin event.is_admin?(current_user)
+json.can_attend event.can_attend?(current_user)

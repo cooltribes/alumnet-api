@@ -3,7 +3,9 @@ module UserHelpers
   def permit_email(user)
     return email if self == user
     email_contact = profile.contact_infos.where(contact_type: 0).first
-    email_contact.permit(user) ? email : nil
+    if email_contact
+      email_contact.permit(user) ? email : nil
+    end
   end
 
   def permit_name(user)
@@ -23,6 +25,14 @@ module UserHelpers
       self.last_experience.name
     else
       nil
+    end
+  end
+
+  def admin_location_info
+    if admin_location.present?
+      { id: admin_location.id, text: admin_location.name }
+    else
+      { id: nil, text: nil}
     end
   end
 end
