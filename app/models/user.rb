@@ -30,6 +30,10 @@ class User < ActiveRecord::Base
   has_many :invited_events, through: :attendances, source: :event
   has_one :profile, dependent: :destroy
   belongs_to :admin_location, polymorphic: true
+  #These are the requests that "self" has made to others  
+  has_many :approval_requests, dependent: :destroy
+  #These are the requests that were made for "self" to approve  
+  has_many :pending_approval_requests, class_name: "ApprovalRequest", foreign_key: "approver_id"
 
   ### Scopes
   scope :active, -> { where(status: 1) }
@@ -377,6 +381,41 @@ class User < ActiveRecord::Base
   ###Attendances
   def attendance_for(event)
     attendances.find_by(event_id: event.id)
+  end
+
+  ##Approval Process
+  def create_approval_request_for(user)
+    approval_requests.build(approver_id: user.id)
+  end
+    
+  def approval_with(user)
+    ApprovalRequest.where("(approver_id = :id and user_id = :user_id) or (approver_id = :user_id and user_id = :id)", id: id, user_id: user.id).first    
+  end 
+
+  def pending_approval_for(user)
+    approval_requests.where(approver_id: user.id, accepted: false).take.present?        
+  end
+
+  def pending_approval_by(user)
+    pending_approval_requests.where(user_id: user.id, accepted: false).take.present?        
+  end
+
+  def has_approved_request_with(user)
+    approval_requests.where(approver_id: user.id, accepted: true).take.present? ||
+    pending_approval_requests.where(user_id: user.id, accepted: true).take.present?
+  end
+  
+  def approval_status_with(user)
+    ##Optimize this
+    if has_approved_request_with(user) || id == user.id
+      "accepted"
+    elsif pending_approval_for(user).present?
+      "sent"
+    elsif pending_approval_by(user).present?
+      "received"
+    else
+      "none"
+    end
   end
 
   private

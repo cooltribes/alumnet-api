@@ -1,0 +1,1 @@
+json.(@approval_request, :id, :user_id, :approver_id, :accepted)
