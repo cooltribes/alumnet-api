@@ -3,13 +3,9 @@ class V1::Me::ApprovalController < V1::BaseController
   before_action :set_and_check_approver, only: :create
 
   def index
-    @requests = @user.pending_approval_requests
-    # @friendships = @user.approval_requests(params[:filter])
+    @requests = @user.get_pending_approval_requests
   end
 
-  # def friends
-  #   @friends = @user.search_accepted_friends(params[:q])
-  # end
 
   def create
     @approval_request = @user.create_approval_request_for(@approver)
@@ -25,7 +21,23 @@ class V1::Me::ApprovalController < V1::BaseController
     @approval_request = @user.pending_approval_requests.find(params[:id])
     #if @friendship.friend_id == current_user.id #this a policy refactor!
     @approval_request.accept!
-    render :show
+
+    requester = @approval_request.user
+
+    if requester.get_approved_requests.count == 3
+      requester.activate!
+
+    #Create a friendship between users
+    friendship = requester.create_friendship_for(@user)
+
+    if friendship.save
+      friendship.accept!
+      # Notification.notify_friendship_request_to_user(@user, @friend)
+      #Notificate for a new friendship created but not accepted
+      render :show
+    else
+      render json: friendship.errors, status: :unprocessable_entity
+    end
   end
 
   def destroy

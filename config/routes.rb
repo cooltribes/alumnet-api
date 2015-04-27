@@ -26,7 +26,7 @@ Rails.application.routes.draw do
         put :mark_as_unread, on: :member
       end
       resources :privacies, except: :show, controller: 'me/privacies'
-      resources :approval_requests, except: [:show,:index], controller: 'me/approval' do
+      resources :approval_requests, except: [:show], controller: 'me/approval' do
         get :friends, on: :collection
       end      
     end

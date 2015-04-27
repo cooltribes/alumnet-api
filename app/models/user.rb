@@ -339,6 +339,14 @@ class User < ActiveRecord::Base
     pending_friendships.count
   end
 
+  def pending_approval_requests_count
+    get_pending_approval_requests.count
+  end
+
+  def approved_requests_count
+    get_approved_requests.count
+  end
+
   def mutual_friends_count(user)
     common_friends_with(user).count
   end
@@ -393,11 +401,19 @@ class User < ActiveRecord::Base
   end 
 
   def pending_approval_for(user)
-    approval_requests.where(approver_id: user.id, accepted: false).take.present?        
+    get_approved_requests.where(approver_id: user.id).take.present?        
   end
 
   def pending_approval_by(user)
-    pending_approval_requests.where(user_id: user.id, accepted: false).take.present?        
+    get_pending_approval_requests.where(user_id: user.id).take.present?        
+  end
+
+  def get_pending_approval_requests
+    pending_approval_requests.where(accepted: false)
+  end
+
+  def get_approved_requests
+    approval_requests.where(accepted: true)
   end
 
   def has_approved_request_with(user)

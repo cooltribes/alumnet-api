@@ -1,1 +1,1 @@
-json.(@approval_request, :id, :user_id, :approver_id, :accepted)
+json.partial! 'approval_request', approval_request: @approval_request, current_user: @user
