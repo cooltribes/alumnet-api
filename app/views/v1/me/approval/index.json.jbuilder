@@ -1,0 +1,1 @@
+json.array! @requests, partial: '_show', as: :approval_request

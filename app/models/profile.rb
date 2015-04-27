@@ -6,7 +6,7 @@ class Profile < ActiveRecord::Base
   include ProfileHelpers
 
   ##Crop avatar
-  attr_accessor :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH
+  attr_accessor :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH, :avatar_url
 
   ###Relations
   belongs_to :birth_city, class_name: 'City'
@@ -72,7 +72,9 @@ class Profile < ActiveRecord::Base
   end
 
   def last_experience
-    experiences.where.not(exp_type: 2).last
+    # experiences.where.not(exp_type: 2).last
+    #Getting the last experience added if is Current or not.
+    experiences.where.not(exp_type: 2).order(end_date: :desc, id: :desc).first
   end
 
   def languages_attributes=(collection_attributes)
@@ -98,6 +100,13 @@ class Profile < ActiveRecord::Base
       when "experience_c" then experience_d!
       when "experience_d" then skills!
       when "skills" then approval!
+    end
+  end
+
+  ## virtual method to set a remote url to avatar if url is present and avatar is nil
+  def avatar_url=(value)
+    if value.present?
+      self.remote_avatar_url = value
     end
   end
 
