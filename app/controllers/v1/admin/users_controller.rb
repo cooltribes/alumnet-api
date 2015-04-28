@@ -52,8 +52,12 @@ class V1::Admin::UsersController < V1::AdminController
   end
 
   def destroy
-    @user.destroy
-    head :no_content
+    if @user == current_user
+      render json: ["you can't destroy yourself"]
+    else
+      @user.destroy
+      head :no_content
+    end
   end
 
   private

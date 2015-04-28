@@ -12,6 +12,16 @@ class V1::AuthController < V1::BaseController
     end
   end
 
+  def oauth_sign_in
+    @user = User.find_by(email: params[:email])
+    if @user && @user.find_or_create_provider(provider_params)
+      render :user, status: :ok,  location: @user
+    else
+      render json: { error: "email or password are incorrect"} , status: 401
+    end
+  end
+
+
   def register
     @user = User.new(user_params)
     if @user.save
@@ -31,6 +41,10 @@ class V1::AuthController < V1::BaseController
 
   def user_params
     params.require(:user).permit(:email, :password, :password_confirmation)
+  end
+
+  def provider_params
+    params.permit(:provider, :uid, :oauth_token)
   end
 
 end

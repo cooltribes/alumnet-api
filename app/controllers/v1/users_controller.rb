@@ -18,8 +18,12 @@ class V1::UsersController < V1::BaseController
   end
 
   def destroy
-    @user.destroy
-    head :no_content
+    if @user == current_user
+      render json: ["you can't destroy yourself"], status: :unprocessable_entity
+    else
+      @user.destroy
+      head :no_content
+    end
   end
 
   private

@@ -16,6 +16,20 @@ User.blueprint(:admin) do
   profile { Profile.make! }
 end
 
+OauthProvider.blueprint(:facebook) do
+  provider { 'facebook' }
+  uid { 'UIDFACEBOOK' }
+  oauth_token { '' }
+  user { User.make! }
+end
+
+OauthProvider.blueprint(:linkedin) do
+  provider { 'linkedin' }
+  uid { 'LINKEDINUID' }
+  oauth_token { '' }
+  user { User.make! }
+end
+
 Profile.blueprint do
   first_name { Faker::Name.first_name }
   last_name { Faker::Name.last_name }
