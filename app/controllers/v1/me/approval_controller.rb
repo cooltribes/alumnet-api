@@ -26,14 +26,15 @@ class V1::Me::ApprovalController < V1::BaseController
 
     if requester.get_approved_requests.count == 3
       requester.activate!
+    end
 
     #Create a friendship between users
     friendship = requester.create_friendship_for(@user)
 
     if friendship.save
-      friendship.accept!
-      # Notification.notify_friendship_request_to_user(@user, @friend)
+      friendship.accept!(false)
       #Notificate for a new friendship created but not accepted
+      Notification.notify_new_friendship_by_approval(requester, @user)
       render :show
     else
       render json: friendship.errors, status: :unprocessable_entity

@@ -8,4 +8,9 @@ class Region < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :name
+
+  ### Instance Methods
+  def admins
+    User.where(admin_location_id: id, admin_location_type: "Region")
+  end
 end

@@ -84,4 +84,27 @@ class Notification
     UserMailer.invitation_to_event(user, event).deliver
     PusherDelegator.notifiy_new_notification(notification, recipients)
   end
+
+  def self.notify_new_friendship_by_approval(requester, user)
+    #Notify about new friendship to requester
+    recipients = [requester]
+    notification = Mailboxer::Notification.notify_all(
+      recipients,
+      "You have a new friend!",
+      user.permit_name(requester) + " is now your friend."
+    )
+    PusherDelegator.notifiy_new_notification(notification, recipients)
+    
+    recipients = [user]
+    notification = Mailboxer::Notification.notify_all(
+      recipients,
+      "You have a new friend!",
+      requester.permit_name(user) + " is now your friend."
+    )
+    PusherDelegator.notifiy_new_notification(notification, recipients)
+    
+    
+    UserMailer.approval_request_accepted(requester, user).deliver
+  end
+
 end
