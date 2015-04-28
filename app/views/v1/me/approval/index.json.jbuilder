@@ -1,1 +1,1 @@
-json.array! @requests, partial: '_show', as: :approval_request
+json.array! @requests, partial: 'approval_request', as: :approval_request, current_user: @user
