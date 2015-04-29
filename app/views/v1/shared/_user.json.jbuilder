@@ -44,12 +44,29 @@ else
   end
 end
 
+#Related to aproval request ... Suggested to split this file
+if user.id == current_user.id
+  json.approval_status "user"
+else
+  approval_request = user.approval_with(current_user)
+  if approval_request
+    json.approval_status current_user.approval_status_with(user)
+    # json.approval_status current_user.friendship_status_with(user)
+  else
+    json.approval_status "none"
+  end
+end
+
+
+#Other fields
 json.is_admin user.is_admin?
 json.is_regional_admin user.is_regional_admin?
 json.is_nacional_admin user.is_nacional_admin?
 json.is_alumnet_admin user.is_alumnet_admin?
 json.is_system_admin user.is_system_admin?
 json.is_premium user.is_premium?
+json.first_committee user.first_committee
 
+#Counters
 json.friends_count user.permit_friends_count(current_user)
 json.mutual_friends_count current_user.mutual_friends_count(user)

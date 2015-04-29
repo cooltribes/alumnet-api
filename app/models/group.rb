@@ -51,6 +51,7 @@ class Group < ActiveRecord::Base
   ### Croping Cover
   def crop
     cover.recreate_versions! if imgX1.present?
+    save!
   end
 
   ### all membership

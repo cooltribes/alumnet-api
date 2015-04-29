@@ -15,7 +15,7 @@ class V1::PostsController < V1::BaseController
 
   def unlike
     response = @post.remove_like_of(current_user)
-    render json: { ok: response}, status: :ok
+    render json: { ok: response }, status: :ok
   end
 
   private
