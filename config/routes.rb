@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     post '/sign_in', to: 'auth#sign_in', as: :sign_in
     post '/oauth_sign_in', to: 'auth#oauth_sign_in', as: :oauth_sign_in
     post '/register', to: 'auth#register', as: :register
+    post '/oauth_register', to: 'auth#oauth_register', as: :oauth_register
 
     resources :password_resets, only: [:create, :update]
 

@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
   has_many :approval_requests, dependent: :destroy
   #These are the requests that were made for "self" to approve
   has_many :pending_approval_requests, class_name: "ApprovalRequest", foreign_key: "approver_id"
-  has_many :oauth_providers
+  has_many :oauth_providers, dependent: :destroy
 
   ### Scopes
   scope :active, -> { where(status: 1) }
@@ -45,6 +45,10 @@ class User < ActiveRecord::Base
   validates :password, length: { minimum: 8, message: "must contain at least eight (8) characters." },
     format: { with: VALID_PASSWORD_REGEX, message: "must be a combination of numbers and letters" },
     if: 'password.present?'
+
+  ###Nested Atrributes
+  accepts_nested_attributes_for :oauth_providers
+
   ### Callbacks
   before_create :ensure_tokens
   before_create :set_role
@@ -74,10 +78,6 @@ class User < ActiveRecord::Base
 
   def last_experience
     profile.last_experience
-  end
-
-  def find_or_create_provider(attributes)
-    oauth_providers.find_or_create_by(attributes)
   end
 
   def send_password_reset
