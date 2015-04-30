@@ -152,7 +152,7 @@ class User < ActiveRecord::Base
   end
 
   def is_premium?
-    member == 1
+    member != 0
   end
 
   def is_regular?
