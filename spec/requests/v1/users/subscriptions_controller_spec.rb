@@ -16,7 +16,7 @@ describe V1::Users::SubscriptionsController, type: :request do
   describe "POST /users/:user_id/subscriptions" do
     context "with valid attributes and lifetime = true" do
       it "create a subscription and set user member to 3" do
-        valid_attributes = { begin: '2015-01-01', end: '2015-12-31', lifetime: true, reference: "XXX-XXX" }
+        valid_attributes = { start_date: '2015-01-01', end_date: '2015-12-31', lifetime: true, reference: "XXX-XXX" }
         expect(user.member).to eq(0)
         expect {
           post user_subscriptions_path(user), valid_attributes , basic_header(user.auth_token)
@@ -29,7 +29,7 @@ describe V1::Users::SubscriptionsController, type: :request do
 
     context "with valid attributes and lifetime = false and subscriptions day < 30" do
       it "create a subscription and set user member to 3" do
-        valid_attributes = { begin: '2015-01-01', end: '2015-01-15', lifetime: false, reference: "XXX-XXX" }
+        valid_attributes = { start_date: '2015-01-01', end_date: '2015-01-15', lifetime: false, reference: "XXX-XXX" }
         expect(user.member).to eq(0)
         expect {
           post user_subscriptions_path(user), valid_attributes , basic_header(user.auth_token)
@@ -42,7 +42,7 @@ describe V1::Users::SubscriptionsController, type: :request do
 
     context "with valid attributes and lifetime = false and subscriptions days > 30" do
       it "create a subscription and set user member to 3" do
-        valid_attributes = { begin: '2015-01-01', end: '2015-02-14', lifetime: false, reference: "XXX-XXX" }
+        valid_attributes = { start_date: '2015-01-01', end_date: '2015-02-14', lifetime: false, reference: "XXX-XXX" }
         expect(user.member).to eq(0)
         expect {
           post user_subscriptions_path(user), valid_attributes , basic_header(user.auth_token)

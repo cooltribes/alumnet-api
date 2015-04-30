@@ -6,4 +6,8 @@ class Subscription < ActiveRecord::Base
   ### Relations
   has_many :user_subscriptions
   has_many :users, through: :user_subscriptions
+
+  ###Scopes
+  scope :premium, -> { where(name: 'Premium') }
+  scope :lifetime, -> { where(name: 'Premium Lifetime') }
 end

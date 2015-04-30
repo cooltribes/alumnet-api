@@ -7,9 +7,7 @@ class V1::Users::SubscriptionsController < V1::BaseController
   end
 
   def create
-    #render json: @user_subscription.errors, status: :unprocessable_entity
     @user_subscription = @user.build_subscription(subscription_params, current_user)
-    #render json: @user_subscription
     if @user_subscription.save
       render :show, status: :created
     else

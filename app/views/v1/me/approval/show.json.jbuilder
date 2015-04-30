@@ -1,0 +1,1 @@
+json.partial! 'approval_request', approval_request: @approval_request, current_user: @user

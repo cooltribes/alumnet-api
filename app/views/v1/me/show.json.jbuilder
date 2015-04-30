@@ -27,7 +27,12 @@ json.is_system_admin @user.is_system_admin?
 
 json.is_premium @user.is_premium?
 
+#Counters
 json.friends_count @user.friends_count
 json.pending_received_friendships_count @user.pending_received_friendships_count
 json.pending_sent_friendships_count @user.pending_sent_friendships_count
+json.pending_approval_requests_count @user.pending_approval_requests_count
+json.approved_requests_count @user.approved_requests_count
 json.days_membership @user.days_membership
+
+

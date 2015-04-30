@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   api_version(:module => "V1", :header => {:name => "Accept", :value => "application/vnd.alumnet+json;version=1"}) do
 
     post '/sign_in', to: 'auth#sign_in', as: :sign_in
+    post '/oauth_sign_in', to: 'auth#oauth_sign_in', as: :oauth_sign_in
     post '/register', to: 'auth#register', as: :register
+    post '/oauth_register', to: 'auth#oauth_register', as: :oauth_register
 
     resources :password_resets, only: [:create, :update]
 
@@ -26,6 +28,9 @@ Rails.application.routes.draw do
         put :mark_as_unread, on: :member
       end
       resources :privacies, except: :show, controller: 'me/privacies'
+      resources :approval_requests, except: [:show], controller: 'me/approval' do
+        get :friends, on: :collection
+      end
     end
 
     resources :users, except: :create do

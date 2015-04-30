@@ -30,6 +30,11 @@ class User < ActiveRecord::Base
   has_many :invited_events, through: :attendances, source: :event
   has_one :profile, dependent: :destroy
   belongs_to :admin_location, polymorphic: true
+  #These are the requests that "self" has made to others
+  has_many :approval_requests, dependent: :destroy
+  #These are the requests that were made for "self" to approve
+  has_many :pending_approval_requests, class_name: "ApprovalRequest", foreign_key: "approver_id"
+  has_many :oauth_providers, dependent: :destroy
 
   ### Scopes
   scope :active, -> { where(status: 1) }
@@ -40,6 +45,10 @@ class User < ActiveRecord::Base
   validates :password, length: { minimum: 8, message: "must contain at least eight (8) characters." },
     format: { with: VALID_PASSWORD_REGEX, message: "must be a combination of numbers and letters" },
     if: 'password.present?'
+
+  ###Nested Atrributes
+  accepts_nested_attributes_for :oauth_providers
+
   ### Callbacks
   before_create :ensure_tokens
   before_create :set_role
@@ -96,8 +105,8 @@ class User < ActiveRecord::Base
   end
 
   def first_committee
-    com=self.profile.experiences.where(exp_type: 0).first.committee_id
-    return Committee.find_by(id:com).name
+    experience = profile.experiences.where(exp_type: 0).first.committee_id
+    Committee.find_by(id:experience).name
   end
 
   ### Roles
@@ -291,11 +300,7 @@ class User < ActiveRecord::Base
   end
 
   def days_membership
-    if(member==2)
-      return user_subscriptions.find_by(status:1).days_left
-    else
-      return false
-    end
+    member == 2 ? user_subscriptions.find_by(status:1).days_left : false
   end
 
   ### premium subscriptions
@@ -305,24 +310,22 @@ class User < ActiveRecord::Base
     user_subscription = user_subscriptions.build(params)
     user_subscription.ownership_type = 1
     if user_subscription.lifetime?
-      user_subscription.subscription_id = Subscription.where("name='Premium'").first.id
+      user_subscription.subscription = Subscription.premium.first
     else
-      user_subscription.subscription_id = Subscription.where("name='Premium Lifetime'").first.id
+      user_subscription.subscription = Subscription.lifetime.first
     end
-    user_subscription.creator_id = current_user.id
-    return user_subscription
+    user_subscription.creator = current_user
+    user_subscription
   end
 
   ### Function to validate users subcription every day
 
   def validate_subscription
     user_subscriptions.where('status = 1').each do |subscription|
-      if(subscription.end_date)
-        if(subscription.end_date.past?)
-          subscription.update_column(:status, 0)
-          update_column(:member, 0)
-          "expired - user_id: #{id} - #{subscription.end_date}"
-        end
+      if subscription.end_date && subscription.end_date.past?
+        subscription.update_column(:status, 0)
+        update_column(:member, 0)
+        "expired - user_id: #{id} - #{subscription.end_date}"
       end
     end
   end
@@ -339,6 +342,14 @@ class User < ActiveRecord::Base
 
   def pending_sent_friendships_count
     pending_friendships.count
+  end
+
+  def pending_approval_requests_count
+    get_pending_approval_requests.count
+  end
+
+  def approved_requests_count
+    get_approved_requests.count
   end
 
   def mutual_friends_count(user)
@@ -383,6 +394,53 @@ class User < ActiveRecord::Base
   ###Attendances
   def attendance_for(event)
     attendances.find_by(event_id: event.id)
+  end
+
+  ##Approval Process
+  def create_approval_request_for(user)
+    approval_requests.build(approver_id: user.id)
+  end
+
+  def approval_with(user)
+    ApprovalRequest.where("(approver_id = :id and user_id = :user_id) or (approver_id = :user_id and user_id = :id)", id: id, user_id: user.id).first
+  end
+
+  def pending_approval_for(user)
+    get_approved_requests.where(approver_id: user.id).take.present?
+  end
+
+  def pending_approval_by(user)
+    get_pending_approval_requests.where(user_id: user.id).take.present?
+  end
+
+  def get_pending_approval_requests
+    pending_approval_requests.where(accepted: false)
+  end
+
+  def get_approved_requests
+    approval_requests.where(approver_id: user.id, accepted: false).take.present?
+  end
+
+  def pending_approval_by(user)
+    pending_approval_requests.where(user_id: user.id, accepted: false).take.present?
+  end
+
+  def has_approved_request_with(user)
+    approval_requests.where(approver_id: user.id, accepted: true).take.present? ||
+    pending_approval_requests.where(user_id: user.id, accepted: true).take.present?
+  end
+
+  def approval_status_with(user)
+    ##Optimize this
+    if has_approved_request_with(user) || id == user.id
+      "accepted"
+    elsif pending_approval_for(user).present?
+      "sent"
+    elsif pending_approval_by(user).present?
+      "received"
+    else
+      "none"
+    end
   end
 
   private
