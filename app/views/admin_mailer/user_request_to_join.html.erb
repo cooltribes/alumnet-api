@@ -6,7 +6,9 @@
   <body>
     <h2>Greetings <%= "#{ @admin.name }" %></h2>
     <p>
-      The user <%= "#{@user.name}" %> sent a request to join the group <%= "#{@group.name}" %>
+      The user <%= "#{@user.name}" %> sent a request to join the group <%= "#{@group.name}" %>.
+    </p>
+    <p>      
       Click <a href=<%= "#{Settings.ui_endpoint}/#groups/#{@group.id}/members" %>>here</a> to visit the group.
     </p>
   </body>

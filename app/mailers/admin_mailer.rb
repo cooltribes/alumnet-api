@@ -14,4 +14,10 @@ class AdminMailer < ActionMailer::Base
     @admin = admin
     mail to: admin.email, subject: "A new user request to join the group #{group.name}"
   end
+
+  def user_request_approval(admin, user)
+    @user = user
+    @admin = admin
+    mail to: admin.email, subject: "A new user was registered in AlumNet"
+  end
 end

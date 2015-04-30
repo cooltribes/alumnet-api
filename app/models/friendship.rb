@@ -17,11 +17,11 @@ class Friendship < ActiveRecord::Base
     end
   end
 
-  def accept!
+  def accept!(notify = true)
     unless accepted?
       update_column(:accepted, true)
       touch(:accepted_at)
-      Notification.notify_accepted_friendship_to_user(user, friend)
+      Notification.notify_accepted_friendship_to_user(user, friend) if notify
     end
   end
 
