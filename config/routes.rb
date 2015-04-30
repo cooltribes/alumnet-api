@@ -27,7 +27,7 @@ Rails.application.routes.draw do
       end
       resources :privacies, except: :show, controller: 'me/privacies'
       resources :approval_requests, except: [:show], controller: 'me/approval' do
-        get :friends, on: :collection
+        put :notify_admins, on: :collection
       end      
     end
 

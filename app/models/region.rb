@@ -11,6 +11,6 @@ class Region < ActiveRecord::Base
 
   ### Instance Methods
   def admins
-    User.where(admin_location_id: id, admin_location_type: "Region")
+    User.where(admin_location_id: id, admin_location_type: "Region", role: "RegionalAdmin")
   end
 end
