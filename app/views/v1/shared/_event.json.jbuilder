@@ -1,5 +1,5 @@
 json.(event, :id, :name, :description, :official, :address, :start_date, :start_hour,
-  :end_date, :end_hour, :capacity, :city_id, :country_id, :created_at)
+  :end_date, :end_hour, :capacity, :city_id, :country_id, :created_at, :admission_type, :regular_price, :premium_price)
 
 json.event_type event.event_type_info
 json.country event.country_info

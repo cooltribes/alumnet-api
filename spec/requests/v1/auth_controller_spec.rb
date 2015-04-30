@@ -42,6 +42,34 @@ describe V1::AuthController, type: :request do
     end
   end
 
+  describe "POST /oauth_sign_in" do
+    context "with valid credentials" do
+      it "return the user" do
+        provider = OauthProvider.make!(:facebook, user: user)
+        post oauth_sign_in_path, { email: user.email, provider: provider.provider, uid: provider.uid }, header
+        expect(response.status).to eq 200
+        expect(json).to eq({"id"=>user.id, "email"=>user.email, "auth_token"=>user.auth_token,
+          "name"=>user.name })
+      end
+    end
+
+    context "with invalid credentials" do
+      it "return the user" do
+        post sign_in_path, { email: user.email, password: "123456dd78" }, header
+        expect(response.status).to eq 401
+        expect(json).to eq({"error"=>"email or password are incorrect"})
+      end
+    end
+
+    context "without credentials" do
+      it "return the user" do
+        post sign_in_path, {}, header
+        expect(response.status).to eq 401
+        expect(json).to eq({"error"=>"Please enter your email address and your password"})
+      end
+    end
+  end
+
   describe "POST /register" do
     context "with valid attributes" do
       it "create a user" do
