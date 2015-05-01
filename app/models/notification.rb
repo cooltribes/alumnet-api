@@ -54,7 +54,7 @@ class Notification
     recipients = [friend]
     notification = Mailboxer::Notification.notify_all(
       recipients,
-      "You have a new friendship request",
+      "Hello, Do you like to be my Alumfriend?",
       "The user #{user.name} sent you a friendship request"
     )
     UserMailer.user_request_friendship(user, friend).deliver
@@ -66,7 +66,7 @@ class Notification
     notification = Mailboxer::Notification.notify_all(
       recipients,
       "You have a new friend!",
-      "The user #{friend.name} has accepted your friendship request"
+      "Your friend #{friend.name} accepted your invitation to connect."
     )
     UserMailer.friend_accept_friendship(user, friend).deliver
     PusherDelegator.notifiy_new_notification(notification, recipients)
