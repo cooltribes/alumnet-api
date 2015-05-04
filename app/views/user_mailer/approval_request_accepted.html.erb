@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h2>Greetings <%= "#{ @user.name }" %></h2>
+    <p>
+      The user <%= "#{@approver.name}" %> has accepted your request for AlumNet access. <br>
+      You have <%= "#{@user.get_approved_requests.count}" %> approves and only need <%= 3 - @user.get_approved_requests.count %> more approves to become an active member.      
+    </p>
+  </body>
+</html>

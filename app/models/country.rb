@@ -13,4 +13,9 @@ class Country < ActiveRecord::Base
   default_scope { order('name') }
   scope :availables, -> { where(region_id: nil) }
 
+  ### Instance Methods
+  def admins
+    User.where(admin_location_id: id, admin_location_type: "Country", role: "NacionalAdmin")
+  end
+
 end

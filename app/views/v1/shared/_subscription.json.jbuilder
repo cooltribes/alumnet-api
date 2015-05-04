@@ -2,6 +2,9 @@ json.(user_subscription, :id)
 
 json.user_subscription do
   json.id user_subscription.id
+  json.start_date user_subscription.start_date
+  json.end_date user_subscription.end_date
+  json.lifetime user_subscription.lifetime
 end
 
 user = user_subscription.user

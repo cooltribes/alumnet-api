@@ -29,4 +29,11 @@ class UserMailer < ActionMailer::Base
     @event = event
     mail to: user.email, subject: "You have a new invitation!"
   end
+
+  def approval_request_accepted(requester, approver)
+    @approver = approver
+    @user = requester
+    mail to: @user.email, subject: "Yo have a new approved request"
+  end
+
 end

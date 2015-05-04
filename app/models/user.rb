@@ -30,10 +30,11 @@ class User < ActiveRecord::Base
   has_many :invited_events, through: :attendances, source: :event
   has_one :profile, dependent: :destroy
   belongs_to :admin_location, polymorphic: true
-  #These are the requests that "self" has made to others  
+  #These are the requests that "self" has made to others
   has_many :approval_requests, dependent: :destroy
-  #These are the requests that were made for "self" to approve  
+  #These are the requests that were made for "self" to approve
   has_many :pending_approval_requests, class_name: "ApprovalRequest", foreign_key: "approver_id"
+  has_many :oauth_providers, dependent: :destroy
 
   ### Scopes
   scope :active, -> { where(status: 1) }
@@ -44,6 +45,10 @@ class User < ActiveRecord::Base
   validates :password, length: { minimum: 8, message: "must contain at least eight (8) characters." },
     format: { with: VALID_PASSWORD_REGEX, message: "must be a combination of numbers and letters" },
     if: 'password.present?'
+
+  ###Nested Atrributes
+  accepts_nested_attributes_for :oauth_providers
+
   ### Callbacks
   before_create :ensure_tokens
   before_create :set_role
@@ -156,7 +161,7 @@ class User < ActiveRecord::Base
   end
 
   def is_premium?
-    member == 1
+    member != 0
   end
 
   def is_regular?
@@ -395,17 +400,17 @@ class User < ActiveRecord::Base
   def create_approval_request_for(user)
     approval_requests.build(approver_id: user.id)
   end
-    
+
   def approval_with(user)
-    ApprovalRequest.where("(approver_id = :id and user_id = :user_id) or (approver_id = :user_id and user_id = :id)", id: id, user_id: user.id).first    
-  end 
+    ApprovalRequest.where("(approver_id = :id and user_id = :user_id) or (approver_id = :user_id and user_id = :id)", id: id, user_id: user.id).first
+  end
 
   def pending_approval_for(user)
-    get_approved_requests.where(approver_id: user.id).take.present?        
+    get_approved_requests.where(approver_id: user.id).take.present?
   end
 
   def pending_approval_by(user)
-    get_pending_approval_requests.where(user_id: user.id).take.present?        
+    get_pending_approval_requests.where(user_id: user.id).take.present?
   end
 
   def get_pending_approval_requests
@@ -416,11 +421,15 @@ class User < ActiveRecord::Base
     approval_requests.where(accepted: true)
   end
 
+  def pending_approval_by(user)
+    pending_approval_requests.where(user_id: user.id, accepted: false).take.present?
+  end
+
   def has_approved_request_with(user)
     approval_requests.where(approver_id: user.id, accepted: true).take.present? ||
     pending_approval_requests.where(user_id: user.id, accepted: true).take.present?
   end
-  
+
   def approval_status_with(user)
     ##Optimize this
     if has_approved_request_with(user) || id == user.id
