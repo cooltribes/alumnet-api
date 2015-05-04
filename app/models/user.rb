@@ -105,8 +105,7 @@ class User < ActiveRecord::Base
   end
 
   def first_committee
-    experience = profile.experiences.where(exp_type: 0).first.committee_id
-    Committee.find_by(id:experience).name
+    profile.experiences.find_by(exp_type: 0).try(:committee).try(:name)
   end
 
   ### Roles
