@@ -20,6 +20,7 @@ gem 'pusher'
 gem 'settingslogic'
 gem 'paranoia', '~> 2.0'
 gem 'fog'
+gem 'httparty'
 
 group :development do
   gem 'spring'

@@ -105,8 +105,7 @@ class User < ActiveRecord::Base
   end
 
   def first_committee
-    experience = profile.experiences.where(exp_type: 0).first.committee_id
-    Committee.find_by(id:experience).name
+    profile.experiences.find_by(exp_type: 0).try(:committee).try(:name)
   end
 
   ### Roles
@@ -418,7 +417,7 @@ class User < ActiveRecord::Base
   end
 
   def get_approved_requests
-    approval_requests.where(approver_id: user.id, accepted: false).take.present?
+    approval_requests.where(accepted: true)
   end
 
   def pending_approval_by(user)
