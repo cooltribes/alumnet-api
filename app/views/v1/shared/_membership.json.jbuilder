@@ -34,3 +34,11 @@ json.permissions do
   json.(membership, :edit_group, :create_subgroup, :delete_member,
     :change_join_process, :moderate_posts, :make_admin, :admin)
 end
+json.friends_in do
+  json.array! group.which_friends_in(current_user) do |user|
+    json.id user.id
+    json.avatar user.profile.avatar
+    json.first_name user.profile.first_name
+    json.last_name user.profile.last_name
+  end
+end
