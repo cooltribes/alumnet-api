@@ -1,7 +1,10 @@
+require 'mailchimp'
+
 class ApplicationController < ActionController::API
   include ActionController::ImplicitRender
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
+  before_action :setup_mcapi
   before_action :authenticate
   before_action :set_request_format
 
@@ -28,6 +31,10 @@ class ApplicationController < ActionController::API
 
   def user_not_authorized
     head 403
+  end
+
+  def setup_mcapi
+    @mc = Mailchimp::API.new('f0ad0e019703b02132b2cf15ad458e50-us10')
   end
 
 end

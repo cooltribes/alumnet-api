@@ -26,6 +26,7 @@ class V1::Admin::UsersController < V1::AdminController
       render json: ["the user is already activated"], status: :unprocessable_entity
     else
       if @user.activate!
+        @mc.lists.subscribe(Settings.mailchimp_general_list_id, {'email' => @user.email}, nil, 'html', false, true, true, true)
         render :show, status: :ok
       else
         render json: ['the register is incompleted!'], status: :unprocessable_entity
@@ -36,6 +37,7 @@ class V1::Admin::UsersController < V1::AdminController
   def banned
     if @user.active?
       @user.banned!
+      @mc.lists.unsubscribe(Settings.mailchimp_general_list_id, {'email' => @user.email}, false, false, true)
       render :show, status: :ok
     else
       render json: ["the user is already banned"]
