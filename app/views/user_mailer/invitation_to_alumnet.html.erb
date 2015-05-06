@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h2>Hi <%= "#{ @guest_name }" %></h2>
+    <p>
+      <%="#{ @user.name }"%> is inviting you to join to Alumnet!
+      Click <a href=<%= "#{Settings.ui_endpoint}/" %>>here</a> to visit AlumNet.
+    </p>
+  </body>
+</html>

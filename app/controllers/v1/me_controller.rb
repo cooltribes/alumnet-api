@@ -4,6 +4,11 @@ class V1::MeController < V1::BaseController
   def show
   end
 
+  def send_invitations
+    Notification.send_invitations_to_alumnet(invitation_params, current_user)
+    render json: { status: 'ok' }
+  end
+
   def messages
     @receipts = @user.receipts.messages_receipts.limit(3)
     render "v1/me/receipts/index", status: :ok
@@ -24,5 +29,13 @@ class V1::MeController < V1::BaseController
 
     def set_user
       @user = current_user if current_user
+    end
+
+    def invitation_params
+      if params[:contacts].is_a?(Hash)
+        params[:contacts].values
+      elsif params[:contacts].is_a?(Array)
+        params[:contacts]
+      end
     end
 end
