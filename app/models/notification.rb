@@ -16,7 +16,7 @@ class Notification
     PusherDelegator.notifiy_new_notification(message, recipients)
   end
 
-  ###Membership Join
+  ### Class Methods
   def self.notify_join_to_users(users, group)
     notification = new(users)
     subject = "You've joined to #{group.name}!"
@@ -128,7 +128,7 @@ class Notification
 
   def self.send_invitations_to_alumnet(contacts, user)
     contacts.each do |contact|
-      UserMailer.invitation_to_alumnet(contact["email"], contact["name"], user)
+      UserMailer.invitation_to_alumnet(contact["email"], contact["name"], user).deliver
     end
   end
 
