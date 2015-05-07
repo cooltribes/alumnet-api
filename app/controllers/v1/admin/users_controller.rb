@@ -62,29 +62,32 @@ class V1::Admin::UsersController < V1::AdminController
 
   def stats
     @q = if @admin_location
-      @admin_location.users.includes(:profile).search()
+      @admin_location.users.includes(:profile)
     else
-      User.includes(:profile).search()
+      User.includes(:profile)
     end
-    @all_users = @q.result
-    if params[:q] 
-      query_users = @q.search(params[:q]).result
-      @query_counters = Hash[
-        "users_all", @query_users.count,
-        "users", @query_users.where(member: 0).count,
-        "members", @query_users.where(member: 1, member: 2).count,
-        "lt_members", @query_users.where(member: 3).count,
-      ]
-    else
-      @query_counters = nil
-    end
-
+    @all_users = @q.search().result
     @counters = Hash[
       "users_all", @all_users.count,
       "users", @all_users.where(member: 0).count,
       "members", @all_users.where(member: 1, member: 2).count,
       "lt_members", @all_users.where(member: 3).count,
     ]
+
+
+    if params[:q] && params[:q] != ""
+      @q = User.includes(:profile)
+      query_users = @q.search(params[:q]).result
+      @query_counters = Hash[
+        "users_all", query_users.count,
+        "users", query_users.where(member: 0).count,
+        "members", query_users.where(member: 1, member: 2).count,
+        "lt_members", query_users.where(member: 3).count,
+      ]
+    else     
+      @query_counters = nil
+    end
+
       
   end
 
