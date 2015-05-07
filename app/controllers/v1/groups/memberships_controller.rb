@@ -18,6 +18,8 @@ class V1::Groups::MembershipsController < V1::BaseController
     @membership = @group.build_membership_for(@user, admin)
     if @membership.save
       @group.notify(@user, admin)
+      @mc_group = Mailchimp::API.new(@group.api_key)
+      @mc_group.lists.subscribe(@group.list_id, {'email' => @user.email}, nil, 'html', false, true, true, true)
       render :show, status: :created
     else
       render json: @membership.errors, status: :unprocessable_entity
