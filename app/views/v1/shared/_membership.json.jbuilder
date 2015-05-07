@@ -27,6 +27,7 @@ json.user do
   json.name user.name
   json.avatar user.avatar.large.url
   json.last_experience user.last_experience.try(:name)
+  json.first_committee user.first_committee
 end
 json.is_friend user.is_friend_of?(@current_user)
 
