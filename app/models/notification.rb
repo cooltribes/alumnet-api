@@ -126,10 +126,4 @@ class Notification
     end
   end
 
-  def self.send_invitations_to_alumnet(contacts, user)
-    contacts.each do |contact|
-      UserMailer.invitation_to_alumnet(contact["email"], contact["name"], user).deliver
-    end
-  end
-
 end

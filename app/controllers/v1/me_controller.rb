@@ -5,8 +5,13 @@ class V1::MeController < V1::BaseController
   end
 
   def send_invitations
-    Notification.send_invitations_to_alumnet(invitation_params, current_user)
-    render json: { status: 'ok' }
+    sender = SenderInvitation.new(params[:contacts], current_user)
+    if sender.valid?
+      sender.send_invitations
+      render json: { status: 'ok' }
+    else
+      render json: { errors: sender.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   def messages
@@ -31,11 +36,4 @@ class V1::MeController < V1::BaseController
       @user = current_user if current_user
     end
 
-    def invitation_params
-      if params[:contacts].is_a?(Hash)
-        params[:contacts].values
-      elsif params[:contacts].is_a?(Array)
-        params[:contacts]
-      end
-    end
 end
