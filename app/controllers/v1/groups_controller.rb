@@ -1,3 +1,5 @@
+require 'mailchimp'
+
 class V1::GroupsController < V1::BaseController
   include Pundit
   before_action :set_group, except: [:index, :create]
@@ -28,6 +30,10 @@ class V1::GroupsController < V1::BaseController
     @group.cover_uploader = current_user
     if @group.save
       Membership.create_membership_for_creator(@group, current_user)
+      if @group.mailchimp
+        @mc_group = Mailchimp::API.new(@group.api_key)
+        @mc_group.lists.subscribe(@group.list_id, {'email' => current_user.email}, nil, 'html', false, true, true, true)
+      end
       render :show, status: :created,  location: @group
     else
       render json: @group.errors, status: :unprocessable_entity
@@ -70,7 +76,7 @@ class V1::GroupsController < V1::BaseController
 
   def group_params
     params.permit(:name, :description, :cover, :group_type, :official, :country_id,
-      :city_id, :join_process)
+      :city_id, :join_process, :mailchimp, :api_key, :list_id)
   end
 
   def crop_params

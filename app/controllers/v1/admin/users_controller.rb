@@ -1,5 +1,5 @@
 class V1::Admin::UsersController < V1::AdminController
-  before_action :set_user, except: :index
+  before_action :set_user, except: [:index, :stats]
 
   def index
     @q = if @admin_location
@@ -26,6 +26,7 @@ class V1::Admin::UsersController < V1::AdminController
       render json: ["the user is already activated"], status: :unprocessable_entity
     else
       if @user.activate!
+        @mc.lists.subscribe(Settings.mailchimp_general_list_id, {'email' => @user.email}, nil, 'html', false, true, true, true)
         render :show, status: :ok
       else
         render json: ['the register is incompleted!'], status: :unprocessable_entity
@@ -36,6 +37,7 @@ class V1::Admin::UsersController < V1::AdminController
   def banned
     if @user.active?
       @user.banned!
+      @mc.lists.unsubscribe(Settings.mailchimp_general_list_id, {'email' => @user.email}, false, false, true)
       render :show, status: :ok
     else
       render json: ["the user is already banned"]
@@ -58,6 +60,37 @@ class V1::Admin::UsersController < V1::AdminController
       @user.destroy
       head :no_content
     end
+  end
+
+  def stats
+    @q = if @admin_location
+      @admin_location.users.includes(:profile)
+    else
+      User.includes(:profile)
+    end
+    @all_users = @q.search().result
+    @counters = Hash[
+      "users_all", @all_users.count,
+      "users", @all_users.where(member: 0).count,
+      "members", @all_users.where(member: 1, member: 2).count,
+      "lt_members", @all_users.where(member: 3).count,
+    ]
+
+
+    if params[:q] && params[:q] != ""
+      @q = User.includes(:profile)
+      query_users = @q.search(params[:q]).result
+      @query_counters = Hash[
+        "users_all", query_users.count,
+        "users", query_users.where(member: 0).count,
+        "members", query_users.where(member: 1, member: 2).count,
+        "lt_members", query_users.where(member: 3).count,
+      ]
+    else     
+      @query_counters = nil
+    end
+
+      
   end
 
   private

@@ -35,6 +35,7 @@ class User < ActiveRecord::Base
   #These are the requests that were made for "self" to approve
   has_many :pending_approval_requests, class_name: "ApprovalRequest", foreign_key: "approver_id"
   has_many :oauth_providers, dependent: :destroy
+  has_many :contacts, dependent: :destroy
 
   ### Scopes
   scope :active, -> { where(status: 1) }
@@ -105,8 +106,7 @@ class User < ActiveRecord::Base
   end
 
   def first_committee
-    experience = profile.experiences.where(exp_type: 0).first.committee_id
-    Committee.find_by(id:experience).name
+    profile.experiences.find_by(exp_type: 0).try(:committee).try(:name)
   end
 
   ### Roles

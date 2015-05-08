@@ -21,6 +21,7 @@ gem 'settingslogic'
 gem 'paranoia', '~> 2.0'
 gem 'fog'
 gem 'httparty'
+gem 'mailchimp-api'
 
 group :development do
   gem 'spring'

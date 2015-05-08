@@ -207,6 +207,9 @@ GEM
       carrierwave (>= 0.5.8)
       foreigner (>= 0.9.1)
       rails (>= 3.2.0)
+    mailchimp-api (2.0.6)
+      excon (>= 0.16.0)
+      json (>= 1.7.7)
     mime-types (2.4.3)
     mini_magick (4.0.0)
     mini_portile (0.6.2)
@@ -327,6 +330,7 @@ DEPENDENCIES
   lol_dba
   machinist
   mailboxer
+  mailchimp-api
   mini_magick
   paranoia (~> 2.0)
   pg
