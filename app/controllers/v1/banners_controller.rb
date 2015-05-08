@@ -37,7 +37,7 @@ class V1::BannersController < V1::BaseController
   private
 
   def set_banner
-    @banner = Banner.find(params[:id])
+    @banner = Banner.find(params[:banner_id])
   end
 
   def banner_params
