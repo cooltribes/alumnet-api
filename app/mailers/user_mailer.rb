@@ -36,4 +36,10 @@ class UserMailer < ActionMailer::Base
     mail to: @user.email, subject: "Yo have a new approved request"
   end
 
+  def user_request_approval(approver, requester)
+    @approver = approver
+    @requester = requester
+    mail to: @requester.email, subject: "#{requester.name} wants to be approved in AlumNet"
+  end
+
 end

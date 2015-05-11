@@ -10,7 +10,7 @@ class V1::Me::ApprovalController < V1::BaseController
   def create
     @approval_request = @user.create_approval_request_for(@approver)
     if @approval_request.save
-      # Notification.notify_friendship_request_to_user(@user, @friend)
+      Notification.notify_approval_request_to_user(@user, @approver)
       render :show, status: :created
     else
       render json: @approval_request.errors, status: :unprocessable_entity

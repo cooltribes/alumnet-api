@@ -405,7 +405,7 @@ class User < ActiveRecord::Base
   end
 
   def pending_approval_for(user)
-    get_approved_requests.where(approver_id: user.id).take.present?
+    approval_requests.where(approver_id: user.id, accepted: false).take.present?
   end
 
   def pending_approval_by(user)

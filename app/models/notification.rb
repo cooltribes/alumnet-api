@@ -2,6 +2,7 @@ class Notification
   attr_reader :recipients
   attr_reader :message
 
+  #Param is the array or single object 
   def initialize(recipients)
     @recipients = recipients.is_a?(Array) ? recipients : [recipients]
   end
@@ -139,18 +140,26 @@ class Notification
     notification.recipients.each do |admin|
       AdminMailer.user_request_approval(admin, user).deliver
     end
-    
+   
+  end
 
-    # recipients = admins.is_a?(Array) ? admins : [admins]
-    # # recipients = [admins]
-    # receipts = Mailboxer::Notification.notify_all(
-    #   recipients,
-    #   "A new user was registered in AlumNet",
-    #   "The user #{user.name} is waiting for your approval"
-    # )
-    # byebug
-    # message = receipts.is_a?(Array) ? receipts.first.notification : receipts.notification
-    # PusherDelegator.notifiy_new_notification(message, recipients)
+  def self.notify_approval_request_to_user(user, approver)
+    
+    notification = self.new(approver)
+    subject = "#{user.name} wants to be approved in AlumNet"
+    body = "Hello, I'm registering in Alumnet. Please approve my membership"
+    
+    #Create and send notification
+    message = notification.send_notification(subject, body)
+
+    #Use pusher to notify recipients in real time
+    notification.send_pusher_notification()
+
+    #Send Email
+    notification.recipients.each do |recipient|
+      UserMailer.user_request_approval(recipient, user).deliver
+    end
+   
   end
 
 end
