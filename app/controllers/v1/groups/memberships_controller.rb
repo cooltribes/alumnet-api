@@ -22,7 +22,7 @@ class V1::Groups::MembershipsController < V1::BaseController
       @group.notify(@user, admin)
       if @group.mailchimp && @group.join_process == 0
         @mc_group = Mailchimp::API.new(@group.api_key)
-        @mc_group.lists.subscribe(@group.list_id, {'email' => @user.email}, nil, 'html', false, true, true, true)
+        @mc_group.lists.subscribe(@group.list_id, {'email' => @user.email}, nil, 'html', false, true, true, false)
       end
       render :show, status: :created
     else
@@ -35,7 +35,7 @@ class V1::Groups::MembershipsController < V1::BaseController
       if @group.mailchimp
         if @membership.approved
           @mc_group = Mailchimp::API.new(@group.api_key)
-          @mc_group.lists.subscribe(@group.list_id, {'email' => @membership.user.email}, nil, 'html', false, true, true, true)
+          @mc_group.lists.subscribe(@group.list_id, {'email' => @membership.user.email}, nil, 'html', false, true, true, false)
         else
           @mc_group.lists.unsubscribe(@group.list_id, {'email' => @membership.user.email}, false, false, true)
         end
