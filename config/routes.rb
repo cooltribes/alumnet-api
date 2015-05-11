@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
     resource :me, only: [:show, :update], controller: 'me' do
       get :messages
+      post :send_invitations
       resource :profile, only: [:show, :update], controller: 'me/profiles'
       resources :posts, controller: 'me/posts'
       resources :friendships, except: :show, controller: 'me/friendships' do
@@ -30,7 +31,7 @@ Rails.application.routes.draw do
       resources :privacies, except: :show, controller: 'me/privacies'
       resources :approval_requests, except: [:show], controller: 'me/approval' do
         put :notify_admins, on: :collection
-      end      
+      end
     end
 
     resources :users, except: :create do

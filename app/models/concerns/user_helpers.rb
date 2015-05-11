@@ -22,7 +22,11 @@ module UserHelpers
 
   def permit_last_experience(user)
     if self.last_experience.present? && self.permit('see-job', user)
-      self.last_experience.name
+      if last_experience.organization_name.present?
+        self.last_experience.name + " at " + self.last_experience.organization_name
+      else
+        self.last_experience.name
+      end
     else
       nil
     end
