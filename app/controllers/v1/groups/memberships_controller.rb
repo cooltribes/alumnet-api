@@ -20,7 +20,7 @@ class V1::Groups::MembershipsController < V1::BaseController
     @membership = @group.build_membership_for(@user, admin)
     if @membership.save
       @group.notify(@user, admin)
-      if @group.mailchimp && @group.join_process == 0
+      if @group.mailchimp && (@group.join_process == 0 || admin)
         @mc_group = Mailchimp::API.new(@group.api_key)
         @mc_group.lists.subscribe(@group.list_id, {'email' => @user.email}, nil, 'html', false, true, true, false)
       end
@@ -50,6 +50,7 @@ class V1::Groups::MembershipsController < V1::BaseController
     email = @membership.user.email
     @membership.destroy
     if @group.mailchimp
+      @mc_group = Mailchimp::API.new(@group.api_key)
       @mc_group.lists.unsubscribe(@group.list_id, {'email' => email}, false, false, true)
     end
     head :no_content
