@@ -263,14 +263,14 @@ class User < ActiveRecord::Base
   end
 
   def accepted_friends
-    friends.where("friendships.accepted = ?", true)
+    friends.where("friendships.accepted = ?", true).where(status: 1)
   end
 
   def accepted_inverse_friends
-    inverse_friends.where("friendships.accepted = ?", true)
+    inverse_friends.where("friendships.accepted = ?", true).where(status: 1)
   end
 
-  def accepted_friendships
+  def accepted_friendships    
     friendships.where(accepted: true)
   end
 
