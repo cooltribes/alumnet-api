@@ -1,5 +1,6 @@
 class AdminMailer < ActionMailer::Base
   default from: "alumnet@alumnet.com"
+  layout "admin_mailer"
 
   def user_was_joined(admin, user, group)
     @user = user
