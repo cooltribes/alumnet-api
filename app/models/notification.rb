@@ -138,7 +138,6 @@ class Notification
 
     #Use pusher to notify recipients in real time
     notification.send_pusher_notification()
-
     #Send Email
     notification.recipients.each do |recipient|
       UserMailer.user_request_approval(recipient, user).deliver

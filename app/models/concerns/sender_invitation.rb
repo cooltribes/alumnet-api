@@ -1,10 +1,11 @@
 class SenderInvitation
   include ActiveModel::Model
 
-  attr_reader :file
+  attr_reader :file, :count
   validate :contacts_format
 
   def initialize(object, sender)
+    @count = 0
     @sender = sender
     if object.is_a?(Array)
       @contacts = object
@@ -20,6 +21,7 @@ class SenderInvitation
 
   def send_invitations
     contacts_out_alumnet.each do |contact|
+      @count = count + 1
       UserMailer.invitation_to_alumnet(contact[:email], contact[:name], @sender).deliver
     end
   end
@@ -67,7 +69,7 @@ class SenderInvitation
     end
 
     def contacts_format
-      errors.add(:base, 'the contacts are empty') if contacts.empty?
-      errors.add(:base, 'contacts with bad format. Please check the data') unless contacts.all? { |c| c.has_key?(:email) && c.has_key?(:name) }
+      errors.add(:base, 'The contacts are empty') if contacts.empty?
+      errors.add(:base, 'Contacts with bad format. Please check the data') unless contacts.all? { |c| c.has_key?(:email) && c.has_key?(:name) }
     end
 end
