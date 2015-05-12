@@ -68,6 +68,18 @@ class V1::GroupsController < V1::BaseController
     head :no_content
   end
 
+  def migrate_users
+    if @group.mailchimp
+      @mc_group = Mailchimp::API.new(@group.api_key)
+      @group.members.each do |member|
+        @mc_group.lists.subscribe(@group.list_id, {'email' => member.email}, nil, 'html', false, true, true, true)
+      end
+      render :show, status: :ok
+    else
+      render json: { error: 'Group does not have mailchimp' }
+    end
+  end
+
   private
 
   def set_group

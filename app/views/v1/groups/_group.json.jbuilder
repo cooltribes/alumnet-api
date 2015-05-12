@@ -4,6 +4,12 @@ json.can_be_official group.can_be_official?
 
 json.can_be_unofficial group.can_be_unofficial?
 
+json.mailchimp group.mailchimp?
+
+json.api_key group.api_key
+
+json.list_id group.list_id
+
 json.group_type group.get_group_type_info
 
 json.country group.get_country_info

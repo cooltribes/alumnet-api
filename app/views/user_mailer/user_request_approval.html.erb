@@ -1,0 +1,8 @@
+<h2>Greetings <%= "#{ @approver.name }" %></h2>
+<p>
+  <%= "#{ @requester.name }" %> says: Hello, I'm registering in Alumnet. Please approve my membership      
+</p>
+<p>
+  Check your pending approval requests <a href=<%= "#{Settings.ui_endpoint}/#friends" %>>here</a>.
+</p>
+
