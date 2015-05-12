@@ -68,6 +68,10 @@ class V1::GroupsController < V1::BaseController
     head :no_content
   end
 
+  def migrate_users
+    render json: @group
+  end
+
   private
 
   def set_group
