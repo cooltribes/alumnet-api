@@ -55,7 +55,7 @@ Rails.application.routes.draw do
       post :cropping, on: :member
       post :add_group, on: :member
       get :subgroups, on: :member
-      get :migrate_users
+      get :migrate_users, on: :member
       resources :posts, controller: 'groups/posts'
       resources :events, controller: 'groups/events'
       resources :memberships, except: :show, controller: 'groups/memberships' do
