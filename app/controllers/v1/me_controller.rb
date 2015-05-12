@@ -8,7 +8,7 @@ class V1::MeController < V1::BaseController
     sender = SenderInvitation.new(params[:contacts], current_user)
     if sender.valid?
       sender.send_invitations
-      render json: { status: 'ok' }
+      render json: { status: 'ok', count: sender.count }
     else
       render json: { errors: sender.errors.full_messages }, status: :unprocessable_entity
     end
