@@ -51,7 +51,6 @@ else
   approval_request = user.approval_with(current_user)
   if approval_request
     json.approval_status current_user.approval_status_with(user)
-    # json.approval_status current_user.friendship_status_with(user)
   else
     json.approval_status "none"
   end

@@ -2,6 +2,7 @@ class Notification
   attr_reader :recipients
   attr_reader :message
 
+  #Param is the array or single object 
   def initialize(recipients)
     @recipients = recipients.is_a?(Array) ? recipients : [recipients]
   end
@@ -59,7 +60,7 @@ class Notification
   end
 
   def self.notify_friendship_request_to_user(user, friend)
-    notification = new(user)
+    notification = new(friend)
     subject = "Hello, Do you like to be my Alumfriend?"
     body = "The user #{user.name} sent you a friendship request"
     notification.send_notification(subject, body)
@@ -123,6 +124,24 @@ class Notification
     #Send Email
     notification.recipients.each do |admin|
       AdminMailer.user_request_approval(admin, user).deliver
+    end
+  end
+
+  def self.notify_approval_request_to_user(user, approver)
+    
+    notification = self.new(approver)
+    subject = "#{user.name} wants to be approved in AlumNet"
+    body = "Hello, I'm registering in Alumnet. Please approve my membership"
+    
+    #Create and send notification
+    message = notification.send_notification(subject, body)
+
+    #Use pusher to notify recipients in real time
+    notification.send_pusher_notification()
+
+    #Send Email
+    notification.recipients.each do |recipient|
+      UserMailer.user_request_approval(recipient, user).deliver
     end
   end
 

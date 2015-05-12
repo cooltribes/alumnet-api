@@ -263,14 +263,14 @@ class User < ActiveRecord::Base
   end
 
   def accepted_friends
-    friends.where("friendships.accepted = ?", true)
+    friends.where("friendships.accepted = ?", true).where(status: 1)
   end
 
   def accepted_inverse_friends
-    inverse_friends.where("friendships.accepted = ?", true)
+    inverse_friends.where("friendships.accepted = ?", true).where(status: 1)
   end
 
-  def accepted_friendships
+  def accepted_friendships    
     friendships.where(accepted: true)
   end
 
@@ -406,7 +406,7 @@ class User < ActiveRecord::Base
   end
 
   def pending_approval_for(user)
-    get_approved_requests.where(approver_id: user.id).take.present?
+    approval_requests.where(approver_id: user.id, accepted: false).take.present?
   end
 
   def pending_approval_by(user)
