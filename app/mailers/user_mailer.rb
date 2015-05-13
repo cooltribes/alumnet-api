@@ -39,7 +39,7 @@ class UserMailer < ActionMailer::Base
   def user_request_approval(approver, requester)
     @approver = approver
     @requester = requester
-    mail to: @requester.email, subject: "#{requester.name} wants to be approved in AlumNet"
+    mail to: @approver.email, subject: "#{requester.name} wants to be approved in AlumNet"
   end
 
   def invitation_to_alumnet(email, guest_name, user)

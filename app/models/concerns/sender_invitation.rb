@@ -1,18 +1,16 @@
 class SenderInvitation
   include ActiveModel::Model
 
-  attr_reader :file
+  attr_reader :file, :count
   validate :contacts_format
 
-  def initialize(object, sender)
+  def initialize(contacts, sender)
+    @count = 0
     @sender = sender
-    if object.is_a?(Array)
-      @contacts = object
-    elsif object.is_a?(Hash)
-      @contacts = extract_contact_from_hash(object)
-    elsif object.is_a?(ActionDispatch::Http::UploadedFile)
-      @file = object
-      @contacts = extract_contact_from_file(object)
+    if contacts.is_a?(Array)
+      @contacts = contacts
+    elsif contacts.is_a?(Hash)
+      @contacts = extract_contact_from_hash(contacts)
     else
       @contacts = []
     end
@@ -20,6 +18,7 @@ class SenderInvitation
 
   def send_invitations
     contacts_out_alumnet.each do |contact|
+      @count = count + 1
       UserMailer.invitation_to_alumnet(contact[:email], contact[:name], @sender).deliver
     end
   end
@@ -54,20 +53,12 @@ class SenderInvitation
       contacts.inject([]) { |array, contact| array << contact[:email]  }
     end
 
-    def extract_contact_from_hash(object)
-      object.values
-    end
-
-    def extract_contact_from_file(object)
-      contacts_array = []
-      CSV.foreach(object.path, headers: true) do |row|
-        contacts_array << row.to_hash
-      end
-      contacts_array
+    def extract_contact_from_hash(contacts)
+      contacts.values
     end
 
     def contacts_format
-      errors.add(:base, 'the contacts are empty') if contacts.empty?
-      errors.add(:base, 'contacts with bad format. Please check the data') unless contacts.all? { |c| c.has_key?(:email) && c.has_key?(:name) }
+      errors.add(:base, 'The contacts are empty') if contacts.empty?
+      errors.add(:base, 'Contacts with bad format. Please check the data') unless contacts.all? { |c| c.has_key?(:email) && c.has_key?(:name) }
     end
 end
