@@ -121,8 +121,8 @@ Like.blueprint do
 end
 
 Friendship.blueprint(:accepted) do
-  user { User.make! }
-  friend { User.make! }
+  user { User.make!(status: 1) }
+  friend { User.make!(status: 1) }
   accepted { true }
 end
 
