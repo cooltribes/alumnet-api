@@ -31,6 +31,10 @@ module AlumnetUploader
       if model.imgX1.present?
         imgW = model.imgW.to_i
         imgH = model.imgH.to_i
+        # imgX1 = model.imgX1.to_i * (1600/450)
+        # imgY1 = model.imgY1.to_i * (560/150)
+        # cropW = model.cropW.to_i * (1600/450)
+        # cropH = model.cropH.to_i * (560/150)
         imgX1 = model.imgX1.to_i
         imgY1 = model.imgY1.to_i
         cropW = model.cropW.to_i
