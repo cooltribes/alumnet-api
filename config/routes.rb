@@ -32,6 +32,8 @@ Rails.application.routes.draw do
       resources :approval_requests, except: [:show], controller: 'me/approval' do
         put :notify_admins, on: :collection
       end
+
+      post '/contacts/file', to: 'contacts#file' ###TEMPORAL
     end
 
     resources :users, except: :create do
@@ -46,9 +48,7 @@ Rails.application.routes.draw do
         get :friends, on: :collection
         get :commons, on: :collection
       end
-      resources :subscriptions, except: :show, controller: 'users/subscriptions' do
-        #get :subscriptions, on: :collection
-      end
+      resources :subscriptions, except: :show, controller: 'users/subscriptions'
     end
 
     resources :groups do
@@ -105,7 +105,6 @@ Rails.application.routes.draw do
     resources :profiles, only: [:show, :update] do
       post :cropping, on: :member
       resources :experiences, except: [:new, :edit], controller: 'profiles/experiences'
-      # resources :experiences, except: [:show, :new, :edit], controller: 'profiles/experiences'
       resources :skills, except: [:show, :new, :edit], controller: 'profiles/skills'
       resources :language_levels, except: [:show, :new, :edit], controller: 'profiles/language_levels'
       resources :contact_infos, except: [:show, :new, :edit], controller: 'profiles/contact_infos'

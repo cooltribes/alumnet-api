@@ -18,8 +18,6 @@ RSpec.describe SenderInvitation do
         expect(sender.contacts).to eq([{name: "text", email: "testing@email.com"}])
       end
     end
-    describe "when an Array is passed" do
-    end
   end
 
   describe "contacts_out_alumnet" do
@@ -63,12 +61,12 @@ RSpec.describe SenderInvitation do
     it "should return an error if the contacts are empty" do
       sender = SenderInvitation.new([], user_sender)
       expect(sender).to_not be_valid
-      expect(sender.errors[:base]).to eq(["the contacts are empty"])
+      expect(sender.errors[:base]).to eq(["The contacts are empty"])
     end
     it "should return an error if the contacts not have name and email keys" do
       sender = SenderInvitation.new([{nombre: "name", mail: "testing@email"}], user_sender)
       expect(sender).to_not be_valid
-      expect(sender.errors[:base]).to eq(["contacts with bad format. Please check the data"])
+      expect(sender.errors[:base]).to eq(["Contacts with bad format. Please check the data"])
     end
   end
 end
