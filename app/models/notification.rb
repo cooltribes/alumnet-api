@@ -2,7 +2,7 @@ class Notification
   attr_reader :recipients
   attr_reader :message
 
-  #Param is the array or single object 
+  #Param is the array or single object
   def initialize(recipients)
     @recipients = recipients.is_a?(Array) ? recipients : [recipients]
   end
@@ -128,11 +128,11 @@ class Notification
   end
 
   def self.notify_approval_request_to_user(user, approver)
-    
+
     notification = self.new(approver)
     subject = "#{user.name} wants to be approved in AlumNet"
     body = "Hello, I'm registering in Alumnet. Please approve my membership"
-    
+
     #Create and send notification
     message = notification.send_notification(subject, body)
 

@@ -28,16 +28,37 @@ class V1::GroupsController < V1::BaseController
     @group = Group.new(group_params)
     @group.creator = current_user
     @group.cover_uploader = current_user
-    if @group.save
-      Membership.create_membership_for_creator(@group, current_user)
-      if @group.mailchimp
+    success = true
+    message = 'No error'
+    if @group.mailchimp
+      begin
         @mc_group = Mailchimp::API.new(@group.api_key)
-        @mc_group.lists.subscribe(@group.list_id, {'email' => current_user.email}, nil, 'html', false, true, true, true)
+      rescue Mailchimp::InvalidApiKeyError
+        success = false
+        message = 'Invalid API Key'
       end
-      render :show, status: :created,  location: @group
-    else
-      render json: @group.errors, status: :unprocessable_entity
+
+      if success
+        begin
+          @mc_group.lists.subscribe(@group.list_id, {'email' => current_user.email}, nil, 'html', false, true, true, true)  
+        rescue Mailchimp::ListDoesNotExistError
+          success = false
+          message = 'List does not exist'
+        end
+      end
     end
+
+    if success
+      if @group.save
+        Membership.create_membership_for_creator(@group, current_user)
+        render :show, status: :created,  location: @group
+      else
+        render json: @group.errors, status: :unprocessable_entity
+      end
+    else
+      render json: { success: success, message: message }, status: :unprocessable_entity
+    end
+
   end
 
   def add_group
@@ -70,13 +91,36 @@ class V1::GroupsController < V1::BaseController
 
   def migrate_users
     if @group.mailchimp
-      @mc_group = Mailchimp::API.new(@group.api_key)
-      @group.members.each do |member|
-        @mc_group.lists.subscribe(@group.list_id, {'email' => member.email}, nil, 'html', false, true, true, true)
+      success = true
+      message = 'No error'
+      begin
+        @mc_group = Mailchimp::API.new(@group.api_key)
+      rescue Mailchimp::InvalidApiKeyError
+        success = false
       end
-      render :show, status: :ok
+        
+      if success
+        begin
+          @group.members.each do |member|
+            @mc_group.lists.subscribe(@group.list_id, {'email' => member.email}, nil, 'html', false, true, true, true)
+          end
+        rescue Mailchimp::ListDoesNotExistError
+          success = false
+          message = 'List does not exist'
+        rescue Mailchimp::Error => ex
+          success = false
+          if ex.message
+            message = ex.message
+          else
+            message = "An unknown error occurred"
+          end
+        end
+        render json: { success: success, message: message }
+      else
+        render json: { success: false,  message: 'Invalid API Key' }
+      end
     else
-      render json: { error: 'Group does not have mailchimp' }
+      render json: { success: false,  message: 'Group does not have mailchimp' }
     end
   end
 

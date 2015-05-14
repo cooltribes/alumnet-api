@@ -7,7 +7,7 @@ class UserCoverUploader < CarrierWave::Uploader::Base
 
   version :main do
     process :crop!
-    process :resize_to_fill => [1360, 430]
+    # process :resize_to_fill => [1600, 500]
   end
 
   version :crop do
