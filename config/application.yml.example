@@ -5,12 +5,14 @@ defaults: &defaults
 
 development:
   <<: *defaults
+  mailchimp_general_list_id: 'a43c1698cd'
 
 test:
   <<: *defaults
 
 staging:
   <<: *defaults
+  mailchimp_general_list_id: '52c8e138cb'
 
 production:
   <<: *defaults
