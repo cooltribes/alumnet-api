@@ -66,6 +66,11 @@ json.is_system_admin user.is_system_admin?
 json.is_premium user.is_premium?
 json.first_committee user.first_committee
 
+
+if user.is_regional_admin? || is_national_admin?
+  json.admin_location_id user.admin_location_id
+end
+
 #Counters
 json.friends_count user.permit_friends_count(current_user)
 json.mutual_friends_count current_user.mutual_friends_count(user)
