@@ -35,4 +35,22 @@ json.pending_approval_requests_count @user.pending_approval_requests_count
 json.approved_requests_count @user.approved_requests_count
 json.days_membership @user.days_membership
 
+#Admin location
 
+if @user.is_regional_admin?
+  json.admin_country_id @user.profile.residence_country.id #Temp - it can change
+  json.admin_country_name @user.profile.residence_country.name
+  
+  json.admin_region_id @user.admin_location.id
+  json.admin_region_name @user.admin_location.name
+end
+
+if @user.is_nacional_admin?
+  json.admin_country_id @user.admin_location.id
+  json.admin_country_name @user.admin_location.name
+  
+  if @user.admin_location.region.present?
+    json.admin_region_id @user.admin_location.region.id
+    json.admin_region_name @user.admin_location.region.name
+  end
+end
