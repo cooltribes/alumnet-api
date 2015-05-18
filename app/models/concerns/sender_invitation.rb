@@ -29,7 +29,7 @@ class SenderInvitation
 
   def users_in_alumnet
     emails = extract_email_from_contacts(contacts)
-    User.where(email: emails)
+    User.active.where(email: emails)
   end
 
   def contacts_in_alumnet
@@ -43,7 +43,7 @@ class SenderInvitation
   def contacts_out_alumnet
     contacts_array = []
     contacts.each do |contact|
-      contacts_array << contact unless User.find_by(email: contact[:email])
+      contacts_array << contact unless User.active.find_by(email: contact[:email])
     end
     contacts_array
   end
