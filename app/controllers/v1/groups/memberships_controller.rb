@@ -18,6 +18,7 @@ class V1::Groups::MembershipsController < V1::BaseController
   def create
     admin = @group.user_is_admin?(current_user)
     @membership = @group.build_membership_for(@user, admin)
+    byebug
     if @membership.save
       @group.notify(@user, admin)
       if @group.mailchimp && (@group.join_process == 0 || admin)
@@ -48,7 +49,7 @@ class V1::Groups::MembershipsController < V1::BaseController
 
   def destroy
     email = @membership.user.email
-    @membership.destroy
+    @membership.really_destroy!
     if @group.mailchimp
       @mc_group = Mailchimp::API.new(@group.api_key)
       @mc_group.lists.unsubscribe(@group.list_id, {'email' => email}, false, false, true)
