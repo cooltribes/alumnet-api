@@ -28,37 +28,18 @@ class V1::GroupsController < V1::BaseController
     @group = Group.new(group_params)
     @group.creator = current_user
     @group.cover_uploader = current_user
-    success = true
-    message = 'No error'
-    if @group.mailchimp
-      begin
-        @mc_group = Mailchimp::API.new(@group.api_key)
-      rescue Mailchimp::InvalidApiKeyError
-        success = false
-        message = 'Invalid API Key'
-      end
-
-      if success
-        begin
-          @mc_group.lists.subscribe(@group.list_id, {'email' => current_user.email}, nil, 'html', false, true, true, true)  
-        rescue Mailchimp::ListDoesNotExistError
-          success = false
-          message = 'List does not exist'
-        end
-      end
-    end
-
-    if success
-      if @group.save
+    if @group.valid?
+      @mailchimp = MailchimpGroup.new(@group)
+      if @mailchimp.valid?
+        @group.save
         Membership.create_membership_for_creator(@group, current_user)
         render :show, status: :created,  location: @group
       else
-        render json: @group.errors, status: :unprocessable_entity
+        render json: { success: false, message: @mailchimp.errors }, status: :unprocessable_entity
       end
     else
-      render json: { success: success, message: message }, status: :unprocessable_entity
+      render json: @group.errors, status: :unprocessable_entity
     end
-
   end
 
   def add_group
@@ -98,7 +79,7 @@ class V1::GroupsController < V1::BaseController
       rescue Mailchimp::InvalidApiKeyError
         success = false
       end
-        
+
       if success
         begin
           @group.members.each do |member|
