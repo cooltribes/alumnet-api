@@ -7,7 +7,7 @@ class CoverUploader < CarrierWave::Uploader::Base
 
   version :main do
     process :crop!
-    process :resize_to_fill => [1360, 430]
+    process :resize_to_fit => [1360, 430]
   end
 
   version :card do

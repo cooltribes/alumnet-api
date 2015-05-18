@@ -34,6 +34,7 @@ Rails.application.routes.draw do
       end
 
       post '/contacts/file', to: 'contacts#file' ###TEMPORAL
+      post '/contacts/in_alumnet', to: 'contacts#in_alumnet' ###TEMPORAL
     end
 
     resources :users, except: :create do

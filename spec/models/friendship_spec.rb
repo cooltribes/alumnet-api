@@ -9,12 +9,12 @@ RSpec.describe Friendship, :type => :model do
     describe "#my_friends" do
       it "return all friends of user" do
         user = User.make!
-        friend_one = User.make!
-        friend_two = User.make!
-        friend_three = User.make!
-        user.create_friendship_for(friend_one).tap { |f| f.save! }.accept!
-        user.create_friendship_for(friend_two).tap { |f| f.save! }.accept!
-        friend_three.create_friendship_for(user).tap { |f| f.save! }.accept! ##inverse_friend
+        friend_one = User.make!(status: 1)
+        friend_two = User.make!(status: 1)
+        friend_three = User.make!(status: 1)
+        user.create_friendship_for(friend_one).tap { |f| f.save! }.accept!(false)
+        user.create_friendship_for(friend_two).tap { |f| f.save! }.accept!(false)
+        friend_three.create_friendship_for(user).tap { |f| f.save! }.accept!(false) ##inverse_friend
         expect(user.my_friends).to match_array([friend_one, friend_two, friend_three])
       end
     end
