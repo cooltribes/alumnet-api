@@ -18,7 +18,6 @@ class V1::Groups::MembershipsController < V1::BaseController
   def create
     admin = @group.user_is_admin?(current_user)
     @membership = @group.build_membership_for(@user, admin)
-    byebug
     if @membership.save
       @group.notify(@user, admin)
       if @group.mailchimp && (@group.join_process == 0 || admin)
@@ -33,6 +32,9 @@ class V1::Groups::MembershipsController < V1::BaseController
 
   def update
     if @membership.update(membership_params)
+      
+      Notification.notify_group_join_accepted_to_user(@membership.user, @group)
+
       if @group.mailchimp
         if @membership.approved
           @mc_group = Mailchimp::API.new(@group.api_key)
