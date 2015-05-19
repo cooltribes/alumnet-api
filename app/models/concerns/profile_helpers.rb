@@ -26,7 +26,20 @@ module ProfileHelpers
 
   def permit_residence_country(user)
     if self.residence_country.present? && self.user.permit('see-residence', user)
-      { id: self.residence_country.id, text: self.residence_country.name }
+      id = nil
+      name = nil
+      
+      if self.residence_country.region.present?
+        id = self.residence_country.region.id
+        name = self.residence_country.region.name
+      end
+
+      { id: self.residence_country.id, text: self.residence_country.name, 
+        region: {
+          id:  id,
+          text: name
+        }
+      }
     else
       nil
     end
