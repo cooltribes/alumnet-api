@@ -1,13 +1,23 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
-  </head>
-  <body>
-    <h2>Hi <%= "#{ @guest_name }" %></h2>
-    <p>
-      <%="#{ @user.name }"%> is inviting you to join to Alumnet!
-      Click <a href=<%= "#{Settings.ui_endpoint}/" %>>here</a> to visit AlumNet.
-    </p>
-  </body>
-</html>
+<div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
+  <p>Hello <%= "#{ @guest_name }" %></p>
+  <p>
+    The AIESEC Alumni <%="#{ @user.name }"%> sent you this invitation to join AlumNet. 
+  </p>
+
+  <p>
+    <a href=<%= "#{Settings.ui_endpoint}/" %>>Click here to register in AlumNet</a>
+  </p>
+
+  <h3>What is AlumNet?</h3>
+
+  <p>
+    AlumNet is the official platform for all AIESEC Alumni developed by the AIESEC Alumni International organisation.
+  </p>
+  <p>
+    <small style="font-size:1.3em;">Join us now!</small>
+    <br>
+    <small style="font-size:1em;">
+      and help transform our global network of AIESEC alumni into a powerful force for positive change!
+    </small>
+  </p>
+</div>

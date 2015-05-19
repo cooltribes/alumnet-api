@@ -1,5 +1,5 @@
 class Attendance < ActiveRecord::Base
-  enum status: [:invited, :going, :maybe, :not_going, :paid]
+  enum status: [:invited, :going, :maybe, :not_going, :pending_payment]
 
   ###Relations
   belongs_to :user
