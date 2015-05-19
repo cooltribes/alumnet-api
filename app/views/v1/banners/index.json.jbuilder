@@ -1,0 +1,1 @@
+json.array! @banners, partial: 'v1/banners/banner', as: :banner, current_user: @current_user

@@ -185,4 +185,5 @@ class Group < ActiveRecord::Base
         album.pictures << picture
       end
     end
+       
 end

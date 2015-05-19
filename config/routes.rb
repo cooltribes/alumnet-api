@@ -74,6 +74,8 @@ Rails.application.routes.draw do
 
     resources :attendances
 
+    resources :banners
+    
     resources :pictures do
       post :like, on: :member
       post :unlike, on: :member
