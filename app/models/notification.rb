@@ -40,6 +40,17 @@ class Notification
     end
   end
 
+  def self.notify_group_join_accepted_to_user(user, group)
+    notification = new(user)    
+    # subject = "Your request to join the group #{group.name} was accepted"
+    # body = "The user #{user.name} was invited to join the group #{group.name}"
+    # notification.send_notification(subject, body)
+    # notification.send_pusher_notification
+    notification.recipients.each do |admin|
+      UserMailer.user_was_accepted_in_group(user, group).deliver
+    end
+  end
+
   def self.notify_request_to_users(users, group)
     notification = new(users)
     subject = "Your request was sent"
