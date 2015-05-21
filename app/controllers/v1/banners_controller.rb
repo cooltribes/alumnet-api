@@ -19,9 +19,9 @@ class V1::BannersController < V1::BaseController
       render json: @banner.errors, status: :unprocessable_entity
     end
   end
- 
+
   def update
-    #authorize @banner    
+    #authorize @banner
     if @banner.update(banner_params)
       render :show, status: :ok,  location: @banner
     else
@@ -37,11 +37,11 @@ class V1::BannersController < V1::BaseController
   private
 
   def set_banner
-    @banner = Banner.find(params[:banner_id])
+    @banner = Banner.find(params[:id])
   end
 
   def banner_params
-    params.permit(:title,:link,:description,:picture,:timelapse)
+    params.permit(:title, :link, :description, :picture, :timelapse)
   end
 
 end
