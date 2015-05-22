@@ -4,6 +4,10 @@ class Post < ActiveRecord::Base
   include LikeableMethods
   include PostHelpers
 
+  #Paginatin options
+  paginates_per 2
+  max_paginates_per 2
+
   ### Relations
   belongs_to :user ##Creator
   belongs_to :postable, polymorphic: true

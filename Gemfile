@@ -22,6 +22,7 @@ gem 'paranoia', '~> 2.0'
 gem 'fog'
 gem 'httparty'
 gem 'mailchimp-api'
+gem 'kaminari'
 
 group :development do
   gem 'spring'

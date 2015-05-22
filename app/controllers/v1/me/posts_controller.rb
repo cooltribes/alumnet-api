@@ -1,11 +1,14 @@
 class V1::Me::PostsController < V1::BaseController
   include Pundit
+
   before_action :set_user
   before_action :set_post, except: [:index, :create]
 
   def index
     @q = @user.all_posts(params[:q])
-    @posts = @q
+    # @posts = @q.page(params[:page])
+    @posts = Kaminari.paginate_array(@q).page(params[:page]).per(params[:per_page])
+
     render 'v1/users/posts/index'
   end
 

@@ -196,6 +196,9 @@ GEM
       multi_json (~> 1.2)
     json (1.8.1)
     json-schema (2.4.1)
+    kaminari (0.16.3)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
     lol_dba (1.6.4)
       actionpack (>= 3.0)
       activerecord (>= 3.0)
@@ -327,6 +330,7 @@ DEPENDENCIES
   httparty
   jbuilder
   json-schema
+  kaminari
   lol_dba
   machinist
   mailboxer
