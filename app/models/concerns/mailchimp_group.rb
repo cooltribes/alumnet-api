@@ -6,9 +6,13 @@ class MailchimpGroup
 
   def initialize(group)
     @group = group
-    @mailchimp = Mailchimp::API.new(@group.api_key) if valid?
-    rescue Mailchimp::InvalidApiKeyError
-      @valid_api_key = false
+    if @group.mailchimp
+      begin
+        @mailchimp = Mailchimp::API.new(@group.api_key) if valid?
+      rescue Mailchimp::InvalidApiKeyError
+        @valid_api_key = false
+      end
+    end
   end
 
 

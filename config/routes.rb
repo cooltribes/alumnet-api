@@ -70,10 +70,13 @@ Rails.application.routes.draw do
       post :cropping, on: :member
       resources :posts, controller: 'events/posts'
       resources :albums, controller: 'events/albums'
+      resources :payments, controller: 'events/payments'
     end
 
     resources :attendances
 
+    resources :banners
+    
     resources :pictures do
       post :like, on: :member
       post :unlike, on: :member
