@@ -53,7 +53,7 @@ class User < ActiveRecord::Base
 
   ### Callbacks
   before_create :ensure_tokens
-  before_create :set_role
+  before_create :set_role, :set_profinda_password
   after_create :create_new_profile
   after_create :create_privacies
 
@@ -456,6 +456,10 @@ class User < ActiveRecord::Base
 
   def set_role
     self[:role] = ROLES[:regular] unless role.present?
+  end
+
+  def set_profinda_password
+    self[:profinda_password] = 'xwggk39V9m6AByUVbS8e'
   end
 
   def create_new_profile
