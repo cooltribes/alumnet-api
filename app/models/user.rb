@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   acts_as_paranoid
   acts_as_messageable
   include UserHelpers
+  include ProfindaRegistration
 
   ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin",
     regional_admin: "RegionalAdmin", nacional_admin: "NacionalAdmin", regular: "Regular" }
@@ -114,6 +115,7 @@ class User < ActiveRecord::Base
     if profile.skills? || profile.approval?
       active!
       profile.approval!
+      update_or_create_profinda_profile
     else
       false
     end
@@ -270,7 +272,7 @@ class User < ActiveRecord::Base
     inverse_friends.where("friendships.accepted = ?", true).where(status: 1)
   end
 
-  def accepted_friendships    
+  def accepted_friendships
     friendships.where(accepted: true)
   end
 

@@ -63,6 +63,7 @@ class V1::Admin::UsersController < V1::AdminController
   end
 
   def stats
+    ##TODO: Refactor this
     @q = if @admin_location
       @admin_location.users.includes(:profile)
     else
@@ -86,11 +87,11 @@ class V1::Admin::UsersController < V1::AdminController
         "members", query_users.where(member: 1, member: 2).count,
         "lt_members", query_users.where(member: 3).count,
       ]
-    else     
+    else
       @query_counters = nil
     end
 
-      
+
   end
 
   private
