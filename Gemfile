@@ -22,6 +22,8 @@ gem 'paranoia', '~> 2.0'
 gem 'fog'
 gem 'httparty'
 gem 'mailchimp-api'
+gem 'sidekiq'
+gem 'sinatra', :require => nil
 
 group :development do
   gem 'spring'
