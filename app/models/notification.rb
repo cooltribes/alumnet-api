@@ -25,7 +25,7 @@ class Notification
     notification.send_notification(subject, body)
     notification.send_pusher_notification
     notification.recipients.each do |user|
-      UserMailer.join_to_group(user, group).deliver
+      UserMailer.join_to_group(user, group).deliver_now
     end
   end
 
@@ -36,18 +36,18 @@ class Notification
     notification.send_notification(subject, body)
     notification.send_pusher_notification
     notification.recipients.each do |admin|
-      AdminMailer.user_was_joined(admin, user, group).deliver
+      AdminMailer.user_was_joined(admin, user, group).deliver_now
     end
   end
 
   def self.notify_group_join_accepted_to_user(user, group)
-    notification = new(user)    
+    notification = new(user)
     # subject = "Your request to join the group #{group.name} was accepted"
     # body = "The user #{user.name} was invited to join the group #{group.name}"
     # notification.send_notification(subject, body)
     # notification.send_pusher_notification
     notification.recipients.each do |admin|
-      UserMailer.user_was_accepted_in_group(user, group).deliver
+      UserMailer.user_was_accepted_in_group(user, group).deliver_now
     end
   end
 
@@ -66,7 +66,7 @@ class Notification
     notification.send_notification(subject, body)
     notification.send_pusher_notification
     notification.recipients.each do |admin|
-     AdminMailer.user_request_to_join(admin, user, group).deliver
+     AdminMailer.user_request_to_join(admin, user, group).deliver_now
     end
   end
 
@@ -76,7 +76,7 @@ class Notification
     body = "The user #{user.name} sent you a friendship request"
     notification.send_notification(subject, body)
     notification.send_pusher_notification
-    UserMailer.user_request_friendship(user, friend).deliver
+    UserMailer.user_request_friendship(user, friend).deliver_now
   end
 
   def self.notify_accepted_friendship_to_user(user, friend)
@@ -85,7 +85,7 @@ class Notification
     body = "Your friend #{friend.name} accepted your invitation to connect."
     notification.send_notification(subject, body)
     notification.send_pusher_notification
-    UserMailer.friend_accept_friendship(user, friend).deliver
+    UserMailer.friend_accept_friendship(user, friend).deliver_now
   end
 
   def self.notify_invitation_event_to_user(attendance)
@@ -95,7 +95,7 @@ class Notification
     body = "The user #{event.creator.name} is inviting you to assist the event #{event.name}"
     notification.send_notification(subject, body)
     notification.send_pusher_notification
-    UserMailer.invitation_to_event(attendance.user, event).deliver
+    UserMailer.invitation_to_event(attendance.user, event).deliver_now
   end
 
   def self.notify_new_friendship_by_approval(requester, user)
@@ -117,7 +117,7 @@ class Notification
     PusherDelegator.notifiy_new_notification(notification, recipients)
 
 
-    UserMailer.approval_request_accepted(requester, user).deliver
+    UserMailer.approval_request_accepted(requester, user).deliver_now
   end
 
   def self.notify_approval_request_to_admins(admins, user)
@@ -134,7 +134,7 @@ class Notification
 
     #Send Email
     notification.recipients.each do |admin|
-      AdminMailer.user_request_approval(admin, user).deliver
+      AdminMailer.user_request_approval(admin, user).deliver_now
     end
   end
 
@@ -151,7 +151,7 @@ class Notification
     notification.send_pusher_notification()
     #Send Email
     notification.recipients.each do |recipient|
-      UserMailer.user_request_approval(recipient, user).deliver
+      UserMailer.user_request_approval(recipient, user).deliver_now
     end
   end
 

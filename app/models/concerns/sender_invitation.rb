@@ -19,7 +19,7 @@ class SenderInvitation
   def send_invitations
     contacts_out_alumnet.each do |contact|
       @count = count + 1
-      UserMailer.invitation_to_alumnet(contact[:email], contact[:name], @sender).deliver
+      UserMailer.invitation_to_alumnet(contact[:email], contact[:name], @sender).deliver_now
     end
   end
 
