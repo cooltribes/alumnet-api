@@ -102,7 +102,7 @@ describe V1::GroupsController, type: :request do
         expect {
           post groups_path, invalid_attributes_with_mailchimp, basic_header(user.auth_token)
         }.to change(Group, :count).by(0)
-        expect(json).to eq({"success"=>false, "message"=>["Invalid API Key"]})
+        expect(json).to eq( {"success"=>false, "message"=>{"api_key"=>["Invalid API Key"]}})
         expect(response.status).to eq 422
       end
     end

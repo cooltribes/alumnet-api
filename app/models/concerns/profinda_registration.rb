@@ -3,7 +3,12 @@ module ProfindaRegistration
 
   def update_or_create_profinda_profile
     profinda_api = ProfindaApi.sign_in_or_sign_up(email, profinda_password)
-    profinda_api.profile = info_for_profinda_registration
+    if profinda_api.valid?
+      profinda_api.profile = info_for_profinda_registration
+      true
+    else
+      false
+    end
   end
 
   def info_for_profinda_registration

@@ -113,9 +113,9 @@ class User < ActiveRecord::Base
   ### Roles
   def activate!
     if profile.skills? || profile.approval?
+      update_or_create_profinda_profile
       active!
       profile.approval!
-      update_or_create_profinda_profile
     else
       false
     end
