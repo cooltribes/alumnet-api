@@ -17,7 +17,7 @@ class V1::Me::ApprovalController < V1::BaseController
     end
   end
 
-  def notify_admins    
+  def notify_admins
     countryAiesec = @user.profile.experiences.where(exp_type: 0).first.committee.country
     regionAiesec = countryAiesec.region
     countryResidence = @user.profile.residence_country
@@ -25,10 +25,11 @@ class V1::Me::ApprovalController < V1::BaseController
     admins = countryAiesec.admins | regionAiesec.admins | countryResidence.admins | superAdmins
     # byebug
     Notification.notify_approval_request_to_admins(admins, @user)
-    head :no_content   
+    head :no_content
   end
- 
+
   def update
+    ##TODO: Refactor this
     @approval_request = @user.pending_approval_requests.find(params[:id])
     #if @friendship.friend_id == current_user.id #this a policy refactor!
     @approval_request.accept!
@@ -39,6 +40,8 @@ class V1::Me::ApprovalController < V1::BaseController
       requester.activate!
       @mc.lists.subscribe(Settings.mailchimp_general_list_id, {'email' => requester.email}, nil, 'html', false, true, true, true)
     end
+
+    ##TODO: colocar aqui el registro de profinda.
 
     #Create a friendship between users
     friendship = requester.create_friendship_for(@user)

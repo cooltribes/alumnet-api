@@ -13,6 +13,8 @@ class ProfindaApi
     "PROFINDAACCOUNTDOMAIN" => "cooltribes-staging.profinda.com"
   }
 
+  ## Instance Methods
+
   def initialize(email, password, create = false)
     @user = {}
     if create
@@ -49,8 +51,17 @@ class ProfindaApi
     @last_response.parsed_response
   end
 
+  ## class Methods
+
   def self.sign_up(email, password)
     new(email, password, true)
+  end
+
+  def self.sign_in_or_sign_up(email, password)
+    ##TODO: Improve this
+    profinda = new(email, password)
+    profinda = sign_up(email, password) unless profinda.valid?
+    profinda
   end
 
   protected
@@ -81,6 +92,12 @@ class ProfindaApi
     end
 
     def success_of_last_response
-      errors.add(:base, last_response["error"]) unless last_response.success?
+      if !last_response.success? && last_response["errors"] && last_response["errors"].any?
+        last_response["errors"].each do |key, value|
+          value.each do |message|
+            errors.add(key.to_sym, message)
+          end
+        end
+      end
     end
 end
