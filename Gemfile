@@ -36,6 +36,7 @@ group :development do
   gem 'capistrano-rvm'
   gem 'capistrano-bundler'
   gem 'capistrano-rails-collection'
+  gem 'capistrano-sidekiq'
 end
 
 group :test, :development do
