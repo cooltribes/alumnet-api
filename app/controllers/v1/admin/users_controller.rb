@@ -37,7 +37,12 @@ class V1::Admin::UsersController < V1::AdminController
   def banned
     if @user.active?
       @user.banned!
-      @mc.lists.unsubscribe(Settings.mailchimp_general_list_id, {'email' => @user.email}, false, false, true)
+      valid = true
+      begin
+        @mc.lists.unsubscribe(Settings.mailchimp_general_list_id, {'email' => @user.email}, false, false, true)
+      rescue Mailchimp::EmailNotExistsError
+        valid = false
+      end
       render :show, status: :ok
     else
       render json: ["the user is already banned"]
