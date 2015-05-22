@@ -177,7 +177,7 @@ GEM
     fog-xml (0.1.2)
       fog-core
       nokogiri (~> 1.5, >= 1.5.11)
-    foreigner (1.6.1)
+    foreigner (1.7.4)
       activerecord (>= 3.0.0)
     formatador (0.2.5)
     globalid (0.3.5)
@@ -203,7 +203,7 @@ GEM
     machinist (2.0)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
-    mailboxer (0.12.4)
+    mailboxer (0.12.5)
       carrierwave (>= 0.5.8)
       foreigner (>= 0.9.1)
       rails (>= 3.2.0)
