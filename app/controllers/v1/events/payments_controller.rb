@@ -1,10 +1,13 @@
 class V1::Events::PaymentsController < V1::BaseController
-  before_action :set_user
+  before_action :set_event
 
   def create
-    @event_payment = @event.build_payment(payment_params, current_user)
+    @event_payment = EventPayment.new(payment_params)
     if @event_payment.save
-      render :text => 'Created'
+      @attendance = Attendance.find(payment_params[:attendance_id])
+      @attendance.status = 1
+      @attendance.save
+      render json: { status: :created }
     else
       render json: @event_payment.errors, status: :unprocessable_entity
     end
@@ -16,11 +19,11 @@ class V1::Events::PaymentsController < V1::BaseController
   end
 
   private
-    def set_user
-      @user = User.find(params[:user_id])
+    def set_event
+      @event = Event.find(params[:event_id])
     end
 
     def payment_params
-      params.permit(:start_date, :end_date, :user_id, :lifetime)
+      params.permit(:price, :reference, :user_id, :event_id, :attendance_id)
     end
 end
