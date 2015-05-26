@@ -1,4 +1,12 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
+
+  Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+    username == ENV["SIDEKIQ_USERNAME"] && password == ENV["SIDEKIQ_PASSWORD"]
+  end if Rails.env.production? || Rails.env.staging?
+
+  mount Sidekiq::Web => '/sidekiq'
 
   api_version(:module => "V1", :header => {:name => "Accept", :value => "application/vnd.alumnet+json;version=1"}) do
 
@@ -76,7 +84,7 @@ Rails.application.routes.draw do
     resources :attendances
 
     resources :banners
-    
+
     resources :pictures do
       post :like, on: :member
       post :unlike, on: :member
