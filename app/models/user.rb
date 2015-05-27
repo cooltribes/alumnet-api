@@ -113,7 +113,7 @@ class User < ActiveRecord::Base
   ### Roles
   def activate!
     if profile.skills? || profile.approval?
-      update_or_create_profinda_profile
+      save_profinda_profile unless Rails.env.test?
       active!
       profile.approval!
     else
