@@ -4,6 +4,5 @@ class CreateCities < ActiveRecord::Migration
       t.string :cc_fips, index: true
       t.string :name
     end
-    add_index :cities, :cc_fips
   end
 end
