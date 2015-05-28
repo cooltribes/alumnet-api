@@ -37,6 +37,7 @@ class V1::Admin::UsersController < V1::AdminController
   def banned
     if @user.active?
       @user.banned!
+      @user.suspend_in_profinda
       valid = true
       begin
         @mc.lists.unsubscribe(Settings.mailchimp_general_list_id, {'email' => @user.email}, false, false, true)

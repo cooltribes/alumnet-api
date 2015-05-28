@@ -43,13 +43,22 @@ class ProfindaAdminApi
     @last_response.parsed_response
   end
 
+  def activate(uid)
+    options = {
+      headers: authorized_headers.merge({"Content-Type" => "application/json"}),
+      body: { active: true }.to_json
+    }
+    @last_response = self.class.put("/admin/users/#{uid}/activate", options)
+    @last_response.success?
+  end
+
   def suspend(uid)
     options = {
       headers: authorized_headers.merge({"Content-Type" => "application/json"}),
       body: { active: false }.to_json
     }
     @last_response = self.class.put("/admin/users/#{uid}/suspend", options)
-    @last_response.parsed_response
+    @last_response.success?
   end
 
   ## class Methods

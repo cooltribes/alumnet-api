@@ -38,10 +38,9 @@ class V1::Me::ApprovalController < V1::BaseController
 
     if requester.get_approved_requests.count == 3
       requester.activate!
+      requester.save_profinda_profile unless Rails.env.test?
       @mc.lists.subscribe(Settings.mailchimp_general_list_id, {'email' => requester.email}, nil, 'html', false, true, true, true)
     end
-
-    ##TODO: colocar aqui el registro de profinda.
 
     #Create a friendship between users
     friendship = requester.create_friendship_for(@user)

@@ -110,6 +110,10 @@ class Profile < ActiveRecord::Base
     end
   end
 
+  def save_profinda_profile
+    user.save_profinda_profile
+  end
+
   private
     def born_date
       if born.present? && ((Date.current - born).to_i / 365 ) < 20

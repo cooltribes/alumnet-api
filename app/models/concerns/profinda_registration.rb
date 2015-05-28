@@ -1,5 +1,23 @@
 module ProfindaRegistration
 
+  def activate_in_profinda
+    if profinda_uid.present?
+      profinda = ProfindaAdminApi.new
+      profinda.activate profinda_uid
+    else
+      false
+    end
+  end
+
+  def suspend_in_profinda
+    if profinda_uid.present?
+      profinda = ProfindaAdminApi.new
+      profinda.suspend profinda_uid
+    else
+      false
+    end
+  end
+
   def save_profinda_profile
     SaveProfindaProfileJob.perform_later(id)
   end
