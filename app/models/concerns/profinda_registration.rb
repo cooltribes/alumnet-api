@@ -19,7 +19,7 @@ module ProfindaRegistration
   end
 
   def save_profinda_profile
-    SaveProfindaProfileJob.perform_later(id)
+    SaveProfindaProfileJob.perform_later(id) unless Rails.env.test?
   end
 
   def save_data_in_profinda

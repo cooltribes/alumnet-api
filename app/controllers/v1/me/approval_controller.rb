@@ -38,7 +38,7 @@ class V1::Me::ApprovalController < V1::BaseController
 
     if requester.get_approved_requests.count == 3
       requester.activate!
-      requester.save_profinda_profile unless Rails.env.test?
+      requester.save_profinda_profile
       @mc.lists.subscribe(Settings.mailchimp_general_list_id, {'email' => requester.email}, nil, 'html', false, true, true, true)
     end
 
