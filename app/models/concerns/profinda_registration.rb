@@ -40,7 +40,9 @@ module ProfindaRegistration
       "pcf_alumnet_city_origin" => city_origin_for_profinda,
       "pcf_alumnet_country_origin" => country_origin_for_profinda,
       "pcf_alumnet_city_residence" => city_residence_for_profinda,
-      "pcf_alumnet_country_residence" => country_residence_for_profinda
+      "pcf_alumnet_country_residence" => country_residence_for_profinda,
+      "pcf_alumnet_organizations" => organizations_for_profinda,
+      "pcf_alumnet_aisec_chapter" => committees_for_profinda
     }
   end
 
@@ -58,6 +60,18 @@ module ProfindaRegistration
 
   def languages_for_profinda
     profile.languages.map(&:name).join("&#x2c;")
+  end
+
+  def organizations_for_profinda
+    profile.experiences.non_alumnet.map(&:organization_name).join("&#x2c;")
+  end
+
+  def committees_for_profinda
+    committees = []
+    profile.experiences.aisec.each do |experience|
+      committees << experience.committee.name if experience.committee
+    end
+    committees.join("&#x2c;")
   end
 
   def country_origin_for_profinda
