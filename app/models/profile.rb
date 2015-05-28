@@ -111,7 +111,7 @@ class Profile < ActiveRecord::Base
   end
 
   def save_profinda_profile
-    user.save_profinda_profile
+    user.save_profinda_profile if user.active?
   end
 
   private

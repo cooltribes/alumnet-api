@@ -11,6 +11,7 @@ class V1::Profiles::SkillsController < V1::BaseController
     @skill = Skill.new(skill_params)
     authorize @profile
     if @profile.skills << @skill
+      @profile.save_profinda_profile
       render :show, status: :created
     else
       render json: @skill.errors, status: :unprocessable_entity
@@ -20,6 +21,7 @@ class V1::Profiles::SkillsController < V1::BaseController
   def update
     authorize @profile
     if @skill.update(skill_params)
+      @profile.save_profinda_profile
       render :show, status: :ok
     else
       render json: @skill.errors, status: :unprocessable_entity
@@ -28,7 +30,8 @@ class V1::Profiles::SkillsController < V1::BaseController
 
   def destroy
     authorize @profile
-    @skill.destroy
+    @profile.skills.destroy(@skill)
+    @profile.save_profinda_profile
     head :no_content
   end
 

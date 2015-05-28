@@ -47,3 +47,9 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
 end
+
+RSpec::Sidekiq.configure do |config|
+  config.clear_all_enqueued_jobs = true
+  config.enable_terminal_colours = true
+  config.warn_when_jobs_not_processed_by_sidekiq = true
+end

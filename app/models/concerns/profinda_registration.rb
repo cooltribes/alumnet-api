@@ -22,6 +22,14 @@ module ProfindaRegistration
     SaveProfindaProfileJob.perform_later(id)
   end
 
+  def save_data_in_profinda
+    profinda_api = ProfindaApi.sign_in_or_sign_up(email, profinda_password)
+    if profinda_api.valid?
+      set_profinda_uid(profinda_api.user['id'])
+      profinda_api.profile = info_for_profinda_registration
+    end
+  end
+
   def info_for_profinda_registration
     {
       "first_name" => profile.first_name,
@@ -36,7 +44,7 @@ module ProfindaRegistration
     }
   end
 
-  def set_profinda_uid=(id)
+  def set_profinda_uid(id)
     update_column(:profinda_uid, id) unless profinda_uid.present?
   end
 
