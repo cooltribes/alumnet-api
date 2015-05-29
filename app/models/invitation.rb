@@ -8,8 +8,21 @@ class Invitation < ActiveRecord::Base
   ## Callbacks
   before_create :generate_token
 
-  def accept!
-    update_column(:accepted, true)
+  ## scopes
+  scope :accepted, -> { where(accepted: true) }
+  scope :unaccepted, -> { where(accepted: false) }
+
+
+  ## class methods
+  def self.mark_as_accepted(token, guest)
+    return unless token.present?
+    invitation = unaccepted.find_by(token: token)
+    invitation.accept!(guest) if invitation
+  end
+
+  ## instance methods
+  def accept!(guest)
+    update_columns(accepted: true, guest_id: guest)
   end
 
 

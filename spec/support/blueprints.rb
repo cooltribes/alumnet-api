@@ -272,3 +272,8 @@ UserSubscription.blueprint(:premium) do
   creator { User.make! }
   reference { "XXXX-XXXX"}
 end
+
+Invitation.blueprint do
+  user { User.make }
+  guest_email { Faker::Internet.email }
+end
