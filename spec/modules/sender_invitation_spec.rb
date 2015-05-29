@@ -55,6 +55,18 @@ RSpec.describe SenderInvitation do
       sender.send_invitations
       expect(ActionMailer::Base.deliveries).to_not be_empty
     end
+
+    it "should create an invitation" do
+      sender = SenderInvitation.new({contacts_one: {"name" =>  "text", "email" => "testing@email.com"}}, user_sender)
+      expect {
+        sender.send_invitations
+      }.to change(Invitation, :count).by(1)
+      invitation = Invitation.last
+      expect(invitation.guest_email).to eq("testing@email.com")
+      expect(invitation).to_not be_accepted
+      expect(invitation.user).to eq(user_sender)
+      expect(invitation.token).to_not be_empty
+      end
   end
 
   describe "validations" do

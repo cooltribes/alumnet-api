@@ -19,7 +19,8 @@ class SenderInvitation
   def send_invitations
     contacts_out_alumnet.each do |contact|
       @count = count + 1
-      UserMailer.invitation_to_alumnet(contact[:email], contact[:name], @sender).deliver_later
+      invitation = Invitation.find_or_create_by(user: @sender, guest_email: contact[:email])
+      UserMailer.invitation_to_alumnet(contact[:email], contact[:name], @sender, invitation.token).deliver_later
     end
   end
 
