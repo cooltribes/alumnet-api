@@ -16,6 +16,8 @@ class V1::Me::BusinessController < V1::BaseController
   end
 
   def create
+
+    @company = Company.find_or_create_by(name: name)
     @post = Post.new(post_params)
     @post.user = @user
     if @user.posts << @post
@@ -56,6 +58,10 @@ class V1::Me::BusinessController < V1::BaseController
 
   def post_params
     params.permit(:body, picture_ids:[])
+  end
+
+  def company_params
+    params.permit(company: {}, picture_ids:[])
   end
 
 end

@@ -22,6 +22,8 @@ Rails.application.routes.draw do
       post :send_invitations
       resource :profile, only: [:show, :update], controller: 'me/profiles'
       resources :posts, controller: 'me/posts'
+      resources :business_relations, controller: 'me/business'
+      
       resources :friendships, except: :show, controller: 'me/friendships' do
         get :friends, on: :collection
       end
