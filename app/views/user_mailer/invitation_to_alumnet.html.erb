@@ -1,11 +1,11 @@
 <div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
   <p>Hello <%= "#{ @guest_name }" %></p>
   <p>
-    The AIESEC Alumni <%="#{ @user.name }"%> sent you this invitation to join AlumNet. 
+    The AIESEC Alumni <%="#{ @user.name }"%> sent you this invitation to join AlumNet.
   </p>
 
   <p>
-    <a href=<%= "#{Settings.ui_endpoint}/" %>>Click here to register in AlumNet</a>
+    <a href=<%= "#{Settings.ui_endpoint}/home/?invitation_token=#{@token}" %>>Click here to register in AlumNet</a>
   </p>
 
   <h3>What is AlumNet?</h3>

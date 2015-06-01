@@ -7,6 +7,7 @@ class CreateBusinessInfos < ActiveRecord::Migration
       t.references :company_relation, index: true    
 
       t.timestamps null: false
+
     end
   end
 end

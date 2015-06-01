@@ -12,6 +12,7 @@ RSpec.describe User, type: :model do
   it { should have_many(:publications) }
   it { should have_many(:likes) }
   it { should have_one(:profile) }
+  it { should have_many(:invitations) }
 
   it "should have paranoia" do
     expect(User.paranoid?).to eq(true)
