@@ -12,6 +12,7 @@ class V1::Admin::Deleted::UsersController < V1::AdminController
 
   def update
     User.restore(@user.id, recursive: true)
+    @user.activate_in_profinda
   end
 
   def destroy

@@ -25,6 +25,7 @@ class V1::AuthController < V1::BaseController
   def register
     @user = User.new(user_params)
     if @user.save
+      Invitation.mark_as_accepted(params[:invitation_token], @user) if params[:invitation_token].present?
       render :user, status: :created,  location: @user
     else
       render json: { errors: @user.errors }, status: :unprocessable_entity
@@ -34,6 +35,7 @@ class V1::AuthController < V1::BaseController
   def oauth_register
     @user = User.new(oauth_register_params)
     if @user.save
+      Invitation.mark_as_accepted(params[:invitation_token], @user) if params[:invitation_token].present?
       render :user, status: :created,  location: @user
     else
       render json: { errors: @user.errors }, status: :unprocessable_entity

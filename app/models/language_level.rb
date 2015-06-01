@@ -7,4 +7,5 @@ class LanguageLevel < ActiveRecord::Base
 
   ### Validations
   validates_inclusion_of :level, in: (1..5)
+
 end

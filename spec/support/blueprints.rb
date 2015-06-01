@@ -287,4 +287,9 @@ UserAction.blueprint do
   value { action.value }
   generator_id { action.id }
   generator_type { action.name }
+
+Invitation.blueprint do
+  user { User.make }
+  guest_email { Faker::Internet.email }
+
 end

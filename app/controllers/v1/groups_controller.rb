@@ -29,13 +29,19 @@ class V1::GroupsController < V1::BaseController
     @group.creator = current_user
     @group.cover_uploader = current_user
     if @group.valid?
-      @mailchimp = MailchimpGroup.new(@group)
-      if @mailchimp.valid?
+      if @group.mailchimp
+        @mailchimp = MailchimpGroup.new(@group)
+        if @mailchimp.valid?
+          @group.save
+          Membership.create_membership_for_creator(@group, current_user)
+          render :show, status: :created,  location: @group
+        else
+          render json: { success: false, message: @mailchimp.errors }, status: :unprocessable_entity
+        end
+      else
         @group.save
         Membership.create_membership_for_creator(@group, current_user)
         render :show, status: :created,  location: @group
-      else
-        render json: { success: false, message: @mailchimp.errors }, status: :unprocessable_entity
       end
     else
       render json: @group.errors, status: :unprocessable_entity

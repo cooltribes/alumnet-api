@@ -39,6 +39,7 @@ class User < ActiveRecord::Base
   has_many :contacts, dependent: :destroy
   has_many :user_actions, dependent: :destroy
   #has_many :actions, through: :user_actions
+  has_many :invitations, dependent: :destroy
 
   ### Scopes
   scope :active, -> { where(status: 1) }
@@ -115,7 +116,7 @@ class User < ActiveRecord::Base
   ### Roles
   def activate!
     if profile.skills? || profile.approval?
-      update_or_create_profinda_profile
+      activate_in_profinda
       active!
       profile.approval!
     else
