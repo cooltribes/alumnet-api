@@ -1,6 +1,6 @@
-class CreateUsersActions < ActiveRecord::Migration
+class CreateUserActions < ActiveRecord::Migration
   def change
-    create_table :users_actions do |t|
+    create_table :user_actions do |t|
       t.integer :value
       t.integer :generator_id
       t.string :generator_type

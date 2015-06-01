@@ -272,3 +272,19 @@ UserSubscription.blueprint(:premium) do
   creator { User.make! }
   reference { "XXXX-XXXX"}
 end
+
+Action.blueprint do
+  name { "Action #{sn}" }
+  description { Faker::Lorem.sentence }
+  status { 'active' }
+  value { 50 }
+end
+
+UserAction.blueprint do
+  user { User.make! }
+  action { Action.make! }
+  status { 'active' }
+  value { action.value }
+  generator_id { action.id }
+  generator_type { action.name }
+end

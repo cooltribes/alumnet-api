@@ -83,6 +83,8 @@ Rails.application.routes.draw do
 
     resources :attendances
 
+    resources :actions
+
     resources :banners
 
     resources :pictures do
