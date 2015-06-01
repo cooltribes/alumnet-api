@@ -37,6 +37,7 @@ class User < ActiveRecord::Base
   has_many :pending_approval_requests, class_name: "ApprovalRequest", foreign_key: "approver_id"
   has_many :oauth_providers, dependent: :destroy
   has_many :contacts, dependent: :destroy
+  has_many :invitations, dependent: :destroy
 
   ### Scopes
   scope :active, -> { where(status: 1) }
@@ -113,7 +114,7 @@ class User < ActiveRecord::Base
   ### Roles
   def activate!
     if profile.skills? || profile.approval?
-      update_or_create_profinda_profile
+      activate_in_profinda
       active!
       profile.approval!
     else

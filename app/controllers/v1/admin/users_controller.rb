@@ -22,30 +22,20 @@ class V1::Admin::UsersController < V1::AdminController
   end
 
   def activate
-    if @user.active?
-      render json: ["the user is already activated"], status: :unprocessable_entity
+    activate = AdminActiveUser.new(@user, @mc)
+    if activate.valid?
+      render :show, status: :ok
     else
-      if @user.activate!
-        @mc.lists.subscribe(Settings.mailchimp_general_list_id, {'email' => @user.email}, nil, 'html', false, true, true, true)
-        render :show, status: :ok
-      else
-        render json: ['the register is incompleted!'], status: :unprocessable_entity
-      end
+      render json: activate.errors, status: :unprocessable_entity
     end
   end
 
   def banned
-    if @user.active?
-      @user.banned!
-      valid = true
-      begin
-        @mc.lists.unsubscribe(Settings.mailchimp_general_list_id, {'email' => @user.email}, false, false, true)
-      rescue Mailchimp::EmailNotExistsError
-        valid = false
-      end
+    banned = AdminBannedUser.new(@user, @mc)
+    if banned.valid?
       render :show, status: :ok
     else
-      render json: ["the user is already banned"]
+      render json: banned.errors, status: :unprocessable_entity
     end
   end
 
@@ -63,6 +53,7 @@ class V1::Admin::UsersController < V1::AdminController
       render json: ["you can't destroy yourself"]
     else
       @user.destroy
+      @user.suspend_in_profinda
       head :no_content
     end
   end

@@ -14,6 +14,7 @@ class V1::Profiles::ExperiencesController < V1::BaseController
     @experience = Experience.new(experience_params)
     authorize @profile
     if @profile.experiences << @experience
+      @profile.save_profinda_profile
       render :show, status: :created
     else
       render json: @experience.errors, status: :unprocessable_entity
@@ -23,6 +24,7 @@ class V1::Profiles::ExperiencesController < V1::BaseController
   def update
     authorize @profile
     if @experience.update(experience_params)
+      @profile.save_profinda_profile
       render :show, status: :ok
     else
       render json: @experience.errors, status: :unprocessable_entity
@@ -32,6 +34,7 @@ class V1::Profiles::ExperiencesController < V1::BaseController
   def destroy
     authorize @profile
     @experience.destroy
+    @profile.save_profinda_profile
     head :no_content
   end
 

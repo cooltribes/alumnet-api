@@ -42,16 +42,17 @@ class UserMailer < ActionMailer::Base
     mail to: @approver.email, subject: "#{requester.name} wants to be approved in AlumNet"
   end
 
-  def invitation_to_alumnet(email, guest_name, user)
+  def invitation_to_alumnet(email, guest_name, user, token)
     @guest_name = guest_name
     @user = user
+    @token = token
     mail to: email, subject: "Invitation to join to AlumNet"
   end
 
-  def user_was_accepted_in_group(user, group)    
+  def user_was_accepted_in_group(user, group)
     @user = user
     @group = group
     mail to: user.email, subject: "Your request to join the group #{group.name} was accepted"
   end
-  
+
 end
