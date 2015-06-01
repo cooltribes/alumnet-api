@@ -10,7 +10,6 @@ class V1::ActionsController < V1::BaseController
   end
 
   def create
-    byebug
     @action = Action.new(action_params)
     render :show, status: :created,  location: @action
   end
