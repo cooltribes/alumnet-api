@@ -3,7 +3,7 @@ class Action < ActiveRecord::Base
   # 0 -> Active
   # "1" -> All Members can invite, but the admins approved
   # "2" -> Only the admins can invite
-  enum status: [:active, :inactive]
+  enum status: [:inactive, :active]
 
   # Relations
   has_many :user_actions, dependent: :destroy
