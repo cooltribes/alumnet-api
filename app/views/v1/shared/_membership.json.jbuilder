@@ -43,3 +43,11 @@ json.friends_in do
     json.last_name user.profile.last_name
   end
 end
+
+json.children do
+  if group.has_children?
+    json.array! group.children, :id, :name, :description, :group_type
+  else
+    json.array! []
+  end
+end
