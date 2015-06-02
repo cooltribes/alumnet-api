@@ -27,10 +27,19 @@ json.user do
   json.name user.name
   json.avatar user.avatar.large.url
   json.last_experience user.last_experience.try(:name)
+  json.first_committee user.first_committee
 end
 json.is_friend user.is_friend_of?(@current_user)
 
 json.permissions do
   json.(membership, :edit_group, :create_subgroup, :delete_member,
     :change_join_process, :moderate_posts, :make_admin, :admin)
+end
+json.friends_in do
+  json.array! group.which_friends_in(@current_user) do |user|
+    json.id user.id
+    json.avatar user.profile.avatar
+    json.first_name user.profile.first_name
+    json.last_name user.profile.last_name
+  end
 end

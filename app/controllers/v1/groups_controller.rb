@@ -1,3 +1,5 @@
+require 'mailchimp'
+
 class V1::GroupsController < V1::BaseController
   include Pundit
   before_action :set_group, except: [:index, :create]
@@ -26,9 +28,21 @@ class V1::GroupsController < V1::BaseController
     @group = Group.new(group_params)
     @group.creator = current_user
     @group.cover_uploader = current_user
-    if @group.save
-      Membership.create_membership_for_creator(@group, current_user)
-      render :show, status: :created,  location: @group
+    if @group.valid?
+      if @group.mailchimp
+        @mailchimp = MailchimpGroup.new(@group)
+        if @mailchimp.valid?
+          @group.save
+          Membership.create_membership_for_creator(@group, current_user)
+          render :show, status: :created,  location: @group
+        else
+          render json: { success: false, message: @mailchimp.errors }, status: :unprocessable_entity
+        end
+      else
+        @group.save
+        Membership.create_membership_for_creator(@group, current_user)
+        render :show, status: :created,  location: @group
+      end
     else
       render json: @group.errors, status: :unprocessable_entity
     end
@@ -62,6 +76,41 @@ class V1::GroupsController < V1::BaseController
     head :no_content
   end
 
+  def migrate_users
+    if @group.mailchimp
+      success = true
+      message = 'No error'
+      begin
+        @mc_group = Mailchimp::API.new(@group.api_key)
+      rescue Mailchimp::InvalidApiKeyError
+        success = false
+      end
+
+      if success
+        begin
+          @group.members.each do |member|
+            @mc_group.lists.subscribe(@group.list_id, {'email' => member.email}, nil, 'html', false, true, true, true)
+          end
+        rescue Mailchimp::ListDoesNotExistError
+          success = false
+          message = 'List does not exist'
+        rescue Mailchimp::Error => ex
+          success = false
+          if ex.message
+            message = ex.message
+          else
+            message = "An unknown error occurred"
+          end
+        end
+        render json: { success: success, message: message }
+      else
+        render json: { success: false,  message: 'Invalid API Key' }
+      end
+    else
+      render json: { success: false,  message: 'Group does not have mailchimp' }
+    end
+  end
+
   private
 
   def set_group
@@ -70,7 +119,7 @@ class V1::GroupsController < V1::BaseController
 
   def group_params
     params.permit(:name, :description, :cover, :group_type, :official, :country_id,
-      :city_id, :join_process)
+      :city_id, :join_process, :mailchimp, :api_key, :list_id)
   end
 
   def crop_params

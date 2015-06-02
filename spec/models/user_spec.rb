@@ -12,6 +12,7 @@ RSpec.describe User, type: :model do
   it { should have_many(:publications) }
   it { should have_many(:likes) }
   it { should have_one(:profile) }
+  it { should have_many(:invitations) }
 
   it "should have paranoia" do
     expect(User.paranoid?).to eq(true)
@@ -68,11 +69,11 @@ RSpec.describe User, type: :model do
 
     describe "commons_friends_with(user)" do
       it "should return the common friends between two users" do
-        user_one = User.make!
-        friend_one = User.make!
-        user_two = User.make!
-        friend_two = User.make!
-        common_user = User.make!
+        user_one = User.make!(status: 1)
+        friend_one = User.make!(status: 1)
+        user_two = User.make!(status: 1)
+        friend_two = User.make!(status: 1)
+        common_user = User.make!(status: 1)
 
         user_one.create_friendship_for(common_user).save
         user_one.friendships.last.accept!

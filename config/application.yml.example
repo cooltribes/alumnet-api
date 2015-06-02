@@ -1,15 +1,20 @@
 defaults: &defaults
   ui_endpoint: http://localhost:3000
   api_endpoint: http://localhost:4000
+  profinda_api_endpoint: http://apistaging.profinda.com/api
+  profinda_account_domain: cooltribes-staging.profinda.com
+
 
 development:
   <<: *defaults
+  mailchimp_general_list_id: 'a43c1698cd'
 
 test:
   <<: *defaults
 
 staging:
   <<: *defaults
+  mailchimp_general_list_id: '52c8e138cb'
 
 production:
   <<: *defaults

@@ -1,4 +1,12 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
+
+  Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+    username == ENV["SIDEKIQ_USERNAME"] && password == ENV["SIDEKIQ_PASSWORD"]
+  end if Rails.env.production? || Rails.env.staging?
+
+  mount Sidekiq::Web => '/sidekiq'
 
   api_version(:module => "V1", :header => {:name => "Accept", :value => "application/vnd.alumnet+json;version=1"}) do
 
@@ -11,6 +19,7 @@ Rails.application.routes.draw do
 
     resource :me, only: [:show, :update], controller: 'me' do
       get :messages
+      post :send_invitations
       resource :profile, only: [:show, :update], controller: 'me/profiles'
       resources :posts, controller: 'me/posts'
       resources :friendships, except: :show, controller: 'me/friendships' do
@@ -30,7 +39,10 @@ Rails.application.routes.draw do
       resources :privacies, except: :show, controller: 'me/privacies'
       resources :approval_requests, except: [:show], controller: 'me/approval' do
         put :notify_admins, on: :collection
-      end      
+      end
+
+      post '/contacts/file', to: 'contacts#file' ###TEMPORAL
+      post '/contacts/in_alumnet', to: 'contacts#in_alumnet' ###TEMPORAL
     end
 
     resources :users, except: :create do
@@ -45,15 +57,14 @@ Rails.application.routes.draw do
         get :friends, on: :collection
         get :commons, on: :collection
       end
-      resources :subscriptions, except: :show, controller: 'users/subscriptions' do
-        #get :subscriptions, on: :collection
-      end
+      resources :subscriptions, except: :show, controller: 'users/subscriptions'
     end
 
     resources :groups do
       post :cropping, on: :member
       post :add_group, on: :member
       get :subgroups, on: :member
+      get :migrate_users, on: :member
       resources :posts, controller: 'groups/posts'
       resources :events, controller: 'groups/events'
       resources :memberships, except: :show, controller: 'groups/memberships' do
@@ -67,9 +78,12 @@ Rails.application.routes.draw do
       post :cropping, on: :member
       resources :posts, controller: 'events/posts'
       resources :albums, controller: 'events/albums'
+      resources :payments, controller: 'events/payments'
     end
 
     resources :attendances
+
+    resources :banners
 
     resources :pictures do
       post :like, on: :member
@@ -103,7 +117,6 @@ Rails.application.routes.draw do
     resources :profiles, only: [:show, :update] do
       post :cropping, on: :member
       resources :experiences, except: [:new, :edit], controller: 'profiles/experiences'
-      # resources :experiences, except: [:show, :new, :edit], controller: 'profiles/experiences'
       resources :skills, except: [:show, :new, :edit], controller: 'profiles/skills'
       resources :language_levels, except: [:show, :new, :edit], controller: 'profiles/language_levels'
       resources :contact_infos, except: [:show, :new, :edit], controller: 'profiles/contact_infos'
@@ -117,6 +130,7 @@ Rails.application.routes.draw do
         put :activate, on: :member
         put :banned, on: :member
         put :change_role, on: :member
+        get :stats, on: :collection
       end
       resources :groups, except: [:new, :edit] do
         get :subgroups, on: :member

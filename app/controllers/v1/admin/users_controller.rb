@@ -1,5 +1,5 @@
 class V1::Admin::UsersController < V1::AdminController
-  before_action :set_user, except: :index
+  before_action :set_user, except: [:index, :stats]
 
   def index
     @q = if @admin_location
@@ -22,23 +22,20 @@ class V1::Admin::UsersController < V1::AdminController
   end
 
   def activate
-    if @user.active?
-      render json: ["the user is already activated"], status: :unprocessable_entity
+    activate = AdminActiveUser.new(@user, @mc)
+    if activate.valid?
+      render :show, status: :ok
     else
-      if @user.activate!
-        render :show, status: :ok
-      else
-        render json: ['the register is incompleted!'], status: :unprocessable_entity
-      end
+      render json: activate.errors, status: :unprocessable_entity
     end
   end
 
   def banned
-    if @user.active?
-      @user.banned!
+    banned = AdminBannedUser.new(@user, @mc)
+    if banned.valid?
       render :show, status: :ok
     else
-      render json: ["the user is already banned"]
+      render json: banned.errors, status: :unprocessable_entity
     end
   end
 
@@ -56,8 +53,41 @@ class V1::Admin::UsersController < V1::AdminController
       render json: ["you can't destroy yourself"]
     else
       @user.destroy
+      @user.suspend_in_profinda
       head :no_content
     end
+  end
+
+  def stats
+    ##TODO: Refactor this
+    @q = if @admin_location
+      @admin_location.users.includes(:profile)
+    else
+      User.includes(:profile)
+    end
+    @all_users = @q.search().result
+    @counters = Hash[
+      "users_all", @all_users.count,
+      "users", @all_users.where(member: 0).count,
+      "members", @all_users.where(member: 1, member: 2).count,
+      "lt_members", @all_users.where(member: 3).count,
+    ]
+
+
+    if params[:q] && params[:q] != ""
+      @q = User.includes(:profile)
+      query_users = @q.search(params[:q]).result
+      @query_counters = Hash[
+        "users_all", query_users.count,
+        "users", query_users.where(member: 0).count,
+        "members", query_users.where(member: 1, member: 2).count,
+        "lt_members", query_users.where(member: 3).count,
+      ]
+    else
+      @query_counters = nil
+    end
+
+
   end
 
   private

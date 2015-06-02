@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   acts_as_paranoid
   acts_as_messageable
   include UserHelpers
+  include ProfindaRegistration
 
   ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin",
     regional_admin: "RegionalAdmin", nacional_admin: "NacionalAdmin", regular: "Regular" }
@@ -35,6 +36,8 @@ class User < ActiveRecord::Base
   #These are the requests that were made for "self" to approve
   has_many :pending_approval_requests, class_name: "ApprovalRequest", foreign_key: "approver_id"
   has_many :oauth_providers, dependent: :destroy
+  has_many :contacts, dependent: :destroy
+  has_many :invitations, dependent: :destroy
 
   ### Scopes
   scope :active, -> { where(status: 1) }
@@ -51,7 +54,7 @@ class User < ActiveRecord::Base
 
   ### Callbacks
   before_create :ensure_tokens
-  before_create :set_role
+  before_create :set_role, :set_profinda_password
   after_create :create_new_profile
   after_create :create_privacies
 
@@ -84,7 +87,7 @@ class User < ActiveRecord::Base
     self.password_reset_token = generate_token_for(:password_reset_token)
     self.password_reset_sent_at = Time.current
     save!
-    UserMailer.password_reset(self).deliver
+    UserMailer.password_reset(self).deliver_later
   end
 
   def password_reset_token_expired?
@@ -111,6 +114,7 @@ class User < ActiveRecord::Base
   ### Roles
   def activate!
     if profile.skills? || profile.approval?
+      activate_in_profinda
       active!
       profile.approval!
     else
@@ -262,11 +266,11 @@ class User < ActiveRecord::Base
   end
 
   def accepted_friends
-    friends.where("friendships.accepted = ?", true)
+    friends.where("friendships.accepted = ?", true).where(status: 1)
   end
 
   def accepted_inverse_friends
-    inverse_friends.where("friendships.accepted = ?", true)
+    inverse_friends.where("friendships.accepted = ?", true).where(status: 1)
   end
 
   def accepted_friendships
@@ -405,7 +409,7 @@ class User < ActiveRecord::Base
   end
 
   def pending_approval_for(user)
-    get_approved_requests.where(approver_id: user.id).take.present?
+    approval_requests.where(approver_id: user.id, accepted: false).take.present?
   end
 
   def pending_approval_by(user)
@@ -453,6 +457,10 @@ class User < ActiveRecord::Base
 
   def set_role
     self[:role] = ROLES[:regular] unless role.present?
+  end
+
+  def set_profinda_password
+    self[:profinda_password] = 'xwggk39V9m6AByUVbS8e'
   end
 
   def create_new_profile

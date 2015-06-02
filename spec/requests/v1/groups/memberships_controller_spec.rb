@@ -25,6 +25,7 @@ describe V1::Groups::MembershipsController, type: :request do
 
   describe "POST /groups/:id/memberships" do
     it "should create a membership" do
+      Membership.make!(:approved, user: user, group: group, admin: true)
       user_to_invite = User.make!
       expect {
         post group_memberships_path(group), { user_id: user_to_invite.id } , basic_header(user.auth_token)

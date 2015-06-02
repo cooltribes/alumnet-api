@@ -18,6 +18,16 @@ describe V1::Me::NotificationsController, type: :request do
     end
   end
 
+  describe "PUT /me/notifications/:id/mark_as_read" do
+    it "the notification is marked as readed" do
+      notification = current_user.mailbox.notifications.first
+      expect(notification).to be_is_unread(current_user)
+      put mark_as_read_me_notification_path(notification), {}, basic_header(current_user.auth_token)
+      expect(response.status).to eq 204
+      expect(notification).to be_is_read(current_user)
+    end
+  end
+
   describe "DELETE /me/notifications/:id" do
     it "sent the conversation to trash" do
       notification = current_user.mailbox.notifications.first

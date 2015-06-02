@@ -14,7 +14,7 @@ describe V1::PasswordResetsController, type: :request do
         post password_resets_path, { email: user.email }, header
         expect(response.status).to eq 200
         expect(json).to eq({"message"=>"We've sent you an email to reset your password!"})
-        ### test the mail
+        expect(ActionMailer::Base.deliveries).to_not be_empty
       end
     end
 
@@ -51,9 +51,9 @@ describe V1::PasswordResetsController, type: :request do
       it "return a error message and not update the password of user" do
         user.send_password_reset
         token = user.password_reset_token
-        travel 2.hour
-        put password_reset_path(token), { password: "314460978",
-          password_confirmation: "314460978" }, header
+        travel 3.hour
+        put password_reset_path(token), { password: "31A4460978",
+          password_confirmation: "31A4460978" }, header
         expect(response.status).to eq 401
         expect(json).to eq({"errors"=> { "token" => ["has expired"]} })
         travel_back
@@ -62,8 +62,8 @@ describe V1::PasswordResetsController, type: :request do
 
     context "with expired token" do
       it "return a error message and not update the password of user" do
-        put password_reset_path("UNEXISTENTTOKEN"), { password: "314460978",
-          password_confirmation: "314460978" }, header
+        put password_reset_path("UNEXISTENTTOKEN"), { password: "31A4460978",
+          password_confirmation: "31A4460978" }, header
         expect(response.status).to eq 401
         expect(json).to eq({"errors"=> { "token" => ["is invalid"]}})
       end

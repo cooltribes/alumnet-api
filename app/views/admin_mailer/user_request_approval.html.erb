@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
-  </head>
-  <body>
-    <h2>Greetings <%= "#{ @admin.name }" %></h2>
-    <p>
-      The user <%= "#{@user.name}" %> sent a request for you to approve him/her
-      <br>
-      Click <a href=<%= "#{Settings.ui_endpoint}/#admin/users/#{@user.id}" %>>here</a> to see the user's information      
-    </p>
-  </body>
-</html>
+<div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
+	<p>Greetings <%= "#{ @admin.name }" %></p>
+	<p>
+	  The user <%= "#{@user.name}" %> sent a request for you to approve him/her
+	  <br>
+	  Click <a href=<%= "#{Settings.ui_endpoint}/#admin/users/#{@user.id}" %>>here</a> to see the user's information      
+	</p>
+</div>

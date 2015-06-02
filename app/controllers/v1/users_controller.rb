@@ -22,6 +22,7 @@ class V1::UsersController < V1::BaseController
       render json: ["you can't destroy yourself"], status: :unprocessable_entity
     else
       @user.destroy
+      @user.suspend_in_profinda
       head :no_content
     end
   end

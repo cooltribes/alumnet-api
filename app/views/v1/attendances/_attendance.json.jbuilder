@@ -17,6 +17,8 @@ json.user do
   json.id user.id
   json.name user.permit_name(current_user)
   json.last_experience user.permit_last_experience(current_user)
+  json.first_committee user.first_committee
+  
   if user.permit('see-avatar', current_user)
     json.avatar user.avatar.large.url
   else

@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
-  </head>
-  <body>
-    <h2>Greetings <%= "#{ @friend.name }" %></h2>
-    <p>
-      The user <%= "#{@user.name}" %> sent you a friendship request <br>
-      Click <a href=<%= "#{Settings.ui_endpoint}/#friends" %>>here</a> to accept
-    </p>
-  </body>
-</html>
+<div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
+	<p>Greetings <%= "#{ @friend.name }" %></p>
+	<p>
+	  The user <%= "#{@user.name}" %> sent you a friendship request <br>
+	  Click <a href=<%= "#{Settings.ui_endpoint}/#friends" %>>here</a> to accept
+	</p>	
+</div>

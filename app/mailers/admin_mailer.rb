@@ -1,12 +1,13 @@
 class AdminMailer < ActionMailer::Base
   default from: "alumnet@alumnet.com"
+  layout "admin_mailer"
 
   def user_was_joined(admin, user, group)
     @user = user
     @group = group
     @admin = admin
     mail to: admin.email, subject: "A new user was joined to the group #{group.name}"
-  end
+  end 
 
   def user_request_to_join(admin, user, group)
     @user = user

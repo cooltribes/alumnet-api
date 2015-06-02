@@ -6,6 +6,7 @@ User.blueprint do
   password { "12345678A" }
   password_confirmation { "12345678A" }
   profile { Profile.make! }
+  status { 1 }
 end
 
 User.blueprint(:admin) do
@@ -121,8 +122,8 @@ Like.blueprint do
 end
 
 Friendship.blueprint(:accepted) do
-  user { User.make! }
-  friend { User.make! }
+  user { User.make!(status: 1) }
+  friend { User.make!(status: 1) }
   accepted { true }
 end
 
@@ -270,4 +271,9 @@ UserSubscription.blueprint(:premium) do
   subscription { Subscription.make!(:premium) }
   creator { User.make! }
   reference { "XXXX-XXXX"}
+end
+
+Invitation.blueprint do
+  user { User.make }
+  guest_email { Faker::Internet.email }
 end

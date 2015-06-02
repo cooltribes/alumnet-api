@@ -5,6 +5,7 @@ class OauthProvider < ActiveRecord::Base
   belongs_to :user
 
   ###Validations
-  validates_uniqueness_of :uid
+  validates_uniqueness_of :uid, conditions: -> { where(deleted_at: nil) }
+
 
 end

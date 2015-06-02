@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.8'
+gem 'rails', '4.2.1'
 gem 'rails-api'
 gem 'pg'
 gem 'jbuilder'
@@ -11,8 +11,8 @@ gem 'json-schema'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'carrierwave'
 gem 'mini_magick'
-gem 'ransack', github: 'activerecord-hackery/ransack', branch: 'rails-4.1'
-gem 'mailboxer'
+gem 'ransack'
+gem 'mailboxer', github: 'lacco/mailboxer'
 gem 'acts_as_commentable'
 gem 'smarter_csv'
 gem 'pundit'
@@ -21,6 +21,10 @@ gem 'settingslogic'
 gem 'paranoia', '~> 2.0'
 gem 'fog'
 gem 'httparty'
+gem 'mailchimp-api'
+gem 'kaminari'
+gem 'sidekiq'
+gem 'sinatra', :require => nil
 
 group :development do
   gem 'spring'
@@ -33,6 +37,7 @@ group :development do
   gem 'capistrano-rvm'
   gem 'capistrano-bundler'
   gem 'capistrano-rails-collection'
+  gem 'capistrano-sidekiq'
 end
 
 group :test, :development do
@@ -46,4 +51,5 @@ group :test do
   gem 'faker'
   gem 'database_cleaner'
   gem 'shoulda-matchers', require: false
+  gem 'rspec-sidekiq'
 end

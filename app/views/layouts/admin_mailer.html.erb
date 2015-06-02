@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+  	<!-- Header on -->
+	<div style="background:#2b2b2b; padding:15px; color:#B7BFC3; font-size:1em;">
+	  <img src="<%= "#{Settings.ui_endpoint}/assets/home/alumNetLogo.png" %>" alt="">
+	</div>
+	<!-- Header off -->
+    <%= yield %> 
+    <!-- Footer on --> 
+    <div style="background:#4c6672; padding:15px; color:#B7BFC3; font-size:1em;">
+	  <p>
+	    <img src="<%= "#{Settings.ui_endpoint}/assets/home/alumNetLogo.png" %>" alt="">
+	    <strong>AIESEC Alumni International</strong><br>
+	    <small>Ave de Tervuren 300, B-1150 Brussels, Belgium International Non Profit </small>
+	    <br>
+	    <small>Organisation recognized by Belgian Royal Decree 16/05/1991 VZW- AiSBL.</small>
+	    <br>
+	    <small>Registered in Belgium under 0456.060.148, RPR/RPM Brussels</small>
+	    <br>
+	    <small>Copyright © 2015 AIESEC Alumni International. All rights reserved.</small>
+	  </p>
+	</div>
+    <!-- Footer off -->   
+  </body>
+</html>

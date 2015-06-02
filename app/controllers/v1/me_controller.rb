@@ -4,6 +4,16 @@ class V1::MeController < V1::BaseController
   def show
   end
 
+  def send_invitations
+    sender = SenderInvitation.new(params[:contacts], current_user)
+    if sender.valid?
+      sender.send_invitations
+      render json: { status: 'ok', count: sender.count }
+    else
+      render json: { errors: sender.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   def messages
     @receipts = @user.receipts.messages_receipts.limit(3)
     render "v1/me/receipts/index", status: :ok
@@ -25,4 +35,5 @@ class V1::MeController < V1::BaseController
     def set_user
       @user = current_user if current_user
     end
+
 end

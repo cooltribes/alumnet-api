@@ -24,8 +24,9 @@ class Group < ActiveRecord::Base
   belongs_to :city
   has_many :albums, as: :albumable, dependent: :destroy
 
-  ### Scopes
+  validates_presence_of :api_key, :list_id, if: 'mailchimp?'
 
+  ### Scopes
   scope :open, -> { where(group_type: 0) }
   scope :closed, -> { where(group_type: 1) }
   scope :secret, -> { where(group_type: 2) }
@@ -184,4 +185,5 @@ class Group < ActiveRecord::Base
         album.pictures << picture
       end
     end
+       
 end

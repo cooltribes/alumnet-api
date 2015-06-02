@@ -11,12 +11,19 @@ describe V1::GroupsController, type: :request do
 
   def valid_attributes
     { name: "Group 1", description: "short description", cover: cover_file,
-      country_id: country.id, city_id: city.id, join_process: 0 }
+      country_id: country.id, city_id: city.id, join_process: 0,
+      mailchimp: true, api_key: 'f0ad0e019703b02132b2cf15ad458e50-us10', list_id: "f3034576a5" }
   end
 
   def invalid_attributes
     { name: "", description: "short description", cover: cover_file,
       country_id: country.id, city_id: city.id, join_process: 0 }
+  end
+
+  def invalid_attributes_with_mailchimp
+    { name: "Group 1", description: "short description", cover: cover_file,
+      country_id: country.id, city_id: city.id, join_process: 0, mailchimp: true,
+      api_key: 'HHHHHHH', list_id: "dsd" }
   end
 
   describe "GET /groups" do
@@ -86,6 +93,16 @@ describe V1::GroupsController, type: :request do
           post groups_path, invalid_attributes, basic_header(user.auth_token)
         }.to change(Group, :count).by(0)
         expect(json).to eq({"name"=>["can't be blank"]})
+        expect(response.status).to eq 422
+      end
+    end
+
+    context "with mailchimp invalid attributes" do
+      it "return the errors in format json" do
+        expect {
+          post groups_path, invalid_attributes_with_mailchimp, basic_header(user.auth_token)
+        }.to change(Group, :count).by(0)
+        expect(json).to eq( {"success"=>false, "message"=>{"api_key"=>["Invalid API Key"]}})
         expect(response.status).to eq 422
       end
     end
