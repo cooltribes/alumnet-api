@@ -293,3 +293,17 @@ UserAction.blueprint do
   generator_id { action.id }
   generator_type { action.name }
 end
+
+Prize.blueprint do
+  name { "Prize #{sn}" }
+  description { Faker::Lorem.sentence }
+  status { 'active' }
+  price { 50 }
+end
+
+UserPrize.blueprint do
+  user { User.make! }
+  prize { Prize.make! }
+  status { 'active' }
+  price { price.value }
+end

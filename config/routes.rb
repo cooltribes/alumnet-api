@@ -85,6 +85,8 @@ Rails.application.routes.draw do
 
     resources :actions
 
+    resources :prizes
+
     resources :banners
 
     resources :pictures do
