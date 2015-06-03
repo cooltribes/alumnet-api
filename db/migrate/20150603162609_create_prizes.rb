@@ -5,7 +5,7 @@ class CreatePrizes < ActiveRecord::Migration
       t.string :description
       t.integer :price
       t.integer :status, default: 1
-      t.integer :type
+      t.integer :prize_type
 
       t.timestamps null: false
     end
