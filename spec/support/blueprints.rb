@@ -273,6 +273,11 @@ UserSubscription.blueprint(:premium) do
   reference { "XXXX-XXXX"}
 end
 
+Invitation.blueprint do
+  user { User.make }
+  guest_email { Faker::Internet.email }
+end
+
 Action.blueprint do
   name { "Action #{sn}" }
   description { Faker::Lorem.sentence }
@@ -287,9 +292,4 @@ UserAction.blueprint do
   value { action.value }
   generator_id { action.id }
   generator_type { action.name }
-
-Invitation.blueprint do
-  user { User.make }
-  guest_email { Faker::Internet.email }
-
 end

@@ -11,11 +11,11 @@ class V1::ActionsController < V1::BaseController
 
   def create
     @action = Action.new(action_params)
+    @action.save
     render :show, status: :created,  location: @action
   end
 
   def update
-    authorize @action
     if @action.update(action_params)
       render :show, status: :ok, location: @action
     else
@@ -24,7 +24,6 @@ class V1::ActionsController < V1::BaseController
   end
 
   def destroy
-    authorize @action
     @action.destroy
     head :no_content
   end
