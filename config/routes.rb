@@ -83,8 +83,6 @@ Rails.application.routes.draw do
 
     resources :attendances
 
-    resources :tasks
-
     resources :job_exchanges
 
     resources :actions
