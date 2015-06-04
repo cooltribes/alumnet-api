@@ -277,6 +277,7 @@ Invitation.blueprint do
   user { User.make }
   guest_email { Faker::Internet.email }
 end
+<<<<<<< HEAD
 
 Task.blueprint(:business) do
   name { "Testing #{sn}" }
@@ -348,4 +349,18 @@ UserAction.blueprint do
   value { action.value }
   generator_id { action.id }
   generator_type { action.name }
+end
+
+Prize.blueprint do
+  name { "Prize #{sn}" }
+  description { Faker::Lorem.sentence }
+  status { 'active' }
+  price { 50 }
+end
+
+UserPrize.blueprint do
+  user { User.make! }
+  prize { Prize.make! }
+  status { 'active' }
+  price { price.value }
 end
