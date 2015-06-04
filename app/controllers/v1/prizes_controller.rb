@@ -35,7 +35,7 @@ class V1::PrizesController < V1::BaseController
   end
 
   def prize_params
-    params.permit(:name, :description, :status, :price, :created_at, :updated_at)
+    params.permit(:name, :description, :status, :price, :created_at, :updated_at, :prize_type)
   end
 
 end
