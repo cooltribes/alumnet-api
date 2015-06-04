@@ -36,7 +36,9 @@ class Task < ActiveRecord::Base
   end
 
   def delete_profinda_task
-    DeleteProfindaTaskJob.perform_later(id) unless Rails.env.test?
+    if user && profinda_id
+      DeleteProfindaTaskJob.perform_later(user.id, profinda_id) unless Rails.env.test?
+    end
   end
 
   def create_in_profinda
@@ -55,9 +57,8 @@ class Task < ActiveRecord::Base
   end
 
   def delete_from_profinda
-    if profinda_id
-      profinda_api = ProfindaApi.new(user.email, user.profinda_password)
-      profinda_api.delete_task(profinda_id)
+    if user && profinda_id
+      Task.delete_from_profinda(user, profinda_id)
     end
   end
 
@@ -68,11 +69,26 @@ class Task < ActiveRecord::Base
   end
 
   def country_info
-    country ? {text: country.name, value: country_id} : { text: "", value: ""}
+    country ? { text: country.name, value: country_id } : { text: "", value: ""}
   end
 
   def city_info
-    city ? {text: city.name, value: city_id} : { text: "", value: ""}
+    city ? { text: city.name, value: city_id } : { text: "", value: ""}
+  end
+
+  def company_info
+    company ? { text: company.name, value: company_id } : { text: "", value: ""}
+  end
+  def company;nil;end
+
+
+  ## class methods
+
+  def self.delete_from_profinda(user, profinda_id)
+    if profinda_id
+      profinda_api = ProfindaApi.new(user.email, user.profinda_password)
+      profinda_api.delete_task(profinda_id)
+    end
   end
 
   private
