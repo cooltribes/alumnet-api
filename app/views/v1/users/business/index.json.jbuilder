@@ -1,0 +1,1 @@
+json.array! @companies, partial: 'show', as: :company, current_user: @user

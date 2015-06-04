@@ -22,7 +22,6 @@ Rails.application.routes.draw do
       post :send_invitations
       resource :profile, only: [:show, :update], controller: 'me/profiles'
       resources :posts, controller: 'me/posts'
-      resources :business_relations, controller: 'me/business'
       
       resources :friendships, except: :show, controller: 'me/friendships' do
         get :friends, on: :collection
@@ -52,6 +51,8 @@ Rails.application.routes.draw do
       resources :posts, controller: 'users/posts'
       resources :events, controller: 'users/events'
       resources :albums, controller: 'users/albums'
+      resources :business, controller: 'users/business'
+      
       resources :memberships, except: :show, controller: 'users/memberships' do
         get :groups, on: :collection
       end
