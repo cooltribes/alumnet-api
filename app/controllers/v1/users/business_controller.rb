@@ -14,20 +14,11 @@ class V1::Users::BusinessController < V1::BaseController
   end
 
   def create
-
-    # @company = Company.find_or_create_by(company_params.name)
-
-    @company = Company.new(company_params)
-    @company.profile = @user.profile
-    @company.save()
-    @company_relation = CompanyRelation.new(business_params)
-    @company_relation.company = @company
-
-
-    if @user.profile.company_relations << @company_relation
+    @business = BusinessRelation.new(params_bussines, current_user)
+    if @business.save
       render :show, status: :created
     else
-      render json: @Company.errors, status: :unprocessable_entity
+      render json: @business.errors, status: :unprocessable_entity
     end
   end
 

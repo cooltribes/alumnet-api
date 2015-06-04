@@ -10,5 +10,14 @@ class CompanyRelation < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :offer, :search
-  
+
+  ### instance methods
+  def offer_keywords
+    company_relation_keywords.where(keyword_type: 0)
+  end
+
+  def search_keywords
+    company_relation_keywords.where(keyword_type: 1)
+  end
+
 end
