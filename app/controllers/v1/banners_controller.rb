@@ -41,7 +41,7 @@ class V1::BannersController < V1::BaseController
   end
 
   def banner_params
-    params.permit(:title, :link, :description, :picture, :timelapse)
+    params.permit(:title, :link, :description, :picture, :order)
   end
 
 end

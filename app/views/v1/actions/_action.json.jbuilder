@@ -1,0 +1,1 @@
+json.(action, :id, :name, :description, :status, :value, :created_at, :updated_at, :key_name)
