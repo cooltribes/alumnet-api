@@ -34,6 +34,7 @@ class V1::TasksController < V1::BaseController
 
   def destroy
     @task.destroy
+    @task.delete_profinda_task
     head :no_content
   end
 

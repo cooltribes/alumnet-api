@@ -95,6 +95,15 @@ class ProfindaApi
     @last_response.parsed_response
   end
 
+  def delete_task(id)
+    options = {
+      headers: authorized_headers.merge({"Content-Type" => "application/json"}),
+      body: {}
+    }
+    @last_response = self.class.delete("/tasks/#{id}", options)
+    @last_response.parsed_response
+  end
+
   def help_types
     unless @help_types
       @help_types = {}

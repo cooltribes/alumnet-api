@@ -35,6 +35,10 @@ class Task < ActiveRecord::Base
     UpdateProfindaTaskJob.perform_later(id) unless Rails.env.test?
   end
 
+  def delete_profinda_task
+    DeleteProfindaTaskJob.perform_later(id) unless Rails.env.test?
+  end
+
   def create_in_profinda
     if user
       profinda_api = ProfindaApi.new(user.email, user.profinda_password)
@@ -50,9 +54,16 @@ class Task < ActiveRecord::Base
     end
   end
 
+  def delete_from_profinda
+    if profinda_id
+      profinda_api = ProfindaApi.new(user.email, user.profinda_password)
+      profinda_api.delete_task(profinda_id)
+    end
+  end
+
   def profinda_attributes
-    p_attributtes = attributes.except("id","created_at","updated_at","deleted_at",
-      "user_id","profinda_id","help_type","city_id","country_id","offer","company_id")
+    p_attributtes = attributes.slice("name", "description", "post_until", "duration",
+      "must_have_list", "nice_have_list")
     p_attributtes.merge({"post_until" => post_until.strftime("%d/%m/%Y")})
   end
 
@@ -76,6 +87,5 @@ class Task < ActiveRecord::Base
         self[:duration] = "hours"
       end
     end
-
 
 end
