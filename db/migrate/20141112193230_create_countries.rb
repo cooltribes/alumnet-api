@@ -6,6 +6,5 @@ class CreateCountries < ActiveRecord::Migration
       t.string :tld
       t.string :name
     end
-    add_index :countries, :cc_fips
   end
 end

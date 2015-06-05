@@ -1,5 +1,6 @@
 json.(@user, :id, :name, :member, :email, :unread_messages_count, :unread_notifications_count)
 
+json.profinda_api_token @user.profinda_api_token
 json.status @user.get_status_info
 
 json.avatar do
@@ -40,7 +41,7 @@ json.days_membership @user.days_membership
 if @user.is_regional_admin?
   json.admin_country_id @user.profile.residence_country.id #Temp - it can change
   json.admin_country_name @user.profile.residence_country.name
-  
+
   json.admin_region_id @user.admin_location.id
   json.admin_region_name @user.admin_location.name
 end
@@ -48,7 +49,7 @@ end
 if @user.is_nacional_admin?
   json.admin_country_id @user.admin_location.id
   json.admin_country_name @user.admin_location.name
-  
+
   if @user.admin_location.region.present?
     json.admin_region_id @user.admin_location.region.id
     json.admin_region_name @user.admin_location.region.name
