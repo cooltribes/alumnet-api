@@ -14,10 +14,11 @@ class Invitation < ActiveRecord::Base
 
 
   ## class methods
-  def self.mark_as_accepted(token, guest)
+  def mark_as_accepted(token, guest)
     return unless token.present?
-    invitation = unaccepted.find_by(token: token)
-    invitation.accept!(guest) if invitation
+    update_columns(accepted: true, guest_id: guest)
+    #invitation = find_by(token: token)
+    #self.accept!(guest) if invitation
   end
 
   ## instance methods
