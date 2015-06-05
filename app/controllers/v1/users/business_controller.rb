@@ -2,7 +2,7 @@ class V1::Users::BusinessController < V1::BaseController
   include Pundit
 
   before_action :set_user
-  before_action :set_business_info, except: [:index, :create]
+  before_action :set_business, except: [:index, :create]
 
   def index
     @q = @user.profile.company_relations.search(params[:q])
@@ -14,7 +14,7 @@ class V1::Users::BusinessController < V1::BaseController
   end
 
   def create
-    @business = BusinessRelation.new(params_bussines, current_user)
+    @business = BusinessRelation.new(business_params, current_user)
     if @business.save
       render :show, status: :created
     else
@@ -43,9 +43,9 @@ class V1::Users::BusinessController < V1::BaseController
     @user = User.find(params[:user_id])
   end
 
-  def set_business_info
+  def set_business
     if @user
-      @post = @user.posts.find(params[:id])
+      @business = @user.company_relations.find(params[:id])
     else
       render json: 'TODO get this error'
     end
@@ -59,7 +59,7 @@ class V1::Users::BusinessController < V1::BaseController
     params.permit(:company)
   end
   def business_params
-    params.permit(:offer, :search, :business_me)
+    params.permit(:company, :offer, :search, :business_me, :keywords)
   end
 
 end

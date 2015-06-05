@@ -1,1 +1,1 @@
-json.array! @companies, partial: 'show', as: :company, current_user: @user
+json.array! @companies, partial: 'business', as: :business, current_user: @user
