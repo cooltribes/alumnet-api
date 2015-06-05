@@ -38,6 +38,7 @@ class User < ActiveRecord::Base
   has_many :oauth_providers, dependent: :destroy
   has_many :contacts, dependent: :destroy
   has_many :invitations, dependent: :destroy
+  has_many :tasks, dependent: :destroy
   has_many :user_actions, dependent: :destroy
   #has_many :actions, through: :user_actions
 

@@ -83,6 +83,8 @@ Rails.application.routes.draw do
 
     resources :attendances
 
+    resources :job_exchanges
+
     resources :actions
 
     resources :prizes
