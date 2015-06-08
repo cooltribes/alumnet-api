@@ -81,9 +81,11 @@ Rails.application.routes.draw do
       resources :payments, controller: 'events/payments'
     end
 
-    resources :attendances
+    resources :job_exchanges do
+      get :matches, on: :member
+    end
 
-    resources :job_exchanges
+    resources :attendances
 
     resources :actions
 

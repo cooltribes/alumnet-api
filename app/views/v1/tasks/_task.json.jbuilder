@@ -15,3 +15,19 @@ json.user do
     json.avatar task.user.avatar.large.default_url
   end
 end
+
+json.applied_count task.matches.applied.count
+
+if task.matches.applied.any?
+  json.applied task.matches.applied, partial: 'v1/shared/match', as: :match, current_user: current_user
+else
+  json.applied nil
+end
+
+json.matches_count task.matches.count
+
+if task.matches.any?
+  json.matches task.matches, partial: 'v1/shared/match', as: :match, current_user: current_user
+else
+  json.matches nil
+end

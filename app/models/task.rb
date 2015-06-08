@@ -2,6 +2,7 @@ class Task < ActiveRecord::Base
   acts_as_paranoid
 
   ## Relations
+  has_many :matches, dependent: :destroy
   belongs_to :user
   belongs_to :city
   belongs_to :country
@@ -46,6 +47,8 @@ class Task < ActiveRecord::Base
       profinda_api = ProfindaApi.new(user.email, user.profinda_password)
       profinda_task = profinda_api.create_task(profinda_attributes, help_type)
       update_column(:profinda_id, profinda_task["id"])
+      matches = profinda_api.matches(profinda_task["id"])
+      save_matches(matches)
     end
   end
 
@@ -53,12 +56,28 @@ class Task < ActiveRecord::Base
     if profinda_id
       profinda_api = ProfindaApi.new(user.email, user.profinda_password)
       profinda_api.update_task(profinda_id, profinda_attributes)
+      matches = profinda_api.matches(profinda_id)
+      save_matches(matches)
     end
   end
 
   def delete_from_profinda
     if user && profinda_id
       Task.delete_from_profinda(user, profinda_id)
+    end
+  end
+
+  def profinda_matches
+    if profinda_id
+      profinda_api = ProfindaApi.new(user.email, user.profinda_password)
+      matches = profinda_api.matches(profinda_id)
+      save_matches(matches)
+    end
+  end
+
+  def save_matches(p_matches)
+    User.where(profinda_uid: p_matches).each do |user|
+      matches.find_or_create_by(user: user)
     end
   end
 
