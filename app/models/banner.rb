@@ -2,10 +2,11 @@ class Banner < ActiveRecord::Base
   
   mount_uploader :picture, PictureUploader
   
-  ### Relations
+ ### Relations
   
 
   ### Callbacks
     
 
 end
+
