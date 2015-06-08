@@ -11,6 +11,7 @@ class V1::Profiles::LanguageLevelsController < V1::BaseController
     @language_level = LanguageLevel.new(language_level_params)
     authorize @profile
     if @profile.language_levels << @language_level
+      @profile.save_profinda_profile
       render :show, status: :created
     else
       render json: @language_level.errors, status: :unprocessable_entity
@@ -20,6 +21,7 @@ class V1::Profiles::LanguageLevelsController < V1::BaseController
   def update
     authorize @profile
     if @language_level.update(language_level_params)
+      @profile.save_profinda_profile
       render :show, status: :ok
     else
       render json: @language_level.errors, status: :unprocessable_entity
@@ -29,6 +31,7 @@ class V1::Profiles::LanguageLevelsController < V1::BaseController
   def destroy
     authorize @profile
     @language_level.destroy
+    @profile.save_profinda_profile
     head :no_content
   end
 

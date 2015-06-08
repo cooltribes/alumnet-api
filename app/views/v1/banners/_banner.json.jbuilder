@@ -1,4 +1,4 @@
-json.(banner, :id, :title, :description, :link, :created_at, :updated_at)
+json.(banner, :id, :title, :description, :link, :created_at, :updated_at, :order)
 
 json.picture do
   json.original banner.picture.url

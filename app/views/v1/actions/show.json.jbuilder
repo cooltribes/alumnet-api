@@ -1,0 +1,1 @@
+json.partial! 'action', action: @action

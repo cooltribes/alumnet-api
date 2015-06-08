@@ -110,6 +110,15 @@ class Profile < ActiveRecord::Base
     end
   end
 
+  def save_profinda_profile
+    user.save_profinda_profile if user.active?
+  end
+
+  def add_points(points)
+    total = self.points+points
+    self.update(points: total)
+  end
+
   private
     def born_date
       if born.present? && ((Date.current - born).to_i / 365 ) < 20

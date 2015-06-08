@@ -272,3 +272,95 @@ UserSubscription.blueprint(:premium) do
   creator { User.make! }
   reference { "XXXX-XXXX"}
 end
+
+Invitation.blueprint do
+  user { User.make }
+  guest_email { Faker::Internet.email }
+end
+<<<<<<< HEAD
+
+Task.blueprint(:business) do
+  name { "Testing #{sn}" }
+  description { "testing task" }
+  offer { Faker::Lorem.sentence }
+  duration { "hours" }
+  nice_have_list { "1638,1590,1636" }
+  must_have_list { "1637,1606" }
+  post_until { Date.today + 30 }
+  help_type { "task_business_exchange" }
+  country { Country.make! }
+  city { object.country.cities.first }
+  user {  User.make! }
+end
+
+Task.blueprint(:job) do
+  name { "Testing #{sn}" }
+  description { "testing task" }
+  offer { Faker::Lorem.sentence }
+  duration { "hours" }
+  nice_have_list { "1638,1590,1636" }
+  must_have_list { "1637,1606" }
+  post_until { Date.today + 30 }
+  help_type { "task_job_exchange" }
+  country { Country.make! }
+  city { object.country.cities.first }
+  user {  User.make! }
+end
+
+Task.blueprint(:home) do
+  name { "Testing #{sn}" }
+  description { "testing task" }
+  offer { Faker::Lorem.sentence }
+  duration { "hours" }
+  nice_have_list { "1638,1590,1636" }
+  must_have_list { "1637,1606" }
+  post_until { Date.today + 30 }
+  help_type { "task_home_exchange" }
+  country { Country.make! }
+  city { object.country.cities.first }
+  user {  User.make! }
+end
+
+Task.blueprint(:meetup) do
+  name { "Testing #{sn}" }
+  description { "testing task" }
+  offer { Faker::Lorem.sentence }
+  duration { "hours" }
+  nice_have_list { "1638,1590,1636" }
+  must_have_list { "1637,1606" }
+  post_until { Date.today + 30 }
+  help_type { "task_meetup_exchange" }
+  country { Country.make! }
+  city { object.country.cities.first }
+  user {  User.make! }
+end
+
+Action.blueprint do
+  name { "Action #{sn}" }
+  description { Faker::Lorem.sentence }
+  status { 'active' }
+  value { 50 }
+end
+
+UserAction.blueprint do
+  user { User.make! }
+  action { Action.make! }
+  status { 'active' }
+  value { action.value }
+  generator_id { action.id }
+  generator_type { action.name }
+end
+
+Prize.blueprint do
+  name { "Prize #{sn}" }
+  description { Faker::Lorem.sentence }
+  status { 'active' }
+  price { 50 }
+end
+
+UserPrize.blueprint do
+  user { User.make! }
+  prize { Prize.make! }
+  status { 'active' }
+  price { price.value }
+end

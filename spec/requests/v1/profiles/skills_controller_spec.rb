@@ -45,7 +45,7 @@ describe V1::Profiles::SkillsController, type: :request do
       @profile.skills << skill
       expect {
         delete profile_skill_path(@profile, skill), {}, basic_header(user.auth_token)
-      }.to change(Skill, :count).by(-1)
+      }.to change(@profile.skills, :count).by(-1)
       expect(response.status).to eq 204
     end
   end

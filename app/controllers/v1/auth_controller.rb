@@ -25,6 +25,9 @@ class V1::AuthController < V1::BaseController
   def register
     @user = User.new(user_params)
     if @user.save
+      if params[:invitation_token].present?
+        validate_register_points(params[:invitation_token])
+      end
       render :user, status: :created,  location: @user
     else
       render json: { errors: @user.errors }, status: :unprocessable_entity
@@ -34,6 +37,7 @@ class V1::AuthController < V1::BaseController
   def oauth_register
     @user = User.new(oauth_register_params)
     if @user.save
+      Invitation.mark_as_accepted(params[:invitation_token], @user) if params[:invitation_token].present?
       render :user, status: :created,  location: @user
     else
       render json: { errors: @user.errors }, status: :unprocessable_entity
@@ -72,6 +76,19 @@ class V1::AuthController < V1::BaseController
 
   def provider_params
     params.permit(:provider, :uid)
+  end
+
+  def validate_register_points(token)
+    action = Action.find_by(key_name: 'accepted_invitation')
+    if action.present? && action.status == "active"
+      invitation = Invitation.find_by(token: token)
+      if invitation.present?
+        user = User.find(invitation.user_id)
+        invitation.mark_as_accepted(token, user) 
+        UserAction.create(value: action.value, generator_id: action.id, generator_type: action.name, user_id: user.id, action_id: action.id)
+        user.profile.add_points(action.value)
+      end
+    end
   end
 
 end
