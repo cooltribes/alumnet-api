@@ -59,7 +59,8 @@ class V1::Users::BusinessController < V1::BaseController
     params.permit(:company)
   end
   def business_params
-    params.permit(:company, :offer, :search, :business_me, :keywords)
+    params.permit(:company_name, :company_logo, :offer, :search, :business_me,
+      keywords_offer: [], keywords_search: [])
   end
 
 end

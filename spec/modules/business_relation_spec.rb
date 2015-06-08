@@ -4,21 +4,24 @@ RSpec.describe BusinessRelation do
 
   def valid_params
     {
-      company: { name: "Company Test" },
+      company_name: "Company Test",
       offer: "offer",
       search: "search",
       business_me: "business",
-      keywords: { offer: [ "Ruby", "PHP" ], search: [ "Sex"] }
+      keywords_offer: [ "Ruby", "PHP" ],
+      keywords_search: ["Sex"]
     }
   end
 
   def invalid_params
     {
-      company: { name: "Company Test" },
+      company_name: "Company Test",
+      company_logo: "",
       offer: "",
       search: "",
-      business_me: "business",
-      keywords: { offer: [ "Ruby", "PHP" ], search: [ "Sex"] }
+      business_me: "",
+      keywords_offer: [ "Ruby", "PHP" ],
+      keywords_search: "Sex"
     }
   end
 
@@ -52,11 +55,12 @@ RSpec.describe BusinessRelation do
       expect(company_relation.search_keywords.count).to eq(1)
     end
 
-    it {
+    it "should return errors" do
       business = BusinessRelation.new(invalid_params, user)
-      business.save
-      expect(business.errors).to eq("")
-    }
+      business.valid?
+      expect(business.errors.full_messages).to eq(["Offer can't be blank",
+        "Search can't be blank", "Business me can't be blank", "Keywords search must be an array"])
+    end
 
   end
 
