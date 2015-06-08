@@ -20,7 +20,7 @@ class Profile < ActiveRecord::Base
   has_many :languages, through: :language_levels
   has_and_belongs_to_many :skills
   has_many :company_relations, dependent: :destroy
-  has_many :companies, through: :business_relations
+  has_many :companies
 
 
   ###Validations
