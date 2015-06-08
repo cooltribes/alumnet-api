@@ -4,6 +4,8 @@ RSpec.describe Task, :type => :model do
   it { should belong_to(:user) }
   it { should belong_to(:city) }
   it { should belong_to(:country) }
+  it { should have_many(:matches) }
+
 
   describe "Callbacks" do
     it "should set post_until dependent of help_type" do

@@ -12,6 +12,11 @@ class V1::TasksController < V1::BaseController
     render 'v1/tasks/show'
   end
 
+  def matches
+    @task.profinda_matches
+    render 'v1/tasks/show'
+  end
+
   def create
     @task = Task.new(task_params)
     @task.help_type = help_type
