@@ -10,31 +10,13 @@ class V1::Users::BusinessController < V1::BaseController
     # render :index
   end
 
-  def show
-  end
-
   def create
-    @business = BusinessRelation.new(business_params, current_user)
-    if @business.save
+    @businessRelation = BusinessRelation.new(business_params, current_user)
+    if @business = @businessRelation.save
       render :show, status: :created
     else
       render json: @business.errors, status: :unprocessable_entity
     end
-  end
-
-  def update
-    authorize @post
-    if @post.update(post_params)
-      render 'v1/users/posts/show', status: :ok,  location: [@user, @post]
-    else
-      render json: @post.errors, status: :unprocessable_entity
-    end
-  end
-
-  def destroy
-    authorize @post
-    @post.destroy
-    head :no_content
   end
 
   private
@@ -50,14 +32,7 @@ class V1::Users::BusinessController < V1::BaseController
       render json: 'TODO get this error'
     end
   end
-
-  def post_params
-    params.permit(:body, picture_ids:[])
-  end
-
-  def company_params
-    params.permit(:company)
-  end
+  
   def business_params
     params.permit(:company_name, :company_logo, :offer, :search, :business_me,
       keywords_offer: [], keywords_search: [])

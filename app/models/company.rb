@@ -2,7 +2,7 @@ class Company < ActiveRecord::Base
 
   ### Relations
   belongs_to :profile  
-  has_many :company_relations  
+  has_many :company_relations, dependent: :destroy  
 
 
   ### Validations

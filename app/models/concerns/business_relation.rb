@@ -5,7 +5,7 @@ class BusinessRelation
     :keywords_offer, :keywords_search
   attr_reader :user
 
-  validates_presence_of :company_name, :offer, :search, :business_me, :keywords_search,
+  validates_presence_of :company_name, :offer, :search, :keywords_search,
     :keywords_offer
 
   validate :keywords_is_array
@@ -29,6 +29,7 @@ class BusinessRelation
       company_relation = create_company_relation(company)
       create_offer_keyword(company_relation)
       create_search_keyword(company_relation)
+      company_relation
     else
       false
     end
