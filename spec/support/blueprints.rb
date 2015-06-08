@@ -277,7 +277,6 @@ Invitation.blueprint do
   user { User.make }
   guest_email { Faker::Internet.email }
 end
-<<<<<<< HEAD
 
 Task.blueprint(:business) do
   name { "Testing #{sn}" }

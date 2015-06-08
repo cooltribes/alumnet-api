@@ -6,7 +6,7 @@ class Profile < ActiveRecord::Base
   include ProfileHelpers
 
   ##Crop avatar
-  attr_accessor :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH, :avatar_url
+  attr_accessor :imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH, :avatar_url
 
   ###Relations
   belongs_to :birth_city, class_name: 'City'
