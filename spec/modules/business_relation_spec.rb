@@ -59,7 +59,7 @@ RSpec.describe BusinessRelation do
       business = BusinessRelation.new(invalid_params, user)
       business.valid?
       expect(business.errors.full_messages).to eq(["Offer can't be blank",
-        "Search can't be blank", "Business me can't be blank", "Keywords search must be an array"])
+        "Search can't be blank", "Keywords search must be an array"])
     end
 
   end

@@ -1,17 +1,17 @@
 require 'rails_helper'
 ### posts from users
 
-describe V1::Me::BusinessController, type: :request do
+describe V1::Users::BusinessController, type: :request do
   let!(:current_user) { User.make! }
 
   def valid_attributes
-    {       
+    {
       offer: "Ofrezco Facere animi quod aut. Qui nulla consequuntur consectetur sapiente.",
       search: "Busco ... Neque dicta enim quasi. Qui corrupti est quisquam. Facere animi quod aut. Qui nulla consequuntur consectetur sapiente.",
     }
   end
   def valid_company_attributes
-    { 
+    {
       name: "Cooltribes",
       logo: nil,
     }
@@ -26,21 +26,17 @@ describe V1::Me::BusinessController, type: :request do
     before do
       2.times{
         company = Company.make!
-        c = CompanyRelation.make!(valid_attributes)
-        c.profile = current_user.profile
-        c.company = company             
+        CompanyRelation.make!(profile: current_user.profile, company: company)
       }
-      
+
     end
 
     it "should return all companies relations that user has" do
-      get me_business_path, {}, basic_header(current_user.auth_token)
+      get user_business_index_path(current_user), {}, basic_header(current_user.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(2)
-      #TODO: Validate schema with null value. Groups without parents and children
-      #expect(valid_schema('user-array', json)).to be_empty
     end
-  end 
+  end
 
   # describe "POST /me/business" do
   #   context "with valid attributes" do
