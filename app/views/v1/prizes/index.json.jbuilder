@@ -1,0 +1,1 @@
+json.array! @prizes, partial: 'prize', as: :prize, current_user: @current_user

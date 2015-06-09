@@ -1,0 +1,1 @@
+json.array! @actions, partial: 'action', as: :action, current_user: @current_user

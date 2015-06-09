@@ -5,6 +5,7 @@ json.group do
   json.id group.id
   json.name group.name
   json.updated_at group.updated_at
+  json.description group.description
   json.official group.official
   json.cover do
     json.main group.cover.main.url
@@ -41,5 +42,13 @@ json.friends_in do
     json.avatar user.profile.avatar
     json.first_name user.profile.first_name
     json.last_name user.profile.last_name
+  end
+end
+
+json.children do
+  if group.has_children?
+    json.array! group.children, :id, :name, :description, :group_type
+  else
+    json.array! []
   end
 end
