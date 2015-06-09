@@ -130,6 +130,16 @@ class Task < ActiveRecord::Base
     end
   end
 
+  def self.profinda_automatches(user)
+    profinda_api = ProfindaApi.new(user.email, user.profinda_password)
+    profinda_tasks = profinda_api.automatches
+    tasks = Task.where(profinda_id: profinda_tasks)
+    tasks.each do |task|
+      task.matches.find_or_create_by(user: user)
+    end
+    tasks
+  end
+
   private
 
     def check_help_type_and_set_values
