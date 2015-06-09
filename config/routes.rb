@@ -58,6 +58,7 @@ Rails.application.routes.draw do
         get :commons, on: :collection
       end
       resources :subscriptions, except: :show, controller: 'users/subscriptions'
+      resources :actions, except: :show, controller: 'users/actions'
     end
 
     resources :groups do
