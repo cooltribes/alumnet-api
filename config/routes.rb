@@ -83,6 +83,7 @@ Rails.application.routes.draw do
 
     resources :job_exchanges do
       get :my, on: :collection
+      get :automatches, on: :collection
       get :matches, on: :member
     end
 
