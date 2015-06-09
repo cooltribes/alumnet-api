@@ -4,6 +4,8 @@ json.(task, :id, :name, :description, :duration, :post_until, :must_have_list,
 json.country task.country_info
 json.city task.city_info
 json.company task.company_info
+json.employment task.employment_info
+json.position task.position_info
 
 json.user do
   json.(task.user, :id)

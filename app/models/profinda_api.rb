@@ -115,6 +115,23 @@ class ProfindaApi
     users
   end
 
+  def automatches
+    profinda_automatches = tasks_automatches
+    tasks = []
+    if profinda_automatches["entries"].present?
+      profinda_automatches["entries"].map do |match|
+        tasks << match["id"]
+      end
+    end
+    tasks
+  end
+
+  def tasks_automatches
+    options = { headers: authorized_headers, body: {} }
+    @last_response = self.class.get("/automatches", options)
+    @last_response.parsed_response
+  end
+
   def task_matches(id)
     options = { headers: authorized_headers, body: {} }
     @last_response = self.class.get("/tasks/#{id}/matches", options)

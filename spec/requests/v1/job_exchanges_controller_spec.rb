@@ -23,6 +23,17 @@ describe V1::JobExchangesController, type: :request do
     end
   end
 
+  describe "GET /job_exchanges/my" do
+    it "return only my job_exchanges of current user" do
+      3.times { Task.make!(:job) }
+      2.times { Task.make!(:job, user: user) }
+      3.times { Task.make!(:business) }
+      get my_job_exchanges_path, {}, basic_header(user.auth_token)
+      expect(response.status).to eq 200
+      expect(json.count).to eq(2)
+    end
+  end
+
   describe "GET /job_exchanges/id" do
     it "should return a task" do
       task = Task.make!(:job)
