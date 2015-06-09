@@ -363,3 +363,17 @@ UserPrize.blueprint do
   status { 'active' }
   price { price.value }
 end
+
+Company.blueprint do
+  name { "Company #{sn}"}
+  logo { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
+end
+
+CompanyRelation.blueprint do
+  company { Company.make! }
+  profile { User.make!.profile }
+  offer { "Ofrezco " + Faker::Lorem.sentence }
+  search { "Busco " + Faker::Lorem.sentence }
+  business_me { "Por que hacer negocios " + Faker::Lorem.sentence }
+end
+

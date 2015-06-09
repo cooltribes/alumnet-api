@@ -2,9 +2,14 @@ class Task < ActiveRecord::Base
   acts_as_paranoid
 
   ## Relations
+  has_many :matches, dependent: :destroy
   belongs_to :user
   belongs_to :city
   belongs_to :country
+
+  EMPLOYMENT_TYPES = { 0 => "Full-time", 1 => "Part-time", 2 => "Internship", 3 => "Temporary"}
+  POSITION_TYPES = { 0 => "Top Management/Director", 1 => "Middle management", 2 => "Senior Specialist",
+    3 => "Junior Specialist", 4 => "Entry job" }
 
   # HELP TYPES
   # "task_business_exchange"
@@ -46,6 +51,8 @@ class Task < ActiveRecord::Base
       profinda_api = ProfindaApi.new(user.email, user.profinda_password)
       profinda_task = profinda_api.create_task(profinda_attributes, help_type)
       update_column(:profinda_id, profinda_task["id"])
+      matches = profinda_api.matches(profinda_task["id"])
+      save_matches(matches)
     end
   end
 
@@ -53,6 +60,8 @@ class Task < ActiveRecord::Base
     if profinda_id
       profinda_api = ProfindaApi.new(user.email, user.profinda_password)
       profinda_api.update_task(profinda_id, profinda_attributes)
+      matches = profinda_api.matches(profinda_id)
+      save_matches(matches)
     end
   end
 
@@ -62,10 +71,32 @@ class Task < ActiveRecord::Base
     end
   end
 
+  def profinda_matches
+    if profinda_id
+      profinda_api = ProfindaApi.new(user.email, user.profinda_password)
+      matches = profinda_api.matches(profinda_id)
+      save_matches(matches)
+    end
+  end
+
+  def save_matches(p_matches)
+    User.where(profinda_uid: p_matches).each do |user|
+      matches.find_or_create_by(user: user)
+    end
+  end
+
   def profinda_attributes
     p_attributtes = attributes.slice("name", "description", "post_until", "duration",
       "must_have_list", "nice_have_list")
     p_attributtes.merge({"post_until" => post_until.strftime("%d/%m/%Y")})
+  end
+
+  def employment_type_text
+    EMPLOYMENT_TYPES[employment_type]
+  end
+
+  def position_type_text
+    POSITION_TYPES[position_type]
   end
 
   def country_info
@@ -81,6 +112,14 @@ class Task < ActiveRecord::Base
   end
   def company;nil;end
 
+  def position_info
+    { text: position_type_text, value: position_type }
+  end
+
+  def employment_info
+    { text: employment_type_text, value: employment_type }
+  end
+
 
   ## class methods
 
@@ -89,6 +128,16 @@ class Task < ActiveRecord::Base
       profinda_api = ProfindaApi.new(user.email, user.profinda_password)
       profinda_api.delete_task(profinda_id)
     end
+  end
+
+  def self.profinda_automatches(user)
+    profinda_api = ProfindaApi.new(user.email, user.profinda_password)
+    profinda_tasks = profinda_api.automatches
+    tasks = Task.where(profinda_id: profinda_tasks)
+    tasks.each do |task|
+      task.matches.find_or_create_by(user: user)
+    end
+    tasks
   end
 
   private

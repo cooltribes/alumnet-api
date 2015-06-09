@@ -19,6 +19,9 @@ class Profile < ActiveRecord::Base
   has_many :language_levels, dependent: :destroy
   has_many :languages, through: :language_levels
   has_and_belongs_to_many :skills
+  has_many :company_relations, dependent: :destroy
+  has_many :companies
+
 
   ###Validations
   validates_presence_of :user_id, :first_name, :last_name, on: :update
