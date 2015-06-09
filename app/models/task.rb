@@ -7,6 +7,10 @@ class Task < ActiveRecord::Base
   belongs_to :city
   belongs_to :country
 
+  EMPLOYMENT_TYPES = { 0 => "Full-time", 1 => "Part-time", 2 => "Internship", 3 => "Temporary"}
+  POSITION_TYPES = { 0 => "Top Management/Director", 1 => "Middle management", 2 => "Senior Specialist",
+    3 => "Junior Specialist", 4 => "Entry job" }
+
   # HELP TYPES
   # "task_business_exchange"
   # "task_home_exchange"
@@ -87,6 +91,14 @@ class Task < ActiveRecord::Base
     p_attributtes.merge({"post_until" => post_until.strftime("%d/%m/%Y")})
   end
 
+  def employment_type_text
+    EMPLOYMENT_TYPES[employment_type]
+  end
+
+  def position_type_text
+    POSITION_TYPES[position_type]
+  end
+
   def country_info
     country ? { text: country.name, value: country_id } : { text: "", value: ""}
   end
@@ -99,6 +111,14 @@ class Task < ActiveRecord::Base
     company ? { text: company.name, value: company_id } : { text: "", value: ""}
   end
   def company;nil;end
+
+  def position_info
+    { text: position_type_text, value: position_type }
+  end
+
+  def employment_info
+    { text: employment_type_text, value: employment_type }
+  end
 
 
   ## class methods
