@@ -1,9 +1,15 @@
 class V1::TasksController < V1::BaseController
   include Pundit
-  before_action :set_task, except: [:index, :create]
+  before_action :set_task, except: [:index, :my, :create]
 
   def index
     @q = Task.search(params[:q])
+    @tasks = @q.result
+    render 'v1/tasks/index'
+  end
+
+  def my
+    @q = current_user.tasks.search(params[:q])
     @tasks = @q.result
     render 'v1/tasks/index'
   end
