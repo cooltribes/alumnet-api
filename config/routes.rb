@@ -22,7 +22,7 @@ Rails.application.routes.draw do
       post :send_invitations
       resource :profile, only: [:show, :update], controller: 'me/profiles'
       resources :posts, controller: 'me/posts'
-      
+
       resources :friendships, except: :show, controller: 'me/friendships' do
         get :friends, on: :collection
       end
@@ -52,7 +52,7 @@ Rails.application.routes.draw do
       resources :events, controller: 'users/events'
       resources :albums, controller: 'users/albums'
       resources :business, controller: 'users/business'
-      
+
       resources :memberships, except: :show, controller: 'users/memberships' do
         get :groups, on: :collection
       end
@@ -126,6 +126,7 @@ Rails.application.routes.draw do
     end
 
     resources :committees, only: [:index]
+    resources :sectors, only: [:index]
 
     resources :profiles, only: [:show, :update] do
       post :cropping, on: :member

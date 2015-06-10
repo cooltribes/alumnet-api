@@ -37,6 +37,13 @@ SmarterCSV.process(file, options ) do |array|
 end
 file.close
 
+file = File.open('db/data/sectors.csv')
+options = { col_sep: "\t"}
+SmarterCSV.process(file, options ) do |array|
+  Sector.create( array.first )
+end
+file.close
+
 ### Data
 venezuela = Country.find_by(name: "Venezuela")
 belgium = Country.find_by(name: "Belgium")
