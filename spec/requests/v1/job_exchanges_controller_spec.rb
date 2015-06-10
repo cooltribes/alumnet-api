@@ -34,6 +34,16 @@ describe V1::JobExchangesController, type: :request do
     end
   end
 
+  describe "GET /job_exchanges/applied" do
+    it "return only job_exchanges where the current user has applied" do
+      3.times { Task.make!(:job) }
+      1.times { Task.make!(:job).apply(user) }
+      get applied_job_exchanges_path, {}, basic_header(user.auth_token)
+      expect(response.status).to eq 200
+      expect(json.count).to eq(1)
+    end
+  end
+
   describe "GET /job_exchanges/id" do
     it "should return a task" do
       task = Task.make!(:job)

@@ -12,6 +12,12 @@ class V1::JobExchangesController < V1::TasksController
     render 'v1/tasks/index'
   end
 
+  def applied
+    @q = Task.applied_by(current_user).job_exchanges.search(params[:q])
+    @tasks = @q.result
+    render 'v1/tasks/index'
+  end
+
   private
     def help_type
       "task_job_exchange"

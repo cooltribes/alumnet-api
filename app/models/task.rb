@@ -139,6 +139,10 @@ class Task < ActiveRecord::Base
 
   ## class methods
 
+  def self.applied_by(user)
+    joins(:matches).where(matches: { user_id: user.id }).where(matches: { applied: true })
+  end
+
   def self.delete_from_profinda(user, profinda_id)
     if profinda_id
       profinda_api = ProfindaApi.new(user.email, user.profinda_password)

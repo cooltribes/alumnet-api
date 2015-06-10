@@ -1,6 +1,6 @@
 class V1::TasksController < V1::BaseController
   include Pundit
-  before_action :set_task, except: [:index, :my, :create, :automatches]
+  before_action :set_task, except: [:index, :my, :applied, :create, :automatches]
 
   def index
     @q = Task.search(params[:q])
@@ -10,6 +10,12 @@ class V1::TasksController < V1::BaseController
 
   def my
     @q = current_user.tasks.search(params[:q])
+    @tasks = @q.result
+    render 'v1/tasks/index'
+  end
+
+  def applied
+    @q = Task.applied_by(current_user).search(params[:q])
     @tasks = @q.result
     render 'v1/tasks/index'
   end
