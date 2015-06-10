@@ -32,6 +32,22 @@ class Task < ActiveRecord::Base
 
   ## Instance methods
 
+  def apply(user)
+    match = matches.find_or_initialize_by(user: user)
+    match.applied = true
+    match.save
+  end
+
+  def can_apply(user)
+    return false if self.user == user
+    !user_applied?(user)
+  end
+
+  def user_applied?(user)
+    match = matches.find_by(user_id: user.id)
+    match ? match.applied? : false
+  end
+
   def create_profinda_task
     CreateProfindaTaskJob.perform_later(id) unless Rails.env.test?
   end

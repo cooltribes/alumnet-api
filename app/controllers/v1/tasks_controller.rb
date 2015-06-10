@@ -20,6 +20,15 @@ class V1::TasksController < V1::BaseController
     render 'v1/tasks/index'
   end
 
+  def apply
+    if @task.can_apply(current_user)
+      @task.apply(current_user)
+      render 'v1/tasks/show'
+    else
+      render json: { error: "The user can not apply to the task" }, status: :unprocessable_entity
+    end
+  end
+
   def show
     render 'v1/tasks/show'
   end

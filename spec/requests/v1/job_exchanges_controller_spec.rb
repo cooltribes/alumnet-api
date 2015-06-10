@@ -43,6 +43,16 @@ describe V1::JobExchangesController, type: :request do
     end
   end
 
+  describe "GET /job_exchanges/apply" do
+    it "should set apply to true and return a task" do
+      task = Task.make!(:job)
+      put apply_job_exchange_path(task), {}, basic_header(user.auth_token)
+      expect(response.status).to eq 200
+      expect(json["user_applied"]).to eq(true)
+      expect(json["user_can_apply"]).to eq(false)
+    end
+  end
+
   describe "POST /job_exchanges" do
     context "with valid attributes" do
       it "should create a job_exchanges to current user" do

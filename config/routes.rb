@@ -89,6 +89,7 @@ Rails.application.routes.draw do
       get :my, on: :collection
       get :automatches, on: :collection
       get :matches, on: :member
+      put :apply, on: :member
     end
 
     resources :attendances
