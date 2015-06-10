@@ -1,6 +1,6 @@
 class V1::TasksController < V1::BaseController
   include Pundit
-  before_action :set_task, except: [:index, :create]
+  before_action :set_task, except: [:index, :my, :create, :automatches]
 
   def index
     @q = Task.search(params[:q])
@@ -8,7 +8,24 @@ class V1::TasksController < V1::BaseController
     render 'v1/tasks/index'
   end
 
+  def my
+    @q = current_user.tasks.search(params[:q])
+    @tasks = @q.result
+    render 'v1/tasks/index'
+  end
+
+  def automatches
+    @q = Task.profinda_automatches(current_user).search(params[:q])
+    @tasks = @q.result
+    render 'v1/tasks/index'
+  end
+
   def show
+    render 'v1/tasks/show'
+  end
+
+  def matches
+    @task.profinda_matches
     render 'v1/tasks/show'
   end
 
@@ -49,7 +66,8 @@ class V1::TasksController < V1::BaseController
 
     def task_params
       params.permit(:name, :description, :duration, :post_until, :must_have_list,
-       :nice_have_list, :company_id, :city_id, :country_id, :offer)
+       :nice_have_list, :company_id, :city_id, :country_id, :offer, :employment_type,
+       :position_type)
     end
 
 end
