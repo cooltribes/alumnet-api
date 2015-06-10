@@ -6,41 +6,41 @@ require 'smarter_csv'
 file = File.open('db/data/GEODATASOURCE-COUNTRY.TXT', "r:ISO-8859-5")
 options = { key_mapping: {country_name: :name}, col_sep: "\t"}
 SmarterCSV.process(file, options ) do |array|
-  Country.create( array.first )
+  Country.find_or_create_by( array.first )
 end
 file.close
 
 file = File.open('db/data/languages.csv', "r:ISO-8859-5")
 options = { col_sep: "\t"}
 SmarterCSV.process(file, options ) do |array|
-  Language.create( array.first )
+  Language.find_or_create_by( array.first )
 end
 file.close
 
 file = File.open('db/data/skills.csv', "r:ISO-8859-5")
 options = { col_sep: "\t"}
 SmarterCSV.process(file, options ) do |array|
-  Skill.create( array.first )
+  Skill.find_or_create_by( array.first )
 end
 file.close
 
 file = File.open('db/data/committees.csv', "r:ISO-8859-5")
 SmarterCSV.process(file) do |array|
-  Committee.create( array.first )
+  Committee.find_or_create_by( array.first )
 end
 file.close
 
 file = File.open('db/data/regions.csv')
 options = { col_sep: "\t"}
 SmarterCSV.process(file, options ) do |array|
-  Region.create( array.first )
+  Region.find_or_create_by( array.first )
 end
 file.close
 
 file = File.open('db/data/sectors.csv')
 options = { col_sep: "\t"}
 SmarterCSV.process(file, options ) do |array|
-  Sector.create( array.first )
+  Sector.find_or_create_by( array.first )
 end
 file.close
 

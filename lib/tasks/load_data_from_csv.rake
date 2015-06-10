@@ -8,7 +8,7 @@ namespace :app do
       file = File.open(file)
         options = { col_sep: "\t"}
         SmarterCSV.process(file, options ) do |array|
-        model.constantize.create( array.first )
+        model.constantize.find_or_create_by( array.first )
       end
       file.close
     else
