@@ -31,17 +31,25 @@ module AlumnetUploader
       if model.imgX1.present?
         imgW = model.imgW.to_i
         imgH = model.imgH.to_i
+        imgInitW = model.imgInitW.to_i
+        imgInitH = model.imgInitH.to_i
+        ratioW = imgInitW/imgW
+        ratioH = imgInitH/imgH
+        ratio = [ratioW, ratioH].min
         # imgX1 = model.imgX1.to_i * (1600/450)
         # imgY1 = model.imgY1.to_i * (560/150)
         # cropW = model.cropW.to_i * (1600/450)
         # cropH = model.cropH.to_i * (560/150)
-        imgX1 = model.imgX1.to_i
-        imgY1 = model.imgY1.to_i
-        cropW = model.cropW.to_i
-        cropH = model.cropH.to_i
-        resize_to_limit(imgW, imgH)
+        imgX1 = model.imgX1.to_i * ratio
+        imgY1 = model.imgY1.to_i * ratio
+        #cropW = model.cropW.to_i
+        #cropH = model.cropH.to_i
+        cropW = 1360
+        cropH = 430
+        resize_to_limit(imgInitW, imgInitH)        
         manipulate! do |img|
           img.crop "#{cropW}x#{cropH}+#{imgX1}+#{imgY1}"
+          #img.resize "1360x430"       
         end
       end
     end
