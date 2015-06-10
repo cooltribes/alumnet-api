@@ -19,7 +19,7 @@ class V1::EventsController < V1::BaseEventsController
   end
 
   def crop_params
-    params.permit(:imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH)
+    params.permit(:imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH)
   end
 
 end
