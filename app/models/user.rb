@@ -451,6 +451,11 @@ class User < ActiveRecord::Base
     end
   end
 
+  ## TASKS
+  def has_task_invitation(task)
+    task_invitations.exists?(task_id: task.id)
+  end
+
   private
 
   ### this a temporary solution to authenticate the api

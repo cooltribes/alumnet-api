@@ -5,6 +5,7 @@ class TaskInvitation < ActiveRecord::Base
 
   ## Validations
   validates_presence_of :user_id, :task_id
+  validates_uniqueness_of :user_id, scope: :task_id
 
   ## Scopes
   scope :accepted, -> { where(accepted: true) }
