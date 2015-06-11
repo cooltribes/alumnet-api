@@ -5,6 +5,8 @@ RSpec.describe Task, :type => :model do
   it { should belong_to(:city) }
   it { should belong_to(:country) }
   it { should have_many(:matches) }
+  it { should have_many(:task_invitations) }
+
 
   describe "Instance Methods" do
     describe "#apply(user)" do

@@ -3,6 +3,7 @@ class Task < ActiveRecord::Base
 
   ## Relations
   has_many :matches, dependent: :destroy
+  has_many :task_invitations, dependent: :destroy
   belongs_to :user
   belongs_to :city
   belongs_to :country

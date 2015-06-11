@@ -41,6 +41,8 @@ class User < ActiveRecord::Base
   has_many :tasks, dependent: :destroy
   has_many :user_actions, dependent: :destroy
   #has_many :actions, through: :user_actions
+  has_many :task_invitations, dependent: :destroy
+
 
   ### Scopes
   scope :active, -> { where(status: 1) }
