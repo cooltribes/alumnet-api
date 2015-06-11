@@ -355,6 +355,8 @@ Prize.blueprint do
   description { Faker::Lorem.sentence }
   status { 'active' }
   price { 50 }
+  prize_type { 1 }
+  quantity { 1 }
 end
 
 UserPrize.blueprint do
@@ -362,6 +364,8 @@ UserPrize.blueprint do
   prize { Prize.make! }
   status { 'active' }
   price { price.value }
+  prize_type { prize.prize_type }
+  remaining_quantity { prize.quantity }
 end
 
 Company.blueprint do
