@@ -12,7 +12,7 @@ class ProfindaApi
   # "task_business_exchange"
   # "task_home_exchange"
   # "task_job_exchange"
-  # "task_meetup_exchange"
+  # "task_meetup_exchange"my
 
   DEFAULT_HEADERS = {
     "Accept" => "application/vnd.profinda+json;version=1",
@@ -101,6 +101,40 @@ class ProfindaApi
       body: {}
     }
     @last_response = self.class.delete("/tasks/#{id}", options)
+    @last_response.parsed_response
+  end
+
+  def matches(task_id)
+    profinda_matches = task_matches(task_id)
+    users = []
+    if profinda_matches["entries"].present?
+      profinda_matches["entries"].map do |match|
+        users << match["profile_id"]
+      end
+    end
+    users
+  end
+
+  def automatches
+    profinda_automatches = tasks_automatches
+    tasks = []
+    if profinda_automatches["entries"].present?
+      profinda_automatches["entries"].map do |match|
+        tasks << match["id"]
+      end
+    end
+    tasks
+  end
+
+  def tasks_automatches
+    options = { headers: authorized_headers, body: {} }
+    @last_response = self.class.get("/automatches", options)
+    @last_response.parsed_response
+  end
+
+  def task_matches(id)
+    options = { headers: authorized_headers, body: {} }
+    @last_response = self.class.get("/tasks/#{id}/matches", options)
     @last_response.parsed_response
   end
 

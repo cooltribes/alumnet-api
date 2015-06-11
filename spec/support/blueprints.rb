@@ -277,7 +277,6 @@ Invitation.blueprint do
   user { User.make }
   guest_email { Faker::Internet.email }
 end
-<<<<<<< HEAD
 
 Task.blueprint(:business) do
   name { "Testing #{sn}" }
@@ -363,4 +362,23 @@ UserPrize.blueprint do
   prize { Prize.make! }
   status { 'active' }
   price { price.value }
+end
+
+Company.blueprint do
+  name { "Company #{sn}"}
+  logo { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
+end
+
+CompanyRelation.blueprint do
+  company { Company.make! }
+  profile { User.make!.profile }
+  offer { "Ofrezco " + Faker::Lorem.sentence }
+  search { "Busco " + Faker::Lorem.sentence }
+  business_me { "Por que hacer negocios " + Faker::Lorem.sentence }
+end
+
+TaskInvitation.blueprint do
+  user { User.make! }
+  task { Task.make!(:job) }
+  accepted { false }
 end
