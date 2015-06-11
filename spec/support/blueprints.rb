@@ -376,4 +376,3 @@ CompanyRelation.blueprint do
   search { "Busco " + Faker::Lorem.sentence }
   business_me { "Por que hacer negocios " + Faker::Lorem.sentence }
 end
-
