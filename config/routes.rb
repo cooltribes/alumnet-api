@@ -93,6 +93,8 @@ Rails.application.routes.draw do
       put :apply, on: :member
     end
 
+    resources :task_invitations, except: :show
+
     resources :attendances
 
     resources :actions

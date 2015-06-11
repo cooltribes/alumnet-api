@@ -376,3 +376,9 @@ CompanyRelation.blueprint do
   search { "Busco " + Faker::Lorem.sentence }
   business_me { "Por que hacer negocios " + Faker::Lorem.sentence }
 end
+
+TaskInvitation.blueprint do
+  user { User.make! }
+  task { Task.make!(:job) }
+  accepted { false }
+end
