@@ -5,7 +5,7 @@ class Event < ActiveRecord::Base
 
   ## Virtual Attributes
   attr_accessor :cover_uploader
-  attr_accessor :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH
+  attr_accessor :imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH
   attr_accessor :invite_group_members
 
   ### Relations

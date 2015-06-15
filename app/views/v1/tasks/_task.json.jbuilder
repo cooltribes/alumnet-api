@@ -33,3 +33,6 @@ if task.matches.any?
 else
   json.matches nil
 end
+
+json.user_applied task.user_applied?(current_user)
+json.user_can_apply task.can_apply(current_user)

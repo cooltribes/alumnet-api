@@ -1,5 +1,5 @@
 server 'alumnet-test.aiesec-alumni.org',
-  roles: %w{web app},
+  roles: %w{web app db},
   ssh_options: {
     user: 'ec2-user',
     keys: %w(~/alumnet.pem),
