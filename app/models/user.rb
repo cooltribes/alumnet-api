@@ -41,6 +41,8 @@ class User < ActiveRecord::Base
   has_many :tasks, dependent: :destroy
   has_many :user_actions, dependent: :destroy
   #has_many :actions, through: :user_actions
+  has_many :task_invitations, dependent: :destroy
+
 
   ### Scopes
   scope :active, -> { where(status: 1) }
@@ -447,6 +449,11 @@ class User < ActiveRecord::Base
     else
       "none"
     end
+  end
+
+  ## TASKS
+  def has_task_invitation(task)
+    task_invitations.exists?(task_id: task.id)
   end
 
   private

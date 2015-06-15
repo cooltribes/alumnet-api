@@ -94,6 +94,7 @@ describe V1::AuthController, type: :request do
     context "with invitation token" do
       it "create a user and mark the invitation as accepted" do
         invitation = Invitation.make!
+        Action.make!(key_name: "accepted_invitation")
         valid_attributes_with_token = valid_attributes.merge({ invitation_token: invitation.token })
         expect {
           post register_path, valid_attributes_with_token , header
@@ -101,8 +102,8 @@ describe V1::AuthController, type: :request do
         expect(response.status).to eq 201
         expect(json['email']).to eq("test_email@gmail.com")
         invitation.reload
-        expect(invitation.guest).to eq(User.last) #be_present
         expect(invitation).to be_accepted
+        expect(invitation.guest).to eq(User.last) #be_present
       end
     end
   end
