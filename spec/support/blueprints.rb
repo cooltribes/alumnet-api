@@ -363,9 +363,12 @@ UserPrize.blueprint do
   user { User.make! }
   prize { Prize.make! }
   status { 'active' }
-  price { price.value }
-  prize_type { prize.prize_type }
-  remaining_quantity { prize.quantity }
+  # price { prize.price }
+  # prize_type { prize.prize_type }
+  # remaining_quantity { prize.quantity }
+  price { 50 }
+  prize_type { 1 }
+  remaining_quantity { 1 }
 end
 
 Company.blueprint do

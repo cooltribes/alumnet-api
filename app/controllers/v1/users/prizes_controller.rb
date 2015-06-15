@@ -1,14 +1,10 @@
 class V1::Users::PrizesController < V1::BaseController
   before_action :set_user_prize, except: [:index, :create]
   before_action :set_prize, only: :index
+  before_action :set_user
 
   def index
-    @q = if @event
-      @event.attendances.search(params[:q])
-    else
-      Attendance.search(params[:q])
-    end
-    @attendances = @q.result
+    @user_prizes = @user.user_prizes
   end
 
 
@@ -21,22 +17,25 @@ class V1::Users::PrizesController < V1::BaseController
     end
   end
 
-  def update
-    authorize @attendance
-    if @attendance.update(update_params)
-      render :show
-    else
-      render json: @attendance.errors, status: :unprocessable_entity
-    end
-  end
+  # def update
+  #   authorize @attendance
+  #   if @attendance.update(update_params)
+  #     render :show
+  #   else
+  #     render json: @attendance.errors, status: :unprocessable_entity
+  #   end
+  # end
 
-  def destroy
-    authorize @attendance
-    @attendance.destroy
-    head :no_content
-  end
+  # def destroy
+  #   authorize @attendance
+  #   @attendance.destroy
+  #   head :no_content
+  # end
 
   private
+    def set_user
+      @user = User.find(params[:user_id])
+    end
 
     def set_user_prize
       @user_prize = UserPrize.find(params[:id])

@@ -1,15 +1,16 @@
 require 'rails_helper'
 
-describe V1::PrizesController, type: :request do
+describe V1::Users::PrizesController, type: :request do
   let!(:user) { User.make! }
 
-  # describe "GET attendances" do
-  #   it "return all attendances " do
-  #     3.times { Attendance.make! }
-  #     get attendances_path,{}, basic_header(user.auth_token)
-  #     expect(response.status).to eq 200
-  #     expect(json.count).to eq(3)
-  #   end
+  describe "GET user prizes" do
+    it "return all user prizes " do
+      3.times { UserPrize.make!(user: user) }
+      get user_prizes_path(user),{}, basic_header(user.auth_token)
+      expect(response.status).to eq 200
+      expect(json.count).to eq(3)
+    end
+  end
 
   #   it "return all attendances of event if params event_id is given" do
   #     event = Event.make!
@@ -26,9 +27,10 @@ describe V1::PrizesController, type: :request do
     it "should create an user prize" do
       prize = Prize.make!
       user = User.make!
+      valid_attributes = { prize_id: prize.id, price: prize.price, status: 1, prize_type: prize.prize_type, remaining_quantity: prize.quantity }
       expect {
-        post user_prizes_path, { user_id: user.id, prize_id: prize.id } , basic_header(user.auth_token)
-      }.to change(UserAction, :count).by(1)
+        post user_prizes_path(user), valid_attributes , basic_header(user.auth_token)
+      }.to change(UserPrize, :count).by(1)
       # expect(response.status).to eq 201
       # expect(json["event"]["id"]).to eq(event.id)
       # expect(json["user"]["id"]).to eq(user_to_invite.id)
