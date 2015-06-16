@@ -1,0 +1,1 @@
+json.partial! 'v1/shared/user_prize', user_prize: @user_prize, current_user: @current_user
