@@ -6,4 +6,13 @@ class Match < ActiveRecord::Base
   ## scopes
   scope :applied, -> { where(applied: true) }
   scope :not_applied, -> { where(applied: false) }
+
+  ## Validations
+  validates_presence_of :task_id, :user_id
+
+  ## Instance methods
+
+  def has_invitation
+    TaskInvitation.exists?(user_id: user.id, task_id: task.id)
+  end
 end

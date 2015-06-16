@@ -1,8 +1,8 @@
 class BusinessRelation
   include ActiveModel::Model
 
-  attr_accessor :company_name, :company_logo, :offer, :search, :business_me,
-    :keywords_offer, :keywords_search
+  attr_accessor :company_name, :company_logo, :offer, :search, :tagline, 
+    :business_me, :keywords_offer, :keywords_search
   attr_reader :user
 
   validates_presence_of :company_name, :offer, :search, :keywords_search,
