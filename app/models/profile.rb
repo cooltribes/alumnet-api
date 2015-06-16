@@ -122,6 +122,11 @@ class Profile < ActiveRecord::Base
     self.update(points: total)
   end
 
+  def substract_points(points)
+    total = self.points-points
+    self.update(points: total)
+  end
+
   private
     def born_date
       if born.present? && ((Date.current - born).to_i / 365 ) < 20
