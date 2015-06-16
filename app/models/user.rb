@@ -40,6 +40,8 @@ class User < ActiveRecord::Base
   has_many :invitations, dependent: :destroy
   has_many :tasks, dependent: :destroy
   has_many :user_actions, dependent: :destroy
+  has_many :user_prizes, dependent: :destroy
+  has_many :prizes, through: :user_prizes
   #has_many :actions, through: :user_actions
   has_many :task_invitations, dependent: :destroy
 
