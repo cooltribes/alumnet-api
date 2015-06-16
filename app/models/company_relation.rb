@@ -14,18 +14,11 @@ class CompanyRelation < ActiveRecord::Base
 
   ### instance methods
   def offer_keywords
-    company_relation_keywords.where(keyword_type: 0)
+    keywords.where(company_relation_keywords: {keyword_type: 0 })
   end
-
-  def offer_keywords_name
-    # company_relation_keywords.where(keyword_type: 0)
-  end
-
+  
   def search_keywords
-    company_relation_keywords.where(keyword_type: 1)
-  end
-  def search_keywords_name
-    # company_relation_keywords.where(keyword_type: 1)
+    keywords.where(company_relation_keywords: {keyword_type: 1 })   
   end
 
 end
