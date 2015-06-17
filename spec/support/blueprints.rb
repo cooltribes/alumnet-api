@@ -355,18 +355,29 @@ Prize.blueprint do
   description { Faker::Lorem.sentence }
   status { 'active' }
   price { 50 }
+  prize_type { 1 }
+  quantity { 1 }
 end
 
 UserPrize.blueprint do
   user { User.make! }
   prize { Prize.make! }
   status { 'active' }
-  price { price.value }
+  # price { prize.price }
+  # prize_type { prize.prize_type }
+  # remaining_quantity { prize.quantity }
+  price { 50 }
+  prize_type { 1 }
+  remaining_quantity { 1 }
 end
 
 Company.blueprint do
   name { "Company #{sn}"}
   logo { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
+end
+
+Keyword.blueprint do
+  name { "Keyword #{sn}" }
 end
 
 CompanyRelation.blueprint do
@@ -375,6 +386,18 @@ CompanyRelation.blueprint do
   offer { "Ofrezco " + Faker::Lorem.sentence }
   search { "Busco " + Faker::Lorem.sentence }
   business_me { "Por que hacer negocios " + Faker::Lorem.sentence }
+end
+
+CompanyRelationKeyword.blueprint(:offer) do
+  company_relation { CompanyRelation.make! }
+  keyword { Keyword.make! }
+  keyword_type { 0 }
+end
+
+CompanyRelationKeyword.blueprint(:search) do
+  company_relation { CompanyRelation.make! }
+  keyword { Keyword.make! }
+  keyword_type { 1 }
 end
 
 TaskInvitation.blueprint do
