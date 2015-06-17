@@ -4,4 +4,7 @@ class Attachment < ActiveRecord::Base
   ### Relations
   belongs_to :folder
   belongs_to :uploader, class_name: "User"
+
+  ### Validations
+  validates_presence_of :name, :file, :folder_id
 end

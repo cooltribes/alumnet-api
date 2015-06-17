@@ -110,6 +110,10 @@ Rails.application.routes.draw do
 
     resources :companies
 
+    resources :folders, only: :show do
+      resources :attachments, controller: 'folders/attachments'
+    end
+
     resources :pictures do
       post :like, on: :member
       post :unlike, on: :member
