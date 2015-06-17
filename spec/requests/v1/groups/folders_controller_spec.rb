@@ -34,6 +34,8 @@ describe V1::Groups::FoldersController, type: :request do
         expect(response.status).to eq 201
         expect(json['name']).to eq("New Folder")
         expect(json['creator']['id']).to eq(current_user.id)
+        expect(json['folderable_id']).to eq(group.id)
+        expect(json['folderable_type']).to eq("Group")
       end
     end
 

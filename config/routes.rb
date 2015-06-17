@@ -85,6 +85,7 @@ Rails.application.routes.draw do
       resources :posts, controller: 'events/posts'
       resources :albums, controller: 'events/albums'
       resources :payments, controller: 'events/payments'
+      resources :folders, controller: 'events/folders'
     end
 
     resources :job_exchanges do
