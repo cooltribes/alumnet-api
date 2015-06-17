@@ -104,6 +104,10 @@ Rails.application.routes.draw do
 
     resources :banners
 
+    resources :keywords
+
+    resources :companies
+
     resources :pictures do
       post :like, on: :member
       post :unlike, on: :member

@@ -1,7 +1,7 @@
 class BusinessRelation
   include ActiveModel::Model
 
-  attr_accessor :company_name, :company_logo, :offer, :search, :tagline, 
+  attr_accessor :company_name, :company_logo, :offer, :search, :tagline,
     :business_me, :keywords_offer, :keywords_search
   attr_reader :user
 
@@ -47,17 +47,11 @@ class BusinessRelation
   end
 
   def create_offer_keyword(company_relation)
-    keywords_offer.each do |name|
-      keyword = Keyword.find_or_create_by(name: name)
-      company_relation.company_relation_keywords.create(keyword: keyword, keyword_type: 0)
-    end
+    company_relation.offer_keywords = keywords_offer
   end
 
   def create_search_keyword(company_relation)
-    keywords_search.each do |name|
-      keyword = Keyword.find_or_create_by(name: name)
-      company_relation.company_relation_keywords.create(keyword: keyword, keyword_type: 1)
-    end
+    company_relation.search_keywords = keywords_search
   end
 
   private
