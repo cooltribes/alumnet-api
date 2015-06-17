@@ -76,6 +76,7 @@ Rails.application.routes.draw do
         get :members, on: :collection
       end
       resources :albums, controller: 'groups/albums'
+      resources :folders, controller: 'groups/folders'
     end
 
     resources :events do
