@@ -16,7 +16,7 @@ class CompanyRelation < ActiveRecord::Base
 
   def offer_keywords=(keywords)
     return false unless keywords.is_a?(Array)
-    offer_keywords.delete_all
+    offer_keywords.delete_all unless new_record?
     keywords.each do |kw|
       keyword = Keyword.find_or_create_by(name: kw)
       company_relation_keywords.create(keyword: keyword, keyword_type: 0)
@@ -25,7 +25,7 @@ class CompanyRelation < ActiveRecord::Base
 
   def search_keywords=(keywords)
     return false unless keywords.is_a?(Array)
-    search_keywords.delete_all
+    search_keywords.delete_all unless new_record?
     keywords.each do |kw|
       keyword = Keyword.find_or_create_by(name: kw)
       company_relation_keywords.create(keyword: keyword, keyword_type: 1)

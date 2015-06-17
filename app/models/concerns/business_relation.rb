@@ -1,11 +1,12 @@
 class BusinessRelation
   include ActiveModel::Model
 
-  attr_accessor :company_name, :company_logo, :offer, :search, :tagline, 
-    :business_me, :offer_keywords, :search_keyword
+  attr_accessor :company_name, :company_logo, :offer, :search, :tagline,
+    :business_me, :offer_keywords, :search_keywords
+
   attr_reader :user
 
-  validates_presence_of :company_name, :offer, :search, :search_keyword,
+  validates_presence_of :company_name, :offer, :search, :search_keywords,
     :offer_keywords
 
   validate :keywords_is_array
@@ -47,24 +48,18 @@ class BusinessRelation
   end
 
   def create_offer_keyword(company_relation)
-    offer_keywords.each do |name|
-      keyword = Keyword.find_or_create_by(name: name)
-      company_relation.company_relation_keywords.create(keyword: keyword, keyword_type: 0)
-    end
+    company_relation.offer_keywords = offer_keywords
   end
 
   def create_search_keyword(company_relation)
-    search_keyword.each do |name|
-      keyword = Keyword.find_or_create_by(name: name)
-      company_relation.company_relation_keywords.create(keyword: keyword, keyword_type: 1)
-    end
+    company_relation.search_keywords = search_keywords
   end
 
   private
 
     def keywords_is_array
       errors.add(:offer_keywords, "must be an array") unless offer_keywords.is_a?(Array)
-      errors.add(:search_keyword, "must be an array") unless search_keyword.is_a?(Array)
+      errors.add(:search_keywords, "must be an array") unless search_keywords.is_a?(Array)
     end
 
 end

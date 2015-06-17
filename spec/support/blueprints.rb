@@ -405,3 +405,15 @@ TaskInvitation.blueprint do
   task { Task.make!(:job) }
   accepted { false }
 end
+
+Folder.blueprint do
+  name { "Folder #{sn}" }
+  creator { User.make! }
+end
+
+Attachment.blueprint do
+  name { "Attachment #{sn}" }
+  file { File.open("#{Rails.root}/spec/fixtures/contacts.csv") }
+  uploader { User.make! }
+  folder { Folder.make! }
+end

@@ -1,0 +1,1 @@
+json.array! @folders, partial: 'v1/shared/folder', as: :folder, current_user: @current_user

@@ -76,6 +76,7 @@ Rails.application.routes.draw do
         get :members, on: :collection
       end
       resources :albums, controller: 'groups/albums'
+      resources :folders, controller: 'groups/folders'
     end
 
     resources :events do
@@ -84,6 +85,7 @@ Rails.application.routes.draw do
       resources :posts, controller: 'events/posts'
       resources :albums, controller: 'events/albums'
       resources :payments, controller: 'events/payments'
+      resources :folders, controller: 'events/folders'
     end
 
     resources :job_exchanges do
@@ -103,6 +105,14 @@ Rails.application.routes.draw do
     resources :prizes
 
     resources :banners
+
+    resources :keywords
+
+    resources :companies
+
+    resources :folders, only: :show do
+      resources :attachments, controller: 'folders/attachments'
+    end
 
     resources :pictures do
       post :like, on: :member
