@@ -376,12 +376,28 @@ Company.blueprint do
   logo { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
 end
 
+Keyword.blueprint do
+  name { "Keyword #{sn}" }
+end
+
 CompanyRelation.blueprint do
   company { Company.make! }
   profile { User.make!.profile }
   offer { "Ofrezco " + Faker::Lorem.sentence }
   search { "Busco " + Faker::Lorem.sentence }
   business_me { "Por que hacer negocios " + Faker::Lorem.sentence }
+end
+
+CompanyRelationKeyword.blueprint(:offer) do
+  company_relation { CompanyRelation.make! }
+  keyword { Keyword.make! }
+  keyword_type { 0 }
+end
+
+CompanyRelationKeyword.blueprint(:search) do
+  company_relation { CompanyRelation.make! }
+  keyword { Keyword.make! }
+  keyword_type { 1 }
 end
 
 TaskInvitation.blueprint do

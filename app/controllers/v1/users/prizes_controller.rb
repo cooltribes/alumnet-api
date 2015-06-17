@@ -11,6 +11,7 @@ class V1::Users::PrizesController < V1::BaseController
   def create
     @user_prize = UserPrize.new(create_params)
     if @user_prize.save
+      @user.profile.substract_points(@user_prize.price)
       render :show, status: :created
     else
       render json: @user_prize.errors, status: :unprocessable_entity
