@@ -39,10 +39,10 @@ class V1::Users::BusinessController < V1::BaseController
 
   def business_params
     params.permit(:company_name, :company_logo, :offer, :search, :business_me,
-      keywords_offer: [], keywords_search: [])
+      offer_keywords: [], search_keywords: [])
   end
   def update_business_params
-    params.permit(:offer, :search, :business_me)
+    params.permit(:offer, :search, :business_me, offer_keywords: [], search_keywords: [])
   end
 
 end

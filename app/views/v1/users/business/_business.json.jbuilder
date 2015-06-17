@@ -5,17 +5,17 @@ json.company do
   json.logo business.company.logo.main
 end
 
-json.keywords_offer do
+json.offer_keywords do
   if business.offer_keywords.any?
-    json.array! business.offer_keywords, :name       
+    json.array! business.offer_keywords_name, :name       
   else
     json.array! []
   end
 end
 
-json.keywords_search do
+json.search_keywords do
   if business.search_keywords.any?
-    json.array! business.search_keywords, :name      
+    json.array! business.search_keywords_name, :name      
   else
     json.array! []
   end

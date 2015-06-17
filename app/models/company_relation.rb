@@ -33,11 +33,19 @@ class CompanyRelation < ActiveRecord::Base
   end
 
   def offer_keywords
-    keywords.where(company_relation_keywords: {keyword_type: 0 })
+    company_relation_keywords.where(keyword_type: 0)
   end
-  
+
+  def offer_keywords_name
+    keywords.where(company_relation_keywords: {keyword_type: 0 })    
+  end
+
   def search_keywords
-    keywords.where(company_relation_keywords: {keyword_type: 1 })   
+    company_relation_keywords.where(keyword_type: 1)    
+  end
+
+  def search_keywords_name
+    keywords.where(company_relation_keywords: {keyword_type: 1 })       
   end
 
 end
