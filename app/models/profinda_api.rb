@@ -73,6 +73,8 @@ class ProfindaApi
     @last_response.parsed_response
   end
 
+  ### TASKS AND MATCHES
+
   def create_task(attributes, type = "task_job_exchange")
     # attributes = { "post_until" => "29/05/2015", "description" => "testing taks", "help_type_id" => "8", "nice_have_list" => "1638,1590,1636", "must_have_list" => "1637,1606", "duration" => "hours", "name" => "Testing Task" }
     default_attributes = { "user_relation" => {}, "profile_id" => nil, "attachment" => "",
@@ -148,7 +150,7 @@ class ProfindaApi
     @help_types
   end
 
-  ## class Methods
+  ### class Methods
   def self.sign_up(email, password)
     new(email, password, true)
   end
