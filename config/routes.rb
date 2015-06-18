@@ -110,6 +110,10 @@ Rails.application.routes.draw do
 
     resources :companies
 
+    resources :business, only: :show do
+      resources :links, controller: 'business/links'
+    end
+
     resources :folders, only: :show do
       resources :attachments, controller: 'folders/attachments'
     end

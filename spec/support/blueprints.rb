@@ -417,3 +417,10 @@ Attachment.blueprint do
   uploader { User.make! }
   folder { Folder.make! }
 end
+
+Link.blueprint do
+  title { "Link #{sn}"}
+  description { Faker::Lorem.sentence }
+  url { Faker::Internet.url }
+  company_relation { CompanyRelation.make! }
+end

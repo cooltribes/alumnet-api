@@ -1,0 +1,1 @@
+json.array! @links, partial: 'link', as: :link, current_user: @current_user
