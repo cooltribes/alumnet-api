@@ -320,9 +320,9 @@ class User < ActiveRecord::Base
     user_subscription = user_subscriptions.build(params)
     user_subscription.ownership_type = 1
     if user_subscription.lifetime?
-      user_subscription.subscription = Subscription.premium.first
-    else
       user_subscription.subscription = Subscription.lifetime.first
+    else
+      user_subscription.subscription = Subscription.premium.first
     end
     user_subscription.creator = current_user
     user_subscription
