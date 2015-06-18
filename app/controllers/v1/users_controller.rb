@@ -34,7 +34,7 @@ class V1::UsersController < V1::BaseController
   end
 
   def user_params
-    params.permit(:email, :password, :password_confirmation, :avatar, :name)
+    params.permit(:email, :password, :password_confirmation, :avatar, :name, :get_status_info, :created_at)
   end
 
   def check_if_current_user_can_invite_on_group

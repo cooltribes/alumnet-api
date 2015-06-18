@@ -22,4 +22,8 @@ class V1::EventsController < V1::BaseEventsController
     params.permit(:imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH)
   end
 
+  def event_params
+    params.permit(:name, :description, :start_date, :end_date, :country_id, :country, :city)
+  end
+
 end

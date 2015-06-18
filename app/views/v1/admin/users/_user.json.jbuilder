@@ -19,6 +19,7 @@ json.profileData do
   json.register_step profile.register_step || nil
   json.gender profile.gender || nil
 
+
   if profile.birth_city.present?
     json.birth_city do
       json.id profile.birth_city.id
@@ -56,7 +57,10 @@ json.profileData do
   end
 
   if profile.local_committee.present?
-    json.local_committee profile.local_committee
+    json.local_committee do
+      json.id profile.local_committee.id
+      json.name profile.local_committee.name
+    end  
   else
     json.local_committee nil
   end
