@@ -23,12 +23,43 @@ describe V1::JobExchangesController, type: :request do
     end
   end
 
+  describe "GET /job_exchanges/my" do
+    it "return only my job_exchanges of current user" do
+      3.times { Task.make!(:job) }
+      2.times { Task.make!(:job, user: user) }
+      3.times { Task.make!(:business) }
+      get my_job_exchanges_path, {}, basic_header(user.auth_token)
+      expect(response.status).to eq 200
+      expect(json.count).to eq(2)
+    end
+  end
+
+  describe "GET /job_exchanges/applied" do
+    it "return only job_exchanges where the current user has applied" do
+      3.times { Task.make!(:job) }
+      1.times { Task.make!(:job).apply(user) }
+      get applied_job_exchanges_path, {}, basic_header(user.auth_token)
+      expect(response.status).to eq 200
+      expect(json.count).to eq(1)
+    end
+  end
+
   describe "GET /job_exchanges/id" do
     it "should return a task" do
       task = Task.make!(:job)
       get job_exchange_path(task), {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
       expect(json['name']).to eq(task.name)
+    end
+  end
+
+  describe "GET /job_exchanges/apply" do
+    it "should set apply to true and return a task" do
+      task = Task.make!(:job)
+      put apply_job_exchange_path(task), {}, basic_header(user.auth_token)
+      expect(response.status).to eq 200
+      expect(json["user_applied"]).to eq(true)
+      expect(json["user_can_apply"]).to eq(false)
     end
   end
 
@@ -47,7 +78,7 @@ describe V1::JobExchangesController, type: :request do
       it "return the errors in format json" do
         expect {
           post job_exchanges_path, invalid_attributes, basic_header(user.auth_token)
-        }.to change(Group, :count).by(0)
+        }.to change(Task, :count).by(0)
         expect(json).to eq({"name"=>["can't be blank"]})
         expect(response.status).to eq 422
       end

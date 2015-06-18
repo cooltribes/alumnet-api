@@ -5,13 +5,14 @@ class Event < ActiveRecord::Base
 
   ## Virtual Attributes
   attr_accessor :cover_uploader
-  attr_accessor :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH
+  attr_accessor :imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH
   attr_accessor :invite_group_members
 
   ### Relations
   has_many :attendances, dependent: :destroy
   has_many :posts, as: :postable, dependent: :destroy
   has_many :albums, as: :albumable, dependent: :destroy
+  has_many :folders, as: :folderable, dependent: :destroy
   belongs_to :creator, class_name: "User"
   belongs_to :country
   belongs_to :city

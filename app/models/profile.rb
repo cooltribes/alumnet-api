@@ -6,7 +6,7 @@ class Profile < ActiveRecord::Base
   include ProfileHelpers
 
   ##Crop avatar
-  attr_accessor :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH, :avatar_url
+  attr_accessor :imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH, :avatar_url
 
   ###Relations
   belongs_to :birth_city, class_name: 'City'
@@ -19,6 +19,9 @@ class Profile < ActiveRecord::Base
   has_many :language_levels, dependent: :destroy
   has_many :languages, through: :language_levels
   has_and_belongs_to_many :skills
+  has_many :company_relations, dependent: :destroy
+  has_many :companies
+
 
   ###Validations
   validates_presence_of :user_id, :first_name, :last_name, on: :update
@@ -116,6 +119,11 @@ class Profile < ActiveRecord::Base
 
   def add_points(points)
     total = self.points+points
+    self.update(points: total)
+  end
+
+  def substract_points(points)
+    total = self.points-points
     self.update(points: total)
   end
 

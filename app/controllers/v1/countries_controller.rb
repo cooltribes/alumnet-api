@@ -17,7 +17,7 @@ class V1::CountriesController < V1::BaseController
 
   def cities
     @q = @country.cities.search(params[:q])
-    @cities = @q.result
+    @cities = @q.result.order(name: :asc)
   end
 
   def committees
