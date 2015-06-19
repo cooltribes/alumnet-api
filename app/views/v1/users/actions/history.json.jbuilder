@@ -1,0 +1,1 @@
+json.array! @history, partial: 'v1/shared/history', as: :history, current_user: @current_user

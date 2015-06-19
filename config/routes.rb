@@ -61,7 +61,9 @@ Rails.application.routes.draw do
         get :commons, on: :collection
       end
       resources :subscriptions, except: :show, controller: 'users/subscriptions'
-      resources :actions, except: :show, controller: 'users/actions'
+      resources :actions, except: :show, controller: 'users/actions' do
+        get :history, on: :collection
+      end
       resources :prizes, except: :show, controller: 'users/prizes'
     end
 

@@ -26,14 +26,23 @@ describe V1::Users::PrizesController, type: :request do
   describe "POST user prizes" do
     it "should create an user prize" do
       prize = Prize.make!
-      user = User.make!
+      user = User.make!(:with_points)
       valid_attributes = { prize_id: prize.id, price: prize.price, status: 1, prize_type: prize.prize_type, remaining_quantity: prize.quantity }
       expect {
         post user_prizes_path(user), valid_attributes , basic_header(user.auth_token)
       }.to change(UserPrize, :count).by(1)
-      # expect(response.status).to eq 201
-      # expect(json["event"]["id"]).to eq(event.id)
-      # expect(json["user"]["id"]).to eq(user_to_invite.id)
+    end
+  end
+
+  describe "POST user prizes without enough points" do
+    it "should get an error message about points" do
+      prize = Prize.make!
+      user = User.make!
+      valid_attributes = { prize_id: prize.id, price: prize.price, status: 1, prize_type: prize.prize_type, remaining_quantity: prize.quantity }
+      expect {
+        post user_prizes_path(user), valid_attributes , basic_header(user.auth_token)
+      }.to change(UserPrize, :count).by(0)
+      expect(json['error']).to eq 'user does not have enough points'
     end
   end
 
