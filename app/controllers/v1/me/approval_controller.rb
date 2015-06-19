@@ -33,6 +33,7 @@ class V1::Me::ApprovalController < V1::BaseController
     @approval_request = @user.pending_approval_requests.find(params[:id])
     #if @friendship.friend_id == current_user.id #this a policy refactor!
     @approval_request.accept!
+    validate_approval_points()
 
     requester = @approval_request.user
 
@@ -70,6 +71,14 @@ class V1::Me::ApprovalController < V1::BaseController
     def set_and_check_approver
       unless @approver = User.find_by(id: params[:approver_id])
         render json: { error: "User not found" }
+      end
+    end
+
+    def validate_approval_points
+      action = Action.find_by(key_name: 'request_approved')
+      if action.present? && action.status == "active"
+        UserAction.create(value: action.value, generator_id: @approval_request.id, generator_type: action.key_name, user_id: @user.id, action_id: action.id)
+        @user.profile.add_points(action.value)
       end
     end
 end
