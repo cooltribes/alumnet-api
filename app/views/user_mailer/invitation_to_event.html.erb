@@ -1,7 +1,7 @@
 <div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
   <p>Greetings <%= "#{ @user.name }" %></p>
   <p>
-      The user <%= "#{@event.creator.name}" %> is inviting you to assist the event <%= "#{@event.name}" %> <br>
+      <%= "#{@event.creator.name}" %> is inviting you to assist the event <%= "#{@event.name}" %> <br>
       Click <a href=<%= "#{Settings.ui_endpoint}/#events/#{@event.id}/posts" %>>here</a> to visit the group.
   </p>
 </div>
