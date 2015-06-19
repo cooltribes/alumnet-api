@@ -17,6 +17,14 @@ User.blueprint(:admin) do
   profile { Profile.make! }
 end
 
+User.blueprint(:with_points) do
+  email { Faker::Internet.email }
+  password { "12345678A" }
+  password_confirmation { "12345678A" }
+  status { 1 }
+  profile { Profile.make!(points: 500) }
+end
+
 OauthProvider.blueprint(:facebook) do
   provider { 'facebook' }
   uid { 'UIDFACEBOOK' }

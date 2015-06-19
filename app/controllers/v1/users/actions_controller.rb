@@ -12,6 +12,20 @@ class V1::Users::ActionsController < V1::BaseController
     end
   end
 
+  def history
+    @user_actions = @user.user_actions
+    @user_prizes = @user.user_prizes
+    @history = (@user_actions + @user_prizes).sort_by(&:created_at).reverse
+    @history.each do |a|
+      if a.class.name == 'UserAction'
+        if a.generator_type == "accepted_invitation"
+          invitation = Invitation.find(a.generator_id)
+          a.invited_user = invitation.guest
+        end
+      end
+    end
+  end
+
   def create
     @user_action = @user.build_action(action_params, current_user)
     if @user_action.save
