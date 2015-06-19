@@ -23,7 +23,7 @@ class V1::Users::PrizesController < V1::BaseController
         render json: @user_prize.errors, status: :unprocessable_entity
       end
     else
-      render json: {'error': 'user does not have enough points' }, status: :unprocessable_entity
+      render json: {'error' => 'user does not have enough points' }, status: :unprocessable_entity
     end
   end
 
