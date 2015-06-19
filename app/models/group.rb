@@ -23,6 +23,7 @@ class Group < ActiveRecord::Base
   belongs_to :country
   belongs_to :city
   has_many :albums, as: :albumable, dependent: :destroy
+  has_many :folders, as: :folderable, dependent: :destroy
 
   validates_presence_of :api_key, :list_id, if: 'mailchimp?'
 
@@ -185,5 +186,5 @@ class Group < ActiveRecord::Base
         album.pictures << picture
       end
     end
-       
+
 end

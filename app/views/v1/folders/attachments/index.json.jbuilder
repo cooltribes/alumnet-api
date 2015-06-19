@@ -1,0 +1,1 @@
+json.array! @attachments, partial: 'attachment', as: :attachment, current_user: @current_user

@@ -1,0 +1,8 @@
+<div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
+  <p>Greetings <%= "#{ @user.name }" %></p>
+  <p>
+    You have a new match in a task.
+    <br>
+    Click <a href=<%= "#{Settings.ui_endpoint}/#job-exchange/#{@task.id}" %>>here</a> to see the task's information
+  </p>
+</div>

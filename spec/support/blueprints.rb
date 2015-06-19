@@ -17,6 +17,14 @@ User.blueprint(:admin) do
   profile { Profile.make! }
 end
 
+User.blueprint(:with_points) do
+  email { Faker::Internet.email }
+  password { "12345678A" }
+  password_confirmation { "12345678A" }
+  status { 1 }
+  profile { Profile.make!(points: 500) }
+end
+
 OauthProvider.blueprint(:facebook) do
   provider { 'facebook' }
   uid { 'UIDFACEBOOK' }
@@ -376,6 +384,10 @@ Company.blueprint do
   logo { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
 end
 
+Keyword.blueprint do
+  name { "Keyword #{sn}" }
+end
+
 CompanyRelation.blueprint do
   company { Company.make! }
   profile { User.make!.profile }
@@ -384,8 +396,39 @@ CompanyRelation.blueprint do
   business_me { "Por que hacer negocios " + Faker::Lorem.sentence }
 end
 
+CompanyRelationKeyword.blueprint(:offer) do
+  company_relation { CompanyRelation.make! }
+  keyword { Keyword.make! }
+  keyword_type { 0 }
+end
+
+CompanyRelationKeyword.blueprint(:search) do
+  company_relation { CompanyRelation.make! }
+  keyword { Keyword.make! }
+  keyword_type { 1 }
+end
+
 TaskInvitation.blueprint do
   user { User.make! }
   task { Task.make!(:job) }
   accepted { false }
+end
+
+Folder.blueprint do
+  name { "Folder #{sn}" }
+  creator { User.make! }
+end
+
+Attachment.blueprint do
+  name { "Attachment #{sn}" }
+  file { File.open("#{Rails.root}/spec/fixtures/contacts.csv") }
+  uploader { User.make! }
+  folder { Folder.make! }
+end
+
+Link.blueprint do
+  title { "Link #{sn}"}
+  description { Faker::Lorem.sentence }
+  url { Faker::Internet.url }
+  company_relation { CompanyRelation.make! }
 end
