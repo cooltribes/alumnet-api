@@ -21,3 +21,12 @@ json.search_keywords do
   end
 end
 
+json.links do
+  json.array! business.links do |link|
+    json.id link.id
+    json.title link.title    
+    json.description link.description    
+    json.url link.url
+  end
+end
+
