@@ -1,7 +1,7 @@
 <div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
     <p>Greetings <%= "#{ @admin.name }" %></p>
     <p>
-      The user <%= "#{@user.name}" %> sent a request to join the group <%= "#{@group.name}" %>.
+    	<%= "#{@user.name}" %> sent a request to join the group <%= "#{@group.name}" %>.
     </p>
     <p>      
       Click <a href=<%= "#{Settings.ui_endpoint}/#groups/#{@group.id}/members" %>>here</a> to visit the group.

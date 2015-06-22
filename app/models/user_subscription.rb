@@ -17,7 +17,7 @@ class UserSubscription < ActiveRecord::Base
   def member_value
   	return 3 if lifetime?
   	return 2 if days_left < 30
-  	return 1 if days_left > 30
+  	return 1 if days_left >= 30
   	return 0
   end
 
