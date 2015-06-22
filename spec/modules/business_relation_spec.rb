@@ -8,8 +8,8 @@ RSpec.describe BusinessRelation do
       offer: "offer",
       search: "search",
       business_me: "business",
-      keywords_offer: [ "Ruby", "PHP" ],
-      keywords_search: ["Sex"]
+      offer_keywords: [ "Ruby", "PHP" ],
+      search_keywords: ["Sex"]
     }
   end
 
@@ -20,8 +20,8 @@ RSpec.describe BusinessRelation do
       offer: "",
       search: "",
       business_me: "",
-      keywords_offer: [ "Ruby", "PHP" ],
-      keywords_search: "Sex"
+      offer_keywords: [ "Ruby", "PHP" ],
+      search_keywords: "Sex"
     }
   end
 
@@ -59,7 +59,7 @@ RSpec.describe BusinessRelation do
       business = BusinessRelation.new(invalid_params, user)
       business.valid?
       expect(business.errors.full_messages).to eq(["Offer can't be blank",
-        "Search can't be blank", "Keywords search must be an array"])
+        "Search can't be blank", "Search keywords must be an array"])
     end
 
   end

@@ -17,6 +17,14 @@ User.blueprint(:admin) do
   profile { Profile.make! }
 end
 
+User.blueprint(:with_points) do
+  email { Faker::Internet.email }
+  password { "12345678A" }
+  password_confirmation { "12345678A" }
+  status { 1 }
+  profile { Profile.make!(points: 500) }
+end
+
 OauthProvider.blueprint(:facebook) do
   provider { 'facebook' }
   uid { 'UIDFACEBOOK' }
@@ -404,4 +412,23 @@ TaskInvitation.blueprint do
   user { User.make! }
   task { Task.make!(:job) }
   accepted { false }
+end
+
+Folder.blueprint do
+  name { "Folder #{sn}" }
+  creator { User.make! }
+end
+
+Attachment.blueprint do
+  name { "Attachment #{sn}" }
+  file { File.open("#{Rails.root}/spec/fixtures/contacts.csv") }
+  uploader { User.make! }
+  folder { Folder.make! }
+end
+
+Link.blueprint do
+  title { "Link #{sn}"}
+  description { Faker::Lorem.sentence }
+  url { Faker::Internet.url }
+  company_relation { CompanyRelation.make! }
 end
