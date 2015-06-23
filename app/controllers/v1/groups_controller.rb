@@ -89,7 +89,7 @@ class V1::GroupsController < V1::BaseController
       if success
         begin
           @group.members.each do |member|
-            @mc_group.lists.subscribe(@group.list_id, {'email' => member.email}, nil, 'html', false, true, true, true)
+            member.subscribe_to_mailchimp_list(@mc_group, @group.list_id)
           end
         rescue Mailchimp::ListDoesNotExistError
           success = false

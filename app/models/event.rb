@@ -13,6 +13,7 @@ class Event < ActiveRecord::Base
   has_many :posts, as: :postable, dependent: :destroy
   has_many :albums, as: :albumable, dependent: :destroy
   has_many :folders, as: :folderable, dependent: :destroy
+  has_many :event_payments, dependent: :destroy
   belongs_to :creator, class_name: "User"
   belongs_to :country
   belongs_to :city
@@ -46,6 +47,10 @@ class Event < ActiveRecord::Base
 
   def attendance_for(user)
     attendances.find_by(user_id: user.id)
+  end
+
+  def payment_for(user)
+    event_payments.find_by(user_id: user.id)
   end
 
   def contacts_for(user, query)
