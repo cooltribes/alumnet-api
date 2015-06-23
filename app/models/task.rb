@@ -165,11 +165,10 @@ class Task < ActiveRecord::Base
 
     def check_help_type_and_set_values
       if new_record?
-        days = case help_type
-          when "task_job_exchange" then 60
-          else 0
+        case help_type
+          when "task_job_exchange"
+            self[:post_until] = Date.today + 60
         end
-        self[:post_until] = Date.today + days
         self[:duration] = "hours"
       end
     end

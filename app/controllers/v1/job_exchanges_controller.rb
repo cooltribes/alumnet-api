@@ -22,4 +22,9 @@ class V1::JobExchangesController < V1::TasksController
     def help_type
       "task_job_exchange"
     end
+
+    def task_params
+      params.permit(:name, :description, :must_have_list, :nice_have_list,
+        :company_id, :city_id, :country_id, :offer, :employment_type, :position_type)
+    end
 end
