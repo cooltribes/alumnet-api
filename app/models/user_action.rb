@@ -7,6 +7,6 @@ class UserAction < ActiveRecord::Base
   ### Validations
   validates_presence_of :action_id, :user_id, :value
 
-  attr_accessor :invited_user
+  attr_accessor :invited_user, :approved_user
 
 end

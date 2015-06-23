@@ -12,3 +12,12 @@ json.creator do
   end
 end
 
+json.files_count folder.files_count
+
+json.files do
+  json.array! folder.attachments do |attachment|
+    json.id attachment.id
+    json.name attachment.name
+    json.url attachment.file.url
+  end
+end

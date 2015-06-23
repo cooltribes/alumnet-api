@@ -24,7 +24,7 @@ class AdminActiveUser
     def activate_user
       if user.activate!
         profinda_process
-        mailchimp_process
+        user.subscribe_to_mailchimp_list(mailchimp, Settings.mailchimp_general_list_id)
       else
         @activate_errors = true
       end
@@ -33,10 +33,6 @@ class AdminActiveUser
     def profinda_process
       user.save_profinda_profile unless user.profinda_uid.present?
       user.activate_in_profinda
-    end
-
-    def mailchimp_process
-      mailchimp.lists.subscribe(Settings.mailchimp_general_list_id, {'email' => user.email}, nil, 'html', false, true, true, true)
     end
 
     def if_user_is_active
