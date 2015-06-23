@@ -40,4 +40,10 @@ namespace :data_fixture do
       user.validate_subscription()
     end
   end
+
+  desc "create active actions available to award user points"
+  task actions: :environment do
+    Action.create!(name: "User invite", description: "Points awarded when invited user registers on Alumnet", status: 1, value: 50, key_name: "accepted_invitation")
+    Action.create!(name: "Approval request", description: "Points awarded when user accepts an approval request on Alumnet", status: 1, value: 10, key_name: "request_approved")
+  end
 end
