@@ -34,5 +34,17 @@ else
   json.matches nil
 end
 
+if task.task_attributes.nice_have.any?
+  json.nice_have_attributes task.task_attributes.nice_have, :id, :value, :profinda_id, :custom_field
+else
+  json.nice_have_attributes nil
+end
+
+if task.task_attributes.must_have.any?
+  json.must_have_attributes task.task_attributes.must_have, :id, :value, :profinda_id, :custom_field
+else
+  json.must_have_attributes nil
+end
+
 json.user_applied task.user_applied?(current_user)
 json.user_can_apply task.can_apply(current_user)
