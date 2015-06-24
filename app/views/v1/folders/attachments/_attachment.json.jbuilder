@@ -1,6 +1,6 @@
 json.(attachment, :id, :name, :folder_id, :created_at, :updated_at)
 
-json.file attachment.file.url
+json.url attachment.file.url
 
 json.uploader do
   json.id attachment.uploader.id
