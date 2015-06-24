@@ -16,6 +16,7 @@ class V1::ProfilesController < V1::BaseController
     authorize @profile
     if @profile.update(profile_params)
       @profile.save_profinda_profile
+      @profile.user.subscribe_to_mailchimp_list(@mc, Settings.mailchimp_general_list_id)
       render :show
     else
       render json: @profile.errors, status: :unprocessable_entity

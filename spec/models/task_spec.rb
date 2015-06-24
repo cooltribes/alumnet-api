@@ -52,8 +52,8 @@ RSpec.describe Task, :type => :model do
     it "should set post_until dependent of help_type" do
       job = Task.make!(:job)
       expect(job.post_until).to eq(Date.today + 60)
-      business = Task.make!(:business)
-      expect(business.post_until).to eq(Date.today + 0)
+      business = Task.make!(:business, post_until: Date.today + 5)
+      expect(business.post_until).to eq(Date.today + 5)
     end
   end
 end

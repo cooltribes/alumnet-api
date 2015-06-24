@@ -90,7 +90,7 @@ Rails.application.routes.draw do
       resources :folders, controller: 'events/folders'
     end
 
-    resources :job_exchanges do
+    resources :job_exchanges, :business_exchanges do
       get :my, on: :collection
       get :automatches, on: :collection
       get :applied, on: :collection
