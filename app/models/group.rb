@@ -8,11 +8,6 @@ class Group < ActiveRecord::Base
   attr_accessor :cover_uploader
   attr_accessor :imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH
 
-  #join_process
-  # "0" -> All Members can invite
-  # "1" -> All Members can invite, but the admins approved
-  # "2" -> Only the admins can invite
-
   ### Relations
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships
@@ -83,10 +78,15 @@ class Group < ActiveRecord::Base
     end
   end
 
+  #           JOIN PROCESS
+  # "0" -> All Members can invite
+  # "1" -> All Members can invite, but the admins approved
+  # "2" -> Only the admins can invite
+
   ## TODO: refactor this
   def notify(user, admin)
     if join_process == 0
-      Notification.notify_join_to_users(user, self)
+      Notification.notify_group_user_added(user, self)
       Notification.notify_join_to_admins(admins.to_a, user, self)
     elsif join_process == 1
       Notification.notify_request_to_users(user, self)
@@ -174,7 +174,7 @@ class Group < ActiveRecord::Base
     def check_join_process
       ## this change the join process automatically on update
       if (group_type == "secret" && join_process < 2) || (group_type == "closed" && join_process == 0)
-        self[:join_process] = 2
+        self[:join_process] = 2      
       end
     end
 

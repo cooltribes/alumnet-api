@@ -1,0 +1,70 @@
+#%RAML 0.8
+title: Prueba
+version: v1
+protocols: [ HTTP, HTTPS ]
+schemas:
+resourceTypes:
+traits:    	
+	/groups:
+  	displayName: Group
+    description: The Groups that the user belongs to and those who doesn't yet.
+	    get: 
+      	description: |
+        	Retreive all groups.
+      	responses: 
+        	200: 
+         		body: 
+          		application/json: 
+         			schema: group-array
+	/{group_id}: 
+    description: An ALUMNET group.
+  	get: 
+	    description: Retrive the group by ID.
+	    responses: 
+	      200: 
+         body: 
+         	application/json: 
+            schema: group
+  	post: 
+  		description: Applications can set the cover photo for a group.
+		  body: 
+		 	 multipart/form-data: 
+				formParameters: 
+			   	cover_url: 
+				    description: "The url for the cover photo. The image will be downloaded and added to the group's album and then used as a cover photo."
+				    required: true    
+		put:
+	  	description: "edit a group"
+	   	body:
+	     	application/x-www-form-urlencoded:
+	     		formParameters:
+	       		name:
+	       			type: string
+		        description:
+		         	type: string
+		        avatar:
+		        	type: string
+		        group_type:
+		         	type: integer
+		  responses:
+			  200:
+			   body:
+			    application/json:
+			      schema: group
+    delete:
+    	description: "destroy a group"
+      	responses:
+        	204:
+        		description: "no content"                        
+
+	/events:
+   	displayName: Event
+  /posts:
+   	displayName: Post
+  /comments:
+  	displayName: Comment
+  /pictures:
+  	displayName: Picture   
+  /committees:
+  	displayName: Committee	
+ 

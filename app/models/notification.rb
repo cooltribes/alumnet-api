@@ -25,7 +25,7 @@ class Notification
     notification.send_notification(subject, body)
     notification.send_pusher_notification
     notification.recipients.each do |user|
-      UserMailer.join_to_group(user, group).deliver_later
+      UserMailer.user_was_accepted_in_group(user, group).deliver_later
     end
   end
 
@@ -48,6 +48,16 @@ class Notification
     # notification.send_pusher_notification
     notification.recipients.each do |admin|
       UserMailer.user_was_accepted_in_group(user, group).deliver_later
+    end
+  end
+
+
+  def self.notify_group_user_added(user, group)  #User added to the group
+    notification = new(user)
+    subject = "The user #{user.name} added you to the group #{group.name}"
+    body = "The user #{user.name} added you to the group #{group.name}"
+    notification.recipients.each do |user|
+      UserMailer.user_added_to_the_group(user, group).deliver_later
     end
   end
 
