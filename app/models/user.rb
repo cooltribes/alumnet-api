@@ -44,7 +44,7 @@ class User < ActiveRecord::Base
   has_many :prizes, through: :user_prizes
   #has_many :actions, through: :user_actions
   has_many :task_invitations, dependent: :destroy
-
+  has_many :matches, dependent: :destroy
 
   ### Scopes
   scope :active, -> { where(status: 1) }
@@ -484,8 +484,8 @@ class User < ActiveRecord::Base
     end
 
     user_vars = {
-      'FNAME' => profile.first_name, 
-      'LNAME' => profile.last_name, 
+      'FNAME' => profile.first_name,
+      'LNAME' => profile.last_name,
       'BIRTHDAY' => profile.born,
       'GENDER' => profile.gender,
       'B_COUNTRY' => profile.birth_country.name,
