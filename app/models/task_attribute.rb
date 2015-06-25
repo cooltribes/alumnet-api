@@ -18,6 +18,10 @@ class TaskAttribute < ActiveRecord::Base
         self.attributable = Skill.find_by(name: value)
       when "alumnet_languages"
         self.attributable = Language.find_by(name: value)
+      when "alumnet_city_residence" || "alumnet_city_origin"
+        self.attributable = City.find_by(name: value)
+      when "alumnet_country_residence" || "alumnet_country_origin"
+        self.attributable = Country.find_by(name: value)
       else
         nil
     end
