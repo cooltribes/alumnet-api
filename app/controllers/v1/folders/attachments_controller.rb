@@ -48,7 +48,7 @@ class V1::Folders::AttachmentsController < V1::BaseController
   end
 
   def attachment_params
-    params.permit(:name, :file)
+    params.permit(:name, :file, :folder_id)
   end
   def attachment_update_params
     params.permit(:folder_id)
