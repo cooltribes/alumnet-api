@@ -21,7 +21,7 @@ class V1::TasksController < V1::BaseController
   end
 
   def automatches
-    @q = Task.profinda_automatches(current_user).search(params[:q])
+    @q = Task.profinda_automatches(current_user, help_type).search(params[:q])
     @tasks = @q.result
     render 'v1/tasks/index'
   end
