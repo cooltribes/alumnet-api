@@ -44,7 +44,7 @@ class User < ActiveRecord::Base
   has_many :prizes, through: :user_prizes
   #has_many :actions, through: :user_actions
   has_many :task_invitations, dependent: :destroy
-
+  has_many :matches, dependent: :destroy
 
   ### Scopes
   scope :active, -> { where(status: 1) }
@@ -172,6 +172,17 @@ class User < ActiveRecord::Base
 
   def is_premium?
     member != 0
+  end
+
+  def membership_type
+    #0-> no member, 1-> Subscription for a year, 2-> Subscription for a year (30 days left or less), 3-> Lifetime
+    if member == 0
+      "No member"
+    elsif member == 1 || member == 2
+      "Member"
+    else
+      "Lifetime member"
+    end
   end
 
   def is_regular?
@@ -456,6 +467,35 @@ class User < ActiveRecord::Base
   ## TASKS
   def has_task_invitation(task)
     task_invitations.exists?(task_id: task.id)
+  end
+
+  def subscribe_to_mailchimp_list(mailchimp, list_id)
+    mailchimp_vars = mailchimp.lists.merge_vars({'id' => list_id})
+    array = []
+    mailchimp_vars['data'][0]['merge_vars'].each do |v|
+      array << v['tag']
+    end
+
+    all_vars = ["EMAIL", "FNAME", "LNAME", "BIRTHDAY", "GENDER", "B_COUNTRY", "B_CITY", "R_COUNTRY", "R_CITY", "L_EXP", "PREMIUM"]
+    all_vars.each do |v|
+      if !array.include?(v)
+        mailchimp.lists.merge_var_add(list_id, v, v.humanize, [])
+      end
+    end
+
+    user_vars = {
+      'FNAME' => profile.first_name,
+      'LNAME' => profile.last_name,
+      'BIRTHDAY' => profile.born,
+      'GENDER' => profile.gender,
+      'B_COUNTRY' => profile.birth_country.name,
+      'B_CITY' => profile.birth_city.name,
+      'R_COUNTRY' => profile.residence_country.name,
+      'R_CITY' => profile.residence_city.name,
+      'L_EXP' => profile.last_experience.name,
+      'PREMIUM' => membership_type
+    }
+    mailchimp.lists.subscribe(list_id, {'email' => email}, user_vars, 'html', false, true, true, true)
   end
 
   private

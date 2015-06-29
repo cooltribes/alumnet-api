@@ -21,6 +21,9 @@ class V1::Users::ActionsController < V1::BaseController
         if a.generator_type == "accepted_invitation"
           invitation = Invitation.find(a.generator_id)
           a.invited_user = invitation.guest
+        elsif a.generator_type == "request_approved"
+          approval_request = ApprovalRequest.find(a.generator_id)
+          a.approved_user = approval_request.user
         end
       end
     end

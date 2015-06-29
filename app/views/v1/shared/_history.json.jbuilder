@@ -32,15 +32,23 @@ json.history do
       json.key_name action.key_name
     end
 
-    invited_user = history.invited_user
-    json.invited_user do
-      json.id invited_user.id
-      json.name invited_user.name
-      json.avatar invited_user.avatar.large.url
-      json.last_experience invited_user.last_experience.try(:name)
+    if action.key_name == 'accepted_invitation'
+      invited_user = history.invited_user
+      json.invited_user do
+        json.id invited_user.id
+        json.name invited_user.name
+        json.avatar invited_user.avatar.large.url
+        json.last_experience invited_user.last_experience.try(:name)
+      end
+    elsif action.key_name == 'request_approved'
+      approved_user = history.approved_user
+      json.approved_user do
+        json.id approved_user.id
+        json.name approved_user.name
+        json.avatar approved_user.avatar.large.url
+        json.last_experience approved_user.last_experience.try(:name)
+      end
     end
-
-    
   else
     json.user_prize do
       json.id history.id
