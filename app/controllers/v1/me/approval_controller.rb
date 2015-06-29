@@ -40,7 +40,8 @@ class V1::Me::ApprovalController < V1::BaseController
     if requester.get_approved_requests.count == 3
       requester.activate!
       requester.save_profinda_profile
-      @mc.lists.subscribe(Settings.mailchimp_general_list_id, {'email' => requester.email}, nil, 'html', false, true, true, true)
+      requester.subscribe_to_mailchimp_list(@mc, Settings.mailchimp_general_list_id)
+      #@mc.lists.subscribe(Settings.mailchimp_general_list_id, {'email' => requester.email}, nil, 'html', false, true, true, true)
     end
 
     #Create a friendship between users
