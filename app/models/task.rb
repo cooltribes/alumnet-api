@@ -4,6 +4,7 @@ class Task < ActiveRecord::Base
   ## Relations
   has_many :matches, dependent: :destroy
   has_many :task_invitations, dependent: :destroy
+  has_many :task_attributes, dependent: :destroy
   belongs_to :user
   belongs_to :city
   belongs_to :country
@@ -29,6 +30,7 @@ class Task < ActiveRecord::Base
 
   ## Callbacks
   before_validation :check_help_type_and_set_values
+  after_save :set_task_attributes
 
   ## Instance methods
 
@@ -108,6 +110,32 @@ class Task < ActiveRecord::Base
     p_attributtes.merge({"post_until" => post_until.strftime("%d/%m/%Y")})
   end
 
+  def set_task_attributes_from_profinda(attribute_type = "nice_have")
+    delete_all_tasks_attributes(attribute_type)
+    dictionary_objects = get_dictionary_object_from_profinda(attribute_type)
+    dictionary_objects.each do |dictionary_object|
+      TaskAttribute.create_from_dictionary_object(self, dictionary_object, attribute_type)
+    end
+  end
+
+  def get_dictionary_object_from_profinda(attribute_type = "nice_have")
+    @profinda_admin_api ||= ProfindaAdminApi.new
+    collection_ids = attribute_type == "nice_have" ? nice_have_array : must_have_array
+    @profinda_admin_api.dictionary_objects_by_id(collection_ids)
+  end
+
+  def delete_all_tasks_attributes(attribute_type = "nice_have")
+    attribute_type == "nice_have" ? task_attributes.nice_have.delete_all : task_attributes.must_have.delete_all
+  end
+
+  def nice_have_array
+    nice_have_list.split(",")
+  end
+
+  def must_have_array
+    must_have_list.split(",")
+  end
+
   def employment_type_text
     EMPLOYMENT_TYPES[employment_type]
   end
@@ -163,13 +191,17 @@ class Task < ActiveRecord::Base
 
   private
 
+    def set_task_attributes
+      set_task_attributes_from_profinda
+      set_task_attributes_from_profinda("must_have")
+    end
+
     def check_help_type_and_set_values
       if new_record?
-        days = case help_type
-          when "task_job_exchange" then 60
-          else 0
+        case help_type
+          when "task_job_exchange"
+            self[:post_until] = Date.today + 60
         end
-        self[:post_until] = Date.today + days
         self[:duration] = "hours"
       end
     end

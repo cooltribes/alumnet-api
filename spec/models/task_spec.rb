@@ -6,6 +6,7 @@ RSpec.describe Task, :type => :model do
   it { should belong_to(:country) }
   it { should have_many(:matches) }
   it { should have_many(:task_invitations) }
+  it { should have_many(:task_attributes) }
 
 
   describe "Instance Methods" do
@@ -46,14 +47,30 @@ RSpec.describe Task, :type => :model do
         expect(task.can_apply(user)).to eq(true)
       end
     end
+
+    describe "#get_dictionary_object_from_profinda(attribute_type)" do
+      it "should return the dictionary_objects from profinda" do
+        dictionary_objects = [{"id" => 1000, "name" => "alumnet_skills", "value" => "Ruby"},
+          {"id" => 1001, "name" => "alumnet_languages", "value" => "English"}]
+        allow_any_instance_of(ProfindaAdminApi).to receive(:dictionary_objects_by_id).
+        with(["1000","1001"]).and_return(dictionary_objects)
+        task = Task.make!(:job, nice_have_list: "1000,1001")
+        expect(task.get_dictionary_object_from_profinda).to eq(dictionary_objects)
+      end
+    end
+
+    describe "#set_task_attributes_from_profinda(attribute_type)" do
+      it "should create task_attributes from the dictonary objects of profinda" do
+      end
+    end
   end
 
   describe "Callbacks" do
     it "should set post_until dependent of help_type" do
       job = Task.make!(:job)
       expect(job.post_until).to eq(Date.today + 60)
-      business = Task.make!(:business)
-      expect(business.post_until).to eq(Date.today + 0)
+      business = Task.make!(:business, post_until: Date.today + 5)
+      expect(business.post_until).to eq(Date.today + 5)
     end
   end
 end

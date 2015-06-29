@@ -19,5 +19,6 @@ json.files do
     json.id attachment.id
     json.name attachment.name
     json.url attachment.file.url
+    json.folder_id folder.id
   end
 end

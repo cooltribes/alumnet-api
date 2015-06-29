@@ -60,6 +60,17 @@ describe V1::Folders::AttachmentsController, type: :request do
       expect(response.status).to eq 200
       expect(json["name"]).to eq("New name of Attachment")
     end
+
+    it "should change the folder of attachment" do
+      old_folder = Folder.make!
+      new_folder = Folder.make!
+      attachment = Attachment.make!(folder: old_folder, uploader: current_user)
+      put folder_attachment_path(old_folder, attachment), { folder_id: new_folder }, basic_header(current_user.auth_token)
+      expect(response.status).to eq 200
+      expect(json["name"]).to eq(attachment.name)
+      expect(json["folder_id"]).to_not eq(old_folder.id)
+      expect(json["folder_id"]).to eq(new_folder.id)
+    end
   end
 
   describe "DELETE /folders/:folder_id/attachment/:id" do
