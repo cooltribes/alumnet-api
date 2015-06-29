@@ -2,6 +2,7 @@ class V1::Folders::AttachmentsController < V1::BaseController
   include Pundit
   before_action :set_folder
   before_action :set_attachment, except: [:index, :create]
+  before_action :check_new_folder, only: :update
 
   def index
     @q = @folder.attachments.search(params[:q])
@@ -20,7 +21,8 @@ class V1::Folders::AttachmentsController < V1::BaseController
 
   def update
     authorize @attachment
-    if @attachment.update(attachment_update_params)
+    @attachment.folder = @new_folder
+    if @attachment.save
       render :show, status: :ok
     else
       render json: @attachment.errors, status: :unprocessable_entity
@@ -47,10 +49,14 @@ class V1::Folders::AttachmentsController < V1::BaseController
     end
   end
 
+  def check_new_folder
+    @new_folder = Folder.find_by(id: params[:new_folder_id])
+    unless @new_folder
+      render json: 'folder not found'
+    end
+  end
+
   def attachment_params
     params.permit(:name, :file, :folder_id)
-  end
-  def attachment_update_params
-    params.permit(:folder_id)
   end
 end
