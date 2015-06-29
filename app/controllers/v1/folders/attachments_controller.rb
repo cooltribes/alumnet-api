@@ -20,7 +20,7 @@ class V1::Folders::AttachmentsController < V1::BaseController
 
   def update
     authorize @attachment
-    if @attachment.update(attachment_params)
+    if @attachment.update(attachment_update_params)
       render :show, status: :ok
     else
       render json: @attachment.errors, status: :unprocessable_entity
@@ -49,5 +49,8 @@ class V1::Folders::AttachmentsController < V1::BaseController
 
   def attachment_params
     params.permit(:name, :file, :folder_id)
+  end
+  def attachment_update_params
+    params.permit(:folder_id)
   end
 end
