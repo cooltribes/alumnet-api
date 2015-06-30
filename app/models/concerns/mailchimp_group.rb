@@ -12,6 +12,12 @@ class MailchimpGroup
       rescue Mailchimp::InvalidApiKeyError
         @valid_api_key = false
       end
+
+      begin
+        @mailchimp.lists.activity(@group.list_id) if valid?
+      rescue Mailchimp::ListDoesNotExistError
+        @list_id = false
+      end
     end
   end
 
@@ -29,7 +35,7 @@ class MailchimpGroup
 
   def check_list_id
     if @list_id == false
-      errors.add(:api_key, 'List does not exist')
+      errors.add(:list_id, 'List does not exist')
     end
   end
 
