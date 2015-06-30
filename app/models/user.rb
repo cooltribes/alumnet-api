@@ -44,7 +44,7 @@ class User < ActiveRecord::Base
   has_many :prizes, through: :user_prizes
   #has_many :actions, through: :user_actions
   has_many :task_invitations, dependent: :destroy
-
+  has_many :matches, dependent: :destroy
 
   ### Scopes
   scope :active, -> { where(status: 1) }
@@ -484,8 +484,8 @@ class User < ActiveRecord::Base
     end
 
     user_vars = {
-      'FNAME' => profile.first_name, 
-      'LNAME' => profile.last_name, 
+      'FNAME' => profile.first_name,
+      'LNAME' => profile.last_name,
       'BIRTHDAY' => profile.born,
       'GENDER' => profile.gender,
       'B_COUNTRY' => profile.birth_country.name,
@@ -496,6 +496,40 @@ class User < ActiveRecord::Base
       'PREMIUM' => membership_type
     }
     mailchimp.lists.subscribe(list_id, {'email' => email}, user_vars, 'html', false, true, true, true)
+  end
+
+  def update_groups_mailchimp()
+    all_vars = ["EMAIL", "FNAME", "LNAME", "BIRTHDAY", "GENDER", "B_COUNTRY", "B_CITY", "R_COUNTRY", "R_CITY", "L_EXP", "PREMIUM"]
+    groups.official.each do |g|
+      if g.mailchimp?
+        group_mailchimp = Mailchimp::API.new(g.api_key)
+        mailchimp_vars = group_mailchimp.lists.merge_vars({'id' => g.list_id})
+        array = []
+        mailchimp_vars['data'][0]['merge_vars'].each do |v|
+          array << v['tag']
+        end
+
+        all_vars.each do |v|
+          if !array.include?(v)
+            group_mailchimp.lists.merge_var_add(g.list_id, v, v.humanize, [])
+          end
+        end
+
+        user_vars = {
+          'FNAME' => profile.first_name, 
+          'LNAME' => profile.last_name, 
+          'BIRTHDAY' => profile.born,
+          'GENDER' => profile.gender,
+          'B_COUNTRY' => profile.birth_country.name,
+          'B_CITY' => profile.birth_city.name,
+          'R_COUNTRY' => profile.residence_country.name,
+          'R_CITY' => profile.residence_city.name,
+          'L_EXP' => profile.last_experience.name,
+          'PREMIUM' => membership_type
+        }
+        group_mailchimp.lists.subscribe(g.list_id, {'email' => email}, user_vars, 'html', false, true, true, true)
+      end
+    end
   end
 
   private

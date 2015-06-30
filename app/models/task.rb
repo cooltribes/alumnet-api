@@ -179,10 +179,10 @@ class Task < ActiveRecord::Base
     end
   end
 
-  def self.profinda_automatches(user)
+  def self.profinda_automatches(user, help_type)
     profinda_api = ProfindaApi.new(user.email, user.profinda_password)
     profinda_tasks = profinda_api.automatches
-    tasks = Task.where(profinda_id: profinda_tasks)
+    tasks = Task.where(profinda_id: profinda_tasks, help_type: help_type)
     tasks.each do |task|
       task.matches.find_or_create_by(user: user)
     end

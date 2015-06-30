@@ -1,8 +1,9 @@
 json.(business, :id, :offer, :search, :business_me)
 
 json.company do
+  json.id business.company.id
   json.name business.company.name
-  json.logo business.company.logo.main
+  json.logo business.company.logo.url
 end
 
 json.offer_keywords do
