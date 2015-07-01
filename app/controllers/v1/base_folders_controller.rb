@@ -14,8 +14,9 @@ class V1::BaseFoldersController < V1::BaseController
   def create
     @folder = Folder.new(folder_params)
     @folder.creator = current_user
+    @folder.folderable = @folderable
     authorize @folder
-    if @folderable.folders << @folder
+    if @folder.save
       render :show, status: :created
     else
       render json: @folder.errors, status: :unprocessable_entity

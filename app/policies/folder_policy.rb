@@ -10,9 +10,11 @@ class FolderPolicy < ApplicationPolicy
 
   def create?
     if record.folderable_type == "Group"
-      record.folderable.user_can_upload_file(user)
+      record.folderable.user_can_upload_file?(user)
+    elsif record.folderable_type == "Event"
+      record.folderable.is_admin?(user)
     else
-      true
+      false
     end
   end
 

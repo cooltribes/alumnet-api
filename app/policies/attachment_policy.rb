@@ -11,8 +11,10 @@ class AttachmentPolicy < ApplicationPolicy
   def create?
     if record.folder.folderable_type == "Group"
       record.folder.folderable.user_can_upload_file(user)
+    elsif record.folder.folderable_type == "Event"
+      record.folder.folderable.is_admin?(user)
     else
-      true
+      false
     end
   end
 

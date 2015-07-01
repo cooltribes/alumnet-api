@@ -12,8 +12,9 @@ class V1::Folders::AttachmentsController < V1::BaseController
   def create
     @attachment = Attachment.new(attachment_params)
     @attachment.uploader = current_user
-    authorize @folder
-    if @folder.attachments << @attachment
+    @attachment.folder = @folder
+    authorize @attachment
+    if @attachment.save
       render :show, status: :created
     else
       render json: @attachment.errors, status: :unprocessable_entity
