@@ -12,6 +12,7 @@ class V1::Folders::AttachmentsController < V1::BaseController
   def create
     @attachment = Attachment.new(attachment_params)
     @attachment.uploader = current_user
+    authorize @folder
     if @folder.attachments << @attachment
       render :show, status: :created
     else

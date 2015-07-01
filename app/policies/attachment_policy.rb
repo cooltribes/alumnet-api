@@ -9,7 +9,11 @@ class AttachmentPolicy < ApplicationPolicy
   end
 
   def create?
-    true
+    if record.folder.folderable_type == "Group"
+      record.folder.folderable.user_can_upload_file(user)
+    else
+      true
+    end
   end
 
   def update?

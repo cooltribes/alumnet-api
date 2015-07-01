@@ -14,6 +14,7 @@ class V1::BaseFoldersController < V1::BaseController
   def create
     @folder = Folder.new(folder_params)
     @folder.creator = current_user
+    authorize @folder
     if @folderable.folders << @folder
       render :show, status: :created
     else

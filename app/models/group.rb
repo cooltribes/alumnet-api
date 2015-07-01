@@ -13,7 +13,12 @@ class Group < ActiveRecord::Base
   # "1" -> All Members can invite, but the admins approved
   # "2" -> Only the admins can invite
 
+  #upload_files
+  # "0" -> Only the admins can upload
+  # "1" -> All Members can upload
+
   ### Relations
+
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships
   has_many :posts, as: :postable, dependent: :destroy
@@ -67,6 +72,14 @@ class Group < ActiveRecord::Base
 
   def user_is_admin?(user)
     admins.where("users.id = ?", user.id).any?
+  end
+
+  def user_is_member?(user)
+    members.where("users.id = ?", user.id).any?
+  end
+
+  def user_can_upload_file?(user)
+    upload_files == 0 ? user_is_admin?(user) : user_is_member?(user)
   end
 
   def which_friends_in(user)

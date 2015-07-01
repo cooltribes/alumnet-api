@@ -3,6 +3,10 @@ class Event < ActiveRecord::Base
   mount_uploader :cover, CoverUploader
   enum event_type: [:open, :closed, :secret]
 
+  #upload_files
+  # "0" -> Only the admins can upload
+  # "1" -> All Members can upload
+
   ## Virtual Attributes
   attr_accessor :cover_uploader
   attr_accessor :imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH
