@@ -18,10 +18,15 @@ class Notification
   end
 
   ### Class Methods
-  def self.notify_join_to_users(users, group)
+  def self.notify_join_to_users(users, group, current_user)
     notification = new(users)
-    subject = "You've joined to #{group.name}!"
-    body = "Welcome! You've joined to #{group.name} group"
+    if users == current_user
+      subject = "You've joined the #{group.name} group!"
+      body = "Welcome! You've joined the #{group.name} group"
+    else
+      subject = "#{current_user.name} added you to the #{group.name} group!"
+      body = "Welcome! #{current_user.name} added you to the #{group.name} group"
+    end
     notification.send_notification(subject, body)
     notification.send_pusher_notification
     notification.recipients.each do |user|
@@ -51,10 +56,15 @@ class Notification
     end
   end
 
-  def self.notify_request_to_users(users, group)
+  def self.notify_request_to_users(users, group, current_user)
     notification = new(users)
-    subject = "Your request was sent"
-    body = "Your request to join in group #{group.name} was sent."
+    if users == current_user
+      subject = "Your request was sent"
+      body = "Your request to join group #{group.name} was sent."
+    else
+      subject = "#{current_user.name} added you to the #{group.name} group!"
+      body = "Welcome! #{current_user.name} wants you to join the #{group.name} group, the request was sent."
+    end
     notification.send_notification(subject, body)
     notification.send_pusher_notification
   end

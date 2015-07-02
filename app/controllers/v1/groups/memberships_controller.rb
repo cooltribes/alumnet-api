@@ -19,7 +19,7 @@ class V1::Groups::MembershipsController < V1::BaseController
     admin = @group.user_is_admin?(current_user)
     @membership = @group.build_membership_for(@user, admin)
     if @membership.save
-      @group.notify(@user, admin)
+      @group.notify(@user, admin, current_user)
       if @group.mailchimp && (@group.join_process == 0 || admin)
         @mc_group = Mailchimp::API.new(@group.api_key)
         @user.subscribe_to_mailchimp_list(@mc_group, @group.list_id)

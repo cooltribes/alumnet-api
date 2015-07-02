@@ -97,18 +97,18 @@ class Group < ActiveRecord::Base
   end
 
   ## TODO: refactor this
-  def notify(user, admin)
+  def notify(user, admin, current_user)
     if join_process == 0
-      Notification.notify_join_to_users(user, self)
+      Notification.notify_join_to_users(user, self, current_user)
       Notification.notify_join_to_admins(admins.to_a, user, self)
     elsif join_process == 1
-      Notification.notify_request_to_users(user, self)
+      Notification.notify_request_to_users(user, self, current_user)
       Notification.notify_request_to_admins(admins.to_a, user, self)
     elsif join_process == 2
       if admin
-        Notification.notify_join_to_users(user, self)
+        Notification.notify_join_to_users(user, self, current_user)
       else
-        Notification.notify_request_to_users(user, self)
+        Notification.notify_request_to_users(user, self, current_user)
         Notification.notify_request_to_admins(admins.to_a, user, self)
       end
     end
