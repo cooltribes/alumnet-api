@@ -1,4 +1,4 @@
-json.(group, :id, :name, :description, :official, :created_at, :join_process)
+json.(group, :id, :name, :description, :official, :created_at, :join_process, :upload_files)
 
 json.can_be_official group.can_be_official?
 
@@ -16,6 +16,7 @@ json.country group.get_country_info
 
 json.city group.get_city_info
 
+json.user_can_upload_file group.user_can_upload_file?(current_user)
 
 if group.last_post.present?
   json.last_post_at group.last_post.last_comment_at

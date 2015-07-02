@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe V1::Events::FoldersController, type: :request do
   let!(:current_user) { User.make! }
-  let!(:event) { Event.make! }
+  let!(:event) { Event.make!(creator: current_user) }
 
   def valid_attributes
     { name: "New Folder" }
