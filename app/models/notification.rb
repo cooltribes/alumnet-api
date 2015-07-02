@@ -74,8 +74,9 @@ class Notification
     notification = new(friend)
     subject = "Hello, Do you like to be my Alumfriend?"
     body = "The user #{user.name} sent you a friendship request"
-    notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
+    NotificationDetail.friendship_request(notfy, user)
     UserMailer.user_request_friendship(user, friend).deliver_later
   end
 
@@ -83,8 +84,9 @@ class Notification
     notification = new(user)
     subject = "You have a new friend!"
     body = "Your friend #{friend.name} accepted your invitation to connect."
-    notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
+    NotificationDetail.friendship_accepted(notfy, friend)
     UserMailer.friend_accept_friendship(user, friend).deliver_later
   end
 
@@ -93,8 +95,9 @@ class Notification
     notification = new(attendance.user)
     subject = "You have a new invitation to an event in AlumNet!",
     body = "The user #{event.creator.name} is inviting you to assist the event #{event.name}"
-    notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
+    NotificationDetail.invitation_to_event(notfy, event.creator, event)
     UserMailer.invitation_to_event(attendance.user, event).deliver_later
   end
 
