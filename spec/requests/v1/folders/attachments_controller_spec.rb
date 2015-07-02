@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe V1::Folders::AttachmentsController, type: :request do
   let!(:current_user) { User.make! }
-  let!(:folder) { Folder.make! }
+  let!(:folder) { Folder.make!(folderable: Event.make!(creator: current_user)) }
 
   def attachment_file
     fixture_file_upload("#{Rails.root}/spec/fixtures/contacts.csv")

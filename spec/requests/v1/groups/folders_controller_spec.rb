@@ -26,6 +26,9 @@ describe V1::Groups::FoldersController, type: :request do
   end
 
   describe "POST /groups/:group_id/folders" do
+    before do
+      Membership.create_membership_for_creator(group, current_user)
+    end
     context "with valid attributes" do
       it "create a folder in group" do
         expect {

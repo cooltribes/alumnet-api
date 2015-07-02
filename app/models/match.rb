@@ -15,4 +15,10 @@ class Match < ActiveRecord::Base
   def has_invitation
     TaskInvitation.exists?(user_id: user.id, task_id: task.id)
   end
+
+  ## Class methods
+
+  def self.delete_with_profinda_uid(profinda_uid)
+    joins(:user).where.not(users: { profinda_uid: profinda_uid }).delete_all
+  end
 end

@@ -98,6 +98,7 @@ class Task < ActiveRecord::Base
   end
 
   def save_matches(p_matches)
+    matches.delete_with_profinda_uid(p_matches)
     User.where(profinda_uid: p_matches).each do |user|
       matches.find_or_create_by(user: user)
       AdminMailer.user_have_match_in_task(user, self).deliver_later
