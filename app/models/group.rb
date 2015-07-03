@@ -61,6 +61,10 @@ class Group < ActiveRecord::Base
     save!
   end
 
+  def mode
+    official? ? "Official" : "Unofficial"
+  end
+
   ### all membership
   def members
     users.where("memberships.approved = ?", true)
@@ -86,27 +90,27 @@ class Group < ActiveRecord::Base
     members & user.my_friends
   end
 
-  def build_membership_for(user, admin = false)
+  def build_membership_for(user, admin_flag = false)
     if join_process == 0
       memberships.build(user: user, approved: true)
     elsif join_process == 1
-      memberships.build(user: user, approved: admin)
+      memberships.build(user: user, approved: admin_flag)
     elsif join_process == 2
-      memberships.build(user: user, approved: admin)
+      memberships.build(user: user, approved: admin_flag)
     end
   end
 
   ## TODO: refactor this
-  def notify(user, admin)
+  def notify(user, sender, admin_flag)
     if join_process == 0
-      Notification.notify_join_to_users(user, self)
+      Notification.notify_join_to_users(user, sender, self)
       Notification.notify_join_to_admins(admins.to_a, user, self)
     elsif join_process == 1
       Notification.notify_request_to_users(user, self)
       Notification.notify_request_to_admins(admins.to_a, user, self)
     elsif join_process == 2
       if admin
-        Notification.notify_join_to_users(user, self)
+        Notification.notify_join_to_users(user, sender, self)
       else
         Notification.notify_request_to_users(user, self)
         Notification.notify_request_to_admins(admins.to_a, user, self)

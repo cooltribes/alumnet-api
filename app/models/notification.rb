@@ -1,6 +1,5 @@
 class Notification
-  attr_reader :recipients
-  attr_reader :message
+  attr_reader :recipients, :message
 
   #Param is the array or single object
   def initialize(recipients)
@@ -18,14 +17,15 @@ class Notification
   end
 
   ### Class Methods
-  def self.notify_join_to_users(users, group)
+  def self.notify_join_to_users(users, sender, group)
     notification = new(users)
     subject = "You've joined to #{group.name}!"
-    body = "Welcome! You've joined to #{group.name} group"
-    notification.send_notification(subject, body)
+    body = "User #{sender.name} added you to the #{group.mode} group #{group.name}"
+    notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
+    NotificationDetail.join_group(notfy, sender, group)
     notification.recipients.each do |user|
-      UserMailer.join_to_group(user, group).deliver_later
+      UserMailer.join_to_group(user, sender, group).deliver_later
     end
   end
 
@@ -33,8 +33,9 @@ class Notification
     notification = new(admins)
     subject = "A new user was invited to join the group #{group.name}"
     body = "The user #{user.name} was invited to join the group #{group.name}"
-    notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
+    NotificationDetail.join_group_admins(notfy, user, group)
     notification.recipients.each do |admin|
       AdminMailer.user_was_joined(admin, user, group).deliver_later
     end
@@ -102,57 +103,36 @@ class Notification
   end
 
   def self.notify_new_friendship_by_approval(requester, user)
-    #Notify about new friendship to requester
-    recipients = [requester]
-    notification = Mailboxer::Notification.notify_all(
-      recipients,
-      "You have a new friend!",
-      user.permit_name(requester) + " is now your friend."
-    )
-    PusherDelegator.notifiy_new_notification(notification, recipients)
+    notfy_to_requester = new(requester)
+    notfy_to_requester.send_notification("You have a new friend!",
+      "#{user.permit_name(requester)} is now your friend.")
+    notfy_to_requester.send_pusher_notification
 
-    recipients = [user]
-    notification = Mailboxer::Notification.notify_all(
-      recipients,
-      "You have a new friend!",
-      requester.permit_name(user) + " is now your friend."
-    )
-    PusherDelegator.notifiy_new_notification(notification, recipients)
-
+    notfy_to_user = new(user)
+    notfy_to_user.send_notification("You have a new friend!",
+      "#{requester.permit_name(user)} is now your friend.")
+    notfy_to_user.send_pusher_notification
 
     UserMailer.approval_request_accepted(requester, user).deliver_later
   end
 
   def self.notify_approval_request_to_admins(admins, user)
-
-    notification = self.new(admins)
+    notification = new(admins)
     subject = "A new user was registered in AlumNet"
     body = "The user #{user.name} is waiting for your approval"
-
-    #Create and send notification
-    message = notification.send_notification(subject, body)
-
-    #Use pusher to notify recipients in real time
+    notification.send_notification(subject, body)
     notification.send_pusher_notification
-
-    #Send Email
     notification.recipients.each do |admin|
       AdminMailer.user_request_approval(admin, user).deliver_later
     end
   end
 
   def self.notify_approval_request_to_user(user, approver)
-
     notification = self.new(approver)
     subject = "#{user.name} wants to be approved in AlumNet"
     body = "Hello, I'm registering in Alumnet. Please approve my membership"
-
-    #Create and send notification
-    message = notification.send_notification(subject, body)
-
-    #Use pusher to notify recipients in real time
+    notification.send_notification(subject, body)
     notification.send_pusher_notification()
-    #Send Email
     notification.recipients.each do |recipient|
       UserMailer.user_request_approval(recipient, user).deliver_later
     end

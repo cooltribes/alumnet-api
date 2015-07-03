@@ -4,7 +4,7 @@ class CreateNotificationDetails < ActiveRecord::Migration
       t.string :url
       t.string :notification_type
       t.integer :mailboxer_notification_id, index: true
-      t.integer :subject_id, index: true
+      t.integer :sender_id, index: true
 
       t.timestamps null: false
     end

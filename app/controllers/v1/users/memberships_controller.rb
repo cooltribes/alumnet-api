@@ -35,7 +35,7 @@ class V1::Users::MembershipsController < V1::BaseController
   def destroy
     email = @membership.user.email
     group = @membership.group
-    @membership.destroy
+    @membership.really_destroy!
     if group.mailchimp
       @mc_group = Mailchimp::API.new(group.api_key)
       @mc_group.lists.unsubscribe(group.list_id, {'email' => email}, false, false, true)
