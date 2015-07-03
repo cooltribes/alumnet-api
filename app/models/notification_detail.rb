@@ -43,4 +43,9 @@ class NotificationDetail < ActiveRecord::Base
     create!(url: url, notification_type: "post", sender: sender,
       mailboxer_notification_id: notification.id)
   end
+
+  def self.notify_comment_in_post(notification, sender, post)
+    create!(url: "posts/#{post.id}", notification_type: "comment", sender: sender,
+      mailboxer_notification_id: notification.id)
+  end
 end

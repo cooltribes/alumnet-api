@@ -13,6 +13,7 @@ class Post < ActiveRecord::Base
   belongs_to :postable, polymorphic: true
   belongs_to :postable_group, foreign_key: :postable_id, class_name: 'Group'
   has_many :pictures, as: :pictureable, dependent: :destroy
+  has_many :comment_users, through: :comments, source: :user #users with comments
 
   ### Scopes
   default_scope -> { order(last_comment_at: :desc) }
@@ -31,6 +32,11 @@ class Post < ActiveRecord::Base
 
   def with_pictures(number)
     pictures.limit(number)
+  end
+
+  def users_with_comments
+    #all users with comments except the post creator
+    comment_users.where.not(comments: { user_id: user.id }).distinct
   end
 
   private
