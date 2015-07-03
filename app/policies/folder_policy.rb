@@ -19,11 +19,27 @@ class FolderPolicy < ApplicationPolicy
   end
 
   def update?
-    record.creator == user
+    return true if record.creator == user    
+
+    if record.folderable_type == "Group"
+      record.folderable.user_is_admin?(user)
+    elsif record.folderable_type == "Event"
+      record.folderable.is_admin?(user)
+    else
+      false
+    end
   end
 
   def destroy?
-    record.creator == user
+    return true if record.creator == user    
+
+    if record.folderable_type == "Group"
+      record.folderable.user_is_admin?(user)
+    elsif record.folderable_type == "Event"
+      record.folderable.is_admin?(user)
+    else
+      false
+    end
   end
 
 end
