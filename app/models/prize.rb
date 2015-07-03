@@ -5,5 +5,5 @@ class Prize < ActiveRecord::Base
 	has_many :user_prizes, dependent: :destroy
 
 	### Validations
-	validates_presence_of :name, :description, :price     
+	validates_presence_of :name, :description, :price
 end
