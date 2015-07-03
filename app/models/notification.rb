@@ -149,12 +149,28 @@ class Notification
     end
   end
 
-  def self.notifiy_new_post(users, post)
+  def self.notify_new_post(users, post)
     notification = self.new(users)
     subject = "The #{post.postable.class.to_s} #{post.postable.name} has new post"
     body = "Hello! the user #{post.user.name} posted in #{post.postable.class.to_s} #{post.postable.name}"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
-    NotificationDetail.new_post(notfy, post)
+    NotificationDetail.notify_new_post(notfy, post)
+  end
+
+  def self.notify_like(like)
+    likeable = like.likeable
+    if like.likeable_type == "Post" || like.likeable_type == "Comment"
+      return if likeable.user == like.user
+      notification = self.new(likeable.user)
+    elsif like.likeable_type == "Picture"
+      return if likeable.uploader == like.user
+      notification = self.new(likeable.uploader)
+    end
+    subject = "The user #{like.user.name} likes your #{likeable.class.to_s}"
+    body = "The user #{like.user.name} likes your #{likeable.class.to_s}"
+    notfy = notification.send_notification(subject, body)
+    notification.send_pusher_notification
+    NotificationDetail.notify_like(notfy, like.user, likeable)
   end
 end

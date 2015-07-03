@@ -6,7 +6,7 @@ class Comment < ActiveRecord::Base
 
   ### Relations
   belongs_to :commentable, polymorphic: true
-  belongs_to :user
+  belongs_to :user ##Creator
 
   ### Scopes
   default_scope -> { order('created_at ASC') }

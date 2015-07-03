@@ -25,6 +25,9 @@ class Post < ActiveRecord::Base
   after_create :assign_pictures_to_album, :notify_to_users
 
   ### Instance Methods
+  def url_for_notification
+    "posts/#{id}"
+  end
 
   def with_pictures(number)
     pictures.limit(number)
@@ -49,9 +52,9 @@ class Post < ActiveRecord::Base
     def notify_to_users
       case postable_type
         when "Group"
-          Notification.notifiy_new_post(postable.members.to_a, self)
+          Notification.notify_new_post(postable.members.to_a, self)
         when "Event"
-          Notification.notifiy_new_post(postable.assistants.to_a, self)
+          Notification.notify_new_post(postable.assistants.to_a, self)
       end
     end
 end

@@ -29,8 +29,18 @@ class NotificationDetail < ActiveRecord::Base
       mailboxer_notification_id: notification.id)
   end
 
-  def self.new_post(notification, post)
+  def self.notify_new_post(notification, post)
     create!(url: "posts/#{post.id}", notification_type: "post", sender: post.user,
+      mailboxer_notification_id: notification.id)
+  end
+
+  def self.notify_like(notification, sender, likeable)
+    url = if likeable.is_a?(Post) || likeable.is_a?(Picture)
+      likeable.url_for_notification
+    elsif likeable.is_a?(Comment)
+      likeable.commentable.url_for_notification
+    end
+    create!(url: url, notification_type: "post", sender: sender,
       mailboxer_notification_id: notification.id)
   end
 end
