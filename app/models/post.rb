@@ -22,7 +22,7 @@ class Post < ActiveRecord::Base
 
   ### Callbacks
   before_create :set_last_comment_at
-  after_create :assign_pictures_to_album
+  after_create :assign_pictures_to_album, :notify_to_users
 
   ### Instance Methods
 
@@ -43,6 +43,15 @@ class Post < ActiveRecord::Base
             album.pictures << picture
           end
         end
+      end
+    end
+
+    def notify_to_users
+      case postable_type
+        when "Group"
+          Notification.notifiy_new_post(postable.members.to_a, self)
+        when "Event"
+          Notification.notifiy_new_post(postable.assistants.to_a, self)
       end
     end
 end

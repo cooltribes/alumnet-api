@@ -28,4 +28,9 @@ class NotificationDetail < ActiveRecord::Base
     create!(url: "events/#{event.id}/posts", notification_type: "event", sender: sender,
       mailboxer_notification_id: notification.id)
   end
+
+  def self.new_post(notification, post)
+    create!(url: "posts/#{post.id}", notification_type: "post", sender: post.user,
+      mailboxer_notification_id: notification.id)
+  end
 end

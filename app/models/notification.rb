@@ -149,4 +149,12 @@ class Notification
     end
   end
 
+  def self.notifiy_new_post(users, post)
+    notification = self.new(users)
+    subject = "The #{post.postable.class.to_s} #{post.postable.name} has new post"
+    body = "Hello! the user #{post.user.name} posted in #{post.postable.class.to_s} #{post.postable.name}"
+    notfy = notification.send_notification(subject, body)
+    notification.send_pusher_notification
+    NotificationDetail.new_post(notfy, post)
+  end
 end
