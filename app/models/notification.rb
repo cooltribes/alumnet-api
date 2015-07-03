@@ -20,7 +20,7 @@ class Notification
 
   def self.notify_join_to_users(users, sender, group)
     notification = new(users)
-    if users == current_user
+    if users == sender
       subject = "You've joined the #{group.name} group!"
       body = "Welcome! You've joined the #{group.name} group"
     else
