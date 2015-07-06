@@ -10,4 +10,18 @@ class Folder < ActiveRecord::Base
   def files_count
     self.attachments.count
   end
+
+  def user_can_edit(user)
+
+    return true if creator == user    
+
+    if folderable_type == "Group"
+      folderable.user_is_admin?(user)
+    elsif folderable_type == "Event"
+      folderable.is_admin?(user)
+    else
+      false
+    end
+    
+  end
 end

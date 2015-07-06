@@ -14,11 +14,25 @@ end
 
 json.files_count folder.files_count
 
-json.files do
-  json.array! folder.attachments do |attachment|
-    json.id attachment.id
-    json.name attachment.name
-    json.url attachment.file.url
-    json.folder_id folder.id
-  end
+if folder.attachments.any?
+  json.files folder.attachments, partial: 'v1/folders/attachments/attachment', as: :attachment, current_user: current_user
+else
+  json.files nil
 end
+
+json.user_can_edit folder.user_can_edit(current_user)
+
+
+# json.files do
+#   json.array! folder.attachments do |attachment|
+#     json.id attachment.id
+#     json.name attachment.name
+#     if attachment.user_can_download(current_user)
+#       json.url attachment.file.url
+#     else
+#       json.url nil
+#     end
+#     json.folder_id folder.id
+
+#   end
+# end

@@ -43,3 +43,5 @@ end
 
 json.admin event.is_admin?(current_user)
 json.can_attend event.can_attend?(current_user)
+
+json.user_can_upload_files event.user_can_upload_files?(current_user)

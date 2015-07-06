@@ -10,36 +10,20 @@ class FolderPolicy < ApplicationPolicy
 
   def create?
     if record.folderable_type == "Group"
-      record.folderable.user_can_upload_file?(user)
+      record.folderable.user_can_upload_files?(user)
     elsif record.folderable_type == "Event"
-      record.folderable.is_admin?(user)
+      record.folderable.user_can_upload_files?(user)
     else
       false
     end
   end
 
-  def update?
-    return true if record.creator == user    
-
-    if record.folderable_type == "Group"
-      record.folderable.user_is_admin?(user)
-    elsif record.folderable_type == "Event"
-      record.folderable.is_admin?(user)
-    else
-      false
-    end
+  def update?    
+    record.user_can_edit (user)
   end
 
-  def destroy?
-    return true if record.creator == user    
-
-    if record.folderable_type == "Group"
-      record.folderable.user_is_admin?(user)
-    elsif record.folderable_type == "Event"
-      record.folderable.is_admin?(user)
-    else
-      false
-    end
+  def destroy?    
+    record.user_can_edit (user)    
   end
 
 end
