@@ -1,0 +1,1 @@
+json.array! @features, partial: 'feature', as: :feature, current_user: @current_user

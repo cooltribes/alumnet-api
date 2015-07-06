@@ -105,6 +105,8 @@ Rails.application.routes.draw do
 
     resources :actions
 
+    resources :features
+
     resources :prizes
 
     resources :banners

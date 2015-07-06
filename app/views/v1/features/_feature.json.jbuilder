@@ -1,0 +1,1 @@
+json.(feature, :id, :name, :description, :status, :created_at, :updated_at, :key_name)
