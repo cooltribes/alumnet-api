@@ -58,8 +58,11 @@ class Event < ActiveRecord::Base
   end
 
   def assistants
+    ##TODO: Apply logic for close and secret.
     if is_open?
       attendances.going
+    else
+      []
     end
   end
 

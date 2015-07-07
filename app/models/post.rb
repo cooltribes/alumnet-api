@@ -58,9 +58,9 @@ class Post < ActiveRecord::Base
     def notify_to_users
       case postable_type
         when "Group"
-          Notification.notify_new_post(postable.members.to_a, self)
+          Notification.notify_new_post(postable.members.to_a, self) if postable.members.any?
         when "Event"
-          Notification.notify_new_post(postable.assistants.to_a, self)
+          Notification.notify_new_post(postable.assistants.to_a, self) if postable.assistants.any?
       end
     end
 end
