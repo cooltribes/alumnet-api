@@ -14,6 +14,10 @@ class Picture < ActiveRecord::Base
   ### Callbacks
   before_create :check_date_taken, :check_location
 
+  ### Instances Methods
+  def url_for_notification
+    "#{pictureable.class.to_s.pluralize.downcase}/#{pictureable.id}/pictures/#{id}"
+  end
 
   private
 
