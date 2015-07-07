@@ -16,7 +16,7 @@ class Picture < ActiveRecord::Base
 
   ### Instances Methods
   def url_for_notification
-    "pictures/#{id}"
+    "#{pictureable.class.to_s.pluralize.downcase}/#{pictureable.id}/pictures/#{id}"
   end
 
   private

@@ -27,7 +27,7 @@ class Post < ActiveRecord::Base
 
   ### Instance Methods
   def url_for_notification
-    "posts/#{id}"
+    "#{postable.class.to_s.pluralize.downcase}/#{postable.id}/posts/#{id}"
   end
 
   def with_pictures(number)

@@ -30,7 +30,7 @@ class NotificationDetail < ActiveRecord::Base
   end
 
   def self.notify_new_post(notification, post)
-    create!(url: "posts/#{post.id}", notification_type: "post", sender: post.user,
+    create!(url: post.url_for_notification, notification_type: "post", sender: post.user,
       mailboxer_notification_id: notification.id)
   end
 
@@ -45,7 +45,7 @@ class NotificationDetail < ActiveRecord::Base
   end
 
   def self.notify_comment_in_post(notification, sender, post)
-    create!(url: "posts/#{post.id}", notification_type: "comment", sender: sender,
+    create!(url: post.url_for_notification, notification_type: "comment", sender: sender,
       mailboxer_notification_id: notification.id)
   end
 end
