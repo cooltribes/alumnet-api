@@ -105,7 +105,9 @@ Rails.application.routes.draw do
 
     resources :actions
 
-    resources :features
+    resources :features, except: :show do
+      get :validate, on: :collection
+    end
 
     resources :prizes
 

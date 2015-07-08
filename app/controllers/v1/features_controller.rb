@@ -1,5 +1,6 @@
 class V1::FeaturesController < V1::BaseController
-  before_action :set_feature, except: [:index, :create]
+  before_action :set_feature, except: [:index, :create, :validate]
+  before_action :set_feature_for_validation, only: [:validate]
 
   def index
     @q = Feature.search(params[:q])
@@ -28,10 +29,18 @@ class V1::FeaturesController < V1::BaseController
     head :no_content
   end
 
+  def validate
+    render json: { validation: @feature.status == 'active' }
+  end
+
   private
 
   def set_feature
     @feature = Feature.find(params[:id])
+  end
+
+  def set_feature_for_validation
+    @feature = Feature.find_by(key_name: params[:key_name])
   end
 
   def feature_params
