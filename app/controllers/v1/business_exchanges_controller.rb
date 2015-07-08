@@ -24,6 +24,7 @@ class V1::BusinessExchangesController < V1::TasksController
     end
 
     def task_params
-      params.permit(:name, :description, :must_have_list, :nice_have_list, :post_until)
+      params.permit(:name, :description, :formatted_description, :must_have_list,
+        :nice_have_list, :post_until)
     end
 end
