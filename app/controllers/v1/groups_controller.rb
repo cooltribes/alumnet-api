@@ -63,23 +63,10 @@ class V1::GroupsController < V1::BaseController
   def update
     authorize @group
     @group.cover_uploader = current_user
-    if @group.mailchimp
-      @mailchimp = MailchimpGroup.new(@group)
-      if @mailchimp.valid?
-        if @group.update(group_params)
-          render :show, status: :ok,  location: @group
-        else
-          render json: @group.errors, status: :unprocessable_entity
-        end
-      else
-        render json: { success: false, message: @mailchimp.errors }, status: :unprocessable_entity
-      end
+    if @group.update(group_params)
+      render :show, status: :ok,  location: @group
     else
-      if @group.update(group_params)
-        render :show, status: :ok,  location: @group
-      else
-        render json: @group.errors, status: :unprocessable_entity
-      end
+      render json: @group.errors, status: :unprocessable_entity
     end
   end
 
