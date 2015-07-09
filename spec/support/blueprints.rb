@@ -439,3 +439,11 @@ Feature.blueprint do
   status { 'active' }
   key_name { 'some_key_name' }
 end
+
+EventPayment.blueprint do
+  price { 1000 }
+  reference { "XXXX-XXXX-#{sn}"}
+  user { User.make! }
+  event { Event.make! }
+  attendance_id { Attendance.make! }
+end
