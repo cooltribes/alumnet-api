@@ -51,23 +51,6 @@ class Membership < ActiveRecord::Base
     create!(attrs).approved!
   end
 
-  def self.create_membership_for_invitation(group, user)
-    create!(user: user, group: group)
-    Notification.notify_invitation_to_users(user, group)
-    #Notification.notify_invitation_to_admins()
-  end
-
-  def self.create_membership_for_request(group, user)
-    membership = create!(user: user, group: group)
-    if group.open?
-      membership.approved!
-      Notification.notify_join_to_users(user, group)
-      # send notificacion to user and group.admins
-    elsif group.closed?
-      #send notificacion to user and group.admins
-    end
-  end
-
   private
     def set_admin
       if permissions_attributes.all? { |pa| send(pa) == 0 }

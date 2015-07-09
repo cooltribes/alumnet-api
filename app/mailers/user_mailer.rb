@@ -6,9 +6,10 @@ class UserMailer < ActionMailer::Base
     mail to: user.email, subject: "Password reset"
   end
 
-  def join_to_group(user, group)
+  def join_to_group(user, sender, group)
     @user = user
     @group = group
+    @sender = sender
     mail to: user.email, subject: "You've joined to the Group #{group.name}!"
   end
 

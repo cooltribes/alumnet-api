@@ -6,8 +6,8 @@ namespace :app do
     file = ENV['file']
     if model && file
       file = File.open(file)
-        options = { col_sep: "\t"}
-        SmarterCSV.process(file, options ) do |array|
+      options = { col_sep: "\t"}
+      SmarterCSV.process(file, options ) do |array|
         model.constantize.find_or_create_by( array.first )
       end
       file.close
