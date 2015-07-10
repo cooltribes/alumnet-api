@@ -38,8 +38,12 @@ class V1::BaseEventsController < V1::BaseController
   end
 
   def destroy
-    @event.destroy
-    head :no_content
+    if @event.event_payments.any?
+      render json: { message: "the event have orders" }, status: 409
+    else
+      @event.destroy
+      head :no_content
+    end
   end
 
   private
@@ -57,7 +61,8 @@ class V1::BaseEventsController < V1::BaseController
 
   def event_params
     params.permit(:name, :description, :cover, :event_type, :official, :address,
-      :start_date, :start_hour, :end_date, :end_hour, :capacity, :city_id, :country_id, :admission_type, :regular_price, :premium_price)
+      :upload_files, :start_date, :start_hour, :end_date, :end_hour, :capacity,
+      :city_id, :country_id, :admission_type, :regular_price, :premium_price)
   end
 
 end

@@ -12,7 +12,7 @@ class ProfindaApi
   # "task_business_exchange"
   # "task_home_exchange"
   # "task_job_exchange"
-  # "task_meetup_exchange"
+  # "task_meetup_exchange"my
 
   DEFAULT_HEADERS = {
     "Accept" => "application/vnd.profinda+json;version=1",
@@ -73,6 +73,8 @@ class ProfindaApi
     @last_response.parsed_response
   end
 
+  ### TASKS AND MATCHES
+
   def create_task(attributes, type = "task_job_exchange")
     # attributes = { "post_until" => "29/05/2015", "description" => "testing taks", "help_type_id" => "8", "nice_have_list" => "1638,1590,1636", "must_have_list" => "1637,1606", "duration" => "hours", "name" => "Testing Task" }
     default_attributes = { "user_relation" => {}, "profile_id" => nil, "attachment" => "",
@@ -104,6 +106,40 @@ class ProfindaApi
     @last_response.parsed_response
   end
 
+  def matches(task_id)
+    profinda_matches = task_matches(task_id)
+    users = []
+    if profinda_matches["entries"].present?
+      profinda_matches["entries"].map do |match|
+        users << match["profile_id"]
+      end
+    end
+    users
+  end
+
+  def automatches
+    profinda_automatches = tasks_automatches
+    tasks = []
+    if profinda_automatches["entries"].present?
+      profinda_automatches["entries"].map do |match|
+        tasks << match["id"]
+      end
+    end
+    tasks
+  end
+
+  def tasks_automatches
+    options = { headers: authorized_headers, body: {} }
+    @last_response = self.class.get("/automatches", options)
+    @last_response.parsed_response
+  end
+
+  def task_matches(id)
+    options = { headers: authorized_headers, body: {} }
+    @last_response = self.class.get("/tasks/#{id}/matches", options)
+    @last_response.parsed_response
+  end
+
   def help_types
     unless @help_types
       @help_types = {}
@@ -114,7 +150,7 @@ class ProfindaApi
     @help_types
   end
 
-  ## class Methods
+  ### class Methods
   def self.sign_up(email, password)
     new(email, password, true)
   end

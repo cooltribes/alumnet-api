@@ -1,0 +1,1 @@
+json.(keyword, :id, :name)

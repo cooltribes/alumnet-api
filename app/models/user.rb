@@ -29,18 +29,20 @@ class User < ActiveRecord::Base
   has_many :attendances, dependent: :destroy
   has_many :events, as: :eventable, dependent: :destroy
   has_many :invited_events, through: :attendances, source: :event
-  has_one :profile, dependent: :destroy
-  belongs_to :admin_location, polymorphic: true
-  #These are the requests that "self" has made to others
   has_many :approval_requests, dependent: :destroy
-  #These are the requests that were made for "self" to approve
   has_many :pending_approval_requests, class_name: "ApprovalRequest", foreign_key: "approver_id"
   has_many :oauth_providers, dependent: :destroy
   has_many :contacts, dependent: :destroy
   has_many :invitations, dependent: :destroy
   has_many :tasks, dependent: :destroy
   has_many :user_actions, dependent: :destroy
-  #has_many :actions, through: :user_actions
+  has_many :user_prizes, dependent: :destroy
+  has_many :prizes, through: :user_prizes
+  has_many :task_invitations, dependent: :destroy
+  has_many :matches, dependent: :destroy
+
+  has_one :profile, dependent: :destroy
+  belongs_to :admin_location, polymorphic: true
 
   ### Scopes
   scope :active, -> { where(status: 1) }
@@ -168,6 +170,17 @@ class User < ActiveRecord::Base
 
   def is_premium?
     member != 0
+  end
+
+  def membership_type
+    #0-> no member, 1-> Subscription for a year, 2-> Subscription for a year (30 days left or less), 3-> Lifetime
+    if member == 0
+      "No member"
+    elsif member == 1 || member == 2
+      "Member"
+    else
+      "Lifetime member"
+    end
   end
 
   def is_regular?
@@ -316,9 +329,9 @@ class User < ActiveRecord::Base
     user_subscription = user_subscriptions.build(params)
     user_subscription.ownership_type = 1
     if user_subscription.lifetime?
-      user_subscription.subscription = Subscription.premium.first
-    else
       user_subscription.subscription = Subscription.lifetime.first
+    else
+      user_subscription.subscription = Subscription.premium.first
     end
     user_subscription.creator = current_user
     user_subscription
@@ -446,6 +459,74 @@ class User < ActiveRecord::Base
       "received"
     else
       "none"
+    end
+  end
+
+  ## TASKS
+  def has_task_invitation(task)
+    task_invitations.exists?(task_id: task.id)
+  end
+
+  def subscribe_to_mailchimp_list(mailchimp, list_id)
+    mailchimp_vars = mailchimp.lists.merge_vars({'id' => list_id})
+    array = []
+    mailchimp_vars['data'][0]['merge_vars'].each do |v|
+      array << v['tag']
+    end
+
+    all_vars = ["EMAIL", "FNAME", "LNAME", "BIRTHDAY", "GENDER", "B_COUNTRY", "B_CITY", "R_COUNTRY", "R_CITY", "L_EXP", "PREMIUM"]
+    all_vars.each do |v|
+      if !array.include?(v)
+        mailchimp.lists.merge_var_add(list_id, v, v.humanize, [])
+      end
+    end
+
+    user_vars = {
+      'FNAME' => profile.first_name,
+      'LNAME' => profile.last_name,
+      'BIRTHDAY' => profile.born,
+      'GENDER' => profile.gender,
+      'B_COUNTRY' => profile.birth_country.name,
+      'B_CITY' => profile.birth_city.name,
+      'R_COUNTRY' => profile.residence_country.name,
+      'R_CITY' => profile.residence_city.name,
+      'L_EXP' => profile.last_experience.name,
+      'PREMIUM' => membership_type
+    }
+    mailchimp.lists.subscribe(list_id, {'email' => email}, user_vars, 'html', false, true, true, true)
+  end
+
+  def update_groups_mailchimp()
+    all_vars = ["EMAIL", "FNAME", "LNAME", "BIRTHDAY", "GENDER", "B_COUNTRY", "B_CITY", "R_COUNTRY", "R_CITY", "L_EXP", "PREMIUM"]
+    groups.official.each do |g|
+      if g.mailchimp?
+        group_mailchimp = Mailchimp::API.new(g.api_key)
+        mailchimp_vars = group_mailchimp.lists.merge_vars({'id' => g.list_id})
+        array = []
+        mailchimp_vars['data'][0]['merge_vars'].each do |v|
+          array << v['tag']
+        end
+
+        all_vars.each do |v|
+          if !array.include?(v)
+            group_mailchimp.lists.merge_var_add(g.list_id, v, v.humanize, [])
+          end
+        end
+
+        user_vars = {
+          'FNAME' => profile.first_name,
+          'LNAME' => profile.last_name,
+          'BIRTHDAY' => profile.born,
+          'GENDER' => profile.gender,
+          'B_COUNTRY' => profile.birth_country.name,
+          'B_CITY' => profile.birth_city.name,
+          'R_COUNTRY' => profile.residence_country.name,
+          'R_CITY' => profile.residence_city.name,
+          'L_EXP' => profile.last_experience.name,
+          'PREMIUM' => membership_type
+        }
+        group_mailchimp.lists.subscribe(g.list_id, {'email' => email}, user_vars, 'html', false, true, true, true)
+      end
     end
   end
 

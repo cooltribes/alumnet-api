@@ -1,5 +1,6 @@
 json.(event, :id, :name, :description, :official, :address, :start_date, :start_hour,
-  :end_date, :end_hour, :capacity, :city_id, :country_id, :created_at, :admission_type, :regular_price, :premium_price)
+  :end_date, :end_hour, :capacity, :city_id, :country_id, :created_at, :admission_type,
+  :regular_price, :premium_price, :upload_files)
 
 json.event_type event.event_type_info
 json.country event.country_info
@@ -27,11 +28,17 @@ json.maybe_count event.attendances.maybe.count
 json.not_going_count event.attendances.not_going.count
 
 attendance = event.attendance_for(current_user)
-
 if attendance
   json.attendance_info attendance, :id, :status, :event_id, :user_id, :created_at
 else
   json.attendance_info nil
+end
+
+payment = event.payment_for(current_user)
+if payment
+  json.payment_info payment, :id, :price, :reference, :event_id, :user_id, :attendance_id, :created_at
+else
+  json.payment_info nil
 end
 
 json.admin event.is_admin?(current_user)

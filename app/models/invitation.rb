@@ -16,7 +16,7 @@ class Invitation < ActiveRecord::Base
   ## class methods
   def self.mark_as_accepted(token, guest)
     return unless token.present?
-    invitation = unaccepted.find_by(token: token)
+    invitation = find_by(token: token)
     invitation.accept!(guest) if invitation
   end
 

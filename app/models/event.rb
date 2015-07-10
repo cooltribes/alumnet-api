@@ -1,17 +1,24 @@
 class Event < ActiveRecord::Base
+  acts_as_paranoid
   include EventHelpers
   mount_uploader :cover, CoverUploader
   enum event_type: [:open, :closed, :secret]
 
+  #upload_files
+  # "0" -> Only the admins can upload
+  # "1" -> All Members can upload
+
   ## Virtual Attributes
   attr_accessor :cover_uploader
-  attr_accessor :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH
+  attr_accessor :imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH
   attr_accessor :invite_group_members
 
   ### Relations
   has_many :attendances, dependent: :destroy
   has_many :posts, as: :postable, dependent: :destroy
   has_many :albums, as: :albumable, dependent: :destroy
+  has_many :folders, as: :folderable, dependent: :destroy
+  has_many :event_payments, dependent: :destroy
   belongs_to :creator, class_name: "User"
   belongs_to :country
   belongs_to :city
@@ -39,12 +46,37 @@ class Event < ActiveRecord::Base
     cover.recreate_versions! if imgX1.present?
   end
 
+  def is_open?
+    event_type == 0
+  end
+
+  def is_close?
+    event_type == 1
+  end
+
+  def is_secret?
+    event_type == 2
+  end
+
+  def assistants
+    ##TODO: Apply logic for close and secret.
+    if is_open?
+      attendances.going
+    else
+      []
+    end
+  end
+
   def create_attendance_for(user)
     attendances.find_or_create_by(user: user)
   end
 
   def attendance_for(user)
     attendances.find_by(user_id: user.id)
+  end
+
+  def payment_for(user)
+    event_payments.find_by(user_id: user.id)
   end
 
   def contacts_for(user, query)

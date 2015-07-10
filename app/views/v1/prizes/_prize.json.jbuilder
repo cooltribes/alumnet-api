@@ -1,1 +1,1 @@
-json.(prize, :id, :name, :description, :status, :price, :created_at, :updated_at, :prize_type)
+json.(prize, :id, :name, :description, :status, :price, :created_at, :updated_at, :prize_type, :quantity, :image)

@@ -89,8 +89,41 @@ class V1::GroupsController < V1::BaseController
       if success
         begin
           @group.members.each do |member|
-            @mc_group.lists.subscribe(@group.list_id, {'email' => member.email}, nil, 'html', false, true, true, true)
+            member.subscribe_to_mailchimp_list(@mc_group, @group.list_id)
           end
+        rescue Mailchimp::ListDoesNotExistError
+          success = false
+          message = 'List does not exist'
+        rescue Mailchimp::Error => ex
+          success = false
+          if ex.message
+            message = ex.message
+          else
+            message = "An unknown error occurred"
+          end
+        end
+        render json: { success: success, message: message }
+      else
+        render json: { success: false,  message: 'Invalid API Key' }
+      end
+    else
+      render json: { success: false,  message: 'Group does not have mailchimp' }
+    end
+  end
+
+  def validate_mailchimp
+    if @group.mailchimp
+      success = true
+      message = 'No error'
+      begin
+        @mc_group = Mailchimp::API.new(@group.api_key)
+      rescue Mailchimp::InvalidApiKeyError
+        success = false
+      end
+
+      if success
+        begin
+          @mc_group.lists.activity(@group.list_id)
         rescue Mailchimp::ListDoesNotExistError
           success = false
           message = 'List does not exist'
@@ -119,11 +152,11 @@ class V1::GroupsController < V1::BaseController
 
   def group_params
     params.permit(:name, :description, :cover, :group_type, :official, :country_id,
-      :city_id, :join_process, :mailchimp, :api_key, :list_id)
+      :city_id, :join_process, :mailchimp, :api_key, :list_id, :upload_files)
   end
 
   def crop_params
-    params.permit(:imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH)
+    params.permit(:imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH)
   end
 
 end

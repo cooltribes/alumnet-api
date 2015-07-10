@@ -32,7 +32,7 @@ class V1::BasePostsController < V1::BaseController
 
   def destroy
     authorize @post
-    @post.destroy
+    @post.really_destroy!
     head :no_content
   end
 

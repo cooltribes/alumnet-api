@@ -61,6 +61,13 @@ class ProfindaAdminApi
     @last_response.success?
   end
 
+  def dictionary_objects_by_id(collection_ids)
+    return [] if collection_ids.empty?
+    options = { headers: authorized_headers, body: {}, query: { ids: collection_ids } }
+    @last_response = self.class.get("/admin/dictionary_objects", options)
+    @last_response.parsed_response["entries"]
+  end
+
   ## class Methods
   protected
     def authorized_headers

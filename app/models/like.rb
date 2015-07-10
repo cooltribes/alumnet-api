@@ -8,4 +8,12 @@ class Like < ActiveRecord::Base
   ### Validations
   validates_uniqueness_of :user_id, scope: [:likeable_id, :likeable_type],
     message: "already made like!"
+
+  after_create :notify_to_author
+
+  private
+
+    def notify_to_author
+      Notification.notify_like(self)
+    end
 end

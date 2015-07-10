@@ -17,12 +17,13 @@ class V1::CountriesController < V1::BaseController
 
   def cities
     @q = @country.cities.search(params[:q])
-    @cities = @q.result
+    @cities = @q.result.order(name: :asc)
   end
 
   def committees
+    other_committee = Committee.find_by(name: "Other")
     @q = @country.committees.search(params[:q])
-    @committees = @q.result
+    @committees = @q.result | [other_committee]
   end
 
 

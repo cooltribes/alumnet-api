@@ -31,7 +31,7 @@ class V1::BaseCommentsController < V1::BaseController
 
   def destroy
     authorize @comment
-    @comment.destroy
+    @comment.really_destroy!
     head :no_content
   end
 

@@ -16,6 +16,8 @@ class V1::ProfilesController < V1::BaseController
     authorize @profile
     if @profile.update(profile_params)
       @profile.save_profinda_profile
+      @profile.user.subscribe_to_mailchimp_list(@mc, Settings.mailchimp_general_list_id)
+      @profile.user.update_groups_mailchimp()
       render :show
     else
       render json: @profile.errors, status: :unprocessable_entity
@@ -33,6 +35,6 @@ class V1::ProfilesController < V1::BaseController
     end
 
     def crop_params
-      params.permit(:imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH)
+      params.permit(:imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH)
     end
 end

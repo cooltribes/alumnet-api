@@ -22,6 +22,7 @@ Rails.application.routes.draw do
       post :send_invitations
       resource :profile, only: [:show, :update], controller: 'me/profiles'
       resources :posts, controller: 'me/posts'
+
       resources :friendships, except: :show, controller: 'me/friendships' do
         get :friends, on: :collection
       end
@@ -50,6 +51,8 @@ Rails.application.routes.draw do
       resources :posts, controller: 'users/posts'
       resources :events, controller: 'users/events'
       resources :albums, controller: 'users/albums'
+      resources :business, controller: 'users/business'
+
       resources :memberships, except: :show, controller: 'users/memberships' do
         get :groups, on: :collection
       end
@@ -58,6 +61,10 @@ Rails.application.routes.draw do
         get :commons, on: :collection
       end
       resources :subscriptions, except: :show, controller: 'users/subscriptions'
+      resources :actions, except: :show, controller: 'users/actions' do
+        get :history, on: :collection
+      end
+      resources :prizes, except: :show, controller: 'users/prizes'
     end
 
     resources :groups do
@@ -65,12 +72,14 @@ Rails.application.routes.draw do
       post :add_group, on: :member
       get :subgroups, on: :member
       get :migrate_users, on: :member
+      get :validate_mailchimp, on: :member
       resources :posts, controller: 'groups/posts'
       resources :events, controller: 'groups/events'
       resources :memberships, except: :show, controller: 'groups/memberships' do
         get :members, on: :collection
       end
       resources :albums, controller: 'groups/albums'
+      resources :folders, controller: 'groups/folders'
     end
 
     resources :events do
@@ -79,17 +88,42 @@ Rails.application.routes.draw do
       resources :posts, controller: 'events/posts'
       resources :albums, controller: 'events/albums'
       resources :payments, controller: 'events/payments'
+      resources :folders, controller: 'events/folders'
     end
+
+    resources :job_exchanges, :business_exchanges do
+      get :my, on: :collection
+      get :automatches, on: :collection
+      get :applied, on: :collection
+      get :matches, on: :member
+      put :apply, on: :member
+    end
+
+    resources :task_invitations, except: :show
 
     resources :attendances
 
-    resources :job_exchanges
-
     resources :actions
+
+    resources :features, except: :show do
+      get :validate, on: :collection
+    end
 
     resources :prizes
 
     resources :banners
+
+    resources :keywords
+
+    resources :companies
+
+    resources :business, only: :show do
+      resources :links, controller: 'business/links'
+    end
+
+    resources :folders, only: :show do
+      resources :attachments, controller: 'folders/attachments'
+    end
 
     resources :pictures do
       post :like, on: :member
@@ -119,6 +153,7 @@ Rails.application.routes.draw do
     end
 
     resources :committees, only: [:index]
+    resources :sectors, only: [:index]
 
     resources :profiles, only: [:show, :update] do
       post :cropping, on: :member

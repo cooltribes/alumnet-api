@@ -17,6 +17,14 @@ User.blueprint(:admin) do
   profile { Profile.make! }
 end
 
+User.blueprint(:with_points) do
+  email { Faker::Internet.email }
+  password { "12345678A" }
+  password_confirmation { "12345678A" }
+  status { 1 }
+  profile { Profile.make!(points: 500) }
+end
+
 OauthProvider.blueprint(:facebook) do
   provider { 'facebook' }
   uid { 'UIDFACEBOOK' }
@@ -277,7 +285,6 @@ Invitation.blueprint do
   user { User.make }
   guest_email { Faker::Internet.email }
 end
-<<<<<<< HEAD
 
 Task.blueprint(:business) do
   name { "Testing #{sn}" }
@@ -356,11 +363,87 @@ Prize.blueprint do
   description { Faker::Lorem.sentence }
   status { 'active' }
   price { 50 }
+  prize_type { 1 }
+  quantity { 1 }
 end
 
 UserPrize.blueprint do
   user { User.make! }
   prize { Prize.make! }
   status { 'active' }
-  price { price.value }
+  # price { prize.price }
+  # prize_type { prize.prize_type }
+  # remaining_quantity { prize.quantity }
+  price { 50 }
+  prize_type { 1 }
+  remaining_quantity { 1 }
+end
+
+Company.blueprint do
+  name { "Company #{sn}"}
+  logo { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
+end
+
+Keyword.blueprint do
+  name { "Keyword #{sn}" }
+end
+
+CompanyRelation.blueprint do
+  company { Company.make! }
+  profile { User.make!.profile }
+  offer { "Ofrezco " + Faker::Lorem.sentence }
+  search { "Busco " + Faker::Lorem.sentence }
+  business_me { "Por que hacer negocios " + Faker::Lorem.sentence }
+end
+
+CompanyRelationKeyword.blueprint(:offer) do
+  company_relation { CompanyRelation.make! }
+  keyword { Keyword.make! }
+  keyword_type { 0 }
+end
+
+CompanyRelationKeyword.blueprint(:search) do
+  company_relation { CompanyRelation.make! }
+  keyword { Keyword.make! }
+  keyword_type { 1 }
+end
+
+TaskInvitation.blueprint do
+  user { User.make! }
+  task { Task.make!(:job) }
+  accepted { false }
+end
+
+Folder.blueprint do
+  name { "Folder #{sn}" }
+  creator { User.make! }
+end
+
+Attachment.blueprint do
+  name { "Attachment #{sn}" }
+  file { File.open("#{Rails.root}/spec/fixtures/contacts.csv") }
+  uploader { User.make! }
+  folder { Folder.make! }
+end
+
+Link.blueprint do
+  title { "Link #{sn}"}
+  description { Faker::Lorem.sentence }
+  url { Faker::Internet.url }
+  company_relation { CompanyRelation.make! }
+end
+
+Feature.blueprint do
+  name { "Feature #{sn}" }
+  description { Faker::Lorem.sentence }
+  status { 'active' }
+  key_name { 'some_key_name' }
+end
+
+EventPayment.blueprint do
+  price { 1000 }
+  reference { "XXXX-XXXX-#{sn}"}
+  user { User.make! }
+  event { Event.make! }
+  attendance_id { Attendance.make! }
 end

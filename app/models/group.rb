@@ -6,14 +6,19 @@ class Group < ActiveRecord::Base
 
   ## Virtual Attributes
   attr_accessor :cover_uploader
-  attr_accessor :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH
+  attr_accessor :imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH
 
   #join_process
   # "0" -> All Members can invite
   # "1" -> All Members can invite, but the admins approved
   # "2" -> Only the admins can invite
 
+  #upload_files
+  # "0" -> Only the admins can upload
+  # "1" -> All Members can upload
+
   ### Relations
+
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships
   has_many :posts, as: :postable, dependent: :destroy
@@ -23,6 +28,7 @@ class Group < ActiveRecord::Base
   belongs_to :country
   belongs_to :city
   has_many :albums, as: :albumable, dependent: :destroy
+  has_many :folders, as: :folderable, dependent: :destroy
 
   validates_presence_of :api_key, :list_id, if: 'mailchimp?'
 
@@ -55,6 +61,10 @@ class Group < ActiveRecord::Base
     save!
   end
 
+  def mode
+    official? ? "Official" : "Unofficial"
+  end
+
   ### all membership
   def members
     users.where("memberships.approved = ?", true)
@@ -68,33 +78,41 @@ class Group < ActiveRecord::Base
     admins.where("users.id = ?", user.id).any?
   end
 
+  def user_is_member?(user)
+    members.where("users.id = ?", user.id).any?
+  end
+
+  def user_can_upload_file?(user)
+    upload_files == 0 ? user_is_admin?(user) : user_is_member?(user)
+  end
+
   def which_friends_in(user)
     members & user.my_friends
   end
 
-  def build_membership_for(user, admin = false)
+  def build_membership_for(user, admin_flag = false)
     if join_process == 0
       memberships.build(user: user, approved: true)
     elsif join_process == 1
-      memberships.build(user: user, approved: admin)
+      memberships.build(user: user, approved: admin_flag)
     elsif join_process == 2
-      memberships.build(user: user, approved: admin)
+      memberships.build(user: user, approved: admin_flag)
     end
   end
 
   ## TODO: refactor this
-  def notify(user, admin)
+  def notify(user, sender, admin_flag)
     if join_process == 0
-      Notification.notify_join_to_users(user, self)
+      Notification.notify_join_to_users(user, sender, self)
       Notification.notify_join_to_admins(admins.to_a, user, self)
     elsif join_process == 1
-      Notification.notify_request_to_users(user, self)
+      Notification.notify_request_to_users(user, self, current_user)
       Notification.notify_request_to_admins(admins.to_a, user, self)
     elsif join_process == 2
-      if admin
-        Notification.notify_join_to_users(user, self)
+      if admin_flag
+        Notification.notify_join_to_users(user, sender, self)
       else
-        Notification.notify_request_to_users(user, self)
+        Notification.notify_request_to_users(user, self, current_user)
         Notification.notify_request_to_admins(admins.to_a, user, self)
       end
     end
@@ -185,5 +203,5 @@ class Group < ActiveRecord::Base
         album.pictures << picture
       end
     end
-       
+
 end
