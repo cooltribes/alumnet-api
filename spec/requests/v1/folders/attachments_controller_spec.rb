@@ -55,10 +55,10 @@ describe V1::Folders::AttachmentsController, type: :request do
 
   describe "PUT /folders/:folder_id/attachments/:id" do
     it "edit an attachment of folder" do
-      # attachment = Attachment.make!(folder: folder, uploader: current_user)
-      # put folder_attachment_path(folder, attachment), { name: "New name of Attachment" }, basic_header(current_user.auth_token)
-      # expect(response.status).to eq 200
-      # expect(json["name"]).to eq("New name of Attachment")
+      attachment = Attachment.make!(folder: folder, uploader: current_user)
+      put folder_attachment_path(folder, attachment), { name: "New name of Attachment" }, basic_header(current_user.auth_token)
+      expect(response.status).to eq 200
+      expect(json["name"]).to eq("New name of Attachment")
     end
 
     it "should change the folder of attachment" do

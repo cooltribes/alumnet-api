@@ -20,7 +20,7 @@ class Notification
 
   def self.notify_join_to_users(users, sender, group)
     notification = new(users)
-    if users == current_user
+    if users == sender
       subject = "You've joined the #{group.name} group!"
       body = "Welcome! You've joined the #{group.name} group"
     else
@@ -139,7 +139,7 @@ class Notification
   end
 
   def self.notify_approval_request_to_user(user, approver)
-    notification = self.new(approver)
+    notification = new(approver)
     subject = "#{user.name} wants to be approved in AlumNet"
     body = "Hello, I'm registering in Alumnet. Please approve my membership"
     notification.send_notification(subject, body)
@@ -149,4 +149,46 @@ class Notification
     end
   end
 
+  def self.notify_new_post(users, post)
+    notification = new(users)
+    subject = "The #{post.postable.class.to_s} #{post.postable.name} has new post"
+    body = "Hello! the user #{post.user.name} posted in #{post.postable.class.to_s} #{post.postable.name}"
+    notfy = notification.send_notification(subject, body)
+    notification.send_pusher_notification
+    NotificationDetail.notify_new_post(notfy, post)
+  end
+
+  def self.notify_like(like)
+    likeable = like.likeable
+    if like.likeable_type == "Post" || like.likeable_type == "Comment"
+      return if likeable.user == like.user
+      notification = new(likeable.user)
+    elsif like.likeable_type == "Picture"
+      return if likeable.uploader == like.user
+      notification = new(likeable.uploader)
+    end
+    subject = "The user #{like.user.name} likes your #{likeable.class.to_s}"
+    body = "The user #{like.user.name} likes your #{likeable.class.to_s}"
+    notfy = notification.send_notification(subject, body)
+    notification.send_pusher_notification
+    NotificationDetail.notify_like(notfy, like.user, likeable)
+  end
+
+  def self.notify_comment_in_post_to_author(author, comment, post)
+    notification = new(author)
+    subject = "You have new comment in Post"
+    body = "The user #{comment.user.name} commented in your post"
+    notfy = notification.send_notification(subject, body)
+    notification.send_pusher_notification
+    NotificationDetail.notify_comment_in_post(notfy, comment.user, post)
+  end
+
+  def self.notify_comment_in_post_to_users(users, comment, post)
+    notification = new(users)
+    subject = "You have new comment in Post"
+    body = "The user #{comment.user.name} commented in a post where you comment"
+    notfy = notification.send_notification(subject, body)
+    notification.send_pusher_notification
+    NotificationDetail.notify_comment_in_post(notfy, comment.user, post)
+  end
 end

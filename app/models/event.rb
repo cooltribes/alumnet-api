@@ -1,4 +1,5 @@
 class Event < ActiveRecord::Base
+  acts_as_paranoid
   include EventHelpers
   mount_uploader :cover, CoverUploader
   enum event_type: [:open, :closed, :secret]
@@ -43,6 +44,27 @@ class Event < ActiveRecord::Base
   ### Croping Cover
   def crop
     cover.recreate_versions! if imgX1.present?
+  end
+
+  def is_open?
+    event_type == 0
+  end
+
+  def is_close?
+    event_type == 1
+  end
+
+  def is_secret?
+    event_type == 2
+  end
+
+  def assistants
+    ##TODO: Apply logic for close and secret.
+    if is_open?
+      attendances.going
+    else
+      []
+    end
   end
 
   def create_attendance_for(user)

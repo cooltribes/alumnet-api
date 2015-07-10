@@ -24,7 +24,7 @@ class V1::JobExchangesController < V1::TasksController
     end
 
     def task_params
-      params.permit(:name, :description, :must_have_list, :nice_have_list,
+      params.permit(:name, :description, :formatted_description, :must_have_list, :nice_have_list,
         :company_id, :city_id, :country_id, :offer, :employment_type, :position_type)
     end
 end

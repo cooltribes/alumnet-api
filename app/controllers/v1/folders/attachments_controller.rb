@@ -23,7 +23,8 @@ class V1::Folders::AttachmentsController < V1::BaseController
 
   def update
     authorize @attachment
-    @attachment.folder = @new_folder
+    @attachment.attributes = attachment_update_params
+    @attachment.folder = @new_folder if @new_folder
     if @attachment.save
       render :show, status: :ok
     else
@@ -52,6 +53,7 @@ class V1::Folders::AttachmentsController < V1::BaseController
   end
 
   def check_new_folder
+    return unless params[:new_folder_id].present?
     @new_folder = Folder.find_by(id: params[:new_folder_id])
     unless @new_folder
       render json: 'folder not found'
@@ -60,5 +62,9 @@ class V1::Folders::AttachmentsController < V1::BaseController
 
   def attachment_params
     params.permit(:name, :file, :folder_id)
+  end
+
+  def attachment_update_params
+    params.permit(:name)
   end
 end
