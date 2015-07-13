@@ -46,4 +46,10 @@ namespace :data_fixture do
     Action.create!(name: "User invite", description: "Points awarded when invited user registers on Alumnet", status: 1, value: 50, key_name: "accepted_invitation")
     Action.create!(name: "Approval request", description: "Points awarded when user accepts an approval request on Alumnet", status: 1, value: 10, key_name: "request_approved")
   end
+
+  desc "create initial premium features (disabled)"
+  task features: :environment do
+    Feature.create!(name: "Job Post", description: "Post a job is a member only feature", status: 0, key_name: "job_post")
+    Feature.create!(name: "Apply for a job", description: "Apply for a job is a member only feature", status: 0, key_name: "apply_for_a_job")
+  end
 end

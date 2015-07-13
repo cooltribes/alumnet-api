@@ -1,4 +1,5 @@
 class Event < ActiveRecord::Base
+  acts_as_paranoid
   include EventHelpers
   mount_uploader :cover, CoverUploader
   enum event_type: [:open, :closed, :secret]

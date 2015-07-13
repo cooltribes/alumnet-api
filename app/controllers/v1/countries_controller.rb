@@ -21,8 +21,9 @@ class V1::CountriesController < V1::BaseController
   end
 
   def committees
+    other_committee = Committee.find_by(name: "Other")
     @q = @country.committees.search(params[:q])
-    @committees = @q.result
+    @committees = @q.result | [other_committee]
   end
 
 

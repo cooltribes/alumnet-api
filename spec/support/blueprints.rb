@@ -432,3 +432,18 @@ Link.blueprint do
   url { Faker::Internet.url }
   company_relation { CompanyRelation.make! }
 end
+
+Feature.blueprint do
+  name { "Feature #{sn}" }
+  description { Faker::Lorem.sentence }
+  status { 'active' }
+  key_name { 'some_key_name' }
+end
+
+EventPayment.blueprint do
+  price { 1000 }
+  reference { "XXXX-XXXX-#{sn}"}
+  user { User.make! }
+  event { Event.make! }
+  attendance_id { Attendance.make! }
+end

@@ -29,11 +29,7 @@ class User < ActiveRecord::Base
   has_many :attendances, dependent: :destroy
   has_many :events, as: :eventable, dependent: :destroy
   has_many :invited_events, through: :attendances, source: :event
-  has_one :profile, dependent: :destroy
-  belongs_to :admin_location, polymorphic: true
-  #These are the requests that "self" has made to others
   has_many :approval_requests, dependent: :destroy
-  #These are the requests that were made for "self" to approve
   has_many :pending_approval_requests, class_name: "ApprovalRequest", foreign_key: "approver_id"
   has_many :oauth_providers, dependent: :destroy
   has_many :contacts, dependent: :destroy
@@ -42,9 +38,11 @@ class User < ActiveRecord::Base
   has_many :user_actions, dependent: :destroy
   has_many :user_prizes, dependent: :destroy
   has_many :prizes, through: :user_prizes
-  #has_many :actions, through: :user_actions
   has_many :task_invitations, dependent: :destroy
   has_many :matches, dependent: :destroy
+
+  has_one :profile, dependent: :destroy
+  belongs_to :admin_location, polymorphic: true
 
   ### Scopes
   scope :active, -> { where(status: 1) }
@@ -516,8 +514,8 @@ class User < ActiveRecord::Base
         end
 
         user_vars = {
-          'FNAME' => profile.first_name, 
-          'LNAME' => profile.last_name, 
+          'FNAME' => profile.first_name,
+          'LNAME' => profile.last_name,
           'BIRTHDAY' => profile.born,
           'GENDER' => profile.gender,
           'B_COUNTRY' => profile.birth_country.name,
