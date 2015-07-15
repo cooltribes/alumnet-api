@@ -51,5 +51,7 @@ namespace :data_fixture do
   task features: :environment do
     Feature.create!(name: "Job Post", description: "Post a job is a member only feature", status: 0, key_name: "job_post")
     Feature.create!(name: "Apply for a job", description: "Apply for a job is a member only feature", status: 0, key_name: "apply_for_a_job")
+    Feature.create!(name: "Get help", description: "Get help on business exchange is a member only feature", status: 0, key_name: "get_help")
+    Feature.create!(name: "Give help", description: "Give help on business exchange is a member only feature", status: 0, key_name: "give_help")
   end
 end
