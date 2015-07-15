@@ -30,7 +30,11 @@ class V1::FeaturesController < V1::BaseController
   end
 
   def validate
-    render json: { validation: @feature.status == 'active' }
+    if @feature
+      render json: { validation: @feature.status == 'active' }
+    else
+      render json: { validation: false }
+    end
   end
 
   private
