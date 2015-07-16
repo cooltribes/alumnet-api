@@ -6,16 +6,20 @@ class AlumnetUsersStatistics
   end
 
   def per_type_of_membership(init_date, end_date, interval)
-    alumni   = group_and_count_regular_users(init_date, end_date, interval)
-    members  = group_and_count_members(init_date, end_date, interval)
-    lifetime = group_and_count_lifetime(init_date, end_date, interval)
-    format_for_line_graph [alumni, members, lifetime], interval
+    data = {}
+    registrants = group_and_count_registrants(init_date, end_date, interval)
+    members     = group_and_count_members(init_date, end_date, interval)
+    lifetime    = group_and_count_lifetime(init_date, end_date, interval)
+    data[:line] = format_for_line_graph [registrants, members, lifetime], interval
+    data[:pie]  = format_for_pie_graph [total_from_hash(registrants), total_from_hash(members),
+      total_from_hash(lifetime) ]
+    data
   end
 
   ## QUERYS
 
-  def group_and_count_regular_users(init_date, end_date, interval)
-    group_and_count_users query_for_regular_users(init_date, end_date), interval
+  def group_and_count_registrants(init_date, end_date, interval)
+    group_and_count_users query_for_registrants(init_date, end_date), interval
   end
 
   def group_and_count_members(init_date, end_date, interval)
@@ -32,13 +36,13 @@ class AlumnetUsersStatistics
       where(role: User::ROLES[:regular])
   end
 
-  def query_for_admin_users(init_date, end_date)
+  def query_for_admins(init_date, end_date)
     User.where("date(active_at) between ? and ?", init_date, end_date).
       where(status: 1, member: 0).
       where.not.(role: User::ROLES[:regular])
   end
 
-  def query_for_alumni(init_date, end_date)
+  def query_for_registrants(init_date, end_date)
     User.where("date(active_at) between ? and ?", init_date, end_date).
       where(status: 1, member: 0)
   end
@@ -92,11 +96,20 @@ class AlumnetUsersStatistics
 
   def format_for_line_graph(data_array, interval)
     data = []
-    data << [interval.capitalize, "Alumni", "Members", "LT Members"]
-    alumni, members, lifetime = data_array[0], data_array[1], data_array[2]
-    keys = (alumni.keys + members.keys + lifetime.keys).uniq
+    data << [interval.capitalize, "Registrants", "Members", "LT Members"]
+    registrants, members, lifetime = data_array[0], data_array[1], data_array[2]
+    keys = (registrants.keys + members.keys + lifetime.keys).uniq
     keys.each do |key|
-      data << [key, alumni[key] || 0, members[key] || 0, lifetime[key] || 0]
+      data << [key, registrants[key] || 0, members[key] || 0, lifetime[key] || 0]
+    end
+    data
+  end
+
+  def format_for_pie_graph(data_array)
+    data = []
+    data << ["Users", "Count"]
+    ["Registrants", "Members", "LT Members"].each_with_index do |value, index|
+      data << [value, data_array[index]]
     end
     data
   end
