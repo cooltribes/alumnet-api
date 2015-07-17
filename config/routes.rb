@@ -167,6 +167,7 @@ Rails.application.routes.draw do
     resources :skills, only: :index
 
     namespace :admin do
+      get 'stats/type_of_membership', to: 'stats#type_of_membership'
       resources :users, except: [:new, :edit] do
         put :activate, on: :member
         put :banned, on: :member
