@@ -120,11 +120,16 @@ class User < ActiveRecord::Base
   def activate!
     if profile.skills? || profile.approval?
       activate_in_profinda
-      active!
-      profile.approval!
+      activate_in_alumnet
     else
       false
     end
+  end
+
+  def activate_in_alumnet
+    profile.approval! unless profile.approval?
+    active!
+    touch(:active_at)
   end
 
   def set_admin_role(params)
