@@ -91,7 +91,7 @@ Rails.application.routes.draw do
       resources :folders, controller: 'events/folders'
     end
 
-    resources :job_exchanges, :business_exchanges do
+    resources :job_exchanges, :business_exchanges, :meetup_exchanges do
       get :my, on: :collection
       get :automatches, on: :collection
       get :applied, on: :collection
@@ -167,6 +167,7 @@ Rails.application.routes.draw do
     resources :skills, only: :index
 
     namespace :admin do
+      get 'stats/type_of_membership', to: 'stats#type_of_membership'
       resources :users, except: [:new, :edit] do
         put :activate, on: :member
         put :banned, on: :member
