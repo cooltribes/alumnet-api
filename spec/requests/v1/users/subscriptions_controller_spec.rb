@@ -53,6 +53,19 @@ describe V1::Users::SubscriptionsController, type: :request do
       end
     end
 
+    # context "with like from user" do
+    #   it "return a json with error" do
+    #     user = User.make!
+    #     post_model = Post.make!(postable: group)
+    #     Like.make!(user: user, likeable: post_model)
+    #     expect {
+    #       post like_post_path(post_model), {}, basic_header(user.auth_token)
+    #     }.to change(post_model, :likes_count).by(0)
+    #     expect(response.status).to eq 422
+    #     expect(json['errors']).to eq(["User already made like!"])
+    #   end
+    # end
+
     context "with invalid attributes" do
       pending
       # it "return the errors in format json" do
