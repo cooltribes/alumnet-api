@@ -117,7 +117,7 @@ Rails.application.routes.draw do
 
     resources :companies
 
-    resources :business, only: :show do
+    resources :business, only: [:index, :show] do
       resources :links, controller: 'business/links'
     end
 
