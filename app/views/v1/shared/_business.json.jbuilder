@@ -1,4 +1,4 @@
-json.(business, :id, :offer, :search, :business_me)
+json.(business, :id, :offer, :search, :business_me, :tagline)
 
 user = business.profile.user
 
