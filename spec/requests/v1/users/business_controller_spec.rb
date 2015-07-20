@@ -22,16 +22,12 @@ describe V1::Users::BusinessController, type: :request do
   end
 
   describe "GET /me/business" do
-
-    before do
-      2.times{
+    it "should return all companies relations that user has" do
+      2.times do
         company = Company.make!
         CompanyRelation.make!(profile: current_user.profile, company: company)
-      }
-
-    end
-
-    it "should return all companies relations that user has" do
+        CompanyRelation.make!
+      end
       get user_business_index_path(current_user), {}, basic_header(current_user.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(2)
