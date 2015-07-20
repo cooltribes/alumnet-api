@@ -117,7 +117,8 @@ class AlumnetUsersStatistics
   private
 
   def total_from_hash(hash)
-    hash.values.reduce(:+)
+    value = hash.values.reduce(:+)
+    value ? value : 0
   end
 
   def format_years_results(result_hash)
