@@ -1,4 +1,5 @@
 class Subscription < ActiveRecord::Base
+  include PaymentableMethods
   ### Relations
   belongs_to :user
   belongs_to :creator, class_name: "User"
