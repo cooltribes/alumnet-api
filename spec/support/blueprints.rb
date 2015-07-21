@@ -457,3 +457,13 @@ EventPayment.blueprint do
   event { Event.make! }
   attendance_id { Attendance.make! }
 end
+
+Payment.blueprint do
+  subtotal { 900 }
+  iva { 100 }
+  total { 1000 }
+  reference { "XXXX-XXXX-#{sn}"}
+  user { User.make! }
+  paymentable_id { Subscription.make!(:lifetime).id }
+  paymentable_type { "Subscription" }
+end
