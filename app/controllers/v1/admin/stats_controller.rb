@@ -14,8 +14,8 @@ class V1::Admin::StatsController < V1::AdminController
     end
 
     def set_dates
-      @init_date = Date.parse(params[:init_date])
-      @end_date = Date.parse(params[:end_date])
+      @init_date = params[:init_date]
+      @end_date = params[:end_date]
       @interval = params[:interval]
     end
 

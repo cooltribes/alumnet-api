@@ -7,9 +7,9 @@ module StatsHelper
     @admin = User.make!(role: User::ROLES[:regional_admin], admin_location: @region)
   end
 
-  def make_local_admin
-    @country = Country.make!(name: country, region: @region)
-    @admin = User.make!(role: User::ROLES[:regional_admin], admin_location: @country)
+  def make_local_admin(country, region = Region.make!)
+    @country = Country.make!(name: country, region: region)
+    @admin = User.make!(role: User::ROLES[:nacional_admin], admin_location: @country)
   end
 
   def activate_user(user)
