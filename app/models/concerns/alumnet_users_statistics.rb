@@ -18,14 +18,21 @@ class AlumnetUsersStatistics
     data
   end
 
-  def per_country_and_region(init_date, end_date, geo = nil)
+  def per_country_and_region(init_date, end_date, geo = "countries")
     users = {}
     init_date = Date.parse(init_date) - 1
     end_date  = Date.parse(end_date) + 1
-    ["registrants", "members", "lifetime"].each do |type|
-      users[type] =  group_and_count_users_by_country(type, init_date, end_date)
+    if geo == "countries"
+      ["registrants", "members", "lifetime"].each do |type|
+        users[type] = group_and_count_users_by_country(type, init_date, end_date)
+      end
+      format_for_table_of_countries(users)
+    else
+      ["registrants", "members", "lifetime"].each do |type|
+        users[type] = group_and_count_users_by_region(type, init_date, end_date)
+      end
+      format_for_table_of_regions(users)
     end
-    format_for_table_of_countries(users)
   end
 
   def group_and_count_registrants(init_date, end_date, interval)
@@ -42,18 +49,32 @@ class AlumnetUsersStatistics
 
   def group_and_count_users_by_country(type_users, init_date, end_date)
     query = get_query_for(type_users, init_date, end_date)
-    if @user.is_regional_admin?
+    if @user.is_system_admin? || @user.is_alumnet_admin?
+      result = group_and_count_by_country(query)
+    elsif @user.is_regional_admin?
       region = @user.admin_location
       result = group_and_count_by_country(query, region.countries.pluck(:id))
     elsif @user.is_nacional_admin?
       country = @user.admin_location
       result = group_and_count_by_country(query, [country.id])
     else
-      result = group_and_count_by_country(query)
+      return []
     end
     get_country_name(result)
   end
 
+  def group_and_count_users_by_region(type_users, init_date, end_date)
+    results = {}
+    query = get_query_for(type_users, init_date, end_date)
+    if @user.is_system_admin? || @user.is_alumnet_admin?
+      Region.all.each do |region|
+        results.merge!(group_and_count_by_region(query, region))
+      end
+    elsif @user.is_regional_admin?
+      results.merge!(group_and_count_by_region(query, @user.admin_location))
+    end
+    results
+  end
 
   ## QUERYS
 
@@ -134,7 +155,24 @@ class AlumnetUsersStatistics
     end
   end
 
+  def group_and_count_by_region(query, region)
+    countries = region.countries.pluck(:id)
+    results = group_and_count_by_country(query, countries)
+    {region.name => total_from_hash(results)}
+  end
+
   ### HELPERS
+  def format_for_table_of_regions(data_users)
+    data = []
+    data << ["Region", "Registrants", "Members", "LT Members", "Total"]
+    registrants, members, lifetime = data_users["registrants"], data_users["members"], data_users["lifetime"]
+    keys = (registrants.keys + members.keys + lifetime.keys).uniq
+    keys.each do |key|
+      total = registrants[key].to_i + members[key].to_i + lifetime[key].to_i
+      data << [key, registrants[key] || 0, members[key] || 0, lifetime[key] || 0, total]
+    end
+    data
+  end
 
   def format_for_table_of_countries(data_users)
     data = []
