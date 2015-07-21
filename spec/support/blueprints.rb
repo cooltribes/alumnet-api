@@ -15,6 +15,7 @@ User.blueprint(:admin) do
   password_confirmation { "12345678A" }
   role { User::ROLES[:system_admin] }
   profile { Profile.make! }
+  status { 1 }
 end
 
 User.blueprint(:with_points) do
@@ -143,6 +144,14 @@ end
 
 Region.blueprint do
   name { "Region #{sn}" }
+end
+
+Country.blueprint(:simple) do
+  cc_fips { sn }
+  cc_iso { sn }
+  tld { '.xx' }
+  aiesec { false }
+  name { "Country #{sn}"}
 end
 
 Country.blueprint do
