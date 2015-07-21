@@ -1,0 +1,1 @@
+json.array! @payments, partial: 'payment', as: :payment, current_user: @current_user
