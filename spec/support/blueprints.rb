@@ -15,6 +15,7 @@ User.blueprint(:admin) do
   password_confirmation { "12345678A" }
   role { User::ROLES[:system_admin] }
   profile { Profile.make! }
+  status { 1 }
 end
 
 User.blueprint(:with_points) do
@@ -145,6 +146,14 @@ Region.blueprint do
   name { "Region #{sn}" }
 end
 
+Country.blueprint(:simple) do
+  cc_fips { sn }
+  cc_iso { sn }
+  tld { '.xx' }
+  aiesec { false }
+  name { "Country #{sn}"}
+end
+
 Country.blueprint do
   cc_fips { sn }
   cc_iso { sn }
@@ -254,7 +263,7 @@ Subscription.blueprint(:lifetime) do
 end
 
 Subscription.blueprint(:premium) do
-  name { "LifeTime"}
+  name { "Premium"}
   subscription_type { Subscription::TYPES[:premium] }
   status { 1 }
 end
@@ -262,6 +271,7 @@ end
 UserSubscription.blueprint(:lifetime) do
   start_date { Date.today }
   end_date { nil }
+  lifetime { true }
   status { 1 }
   ownership_type { 1 }
   user { User.make! }
@@ -273,6 +283,7 @@ end
 UserSubscription.blueprint(:premium) do
   start_date { Date.today }
   end_date { Date.today + 365 }
+  lifetime { false }
   status { 1 }
   ownership_type { 1 }
   user { User.make! }

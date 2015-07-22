@@ -4,7 +4,7 @@ class V1::TasksController < V1::BaseController
 
   def index
     @q = Task.search(params[:q])
-    @tasks = @q.result
+    @tasks = @q.result.limit(params[:limit])
     render 'v1/tasks/index'
   end
 
