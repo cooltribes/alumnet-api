@@ -14,7 +14,6 @@ class V1::PaymentsController < V1::BaseController
     @payment = Payment.new(payment_params)
     @payment.paymentable = @paymentable
     @payment.save
-    byebug
     render :show, status: :created, location: @payment
   end
 
