@@ -15,12 +15,6 @@ class V1::Users::SubscriptionsController < V1::BaseController
     else
       render json: @subscription.errors, status: :unprocessable_entity
     end
-    # @user_subscription = @user.build_subscription(subscription_params, current_user)
-    # if @user_subscription.save
-    #   render :show, status: :created
-    # else
-    #   render json: @user_subscription.errors, status: :unprocessable_entity
-    # end
   end
 
   def update
