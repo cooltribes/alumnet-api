@@ -77,12 +77,11 @@ class Event < ActiveRecord::Base
 
   def user_is_going?(user)
     attendance = attendances.find_by(user_id: user.id)
-    
-    attendance && attendance.status == 1
+    attendance && attendance.status == "going"
   end
 
   def user_can_upload_files?(user)
-    upload_files == 0 ? is_admin?(user) : user_is_going?(user)
+    upload_files == 0 ? is_admin?(user) : is_admin?(user) || user_is_going?(user)
   end
 
   def payment_for(user)

@@ -3,7 +3,12 @@ class V1::Admin::StatsController < V1::AdminController
   before_action :set_dates
 
   def type_of_membership
-    graphs_info = @stats.per_type_of_membership(@init_date, @end_date, @interval)
+    graphs_info = @stats.per_type_of_membership(@init_date, @end_date, params[:interval])
+    render json: graphs_info
+  end
+
+  def country_and_region
+    graphs_info = @stats.per_country_and_region(@init_date, @end_date, params[:geo])
     render json: graphs_info
   end
 
@@ -14,9 +19,8 @@ class V1::Admin::StatsController < V1::AdminController
     end
 
     def set_dates
-      @init_date = Date.parse(params[:init_date])
-      @end_date = Date.parse(params[:end_date])
-      @interval = params[:interval]
+      @init_date = params[:init_date]
+      @end_date = params[:end_date]
     end
 
 end

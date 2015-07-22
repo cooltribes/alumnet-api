@@ -41,4 +41,18 @@ RSpec.describe Event, :type => :model do
       expect(event.is_admin?(other_user)).to eq(false)
     end
   end
+
+  describe "#user_can_upload_files?" do
+    it "return true if user can upload file in event" do
+      creator = User.make!
+      event = Event.make!(eventable: creator, creator: creator, upload_files: 1)
+      event.create_attendance_for(creator)
+      # event.attendances.find_by(user: creator).going!
+      expect(event.user_can_upload_files?(creator)).to eq(true)
+      user = User.make!
+      event.create_attendance_for(user)
+      event.attendances.find_by(user: user).going!
+      expect(event.user_can_upload_files?(user)).to eq(true)
+    end
+  end
 end
