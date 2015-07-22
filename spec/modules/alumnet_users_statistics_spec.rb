@@ -82,7 +82,6 @@ RSpec.describe AlumnetUsersStatistics, type: :stats do
     end
   end
 
-
   describe "#format_for_line_graph(data_array, interval)" do
     it "convert the hash data in to array for google graph" do
       user = make_regional_admin
@@ -92,7 +91,7 @@ RSpec.describe AlumnetUsersStatistics, type: :stats do
       stats = AlumnetUsersStatistics.new(user)
       data_array = [regulars, members, lifetime]
       expect(stats.format_for_line_graph(data_array, "years")).to eq([
-        ['Years', 'Alumni', 'Members', 'LT Members'],
+        ['Years', 'Registrants', 'Members', 'LT Members'],
         ['2010', 10, 0, 14],
         ['2011', 40, 80, 55],
         ['2012', 10, 20, 33],
@@ -116,5 +115,61 @@ RSpec.describe AlumnetUsersStatistics, type: :stats do
     #   end_date = Date.parse('31-12-2015')
     #   expect(stats.per_type_of_membership(init_date, end_date, 'days')).to eq([])
     # }
+  end
+
+  describe "#group_and_count_users_by_country(type_users, init_date, end_date)" do
+    context "with local admin" do
+      it "return all active users group by residence country and type of users" do
+        init_date = Date.parse('01-01-2010')
+        end_date = Date.parse('31-12-2013')
+        local_admin = make_local_admin("Venezuela")
+        3.times { make_regular_active_user(local_admin.admin_location, Date.parse('21-08-2010')) }
+        stats = AlumnetUsersStatistics.new(local_admin)
+        expect(stats.group_and_count_users_by_country("registrants", init_date, end_date)).to eq({"Venezuela"=>3})
+      end
+    end
+
+    context "regional admin" do
+      it "return all active users group by residence country and type of users" do
+        init_date = Date.parse('01-01-2010')
+        end_date = Date.parse('31-12-2013')
+        regional_admin = make_regional_admin
+        regional_admin.admin_location.countries.each do |c|
+          2.times { make_lifetime_active_user(c, Date.parse('21-08-2010')) }
+          2.times { make_regular_active_user(c, Date.parse('10-08-2010')) }
+          1.times { make_regular_active_user(c, Date.parse('17-10-2010')) }
+          2.times { make_regular_active_user(c, Date.parse('22-02-2011')) }
+          2.times { make_regular_active_user(c, Date.parse('02-10-2013')) }
+        end
+        stats = AlumnetUsersStatistics.new(regional_admin)
+        expect(stats.group_and_count_users_by_country("registrants", init_date, end_date)).to eq(
+          "Venezuela" => 7, "Colombia" => 7, "Chile" => 7, "Ecuador" => 7)
+      end
+    end
+  end
+
+  describe "#group_and_count_users_by_region(type_users, init_date, end_date)" do
+    context "super admin" do
+      it "return all active user group by region and type of users" do
+        init_date = Date.parse('01-01-2010')
+        end_date = Date.parse('31-12-2013')
+        super_admin = User.make!(:admin)
+        regions = []
+        ["America", "Europe", "Asia"].each { |name| regions << Region.make!(name: name) }
+        regions.each do |region|
+          3.times { region.countries << Country.make!(:simple) }
+        end
+        regions.each do |region|
+          region.countries.each do |c|
+            1.times { make_regular_active_user(c, Date.parse('17-10-2010')) }
+            1.times { make_regular_active_user(c, Date.parse('26-08-2012')) }
+          end
+        end
+        stats = AlumnetUsersStatistics.new(super_admin)
+        expect(stats.group_and_count_users_by_region("registrants", init_date, end_date)).to eq(
+          {"America"=>6, "Europe"=>6, "Asia"=>6})
+        # expect(stats.per_country_and_region("2010-01-01", "2012-12-31", "regions")).to eq("")
+      end
+    end
   end
 end

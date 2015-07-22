@@ -2,7 +2,7 @@ class V1::BusinessExchangesController < V1::TasksController
 
   def index
     @q = Task.business_exchanges.search(params[:q])
-    @tasks = @q.result
+    @tasks = @q.result.limit(params[:limit])
     render 'v1/tasks/index'
   end
 
