@@ -12,6 +12,11 @@ class V1::Admin::StatsController < V1::AdminController
     render json: graphs_info
   end
 
+  def generation_and_gender
+    graphs_info = @stats.per_generation_and_gender
+    render json: graphs_info
+  end
+
 
   private
     def set_stats

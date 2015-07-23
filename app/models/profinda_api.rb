@@ -110,7 +110,7 @@ class ProfindaApi
     profinda_matches = task_matches(task_id)
     users = []
     if profinda_matches["entries"].present?
-      profinda_matches["entries"].map do |match|
+      profinda_matches["entries"].each do |match|
         users << match["profile_id"]
       end
     end
@@ -121,7 +121,7 @@ class ProfindaApi
     profinda_automatches = tasks_automatches
     tasks = []
     if profinda_automatches["entries"].present?
-      profinda_automatches["entries"].map do |match|
+      profinda_automatches["entries"].each do |match|
         tasks << match["id"]
       end
     end
@@ -130,7 +130,7 @@ class ProfindaApi
 
   def tasks_automatches
     options = { headers: authorized_headers, body: {} }
-    @last_response = self.class.get("/automatches", options)
+    @last_response = self.class.get("/tasks/automatches", options)
     @last_response.parsed_response
   end
 
