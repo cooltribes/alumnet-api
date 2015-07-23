@@ -144,7 +144,7 @@ class Task < ActiveRecord::Base
   end
 
   def position_type_text
-    POSITION_TYPES[position_type]
+    seniority.try(:name)
   end
 
   def country_info
@@ -161,7 +161,7 @@ class Task < ActiveRecord::Base
   def company;nil;end
 
   def position_info
-    { text: position_type_text, value: position_type }
+    { text: position_type_text, value: seniority_id }
   end
 
   def employment_info
