@@ -82,7 +82,7 @@ class Group < ActiveRecord::Base
     members.where("users.id = ?", user.id).any?
   end
 
-  def user_can_upload_file?(user)
+  def user_can_upload_files?(user)
     upload_files == 0 ? user_is_admin?(user) : user_is_member?(user)
   end
 

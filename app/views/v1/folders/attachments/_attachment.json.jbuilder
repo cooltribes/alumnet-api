@@ -1,6 +1,10 @@
 json.(attachment, :id, :name, :folder_id, :created_at, :updated_at)
 
-json.url attachment.file.url
+if attachment.user_can_download(current_user)
+  json.url attachment.file.url
+else
+  json.url nil
+end
 
 json.uploader do
   json.id attachment.uploader.id
@@ -13,3 +17,6 @@ json.uploader do
     end
   end
 end
+
+json.user_can_edit attachment.user_can_edit(current_user)
+

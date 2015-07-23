@@ -19,10 +19,14 @@ class V1::Me::ApprovalController < V1::BaseController
 
   def notify_admins
     countryAiesec = @user.profile.experiences.where(exp_type: 0).first.committee.country
-    regionAiesec = countryAiesec.region
     countryResidence = @user.profile.residence_country
     superAdmins = User.where(role: "AlumNetAdmin")
-    admins = countryAiesec.admins | regionAiesec.admins | countryResidence.admins | superAdmins
+    admins = countryResidence.admins | superAdmins
+    
+    if countryAiesec
+      regionAiesec = countryAiesec.region
+      admins = admins | countryAiesec.admins | regionAiesec.admins
+    end
     # byebug
     Notification.notify_approval_request_to_admins(admins, @user)
     head :no_content

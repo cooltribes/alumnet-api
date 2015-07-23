@@ -6,9 +6,9 @@ if match.user
     json.name match.user.permit_name(current_user)
     json.last_experience match.user.permit_last_experience(current_user)
     if match.user.permit('see-avatar', current_user)
-      json.avatar match.user.avatar.medium.url
+      json.avatar match.user.avatar.large.url
     else
-      json.avatar match.user.avatar.medium.default_url
+      json.avatar match.user.avatar.large.default_url
     end
   end
 else
