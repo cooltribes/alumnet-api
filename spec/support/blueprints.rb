@@ -461,5 +461,5 @@ end
 
 Seniority.blueprint do
   name { "Seniority #{sn}"}
-  seniotity_type { "Profesional" }
+  seniority_type { "Profesional" }
 end

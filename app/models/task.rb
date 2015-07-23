@@ -8,6 +8,8 @@ class Task < ActiveRecord::Base
   belongs_to :user
   belongs_to :city
   belongs_to :country
+  belongs_to :seniority
+
 
   EMPLOYMENT_TYPES = { 0 => "Full-time", 1 => "Part-time", 2 => "Internship", 3 => "Temporary"}
   POSITION_TYPES = { 0 => "Top Management/Director", 1 => "Middle management", 2 => "Senior Specialist",

@@ -12,6 +12,7 @@ class Experience < ActiveRecord::Base
   belongs_to :country
   belongs_to :profile
   belongs_to :committee
+  belongs_to :seniority
 
   ### Instances Class
   def get_info_region
