@@ -8,6 +8,8 @@ class Task < ActiveRecord::Base
   belongs_to :user
   belongs_to :city
   belongs_to :country
+  belongs_to :seniority
+
 
   EMPLOYMENT_TYPES = { 0 => "Full-time", 1 => "Part-time", 2 => "Internship", 3 => "Temporary"}
   POSITION_TYPES = { 0 => "Top Management/Director", 1 => "Middle management", 2 => "Senior Specialist",
@@ -142,7 +144,7 @@ class Task < ActiveRecord::Base
   end
 
   def position_type_text
-    POSITION_TYPES[position_type]
+    seniority.try(:name)
   end
 
   def country_info
@@ -159,7 +161,7 @@ class Task < ActiveRecord::Base
   def company;nil;end
 
   def position_info
-    { text: position_type_text, value: position_type }
+    { text: position_type_text, value: seniority_id }
   end
 
   def employment_info

@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Experience, :type => :model do
   it { should belong_to(:profile) }
+  it { should belong_to(:seniority) }
+
 end
 
 describe 'Callbacks' do

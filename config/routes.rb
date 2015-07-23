@@ -105,6 +105,8 @@ Rails.application.routes.draw do
 
     resources :actions
 
+    resources :seniorities, except: :show
+
     resources :features, except: :show do
       get :validate, on: :collection
     end
@@ -117,7 +119,7 @@ Rails.application.routes.draw do
 
     resources :companies
 
-    resources :business, only: :show do
+    resources :business, only: [:index, :show] do
       resources :links, controller: 'business/links'
     end
 
