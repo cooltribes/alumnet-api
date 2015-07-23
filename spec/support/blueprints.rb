@@ -458,3 +458,8 @@ EventPayment.blueprint do
   event { Event.make! }
   attendance_id { Attendance.make! }
 end
+
+Seniority.blueprint do
+  name { "Seniority #{sn}"}
+  seniotity_type { "Profesional" }
+end
