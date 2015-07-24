@@ -105,6 +105,8 @@ Rails.application.routes.draw do
 
     resources :actions
 
+    resources :seniorities, except: :show
+
     resources :features, except: :show do
       get :validate, on: :collection
     end
