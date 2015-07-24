@@ -9,6 +9,7 @@ class Task < ActiveRecord::Base
   belongs_to :city
   belongs_to :country
   belongs_to :seniority
+  belongs_to :company
 
 
   EMPLOYMENT_TYPES = { 0 => "Full-time", 1 => "Part-time", 2 => "Internship", 3 => "Temporary"}
@@ -158,7 +159,6 @@ class Task < ActiveRecord::Base
   def company_info
     company ? { text: company.name, value: company_id } : { text: "", value: ""}
   end
-  def company;nil;end
 
   def position_info
     { text: position_type_text, value: seniority_id }

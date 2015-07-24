@@ -3,10 +3,12 @@ require 'rails_helper'
 describe V1::JobExchangesController, type: :request do
   let!(:user) { User.make! }
   let!(:seniority) { Seniority.make! }
+  let!(:company) { Company.make! }
 
   def valid_attributes
     { post_until: Date.today + 10, description: "testing task", nice_have_list: "1638,1590,1636",
-      must_have_list: "1637,1606", duration: "hours", name: "Testing Task in Test", seniority_id: seniority.id }
+      must_have_list: "1637,1606", duration: "hours", name: "Testing Task in Test",
+      seniority_id: seniority.id, company_id: company.id }
   end
 
   def invalid_attributes
@@ -74,6 +76,7 @@ describe V1::JobExchangesController, type: :request do
         expect(Task.last.user).to eq(user)
         expect(Task.last.help_type).to eq("task_job_exchange")
         expect(Task.last.seniority).to eq(seniority)
+        expect(Task.last.company).to eq(company)
       end
     end
     context "with invalid attributes" do
