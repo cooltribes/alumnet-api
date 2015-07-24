@@ -11,14 +11,14 @@ end
 file.close
 
 file = File.open('db/data/languages.csv', "r:ISO-8859-5")
-options = { col_sep: "\t"}
+options = {}
 SmarterCSV.process(file, options ) do |array|
   Language.find_or_create_by( array.first )
 end
 file.close
 
 file = File.open('db/data/skills.csv', "r:ISO-8859-5")
-options = { col_sep: "\t"}
+options = {}
 SmarterCSV.process(file, options ) do |array|
   Skill.find_or_create_by( array.first )
 end
@@ -31,14 +31,14 @@ end
 file.close
 
 file = File.open('db/data/regions.csv')
-options = { col_sep: "\t"}
+options = {}
 SmarterCSV.process(file, options ) do |array|
   Region.find_or_create_by( array.first )
 end
 file.close
 
 file = File.open('db/data/sectors.csv')
-options = { col_sep: "\t"}
+options = {}
 SmarterCSV.process(file, options ) do |array|
   Sector.find_or_create_by( array.first )
 end

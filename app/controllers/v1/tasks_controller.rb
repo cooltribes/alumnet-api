@@ -81,8 +81,7 @@ class V1::TasksController < V1::BaseController
 
     def task_params
       params.permit(:name, :description, :duration, :post_until, :must_have_list,
-       :nice_have_list, :company_id, :city_id, :country_id, :offer, :employment_type,
-       :position_type)
+       :nice_have_list, :company_id, :city_id, :country_id, :offer, :employment_type)
     end
 
 end
