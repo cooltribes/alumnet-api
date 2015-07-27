@@ -11,6 +11,7 @@ class V1::PaymentsController < V1::BaseController
   end
 
   def create
+    byebug
     @payment = Payment.new(payment_params)
     @payment.paymentable = @paymentable
     @payment.save
@@ -43,7 +44,7 @@ class V1::PaymentsController < V1::BaseController
   end
 
   def payment_params
-    params.permit(:user_id, :paymentable_id, :paymentable_type, :subtotal, :iva, :total, :reference)
+    params.permit(:user_id, :paymentable_id, :paymentable_type, :subtotal, :iva, :total, :reference, :country_id, :city_id, :address)
   end
 
 end
