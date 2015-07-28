@@ -67,6 +67,21 @@ Experience.blueprint do
   profile { Profile.make! }
 end
 
+Experience.blueprint(:profesional) do
+  exp_type { 3 }
+  name { "Experience #{sn}"}
+  description { Faker::Lorem.sentence }
+  start_date { Date.parse("01/08/2000") }
+  end_date { Date.parse("01/08/2001") }
+  organization_name { "Organization #{sn}" }
+  internship { false }
+  committee { Committee.make! }
+  city { City.make! }
+  country { Country.make! }
+  profile { Profile.make! }
+  seniority { Seniority.make! }
+end
+
 Group.blueprint do
   name { "Group #{sn}"}
   description { Faker::Lorem.sentence }
@@ -457,4 +472,9 @@ EventPayment.blueprint do
   user { User.make! }
   event { Event.make! }
   attendance_id { Attendance.make! }
+end
+
+Seniority.blueprint do
+  name { "Seniority #{sn}"}
+  seniority_type { "Profesional" }
 end
