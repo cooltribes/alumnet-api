@@ -27,7 +27,7 @@ module StatsHelper
 
   def make_lifetime_active_user(country, active_date = Date.today)
     user = User.make!
-    UserSubscription.make!(:lifetime, user: user, creator: user, start_date: active_date)
+    Subscription.make!(:lifetime, user: user, creator: user, start_date: active_date)
     user.profile.update(residence_country_id: country.id)
     activate_user(user)
     user.update(active_at: Date.parse('21-08-2001'), member: 1)
@@ -36,7 +36,7 @@ module StatsHelper
 
   def make_member_active_user(country, active_date = Date.today)
     user = User.make!
-    UserSubscription.make!(:lifetime, user: user, creator: user, start_date: active_date)
+    Subscription.make!(:lifetime, user: user, creator: user, start_date: active_date)
     user.profile.update(residence_country_id: country.id)
     activate_user(user)
     user.update(active_at: Date.parse('21-08-2001'), member: 1)
@@ -45,7 +45,7 @@ module StatsHelper
 
   def make_member_active_user(country, active_date = Date.today)
     user = User.make!
-    UserSubscription.make!(:premium, user: user, creator: user, start_date: active_date)
+    Subscription.make!(:premium, user: user, creator: user, start_date: active_date)
     user.profile.update(residence_country_id: country.id)
     activate_user(user)
     user.update(active_at: Date.parse('21-08-2001'), member: 1)

@@ -291,30 +291,6 @@ Subscription.blueprint(:premium) do
   creator { User.make! }
 end
 
-UserSubscription.blueprint(:lifetime) do
-  start_date { Date.today }
-  end_date { nil }
-  lifetime { true }
-  status { 1 }
-  ownership_type { 1 }
-  user { User.make! }
-  subscription { Subscription.make!(:lifetime) }
-  creator { User.make! }
-  reference { "XXXX-XXXX"}
-end
-
-UserSubscription.blueprint(:premium) do
-  start_date { Date.today }
-  end_date { Date.today + 365 }
-  lifetime { false }
-  status { 1 }
-  ownership_type { 1 }
-  user { User.make! }
-  subscription { Subscription.make!(:premium) }
-  creator { User.make! }
-  reference { "XXXX-XXXX"}
-end
-
 Invitation.blueprint do
   user { User.make }
   guest_email { Faker::Internet.email }
