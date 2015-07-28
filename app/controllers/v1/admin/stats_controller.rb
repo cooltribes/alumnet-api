@@ -22,6 +22,11 @@ class V1::Admin::StatsController < V1::AdminController
     render json: graphs_info
   end
 
+  def status
+    graphs_info = @stats.per_status
+    render json: graphs_info
+  end
+
   private
     def set_stats
       @stats = AlumnetUsersStatistics.new(current_user)
