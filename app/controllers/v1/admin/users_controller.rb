@@ -1,5 +1,5 @@
 class V1::Admin::UsersController < V1::AdminController
-  before_action :set_user, except: [:index, :stats]
+  before_action :set_user, except: [:index, :stats, :register]
 
   def index
     @q = if @admin_location
@@ -58,6 +58,16 @@ class V1::Admin::UsersController < V1::AdminController
     end
   end
 
+  def register
+    @user = User.create_from_admin(register_params)
+    if @user.valid?
+      @user.send_password_reset
+      render :show, status: :created
+    else
+      render json: { errors: @user.errors }, status: :unprocessable_entity
+    end
+  end
+
   def stats
     ##TODO: Refactor this
     @q = if @admin_location
@@ -98,5 +108,9 @@ class V1::Admin::UsersController < V1::AdminController
 
   def user_params
     params.permit(:email, :password, :password_confirmation)
+  end
+
+  def register_params
+    params.permit(:email, :role)
   end
 end

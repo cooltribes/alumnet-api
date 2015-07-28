@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   include UserHelpers
   include ProfindaRegistration
 
-  ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin",
+  ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin", external: "External",
     regional_admin: "RegionalAdmin", nacional_admin: "NacionalAdmin", regular: "Regular" }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
   VALID_PASSWORD_REGEX = /\A(?=.*[a-zA-Z])(?=.*[0-9]).{8,}\z/
@@ -62,6 +62,20 @@ class User < ActiveRecord::Base
   before_create :set_role, :set_profinda_password
   after_create :create_new_profile
   after_create :create_privacies
+
+  ### Class Methods
+  def self.create_from_admin(params)
+    user = new
+    password = user.generate_random_password
+    attributes = { email: params[:email], password: password, password_confirmation: password }
+    user.attributes = attributes
+    user.created_by_admin = true
+    user.role = ROLES[:alumnet_admin] if params[:role] == "admin"
+    user.role = ROLES[:regular] if params[:role] == "regular"
+    user.role = ROLES[:external] if params[:role] == "external"
+    user.save
+    user
+  end
 
   ### Instance Methods
   def name
@@ -151,6 +165,10 @@ class User < ActiveRecord::Base
 
   def set_regular!
     update_column(:role, ROLES[:regular])
+  end
+
+  def set_external!
+    update_column(:role, ROLES[:external])
   end
 
   def is_admin?
@@ -535,6 +553,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def generate_random_password
+    SecureRandom.urlsafe_base64(8).tr('lIO0', 'sxyz')
+  end
+
   private
 
   ### this a temporary solution to authenticate the api
@@ -563,5 +585,4 @@ class User < ActiveRecord::Base
       end
     end
   end
-
 end

@@ -178,6 +178,7 @@ Rails.application.routes.draw do
         put :activate, on: :member
         put :banned, on: :member
         put :change_role, on: :member
+        post :register, on: :collection
         get :stats, on: :collection
       end
       resources :groups, except: [:new, :edit] do
