@@ -272,15 +272,23 @@ Picture.blueprint do
 end
 
 Subscription.blueprint(:lifetime) do
-  name { "LifeTime"}
-  subscription_type { Subscription::TYPES[:lifetime] }
+  start_date { Date.today }
+  end_date { nil }
+  lifetime { true }
   status { 1 }
+  ownership_type { 1 }
+  user { User.make! }
+  creator { User.make! }
 end
 
 Subscription.blueprint(:premium) do
-  name { "Premium"}
-  subscription_type { Subscription::TYPES[:premium] }
+  start_date { Date.today }
+  end_date { Date.today + 365 }
+  lifetime { false }
   status { 1 }
+  ownership_type { 1 }
+  user { User.make! }
+  creator { User.make! }
 end
 
 UserSubscription.blueprint(:lifetime) do
@@ -472,6 +480,16 @@ EventPayment.blueprint do
   user { User.make! }
   event { Event.make! }
   attendance_id { Attendance.make! }
+end
+
+Payment.blueprint do
+  subtotal { 900 }
+  iva { 100 }
+  total { 1000 }
+  reference { "XXXX-XXXX-#{sn}"}
+  user { User.make! }
+  paymentable_id { Subscription.make!(:lifetime).id }
+  paymentable_type { "Subscription" }
 end
 
 Seniority.blueprint do

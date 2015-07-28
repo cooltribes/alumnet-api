@@ -167,6 +167,7 @@ Rails.application.routes.draw do
 
     resources :languages, only: :index
     resources :skills, only: :index
+    resources :payments
 
     namespace :admin do
       get 'stats/type_of_membership', to: 'stats#type_of_membership'
