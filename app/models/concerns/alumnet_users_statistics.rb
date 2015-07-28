@@ -46,6 +46,10 @@ class AlumnetUsersStatistics
     data
   end
 
+  def per_status
+    format_for_status_pie_graph(group_and_count_users_by_status)
+  end
+
   def per_seniorities
     format_for_seniority_pie_graph(group_and_count_users_by_seniority)
   end
@@ -121,6 +125,21 @@ class AlumnetUsersStatistics
     get_seniority_name(results)
   end
 
+  def group_and_count_users_by_status
+    if @user.is_system_admin? || @user.is_alumnet_admin?
+      results = group_and_count_by_status query_for_status
+    elsif @user.is_regional_admin?
+      region = @user.admin_location
+      results = group_and_count_by_status query_for_status(region.countries.pluck(:id))
+    elsif @user.is_nacional_admin?
+      country = @user.admin_location
+      results = group_and_count_by_status query_for_status([country.id])
+    else
+      return []
+    end
+    results
+  end
+
   ## QUERYS
 
   def active_registrants
@@ -166,7 +185,7 @@ class AlumnetUsersStatistics
   end
 
   def query_for_user_generation(range, countries = [])
-    query = User.where(status: 1).joins(profile: :birth_country).
+    query = User.where(status: 1).joins(profile: :residence_country).
       where("date_part('years', age(\"profiles\".born)) between ? and ?", range[0], range[1])
     if countries.any?
       query = query.where('profiles.residence_country_id' => countries)
@@ -175,10 +194,18 @@ class AlumnetUsersStatistics
   end
 
   def query_for_seniority(countries = [])
-    query = User.where(status: 1).joins(profile: [:experiences, :birth_country]).
+    query = User.where(status: 1).joins(profile: [:experiences, :residence_country]).
       where(experiences: { current: true, exp_type: 3 })
     if countries.any?
        query = query.where('profiles.residence_country_id' => countries)
+    end
+    query
+  end
+
+  def query_for_status(countries = [])
+    query = User.joins(:profile)
+    if countries.any?
+      query = query.where('profiles.residence_country_id' => countries)
     end
     query
   end
@@ -217,7 +244,7 @@ class AlumnetUsersStatistics
   end
 
   def group_and_count_by_country(query, countries = [])
-    results = query.joins(profile: :birth_country).group("\"profiles\".residence_country_id")
+    results = query.joins(profile: :residence_country).group("\"profiles\".residence_country_id")
     if countries.any?
       results.where('profiles.residence_country_id' => countries).count
     else
@@ -239,7 +266,20 @@ class AlumnetUsersStatistics
     query.group("experiences.seniority_id").count
   end
 
+  def group_and_count_by_status(query)
+    query.group("users.status").count
+  end
+
   ### HELPERS
+  def format_for_status_pie_graph(data_hash)
+    data = []
+    data << ["Status", "Count"]
+    data << ["Inactive", data_hash[0] || 0]
+    data << ["Active", data_hash[1] || 0]
+    data << ["Banned", data_hash[2] || 0]
+    data
+  end
+
   def format_for_seniority_pie_graph(data_hash)
     data = []
     data << ["Seniority", "Count"]
