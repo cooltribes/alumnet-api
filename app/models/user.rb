@@ -24,8 +24,7 @@ class User < ActiveRecord::Base
   has_many :likes, dependent: :destroy
   has_many :privacies, dependent: :destroy
   has_many :albums, as: :albumable, dependent: :destroy
-  has_many :user_subscriptions, dependent: :destroy
-  has_many :subscriptions, through: :user_subscriptions
+  has_many :subscriptions, dependent: :destroy
   has_many :attendances, dependent: :destroy
   has_many :events, as: :eventable, dependent: :destroy
   has_many :invited_events, through: :attendances, source: :event
@@ -40,6 +39,7 @@ class User < ActiveRecord::Base
   has_many :prizes, through: :user_prizes
   has_many :task_invitations, dependent: :destroy
   has_many :matches, dependent: :destroy
+  has_many :payments, dependent: :destroy
 
   has_one :profile, dependent: :destroy
   belongs_to :admin_location, polymorphic: true
