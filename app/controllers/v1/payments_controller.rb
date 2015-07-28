@@ -11,7 +11,6 @@ class V1::PaymentsController < V1::BaseController
   end
 
   def create
-    byebug
     @payment = Payment.new(payment_params)
     @payment.paymentable = @paymentable
     @payment.save
