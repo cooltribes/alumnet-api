@@ -167,9 +167,14 @@ Rails.application.routes.draw do
 
     resources :languages, only: :index
     resources :skills, only: :index
+    resources :payments
 
     namespace :admin do
       get 'stats/type_of_membership', to: 'stats#type_of_membership'
+      get 'stats/country_and_region', to: 'stats#country_and_region'
+      get 'stats/generation_and_gender', to: 'stats#generation_and_gender'
+      get 'stats/seniorities', to: 'stats#seniorities'
+      get 'stats/status', to: 'stats#status'
       resources :users, except: [:new, :edit] do
         put :activate, on: :member
         put :banned, on: :member
