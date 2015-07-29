@@ -61,6 +61,7 @@ class V1::Admin::UsersController < V1::AdminController
   def register
     @user = User.create_from_admin(register_params)
     if @user.valid?
+      @user.save_profinda_profile
       @user.send_password_reset
       render :show, status: :created
     else
