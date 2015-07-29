@@ -4,6 +4,23 @@ class V1::MeController < V1::BaseController
   def show
   end
 
+  def activate
+    if @user.inactive? && @user.created_by_admin?
+      if @user.is_regular? && @user.profile.skills?
+        @user.activate!
+        render json: { status: 'active' }
+      elsif @user.is_external? && @user.profile.contact?
+        @user.profile.skills!
+        @user.activate!
+        render json: { status: 'active' }
+      else
+        render json: { status: 'fail'}
+      end
+    else
+      render json: { status: 'user is active' }
+    end
+  end
+
   def send_invitations
     sender = SenderInvitation.new(params[:contacts], current_user)
     if sender.valid?

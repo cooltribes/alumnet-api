@@ -46,6 +46,14 @@ class AlumnetUsersStatistics
     data
   end
 
+  def per_status
+    format_for_status_pie_graph(group_and_count_users_by_status)
+  end
+
+  def per_seniorities
+    format_for_seniority_pie_graph(group_and_count_users_by_seniority)
+  end
+
   def group_and_count_registrants(init_date, end_date, interval)
     group_and_count_users query_for_registrants(init_date, end_date), interval
   end
@@ -102,6 +110,36 @@ class AlumnetUsersStatistics
     format_for_generation_bar_graph(label, results)
   end
 
+  def group_and_count_users_by_seniority
+    if @user.is_system_admin? || @user.is_alumnet_admin?
+      results = group_and_count_by_seniority query_for_seniority
+    elsif @user.is_regional_admin?
+      region = @user.admin_location
+      results = group_and_count_by_seniority query_for_seniority(region.countries.pluck(:id))
+    elsif @user.is_nacional_admin?
+      country = @user.admin_location
+      results = group_and_count_by_seniority query_for_seniority([country.id])
+    else
+      return []
+    end
+    get_seniority_name(results)
+  end
+
+  def group_and_count_users_by_status
+    if @user.is_system_admin? || @user.is_alumnet_admin?
+      results = group_and_count_by_status query_for_status
+    elsif @user.is_regional_admin?
+      region = @user.admin_location
+      results = group_and_count_by_status query_for_status(region.countries.pluck(:id))
+    elsif @user.is_nacional_admin?
+      country = @user.admin_location
+      results = group_and_count_by_status query_for_status([country.id])
+    else
+      return []
+    end
+    results
+  end
+
   ## QUERYS
 
   def active_registrants
@@ -109,13 +147,13 @@ class AlumnetUsersStatistics
   end
 
   def active_members
-    User.joins(:user_subscriptions).where(status: 1, member: 1).
-      where(user_subscriptions: { lifetime: false, status: 1 })
+    User.joins(:subscriptions).where(status: 1, member: 1).
+      where(subscriptions: { lifetime: false, status: 1 })
   end
 
   def active_lifetime
-    User.joins(:user_subscriptions).where(status: 1, member: 1).
-      where(user_subscriptions: { lifetime: true, status: 1 })
+    User.joins(:subscriptions).where(status: 1, member: 1).
+      where(subscriptions: { lifetime: true, status: 1 })
   end
 
   def get_query_for(name, init_date, end_date)
@@ -139,16 +177,33 @@ class AlumnetUsersStatistics
   end
 
   def query_for_members(init_date, end_date)
-    active_members.where("date(\"user_subscriptions\".start_date) between ? and ?", init_date, end_date)
+    active_members.where("date(\"subscriptions\".start_date) between ? and ?", init_date, end_date)
   end
 
   def query_for_lifetime(init_date, end_date)
-    active_lifetime.where("date(\"user_subscriptions\".start_date) between ? and ?", init_date, end_date)
+    active_lifetime.where("date(\"subscriptions\".start_date) between ? and ?", init_date, end_date)
   end
 
   def query_for_user_generation(range, countries = [])
-    query = User.where(status: 1).joins(profile: :birth_country).
+    query = User.where(status: 1).joins(profile: :residence_country).
       where("date_part('years', age(\"profiles\".born)) between ? and ?", range[0], range[1])
+    if countries.any?
+      query = query.where('profiles.residence_country_id' => countries)
+    end
+    query
+  end
+
+  def query_for_seniority(countries = [])
+    query = User.where(status: 1).joins(profile: [:experiences, :residence_country]).
+      where(experiences: { current: true, exp_type: 3 })
+    if countries.any?
+       query = query.where('profiles.residence_country_id' => countries)
+    end
+    query
+  end
+
+  def query_for_status(countries = [])
+    query = User.joins(:profile)
     if countries.any?
       query = query.where('profiles.residence_country_id' => countries)
     end
@@ -169,9 +224,9 @@ class AlumnetUsersStatistics
 
   def group_and_count_subscriptions(query, interval = "years")
     if interval == "years"
-      format_years_results query.group("date_part('year', \"user_subscriptions\".start_date)").count
+      format_years_results query.group("date_part('year', \"subscriptions\".start_date)").count
     elsif interval == "days"
-      format_days_results query.group("date(\"user_subscriptions\".start_date)").count
+      format_days_results query.group("date(\"subscriptions\".start_date)").count
     elsif interval == "months"
       generate_data_by_month(query, "start_date")
     end
@@ -189,7 +244,7 @@ class AlumnetUsersStatistics
   end
 
   def group_and_count_by_country(query, countries = [])
-    results = query.joins(profile: :birth_country).group("\"profiles\".residence_country_id")
+    results = query.joins(profile: :residence_country).group("\"profiles\".residence_country_id")
     if countries.any?
       results.where('profiles.residence_country_id' => countries).count
     else
@@ -207,7 +262,30 @@ class AlumnetUsersStatistics
     query.group("profiles.gender").count
   end
 
+  def group_and_count_by_seniority(query)
+    query.group("experiences.seniority_id").count
+  end
+
+  def group_and_count_by_status(query)
+    query.group("users.status").count
+  end
+
   ### HELPERS
+  def format_for_status_pie_graph(data_hash)
+    data = []
+    data << ["Status", "Count"]
+    data << ["Inactive", data_hash[0] || 0]
+    data << ["Active", data_hash[1] || 0]
+    data << ["Banned", data_hash[2] || 0]
+    data
+  end
+
+  def format_for_seniority_pie_graph(data_hash)
+    data = []
+    data << ["Seniority", "Count"]
+    data + data_hash.to_a
+  end
+
   def format_for_generation_bar_graph(label, data_hash)
     [label, data_hash["M"] || 0, data_hash["F"] || 0]
   end
@@ -288,10 +366,24 @@ class AlumnetUsersStatistics
     data
   end
 
+  def get_seniority_name(hash)
+    data = {}
+    @seniorities ||= get_seniorities
+    hash.each do |k,v|
+      data[@seniorities[k]] = v
+    end
+    data
+  end
+
   def get_countries
     hash = {}
     Country.all.each { |country| hash[country.id] = country.name }
     hash
   end
 
+  def get_seniorities
+    hash = {}
+    Seniority.all.each { |seniority| hash[seniority.id] = seniority.name }
+    hash
+  end
 end

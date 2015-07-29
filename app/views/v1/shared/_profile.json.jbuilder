@@ -31,3 +31,6 @@ json.cover do
   json.original profile.cover.url
   json.main profile.cover.main.url
 end
+
+json.role profile.user.role
+json.created_by_admin profile.user.created_by_admin

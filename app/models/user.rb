@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   include UserHelpers
   include ProfindaRegistration
 
-  ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin",
+  ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin", external: "External",
     regional_admin: "RegionalAdmin", nacional_admin: "NacionalAdmin", regular: "Regular" }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
   VALID_PASSWORD_REGEX = /\A(?=.*[a-zA-Z])(?=.*[0-9]).{8,}\z/
@@ -24,8 +24,7 @@ class User < ActiveRecord::Base
   has_many :likes, dependent: :destroy
   has_many :privacies, dependent: :destroy
   has_many :albums, as: :albumable, dependent: :destroy
-  has_many :user_subscriptions, dependent: :destroy
-  has_many :subscriptions, through: :user_subscriptions
+  has_many :subscriptions, dependent: :destroy
   has_many :attendances, dependent: :destroy
   has_many :events, as: :eventable, dependent: :destroy
   has_many :invited_events, through: :attendances, source: :event
@@ -40,6 +39,7 @@ class User < ActiveRecord::Base
   has_many :prizes, through: :user_prizes
   has_many :task_invitations, dependent: :destroy
   has_many :matches, dependent: :destroy
+  has_many :payments, dependent: :destroy
 
   has_one :profile, dependent: :destroy
   belongs_to :admin_location, polymorphic: true
@@ -62,6 +62,20 @@ class User < ActiveRecord::Base
   before_create :set_role, :set_profinda_password
   after_create :create_new_profile
   after_create :create_privacies
+
+  ### Class Methods
+  def self.create_from_admin(params)
+    user = new
+    password = user.generate_random_password
+    attributes = { email: params[:email], password: password, password_confirmation: password }
+    user.attributes = attributes
+    user.created_by_admin = true
+    user.role = ROLES[:alumnet_admin] if params[:role] == "admin"
+    user.role = ROLES[:regular] if params[:role] == "regular"
+    user.role = ROLES[:external] if params[:role] == "external"
+    user.save
+    user
+  end
 
   ### Instance Methods
   def name
@@ -153,6 +167,10 @@ class User < ActiveRecord::Base
     update_column(:role, ROLES[:regular])
   end
 
+  def set_external!
+    update_column(:role, ROLES[:external])
+  end
+
   def is_admin?
     is_system_admin? || is_alumnet_admin? || is_nacional_admin? || is_regional_admin?
   end
@@ -190,6 +208,10 @@ class User < ActiveRecord::Base
 
   def is_regular?
     role == "Regular"
+  end
+
+  def is_external?
+    role == "External"
   end
 
   ### all about Conversations
@@ -535,6 +557,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def generate_random_password
+    SecureRandom.urlsafe_base64(8).tr('lIO0', 'sxyz')
+  end
+
   private
 
   ### this a temporary solution to authenticate the api
@@ -563,5 +589,4 @@ class User < ActiveRecord::Base
       end
     end
   end
-
 end

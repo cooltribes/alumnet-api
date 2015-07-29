@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     resource :me, only: [:show, :update], controller: 'me' do
       get :messages
       post :send_invitations
+      post :activate
       resource :profile, only: [:show, :update], controller: 'me/profiles'
       resources :posts, controller: 'me/posts'
 
@@ -167,15 +168,19 @@ Rails.application.routes.draw do
 
     resources :languages, only: :index
     resources :skills, only: :index
+    resources :payments
 
     namespace :admin do
       get 'stats/type_of_membership', to: 'stats#type_of_membership'
       get 'stats/country_and_region', to: 'stats#country_and_region'
       get 'stats/generation_and_gender', to: 'stats#generation_and_gender'
+      get 'stats/seniorities', to: 'stats#seniorities'
+      get 'stats/status', to: 'stats#status'
       resources :users, except: [:new, :edit] do
         put :activate, on: :member
         put :banned, on: :member
         put :change_role, on: :member
+        post :register, on: :collection
         get :stats, on: :collection
       end
       resources :groups, except: [:new, :edit] do
