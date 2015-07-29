@@ -39,7 +39,7 @@ class AlumnetUsersStatistics
   end
 
   def per_generation_and_gender
-    data = [["Generation", "Male", "Famale"]]
+    data = [["Generation", "Male", "Female"]]
     GENERATIONS.each do |k, v|
       data << group_and_count_user_by_generation(v, k)
     end
