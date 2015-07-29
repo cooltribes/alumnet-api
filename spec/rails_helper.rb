@@ -4,6 +4,9 @@ require 'spec_helper'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'shoulda/matchers'
+require 'webmock/rspec'
+
+WebMock.disable_net_connect!(:allow_localhost => true)
 
 ActiveRecord::Migration.maintain_test_schema!
 

@@ -210,6 +210,10 @@ class User < ActiveRecord::Base
     role == "Regular"
   end
 
+  def is_external?
+    role == "External"
+  end
+
   ### all about Conversations
   def unread_messages_count
     mailbox.inbox.where("mailboxer_receipts.is_read = false").count
