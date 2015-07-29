@@ -19,7 +19,12 @@ class V1::PaymentsController < V1::BaseController
 
   def update
     if @payment.update(payment_params)
-      render :show, status: :ok, location: @payment
+      if @payment.paymentable.update({ status: 2 })
+        @payment.user.update({ member: 0 })
+        render :show, status: :ok, location: @payment
+      else
+        render json: @payment.paymentable.errors, status: :unprocessable_entity
+      end
     else
       render json: @payment.errors, status: :unprocessable_entity
     end
@@ -43,7 +48,7 @@ class V1::PaymentsController < V1::BaseController
   end
 
   def payment_params
-    params.permit(:user_id, :paymentable_id, :paymentable_type, :subtotal, :iva, :total, :reference, :country_id, :city_id, :address)
+    params.permit(:user_id, :paymentable_id, :paymentable_type, :subtotal, :iva, :total, :reference, :country_id, :city_id, :address, :status)
   end
 
 end
