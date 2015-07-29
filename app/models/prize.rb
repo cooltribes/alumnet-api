@@ -1,4 +1,5 @@
 class Prize < ActiveRecord::Base
+	mount_uploader :image, PrizeUploader
 	enum status: [:inactive, :active]
 
 	# Relations

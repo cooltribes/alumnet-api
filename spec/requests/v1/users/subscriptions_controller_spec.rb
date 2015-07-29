@@ -2,11 +2,10 @@ require 'rails_helper'
 
 describe V1::Users::SubscriptionsController, type: :request do
   let!(:user) { User.make! }
-  let!(:subscription) { Subscription.make!(:premium)}
 
   describe "GET /users/:user_id/subscriptions" do
     it "return all subscriptions of user" do
-      5.times { UserSubscription.make!(:premium, user: user, creator: user) }
+      5.times { Subscription.make!(:premium, user: user, creator: user) }
       get user_subscriptions_path(user), {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(5)
@@ -16,42 +15,55 @@ describe V1::Users::SubscriptionsController, type: :request do
   describe "POST /users/:user_id/subscriptions" do
     context "with valid attributes and lifetime = true" do
       it "create a subscription and set user member to 3" do
-        valid_attributes = { start_date: '2015-01-01', end_date: '2015-12-31', lifetime: true, reference: "XXX-XXX" }
+        valid_attributes = { start_date: '2015-01-01', end_date: '2015-12-31', lifetime: true }
         expect(user.member).to eq(0)
         expect {
           post user_subscriptions_path(user), valid_attributes , basic_header(user.auth_token)
-        }.to change(UserSubscription, :count).by(1)
+        }.to change(Subscription, :count).by(1)
         expect(response.status).to eq 201
         user.reload
         expect(user.member).to eq(3)
       end
     end
 
-    context "with valid attributes and lifetime = false and subscriptions day < 30" do
-      it "create a subscription and set user member to 3" do
-        valid_attributes = { start_date: '2015-01-01', end_date: '2015-01-15', lifetime: false, reference: "XXX-XXX" }
-        expect(user.member).to eq(0)
-        expect {
-          post user_subscriptions_path(user), valid_attributes , basic_header(user.auth_token)
-        }.to change(UserSubscription, :count).by(1)
-        expect(response.status).to eq 201
-        user.reload
-        expect(user.member).to eq(2)
-      end
-    end
+    # context "with valid attributes and lifetime = false and subscriptions day < 30" do
+    #   it "create a subscription and set user member to 3" do
+    #     valid_attributes = { start_date: '2015-01-01', end_date: '2015-01-15', lifetime: false, reference: "XXX-XXX" }
+    #     expect(user.member).to eq(0)
+    #     expect {
+    #       post user_subscriptions_path(user), valid_attributes , basic_header(user.auth_token)
+    #     }.to change(UserSubscription, :count).by(1)
+    #     expect(response.status).to eq 201
+    #     user.reload
+    #     expect(user.member).to eq(2)
+    #   end
+    # end
 
-    context "with valid attributes and lifetime = false and subscriptions days > 30" do
-      it "create a subscription and set user member to 3" do
-        valid_attributes = { start_date: '2015-01-01', end_date: '2015-02-14', lifetime: false, reference: "XXX-XXX" }
-        expect(user.member).to eq(0)
-        expect {
-          post user_subscriptions_path(user), valid_attributes , basic_header(user.auth_token)
-        }.to change(UserSubscription, :count).by(1)
-        expect(response.status).to eq 201
-        user.reload
-        expect(user.member).to eq(1)
-      end
-    end
+    # context "with valid attributes and lifetime = false and subscriptions days > 30" do
+    #   it "create a subscription and set user member to 3" do
+    #     valid_attributes = { start_date: '2015-01-01', end_date: '2015-02-14', lifetime: false, reference: "XXX-XXX" }
+    #     expect(user.member).to eq(0)
+    #     expect {
+    #       post user_subscriptions_path(user), valid_attributes , basic_header(user.auth_token)
+    #     }.to change(UserSubscription, :count).by(1)
+    #     expect(response.status).to eq 201
+    #     user.reload
+    #     expect(user.member).to eq(1)
+    #   end
+    # end
+
+    # context "with like from user" do
+    #   it "return a json with error" do
+    #     user = User.make!
+    #     post_model = Post.make!(postable: group)
+    #     Like.make!(user: user, likeable: post_model)
+    #     expect {
+    #       post like_post_path(post_model), {}, basic_header(user.auth_token)
+    #     }.to change(post_model, :likes_count).by(0)
+    #     expect(response.status).to eq 422
+    #     expect(json['errors']).to eq(["User already made like!"])
+    #   end
+    # end
 
     context "with invalid attributes" do
       pending
