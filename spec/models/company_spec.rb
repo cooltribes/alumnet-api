@@ -10,7 +10,7 @@ RSpec.describe Company, :type => :model do
   it { should have_many(:tasks) }
   it { should have_many(:links) }
   it { should have_many(:employment_relations) }
-  it { should have_many(:users).through(:employment_relations) }
+  it { should have_many(:employees).through(:employment_relations) }
 
   # it "Some relations" do
   #   company = Company.make!
@@ -37,13 +37,18 @@ RSpec.describe Company, :type => :model do
         expect(company.name).to eq("Company")
       end
     end
-    describe ".find_or_create_by_name" do
+    describe ".find_or_create_with_employment_by_name" do
       it "find the company or create one if not exists" do
+        user = User.make!
+
         company = Company.create(name: "Company")
-        new_company = Company.find_or_create_by_name("cOmPaNY")
+        new_company = Company.find_or_create_with_employment_by_name("cOmPaNY", user)
         expect(new_company).to eq(company)
-        new_company = Company.find_or_create_by_name("Other cOmPaNY")
+        expect(new_company.employees).to eq([user])
+
+        new_company = Company.find_or_create_with_employment_by_name("Other cOmPaNY", user)
         expect(new_company.name).to eq("Other cOmPaNY")
+        expect(new_company.admins).to eq([user])
       end
     end
   end

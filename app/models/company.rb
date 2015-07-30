@@ -26,9 +26,14 @@ class Company < ActiveRecord::Base
     where('name ~* ?', name).first
   end
 
-  def self.find_or_create_by_name(name, creator = nil)
+  def self.find_or_create_with_employment_by_name(name, user)
     company = find_by_name(name)
-    company = create(name: name, creator: creator) unless company
+    if company
+      EmploymentRelation.find_or_create_by(user: user, company: company)
+    else
+      company = create(name: name, creator: user)
+      EmploymentRelation.find_or_create_by(user: user, company: company, admin: true)
+    end
     company
   end
 
