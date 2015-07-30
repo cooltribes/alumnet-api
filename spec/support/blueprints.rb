@@ -402,6 +402,7 @@ Company.blueprint do
   sector { Sector.make! }
   country { Country.make! }
   city { City.make! }
+  creator { User.make! }
   links(2)
 end
 

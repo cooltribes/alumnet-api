@@ -7,5 +7,6 @@ class AddNewColumnsToCompanies < ActiveRecord::Migration
     add_column :companies, :country_id, :integer, index: true
     add_column :companies, :city_id, :integer, index: true
     add_column :companies, :sector_id, :integer, index: true
+    add_column :companies, :creator_id, :integer, index: true
   end
 end

@@ -5,6 +5,7 @@ RSpec.describe Company, :type => :model do
   it { should belong_to(:country) }
   it { should belong_to(:city) }
   it { should belong_to(:sector) }
+  it { should belong_to(:creator) }
   it { should have_many(:company_relations) }
   it { should have_many(:tasks) }
   it { should have_many(:links) }
@@ -25,6 +26,15 @@ RSpec.describe Company, :type => :model do
         Company.create(name: "Company")
         company = Company.find_by_name("cOmPaNY")
         expect(company.name).to eq("Company")
+      end
+    end
+    describe ".find_or_create_by_name" do
+      it "find the company or create one if not exists" do
+        company = Company.create(name: "Company")
+        new_company = Company.find_or_create_by_name("cOmPaNY")
+        expect(new_company).to eq(company)
+        new_company = Company.find_or_create_by_name("Other cOmPaNY")
+        expect(new_company.name).to eq("Other cOmPaNY")
       end
     end
   end

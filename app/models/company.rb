@@ -7,6 +7,7 @@ class Company < ActiveRecord::Base
   belongs_to :country
   belongs_to :city
   belongs_to :sector
+  belongs_to :creator, class_name: 'User'
   has_many :company_relations, dependent: :destroy
   has_many :tasks, dependent: :destroy
   has_many :links, as: :linkable, dependent: :destroy
@@ -22,4 +23,9 @@ class Company < ActiveRecord::Base
     where('name ~* ?', name).first
   end
 
+  def self.find_or_create_by_name(name, creator = nil)
+    company = find_by_name(name)
+    company = create(name: name, creator: creator) unless company
+    company
+  end
 end
