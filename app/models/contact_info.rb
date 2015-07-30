@@ -1,5 +1,4 @@
 class ContactInfo < ActiveRecord::Base
-  
   include ContactInfoHelpers
   acts_as_paranoid
 
@@ -8,7 +7,7 @@ class ContactInfo < ActiveRecord::Base
     4 => 'Facebook', 5 => 'Twitter', 6 => 'IRC', 7 => 'Web Site' }
 
   ###Relations
-  belongs_to :profile
+  belongs_to :contactable, polymorphic: true
 
   ###Validations
   validates_presence_of :info

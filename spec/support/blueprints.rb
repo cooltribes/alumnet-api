@@ -228,7 +228,7 @@ ContactInfo.blueprint(:email) do
   contact_type { 0 }
   info { Faker::Internet.email }
   privacy { 1 }
-  profile { Profile.make! }
+  contactable { Profile.make! }
 end
 
 PrivacyAction.blueprint do
@@ -440,7 +440,7 @@ Link.blueprint do
   title { "Link #{sn}"}
   description { Faker::Lorem.sentence }
   url { Faker::Internet.url }
-  company_relation { CompanyRelation.make! }
+  linkable { }
 end
 
 Feature.blueprint do

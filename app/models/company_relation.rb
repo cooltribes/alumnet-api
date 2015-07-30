@@ -6,7 +6,7 @@ class CompanyRelation < ActiveRecord::Base
   # has_many :business_infos, dependent: :destroy
   has_many :company_relation_keywords, dependent: :destroy
   has_many :keywords, through: :company_relation_keywords
-  has_many :links, dependent: :destroy, foreign_key: :company_relation_id
+  has_many :links, as: :linkable, dependent: :destroy
 
 
   ### Validations

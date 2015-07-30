@@ -14,7 +14,7 @@ class Profile < ActiveRecord::Base
   belongs_to :birth_country, class_name: 'Country'
   belongs_to :residence_country, class_name: 'Country'
   belongs_to :user
-  has_many :contact_infos, dependent: :destroy
+  has_many :contact_infos, as: :contactable, dependent: :destroy
   has_many :experiences, dependent: :destroy
   has_many :language_levels, dependent: :destroy
   has_many :languages, through: :language_levels
