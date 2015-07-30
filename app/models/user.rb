@@ -45,6 +45,7 @@ class User < ActiveRecord::Base
   belongs_to :admin_location, polymorphic: true
 
   ### Scopes
+  scope :without_externals, -> { where.not(role: ROLES[:external]) }
   scope :active, -> { where(status: 1) }
   scope :inactive, -> { where(status: 0) }
 
