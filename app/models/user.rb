@@ -60,7 +60,7 @@ class User < ActiveRecord::Base
 
   ### Callbacks
   before_create :ensure_tokens
-  before_create :set_role, :set_profinda_password
+  before_create :set_default_role, :set_profinda_password
   after_create :create_new_profile
   after_create :create_privacies
 
@@ -162,6 +162,10 @@ class User < ActiveRecord::Base
 
   def set_admin!(type)
     update_column(:role, ROLES[:"#{type}_admin"])
+  end
+
+  def set_role(role)
+    send("set_#{role}!")
   end
 
   def set_regular!
@@ -571,7 +575,7 @@ class User < ActiveRecord::Base
     end while User.exists?(column => token)
   end
 
-  def set_role
+  def set_default_role
     self[:role] = ROLES[:regular] unless role.present?
   end
 
