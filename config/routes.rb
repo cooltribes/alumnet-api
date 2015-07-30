@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     resource :me, only: [:show, :update], controller: 'me' do
       get :messages
       post :send_invitations
+      post :activate
       resource :profile, only: [:show, :update], controller: 'me/profiles'
       resources :posts, controller: 'me/posts'
 
@@ -179,6 +180,7 @@ Rails.application.routes.draw do
         put :activate, on: :member
         put :banned, on: :member
         put :change_role, on: :member
+        post :register, on: :collection
         get :stats, on: :collection
       end
       resources :groups, except: [:new, :edit] do

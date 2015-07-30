@@ -39,7 +39,7 @@ class AlumnetUsersStatistics
   end
 
   def per_generation_and_gender
-    data = [["Generation", "Male", "Famale"]]
+    data = [["Generation", "Male", "Female"]]
     GENERATIONS.each do |k, v|
       data << group_and_count_user_by_generation(v, k)
     end
@@ -147,13 +147,13 @@ class AlumnetUsersStatistics
   end
 
   def active_members
-    User.joins(:user_subscriptions).where(status: 1, member: 1).
-      where(user_subscriptions: { lifetime: false, status: 1 })
+    User.joins(:subscriptions).where(status: 1, member: 1).
+      where(subscriptions: { lifetime: false, status: 1 })
   end
 
   def active_lifetime
-    User.joins(:user_subscriptions).where(status: 1, member: 1).
-      where(user_subscriptions: { lifetime: true, status: 1 })
+    User.joins(:subscriptions).where(status: 1, member: 1).
+      where(subscriptions: { lifetime: true, status: 1 })
   end
 
   def get_query_for(name, init_date, end_date)
@@ -177,11 +177,11 @@ class AlumnetUsersStatistics
   end
 
   def query_for_members(init_date, end_date)
-    active_members.where("date(\"user_subscriptions\".start_date) between ? and ?", init_date, end_date)
+    active_members.where("date(\"subscriptions\".start_date) between ? and ?", init_date, end_date)
   end
 
   def query_for_lifetime(init_date, end_date)
-    active_lifetime.where("date(\"user_subscriptions\".start_date) between ? and ?", init_date, end_date)
+    active_lifetime.where("date(\"subscriptions\".start_date) between ? and ?", init_date, end_date)
   end
 
   def query_for_user_generation(range, countries = [])
@@ -224,9 +224,9 @@ class AlumnetUsersStatistics
 
   def group_and_count_subscriptions(query, interval = "years")
     if interval == "years"
-      format_years_results query.group("date_part('year', \"user_subscriptions\".start_date)").count
+      format_years_results query.group("date_part('year', \"subscriptions\".start_date)").count
     elsif interval == "days"
-      format_days_results query.group("date(\"user_subscriptions\".start_date)").count
+      format_days_results query.group("date(\"subscriptions\".start_date)").count
     elsif interval == "months"
       generate_data_by_month(query, "start_date")
     end
