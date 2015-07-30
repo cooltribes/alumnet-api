@@ -66,9 +66,11 @@ class V1::Users::PrizesController < V1::BaseController
     end
 
     def save_subscription
-      subscription_params = { start_date: Time.zone.now, end_date: Time.zone.now + @user_prize.remaining_quantity.months, user: @user, lifetime: false }
-      @user_subscription = @user.build_subscription(subscription_params, current_user)
-      @user_subscription.save
+      subscription_params = { start_date: Time.zone.now, end_date: Time.zone.now + @user_prize.remaining_quantity.months, user: @user, lifetime: false, ownership_type: 1, creator_id: @user.id }
+      #@user_subscription = @user.build_subscription(subscription_params, current_user)
+      byebug
+      @user_subscription = Subscription.create(subscription_params)
+      #@user_subscription.save
     end
 
     def validate_avilable_points
