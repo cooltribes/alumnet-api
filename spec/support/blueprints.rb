@@ -389,9 +389,20 @@ UserPrize.blueprint do
   remaining_quantity { 1 }
 end
 
+Sector.blueprint do
+  name { "Sector #{sn}" }
+end
+
 Company.blueprint do
   name { "Company #{sn}"}
+  description { Faker::Lorem.sentence }
+  main_address { Faker::Address.street_address }
+  size { 1 }
   logo { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
+  sector { Sector.make! }
+  country { Country.make! }
+  city { City.make! }
+  links(2)
 end
 
 Keyword.blueprint do
