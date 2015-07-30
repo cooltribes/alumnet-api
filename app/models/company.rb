@@ -11,6 +11,9 @@ class Company < ActiveRecord::Base
   has_many :company_relations, dependent: :destroy
   has_many :tasks, dependent: :destroy
   has_many :links, as: :linkable, dependent: :destroy
+  has_many :employment_relations, dependent: :destroy
+  has_many :employees, through: :employment_relations, source: :user ##has_many users
+
 
   ### Validations
   validates_presence_of :name
@@ -27,5 +30,9 @@ class Company < ActiveRecord::Base
     company = find_by_name(name)
     company = create(name: name, creator: creator) unless company
     company
+  end
+
+  def admins
+    employees.where(employment_relations: { admin: true })
   end
 end

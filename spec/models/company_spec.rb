@@ -9,7 +9,16 @@ RSpec.describe Company, :type => :model do
   it { should have_many(:company_relations) }
   it { should have_many(:tasks) }
   it { should have_many(:links) }
+  it { should have_many(:employment_relations) }
+  it { should have_many(:users).through(:employment_relations) }
 
+  # it "Some relations" do
+  #   company = Company.make!
+  #   5.times { EmploymentRelation.make!(company: company) }
+  #   2.times { EmploymentRelation.make!(company: company, admin: true) }
+  #   expect(company.employees.count).to eq(7)
+  #   expect(company.admins.count).to eq(2)
+  # end
 
   describe "Validations" do
     it "uniqueness of name" do
