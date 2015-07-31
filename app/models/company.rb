@@ -14,6 +14,9 @@ class Company < ActiveRecord::Base
   has_many :employment_relations, dependent: :destroy
   has_many :employees, through: :employment_relations, source: :user ##has_many users
 
+  has_many :experiences
+  has_many :profiles, through: :experiences
+
 
   ### Validations
   validates_presence_of :name
