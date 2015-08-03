@@ -2,6 +2,17 @@ class Company < ActiveRecord::Base
 
   mount_uploader :logo, CompanyUploader
 
+  SIZE = {
+    1 => "1 - 10",
+    2 => "11 - 50",
+    3 => "51 - 200",
+    4 => "201 - 500",
+    5 => "501 - 1.000",
+    6 => "1.001 - 5.000",
+    7 => "5.001 - 10.000",
+    8 => "+10.001"
+  }
+
   ### Relations
   belongs_to :profile
   belongs_to :country
@@ -11,9 +22,6 @@ class Company < ActiveRecord::Base
   has_many :company_relations, dependent: :destroy
   has_many :tasks, dependent: :destroy
   has_many :links, as: :linkable, dependent: :destroy
-  has_many :employment_relations, dependent: :destroy
-  has_many :employees, through: :employment_relations, source: :user ##has_many users
-
   has_many :experiences
   has_many :profiles, through: :experiences
 
@@ -29,18 +37,4 @@ class Company < ActiveRecord::Base
     where('name ~* ?', name).first
   end
 
-  def self.find_or_create_with_employment_by_name(name, user)
-    company = find_by_name(name)
-    if company
-      EmploymentRelation.find_or_create_by(user: user, company: company)
-    else
-      company = create(name: name, creator: user)
-      EmploymentRelation.find_or_create_by(user: user, company: company, admin: true)
-    end
-    company
-  end
-
-  def admins
-    employees.where(employment_relations: { admin: true })
-  end
 end

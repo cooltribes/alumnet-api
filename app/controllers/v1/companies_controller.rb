@@ -8,6 +8,7 @@ class V1::CompaniesController < V1::BaseController
 
   def create
     @company = Company.new(company_params)
+    @company.creator = current_user
     if @company.save
       render :show, status: :created
     else
@@ -34,7 +35,9 @@ class V1::CompaniesController < V1::BaseController
     end
 
     def company_params
-      params.permit(:name, :logo)
+      params.permit(:name, :logo, :profile_id, :description, :main_address,
+        :size, :cover, :country_id, :city_id, :sector_id,)
     end
 
 end
+
