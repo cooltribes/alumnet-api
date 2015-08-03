@@ -1,0 +1,1 @@
+json.(product, :id, :sku, :name, :description, :status, :price, :created_at, :updated_at, :product_type, :quantity, :feature)

@@ -389,6 +389,16 @@ UserPrize.blueprint do
   remaining_quantity { 1 }
 end
 
+Product.blueprint do
+  name { "Product #{sn}" }
+  description { Faker::Lorem.sentence }
+  status { 'active' }
+  price { 100 }
+  product_type { 1 }
+  quantity { 1 }
+  feature { 'subscription' }
+end
+
 Company.blueprint do
   name { "Company #{sn}"}
   logo { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }

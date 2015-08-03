@@ -114,6 +114,8 @@ Rails.application.routes.draw do
 
     resources :prizes
 
+    resources :products
+
     resources :banners
 
     resources :keywords
