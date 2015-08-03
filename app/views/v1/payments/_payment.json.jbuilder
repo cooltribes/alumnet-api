@@ -1,4 +1,4 @@
-json.(payment, :id, :subtotal, :iva, :total, :reference, :created_at, :updated_at)
+json.(payment, :id, :subtotal, :iva, :total, :reference, :country_id, :city_id, :address, :status, :created_at, :updated_at)
 
 user = payment.user
 json.user do

@@ -351,7 +351,7 @@ class User < ActiveRecord::Base
   end
 
   def days_membership
-    member == 2 ? user_subscriptions.find_by(status:1).days_left : false
+    member == 2 ? subscriptions.find_by(status:1).days_left : false
   end
 
   ### premium subscriptions
@@ -372,7 +372,8 @@ class User < ActiveRecord::Base
   ### Function to validate users subcription every day
 
   def validate_subscription
-    user_subscriptions.where('status = 1').each do |subscription|
+    byebug
+    subscriptions.where('status = 1').each do |subscription|
       if subscription.end_date && subscription.end_date.past?
         subscription.update_column(:status, 0)
         update_column(:member, 0)
