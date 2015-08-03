@@ -1,6 +1,6 @@
 class Company < ActiveRecord::Base
 
-  mount_uploader :logo, CompanyUploader
+  mount_uploader :logo, LogoUploader
 
   SIZE = {
     1 => "1 - 10",
@@ -37,4 +37,15 @@ class Company < ActiveRecord::Base
     where('name ~* ?', name).first
   end
 
+  def country_info
+    country ? { text: country.name, value: country_id } : { text: "", value: ""}
+  end
+
+  def city_info
+    city ? { text: city.name, value: city_id } : { text: "", value: ""}
+  end
+
+  def sector_info
+    sector ? { text: sector.name, value: sector_id } : { text: "", value: ""}
+  end
 end

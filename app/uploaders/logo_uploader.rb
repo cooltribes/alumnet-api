@@ -1,10 +1,10 @@
 # encoding: utf-8
 
-class CompanyUploader < CarrierWave::Uploader::Base
+class LogoUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
   include AlumnetUploader::Base
 
-  
+
   version :card do
     process :resize_to_fit => [212, 225]
   end
