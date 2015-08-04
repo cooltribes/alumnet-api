@@ -24,6 +24,7 @@ class Company < ActiveRecord::Base
   has_many :links, as: :linkable, dependent: :destroy
   has_many :experiences
   has_many :profiles, through: :experiences
+  has_many :branches, dependent: :destroy
 
 
   ### Validations

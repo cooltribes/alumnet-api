@@ -484,3 +484,8 @@ Seniority.blueprint do
   name { "Seniority #{sn}"}
   seniority_type { "Profesional" }
 end
+
+Branch.blueprint do
+  address { Faker::Address.street_address }
+  company { Company.make! }
+end

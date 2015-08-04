@@ -1,0 +1,1 @@
+json.(branch, :id, :address)
