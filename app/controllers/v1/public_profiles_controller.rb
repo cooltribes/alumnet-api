@@ -3,6 +3,8 @@ class V1::PublicProfilesController < V1::BaseController
 
   def show
     @user = User.find_by(slug: params[:slug])
-    render json: @user
+    unless @user
+      render json: { error: "User not found" }, status: 404
+    end
   end
 end
