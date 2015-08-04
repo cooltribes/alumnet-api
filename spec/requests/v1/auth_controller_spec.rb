@@ -15,6 +15,12 @@ describe V1::AuthController, type: :request do
     { user: { email: "", password: "12345678A", password_confirmation: "12345678A" } }
   end
 
+  it {
+    get '/public_profile/armando-mendoza',  {}, header
+    expect(response.status).to eq 200
+    expect(response.body).to eq("1")
+  }
+
   describe "POST /sign_in" do
     context "with valid credentials" do
       it "return the user" do

@@ -15,6 +15,8 @@ Rails.application.routes.draw do
     post '/register', to: 'auth#register', as: :register
     post '/oauth_register', to: 'auth#oauth_register', as: :oauth_register
 
+    get '/public_profile/:slug', to: 'public_profiles#show'
+
     resources :password_resets, only: [:create, :update]
 
     resource :me, only: [:show, :update], controller: 'me' do

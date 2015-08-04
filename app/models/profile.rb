@@ -35,6 +35,7 @@ class Profile < ActiveRecord::Base
   accepts_nested_attributes_for :skills, allow_destroy: true
 
   after_save :save_avatar_in_album
+  after_update :generate_slug
 
 
   ###Instance Methods
@@ -128,6 +129,17 @@ class Profile < ActiveRecord::Base
   end
 
   private
+    def generate_slug
+      if first_name_changed? || last_name_changed?
+        generate_slug!
+      end
+    end
+
+    def generate_slug!
+      slug = "#{first_name.split(" ")[0].downcase}-#{last_name.split(" ")[0].downcase}"
+      user.update_column(:slug, slug)
+    end
+
     def born_date
       if born.present? && ((Date.current - born).to_i / 365 ) < 20
         errors.add(:born, 'you must have more than 20 years')
