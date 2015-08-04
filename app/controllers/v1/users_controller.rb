@@ -2,7 +2,7 @@ class V1::UsersController < V1::BaseController
   before_action :set_user, except: [:index, :create]
 
   def index
-    @q = User.active.includes(:profile).search(params[:q])
+    @q = User.active.without_externals.includes(:profile).search(params[:q])
     @users = @q.result
   end
 

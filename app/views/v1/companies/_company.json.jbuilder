@@ -1,17 +1,15 @@
-json.(company, :id, :name)
+json.(company, :id, :name, :description, :size, :main_address)
 
-# json.logo do
-#   if company.logo
-#     json.original company.logo.url
-#     json.card company.logo.card.url
-#     json.main company.logo.main.url
-#   else
-#     json.nil!
-#   end
-# end
+json.country company.country_info
+json.city company.city_info
+json.sector company.sector_info
 
-if company.logo 
-  json.logo company.logo.url
+
+
+if company.logo
+  json.original company.logo.url
+  json.main company.logo.main.url
+  json.card company.logo.card.url
 else
   json.logo json.nil!
 end

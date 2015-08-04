@@ -13,6 +13,10 @@ class Experience < ActiveRecord::Base
   belongs_to :profile
   belongs_to :committee
   belongs_to :seniority
+  belongs_to :company
+
+  ###Callbacks
+  after_save :check_company
 
   ### Instances Class
   def get_info_region
@@ -37,4 +41,12 @@ class Experience < ActiveRecord::Base
     where(exp_type: 0)
   end
 
+  private
+
+    def check_company
+      unless company_id.present?
+        company = Company.find_by_name(organization_name)
+        update_column(:company_id, company.id) if company
+      end
+    end
 end

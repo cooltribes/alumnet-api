@@ -45,6 +45,7 @@ class User < ActiveRecord::Base
   belongs_to :admin_location, polymorphic: true
 
   ### Scopes
+  scope :without_externals, -> { where.not(role: ROLES[:external]) }
   scope :active, -> { where(status: 1) }
   scope :inactive, -> { where(status: 0) }
 
@@ -59,7 +60,7 @@ class User < ActiveRecord::Base
 
   ### Callbacks
   before_create :ensure_tokens
-  before_create :set_role, :set_profinda_password
+  before_create :set_default_role, :set_profinda_password
   after_create :create_new_profile
   after_create :create_privacies
 
@@ -161,6 +162,10 @@ class User < ActiveRecord::Base
 
   def set_admin!(type)
     update_column(:role, ROLES[:"#{type}_admin"])
+  end
+
+  def set_role(role)
+    send("set_#{role}!")
   end
 
   def set_regular!
@@ -346,7 +351,7 @@ class User < ActiveRecord::Base
   end
 
   def days_membership
-    member == 2 ? user_subscriptions.find_by(status:1).days_left : false
+    member == 2 ? subscriptions.find_by(status:1).days_left : false
   end
 
   ### premium subscriptions
@@ -367,7 +372,8 @@ class User < ActiveRecord::Base
   ### Function to validate users subcription every day
 
   def validate_subscription
-    user_subscriptions.where('status = 1').each do |subscription|
+    byebug
+    subscriptions.where('status = 1').each do |subscription|
       if subscription.end_date && subscription.end_date.past?
         subscription.update_column(:status, 0)
         update_column(:member, 0)
@@ -570,7 +576,7 @@ class User < ActiveRecord::Base
     end while User.exists?(column => token)
   end
 
-  def set_role
+  def set_default_role
     self[:role] = ROLES[:regular] unless role.present?
   end
 

@@ -37,7 +37,7 @@ class V1::Me::ProfilesController < V1::BaseController
           :end_date, :city_id, :country_id, :organization_name, :aiesec_experience, :committee_id, :seniority_id, :current])
       elsif @profile.experience_c?
         params.permit(experiences_attributes: [:exp_type, :name, :description, :start_date,
-          :end_date, :city_id, :country_id, :organization_name, :internship, :committee_id, :seniority_id, :current])
+          :end_date, :city_id, :country_id, :organization_name, :internship, :committee_id, :seniority_id, :current, :company_id])
       elsif @profile.experience_d?
         params.permit(languages_attributes: [:language_id, :level], skills_attributes: [])
       end

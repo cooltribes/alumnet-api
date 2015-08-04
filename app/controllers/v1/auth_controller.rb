@@ -82,7 +82,7 @@ class V1::AuthController < V1::BaseController
       invitation = Invitation.find_by(token: token)
       if invitation
         user = invitation.user
-        invitation.accept!(@user) 
+        invitation.accept!(@user)
         UserAction.create(value: action.value, generator_id: invitation.id, generator_type: action.key_name, user_id: user.id, action_id: action.id)
         user.profile.add_points(action.value)
       end

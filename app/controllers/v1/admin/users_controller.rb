@@ -40,8 +40,8 @@ class V1::Admin::UsersController < V1::AdminController
   end
 
   def change_role
-    if params[:role] == "regular"
-      @user.set_regular!
+    if params[:role] == "regular" || params[:role] == "external"
+      @user.set_role(params[:role])
     else
       @user.set_admin_role(params)
     end
