@@ -489,3 +489,13 @@ Branch.blueprint do
   address { Faker::Address.street_address }
   company { Company.make! }
 end
+
+ProductService.blueprint(:service) do
+  name { "Service #{sn}"}
+  service_type { 1 }
+end
+
+ProductService.blueprint(:product) do
+  name { "Product #{sn}"}
+  service_type { 2 }
+end

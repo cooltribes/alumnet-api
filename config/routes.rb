@@ -122,6 +122,7 @@ Rails.application.routes.draw do
 
     resources :companies do
       resources :branches, except: :show, controller: 'companies/branches'
+      resources :product_services, except: :show, controller: 'companies/product_services'
     end
 
     resources :business, only: [:index, :show] do

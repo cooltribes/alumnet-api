@@ -25,6 +25,7 @@ class Company < ActiveRecord::Base
   has_many :experiences
   has_many :profiles, through: :experiences
   has_many :branches, dependent: :destroy
+  has_and_belongs_to_many :product_services, dependent: :destroy
 
 
   ### Validations
@@ -54,5 +55,9 @@ class Company < ActiveRecord::Base
 
   def sector_info
     sector ? { text: sector.name, value: sector_id } : { text: "", value: ""}
+  end
+
+  def size_info
+    { text: SIZE[size], value: size}
   end
 end
