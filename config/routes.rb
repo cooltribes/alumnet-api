@@ -15,11 +15,14 @@ Rails.application.routes.draw do
     post '/register', to: 'auth#register', as: :register
     post '/oauth_register', to: 'auth#oauth_register', as: :oauth_register
 
+    get '/public_profile/:slug', to: 'public_profiles#show'
+
     resources :password_resets, only: [:create, :update]
 
     resource :me, only: [:show, :update], controller: 'me' do
       get :messages
       post :send_invitations
+      post :activate
       resource :profile, only: [:show, :update], controller: 'me/profiles'
       resources :posts, controller: 'me/posts'
 
@@ -117,7 +120,12 @@ Rails.application.routes.draw do
 
     resources :keywords
 
-    resources :companies
+    resources :companies do
+      resources :branches, except: :show, controller: 'companies/branches'
+      resources :product_services, except: :show, controller: 'companies/product_services'
+    end
+
+    resources :product_services, only: :index
 
     resources :business, only: [:index, :show] do
       resources :links, controller: 'business/links'
@@ -179,6 +187,7 @@ Rails.application.routes.draw do
         put :activate, on: :member
         put :banned, on: :member
         put :change_role, on: :member
+        post :register, on: :collection
         get :stats, on: :collection
       end
       resources :groups, except: [:new, :edit] do

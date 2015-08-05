@@ -25,16 +25,15 @@ module StatsHelper
     user
   end
 
-  def make_lifetime_active_user(country, active_date = Date.today)
-    user = User.make!
-    Subscription.make!(:lifetime, user: user, creator: user, start_date: active_date)
+  def make_external_active_user(country, active_date = Date.today)
+    user = User.make!(role: User::ROLES[:external])
     user.profile.update(residence_country_id: country.id)
     activate_user(user)
-    user.update(active_at: Date.parse('21-08-2001'), member: 1)
+    user.update(active_at: active_date)
     user
   end
 
-  def make_member_active_user(country, active_date = Date.today)
+  def make_lifetime_active_user(country, active_date = Date.today)
     user = User.make!
     Subscription.make!(:lifetime, user: user, creator: user, start_date: active_date)
     user.profile.update(residence_country_id: country.id)

@@ -1,5 +1,5 @@
 class V1::Admin::UsersController < V1::AdminController
-  before_action :set_user, except: [:index, :stats]
+  before_action :set_user, except: [:index, :stats, :register]
 
   def index
     @q = if @admin_location
@@ -40,8 +40,8 @@ class V1::Admin::UsersController < V1::AdminController
   end
 
   def change_role
-    if params[:role] == "regular"
-      @user.set_regular!
+    if params[:role] == "regular" || params[:role] == "external"
+      @user.set_role(params[:role])
     else
       @user.set_admin_role(params)
     end
@@ -55,6 +55,17 @@ class V1::Admin::UsersController < V1::AdminController
       @user.destroy
       @user.suspend_in_profinda
       head :no_content
+    end
+  end
+
+  def register
+    @user = User.create_from_admin(register_params)
+    if @user.valid?
+      @user.save_profinda_profile
+      @user.send_password_reset
+      render :show, status: :created
+    else
+      render json: { errors: @user.errors }, status: :unprocessable_entity
     end
   end
 
@@ -98,5 +109,9 @@ class V1::Admin::UsersController < V1::AdminController
 
   def user_params
     params.permit(:email, :password, :password_confirmation)
+  end
+
+  def register_params
+    params.permit(:email, :role)
   end
 end

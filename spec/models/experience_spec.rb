@@ -16,4 +16,14 @@ describe 'Callbacks' do
       }.to change(SaveProfindaProfileJob.jobs, :size).by(1)
     end
   end
+
+  describe "check_company" do
+    it "if exists a company with organization_name then set to experience" do
+      company = Company.make!
+      experience = Experience.make(organization_name: company.name)
+      expect(experience.company).to eq(nil)
+      experience.save
+      expect(experience.company).to eq(company)
+    end
+  end
 end

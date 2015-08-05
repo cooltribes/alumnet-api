@@ -228,7 +228,7 @@ ContactInfo.blueprint(:email) do
   contact_type { 0 }
   info { Faker::Internet.email }
   privacy { 1 }
-  profile { Profile.make! }
+  contactable { Profile.make! }
 end
 
 PrivacyAction.blueprint do
@@ -389,9 +389,21 @@ UserPrize.blueprint do
   remaining_quantity { 1 }
 end
 
+Sector.blueprint do
+  name { "Sector #{sn}" }
+end
+
 Company.blueprint do
   name { "Company #{sn}"}
+  description { Faker::Lorem.sentence }
+  main_address { Faker::Address.street_address }
+  size { 1 }
   logo { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
+  sector { Sector.make! }
+  country { Country.make! }
+  city { City.make! }
+  creator { User.make! }
+  links(2)
 end
 
 Keyword.blueprint do
@@ -440,7 +452,7 @@ Link.blueprint do
   title { "Link #{sn}"}
   description { Faker::Lorem.sentence }
   url { Faker::Internet.url }
-  company_relation { CompanyRelation.make! }
+  linkable { }
 end
 
 Feature.blueprint do
@@ -471,4 +483,19 @@ end
 Seniority.blueprint do
   name { "Seniority #{sn}"}
   seniority_type { "Profesional" }
+end
+
+Branch.blueprint do
+  address { Faker::Address.street_address }
+  company { Company.make! }
+end
+
+ProductService.blueprint(:service) do
+  name { "Service #{sn}"}
+  service_type { 1 }
+end
+
+ProductService.blueprint(:product) do
+  name { "Product #{sn}"}
+  service_type { 2 }
 end
