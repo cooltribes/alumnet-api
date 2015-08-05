@@ -1,1 +1,1 @@
-json.(branch, :id, :address)
+json.(branch, :id, :address, :created_at)

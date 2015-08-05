@@ -38,6 +38,12 @@ class Company < ActiveRecord::Base
     where('name ~* ?', name).first
   end
 
+  ### instance Methods
+
+  def employees
+    profiles.distinct
+  end
+
   def country_info
     country ? { text: country.name, value: country_id } : { text: "", value: ""}
   end

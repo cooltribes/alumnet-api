@@ -4,8 +4,9 @@ json.country company.country_info
 json.city company.city_info
 json.sector company.sector_info
 
-json.branches company.branches, :address, :created_at
+json.branches company.branches, partial: 'v1/company/branches/branch', as: :branch, current_user: current_user
 json.links company.links, :title, :description, :url, :created_at, :updated_at
+json.employees company.employees, :id, :first_name, :last_name
 
 if company.logo
   json.logo do
