@@ -28,7 +28,6 @@ class Company < ActiveRecord::Base
   has_many :contact_infos, as: :contactable, dependent: :destroy
   has_and_belongs_to_many :product_services, dependent: :destroy
 
-
   ### Validations
   validates_presence_of :name
   validates_uniqueness_of :name, case_sensitive: false
