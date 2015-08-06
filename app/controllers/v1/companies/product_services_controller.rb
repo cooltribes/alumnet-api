@@ -8,7 +8,7 @@ class V1::Companies::ProductServicesController < V1::BaseController
   end
 
   def create
-    @product_service = ProductService.new(product_service_params)
+    @product_service = ProductService.find_or_initialize_by(product_service_params)
     if @product_service.save
       @company.product_services << @product_service
       render :show, status: :created,  location: [@company, @product_service]
@@ -26,7 +26,7 @@ class V1::Companies::ProductServicesController < V1::BaseController
   end
 
   def destroy
-    @product_service.destroy
+    @company.product_services.destroy(@product_service)
     head :no_content
   end
 
@@ -47,5 +47,4 @@ class V1::Companies::ProductServicesController < V1::BaseController
   def product_service_params
     params.permit(:name, :service_type)
   end
-
 end

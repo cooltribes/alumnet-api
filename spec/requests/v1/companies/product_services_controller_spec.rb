@@ -52,7 +52,7 @@ describe V1::Companies::ProductServicesController, type: :request do
       company.product_services << product
       expect {
         delete company_product_service_path(company, product), {}, basic_header(user.auth_token)
-      }.to change(ProductService, :count).by(-1)
+      }.to change(company.product_services, :count).by(-1)
       expect(response.status).to eq 204
     end
   end
