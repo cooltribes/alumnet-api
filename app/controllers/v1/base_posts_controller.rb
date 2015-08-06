@@ -6,6 +6,13 @@ class V1::BasePostsController < V1::BaseController
   def index
     @q = @postable.posts.search(params[:q])
     @posts = @q.result
+    #@posts = @q.page(params[:page]).per(params[:per_page])
+    @posts = Kaminari.paginate_array(@posts).page(params[:page]).per(params[:per_page]) 
+    #if @posts.class == Array
+    #  @posts = Kaminari.paginate_array(@posts).page(params[:page]).per(params[:per_page]) 
+    #else
+    #  @posts = @posts.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object 
+    #end
   end
 
   def show

@@ -24,7 +24,9 @@ class Company < ActiveRecord::Base
   has_many :links, as: :linkable, dependent: :destroy
   has_many :experiences
   has_many :profiles, through: :experiences
-
+  has_many :branches, dependent: :destroy
+  has_many :contact_infos, as: :contactable, dependent: :destroy
+  has_and_belongs_to_many :product_services, dependent: :destroy
 
   ### Validations
   validates_presence_of :name
@@ -37,6 +39,12 @@ class Company < ActiveRecord::Base
     where('name ~* ?', name).first
   end
 
+  ### instance Methods
+
+  def employees
+    profiles.distinct
+  end
+
   def country_info
     country ? { text: country.name, value: country_id } : { text: "", value: ""}
   end
@@ -47,5 +55,9 @@ class Company < ActiveRecord::Base
 
   def sector_info
     sector ? { text: sector.name, value: sector_id } : { text: "", value: ""}
+  end
+
+  def size_info
+    { text: SIZE[size], value: size}
   end
 end

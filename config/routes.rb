@@ -120,7 +120,13 @@ Rails.application.routes.draw do
 
     resources :keywords
 
-    resources :companies
+    resources :companies do
+      resources :branches, except: :show, controller: 'companies/branches'
+      resources :contact_infos, except: :show, controller: 'companies/contact_infos'
+      resources :product_services, except: :show, controller: 'companies/product_services'
+    end
+
+    resources :product_services, only: :index
 
     resources :business, only: [:index, :show] do
       resources :links, controller: 'business/links'
