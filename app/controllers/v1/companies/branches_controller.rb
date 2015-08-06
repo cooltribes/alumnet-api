@@ -44,7 +44,7 @@ class V1::Companies::BranchesController < V1::BaseController
   end
 
   def branch_params
-    params.permit(:address)
+    params.permit(:address, :country_id, :city_id)
   end
 
 end
