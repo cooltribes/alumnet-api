@@ -1,17 +1,5 @@
 json.(task_invitation, :id, :accepted, :user_id, :task_id, :created_at)
 
-user = task_invitation.user
-json.user do
-  json.(user, :id)
-  json.name user.permit_name(current_user)
-  json.last_experience user.permit_last_experience(current_user)
-  if user.permit('see-avatar', current_user)
-    json.avatar user.avatar.large.url
-  else
-    json.avatar user.avatar.large.default_url
-  end
-end
-
 task = task_invitation.task
 json.task do
   json.(task, :id, :name, :description, :duration, :post_until, :must_have_list,
@@ -23,3 +11,14 @@ json.task do
   json.position task.position_info
 end
 
+user = task.user
+json.user do
+  json.(user, :id)
+  json.name user.permit_name(current_user)
+  json.last_experience user.permit_last_experience(current_user)
+  if user.permit('see-avatar', current_user)
+    json.avatar user.avatar.large.url
+  else
+    json.avatar user.avatar.large.default_url
+  end
+end

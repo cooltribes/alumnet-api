@@ -16,11 +16,14 @@ describe V1::Companies::BranchesController, type: :request do
   describe "POST /companies/:id/branches" do
     context "with valid attributes" do
       it "should create a Branch" do
+        country = Country.make!(:simple)
+        city = City.make!(country: country)
         expect {
-          post company_branches_path(company), { address: "New address" }, basic_header(user.auth_token)
+          post company_branches_path(company), { address: "New address", country_id: country.id, city_id: city.id }, basic_header(user.auth_token)
         }.to change(Branch, :count).by(1)
         expect(response.status).to eq 201
         expect(json["address"]).to eq("New address")
+        expect(json["country"]).to eq({ "text" => country.name, "value" => country.id} )
       end
     end
     context "with invalid attributes" do

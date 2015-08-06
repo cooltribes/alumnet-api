@@ -7,6 +7,7 @@ class Country < ActiveRecord::Base
   has_many :users, through: :profiles
   has_many :groups
   has_many :events
+  has_many :branches
   belongs_to :region
 
   ### Scopes
