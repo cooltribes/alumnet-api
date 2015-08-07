@@ -1,6 +1,7 @@
 class V1::PaymentsController < V1::BaseController
-  before_action :set_payment, except: [:index, :create]
+  before_action :set_payment, except: [:index, :create, :update]
   before_action :set_paymentable, only: [:create]
+  before_action :set_payment_by_reference, only: [:update]
 
   def index
     @q = Payment.search(params[:q])
@@ -39,6 +40,10 @@ class V1::PaymentsController < V1::BaseController
 
   def set_payment
     @payment = Payment.find(params[:id])
+  end
+
+  def set_payment_by_reference
+    @payment = Payment.find_by(reference: params[:id])
   end
 
   def set_paymentable
