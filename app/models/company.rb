@@ -25,8 +25,8 @@ class Company < ActiveRecord::Base
   has_many :experiences
   has_many :profiles, through: :experiences
   has_many :branches, dependent: :destroy
+  has_many :contact_infos, as: :contactable, dependent: :destroy
   has_and_belongs_to_many :product_services, dependent: :destroy
-
 
   ### Validations
   validates_presence_of :name
