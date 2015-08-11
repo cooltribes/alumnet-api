@@ -399,6 +399,15 @@ Product.blueprint do
   feature { 'subscription' }
 end
 
+UserProduct.blueprint do
+  user { User.make! }
+  product { Product.make! }
+  status { 'active' }
+  start_date { Date.current }
+  end_date { Date.current+1.year }
+  transaction_type { 1 }
+end
+
 Company.blueprint do
   name { "Company #{sn}"}
   logo { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
