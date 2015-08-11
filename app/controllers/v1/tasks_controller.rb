@@ -23,6 +23,11 @@ class V1::TasksController < V1::BaseController
   def automatches
     @q = Task.profinda_automatches(current_user, help_type).search(params[:q])
     @tasks = @q.result
+    if @tasks.class == Array
+      @tasks = Kaminari.paginate_array(@tasks).page(params[:page]).per(params[:per_page]) 
+    else
+      @tasks = @tasks.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object 
+    end    
     render 'v1/tasks/index'
   end
 
