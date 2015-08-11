@@ -3,6 +3,7 @@ class Branch < ActiveRecord::Base
   belongs_to :company
   belongs_to :country
   belongs_to :city
+  has_many :contact_infos, as: :contactable, dependent: :destroy
 
   ###Validationes
   validates_presence_of :address
