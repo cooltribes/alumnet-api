@@ -4,6 +4,11 @@ class V1::UsersController < V1::BaseController
   def index
     @q = User.active.without_externals.includes(:profile).search(params[:q])
     @users = @q.result
+    if @users.class == Array
+      @users = Kaminari.paginate_array(@users).page(params[:page]).per(params[:per_page]) 
+    else
+      @users = @users.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object 
+    end    
   end
 
   def show

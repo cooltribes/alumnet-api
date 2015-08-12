@@ -126,6 +126,10 @@ Rails.application.routes.draw do
       resources :product_services, except: :show, controller: 'companies/product_services'
     end
 
+    resources :branches, only: :show do
+      resources :contact_infos, except: :show, controller: 'branches/contact_infos'
+    end
+
     resources :product_services, only: :index
 
     resources :business, only: [:index, :show] do

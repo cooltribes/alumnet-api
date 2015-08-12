@@ -14,8 +14,19 @@ class V1::PaymentsController < V1::BaseController
   def create
     @payment = Payment.new(payment_params)
     @payment.paymentable = @paymentable
-    @payment.save
-    render :show, status: :created, location: @payment
+    if @payment.save
+      if payment_params[:paymentable_type] == 'Event'
+        @attendance = Attendance.find_by(event_id: payment_params[:paymentable_id], user_id: payment_params[:user_id])
+        @attendance.status = 1
+        if @attendance.save
+          render :show, status: :created, location: @payment
+        else
+          render json: @attendance.errors, status: :unprocessable_entity
+        end
+      end
+    else
+      render json: @payment.errors, status: :unprocessable_entity
+    end
   end
 
   def update
