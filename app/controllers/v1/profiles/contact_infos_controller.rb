@@ -28,7 +28,7 @@ class V1::Profiles::ContactInfosController < V1::BaseController
 
   def destroy
     authorize @profile
-    @contact_info.destroy
+    @contact_info.really_destroy!
     head :no_content
   end
 

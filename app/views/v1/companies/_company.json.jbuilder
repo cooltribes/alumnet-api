@@ -1,4 +1,4 @@
-json.(company, :id, :name, :description, :size, :main_address)
+json.(company, :id, :name, :description, :size, :main_address, :is_free)
 
 json.country company.country_info
 json.city company.city_info
