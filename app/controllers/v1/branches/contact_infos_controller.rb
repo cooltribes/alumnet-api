@@ -1,15 +1,16 @@
-class V1::Companies::ContactInfosController < V1::BaseController
-  before_action :set_company
+class V1::Branches::ContactInfosController < V1::BaseController
+  before_action :set_branch
   before_action :set_contact_info, except: [:index, :create]
 
   def index
-    @contact_infos = @company.contact_infos
+    @contact_infos = @branch.contact_infos
+    render 'v1/companies/contact_infos/index'
   end
 
   def create
     @contact_info = ContactInfo.new(contact_info_params)
-    if @company.contact_infos << @contact_info
-      render :show, status: :created
+    if @branch.contact_infos << @contact_info
+      render 'v1/companies/contact_infos/show', status: :created
     else
       render json: @contact_info.errors, status: :unprocessable_entity
     end
@@ -17,7 +18,7 @@ class V1::Companies::ContactInfosController < V1::BaseController
 
   def update
     if @contact_info.update(contact_info_params)
-      render :show, status: :ok
+      render 'v1/companies/contact_infos/show', status: :ok
     else
       render json: @contact_info.errors, status: :unprocessable_entity
     end
@@ -30,12 +31,12 @@ class V1::Companies::ContactInfosController < V1::BaseController
 
   private
 
-  def set_company
-    @company = Company.find(params[:company_id])
+  def set_branch
+    @branch = Branch.find(params[:branch_id])
   end
 
   def set_contact_info
-    @contact_info = @company.contact_infos.find(params[:id])
+    @contact_info = @branch.contact_infos.find(params[:id])
   end
 
   def contact_info_params
