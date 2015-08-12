@@ -20,3 +20,6 @@ if company.logo
 else
   json.logo json.nil!
 end
+
+json.employees_count company.employees.count
+json.past_employees_count company.past_employees.count

@@ -6,6 +6,17 @@ class V1::CompaniesController < V1::BaseController
     @companies = @q.result
   end
 
+  def employees
+    @q = @company.employees.search(params[:q])
+    @employees = @q.result
+  end
+
+  def past_employees
+    @q = @company.past_employees.search(params[:q])
+    @employees = @q.result
+    render :employees
+  end
+
   def create
     @company = Company.new(company_params)
     @company.creator = current_user

@@ -16,6 +16,7 @@ class Experience < ActiveRecord::Base
   belongs_to :company
 
   ###Callbacks
+  before_save :check_end_date
   after_save :check_company
 
   ### Instances Class
@@ -42,6 +43,11 @@ class Experience < ActiveRecord::Base
   end
 
   private
+    def check_end_date
+      if exp_type == 3 && end_date == nil && current == false
+        self[:current] = true
+      end
+    end
 
     def check_company
       unless company_id.present?
