@@ -84,7 +84,7 @@ class Notification
 
   def self.notify_friendship_request_to_user(user, friend)
     notification = new(friend)
-    subject = "Hello, Do you like to be my Alumfriend?"
+    subject = "Hello, Do you like to be my Friend?"
     body = "The user #{user.name} sent you a friendship request"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
