@@ -1,0 +1,1 @@
+json.array! @company_admins, partial: 'company_admin', as: :company_admin, current_user: @current_user

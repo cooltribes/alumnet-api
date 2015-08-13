@@ -1,30 +1,34 @@
 class V1::Companies::CompanyAdminsController < V1::BaseController
+  include Pundit
   before_action :set_company
-  before_action :set_contact_info, except: [:index, :create]
+  before_action :set_company_admin, except: [:index, :create]
 
   def index
     @company_admins = @company.company_admins
   end
 
   def create
-    @contact_info = ContactInfo.new(contact_info_params)
-    if @company.company_admins << @contact_info
+    @company_admin = CompanyAdmin.new(company_admin_params)
+    if @company.company_admins << @company_admin
+      @company_admin.mark_as_accepted_by(current_user) if @company.is_admin?(current_user)
       render :show, status: :created
     else
-      render json: @contact_info.errors, status: :unprocessable_entity
+      render json: @company_admin.errors, status: :unprocessable_entity
     end
   end
 
   def update
-    if @contact_info.update(contact_info_params)
+    authorize(@company)
+    if @company_admin.mark_as_accepted_by(current_user)
       render :show, status: :ok
     else
-      render json: @contact_info.errors, status: :unprocessable_entity
+      render json: @company_admin.errors, status: :unprocessable_entity
     end
   end
 
   def destroy
-    @contact_info.really_destroy!
+    authorize(@company)
+    @company_admin.destroy!
     head :no_content
   end
 
@@ -34,12 +38,12 @@ class V1::Companies::CompanyAdminsController < V1::BaseController
     @company = Company.find(params[:company_id])
   end
 
-  def set_contact_info
-    @contact_info = @company.company_admins.find(params[:id])
+  def set_company_admin
+    @company_admin = @company.company_admins.find(params[:id])
   end
 
-  def contact_info_params
-    params.permit(:contact_type, :info, :privacy)
+  def company_admin_params
+    params.permit(:user_id)
   end
 
 end
