@@ -7,12 +7,18 @@ class V1::CompaniesController < V1::BaseController
   end
 
   def employees
-    @q = @company.employees.search(params[:q])
+    @q = @company.current_employees.search(params[:q])
     @employees = @q.result
   end
 
   def past_employees
     @q = @company.past_employees.search(params[:q])
+    @employees = @q.result
+    render :employees
+  end
+
+  def admins
+    @q = @company.accepted_admins.search(params[:q])
     @employees = @q.result
     render :employees
   end

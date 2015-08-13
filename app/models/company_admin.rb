@@ -12,6 +12,7 @@ class CompanyAdmin < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :user_id, :company_id
+  validates_uniqueness_of :user_id, scope: [:company_id]
 
   ### Instance Methods
 

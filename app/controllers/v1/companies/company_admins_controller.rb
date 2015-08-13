@@ -4,7 +4,8 @@ class V1::Companies::CompanyAdminsController < V1::BaseController
   before_action :set_company_admin, except: [:index, :create]
 
   def index
-    @company_admins = @company.company_admins
+    @q = @company.company_admins.sent.search(params[:q])
+    @company_admins = @q.result
   end
 
   def create
