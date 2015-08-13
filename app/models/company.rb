@@ -2,6 +2,8 @@ class Company < ActiveRecord::Base
 
   mount_uploader :logo, LogoUploader
 
+  enum :status, [:sent, :accepted]
+
   SIZE = {
     1 => "1 - 10",
     2 => "11 - 50",
@@ -34,6 +36,10 @@ class Company < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name, case_sensitive: false
 
+  ### Scopes
+  scope :accepted, -> { where(status: 1) }
+  scope :sent, -> { where(status: 0) }
+
   ### class Methods
 
   def self.find_by_name(name)
@@ -42,6 +48,14 @@ class Company < ActiveRecord::Base
   end
 
   ### instance Methods
+
+  def accepted_admins
+    admins.where(company_admins: { status: 1 })
+  end
+
+  def is_admin?(user)
+    accepted_admins.include?(user)
+  end
 
   def employees
     profiles.where(experiences: { current: true }).distinct
