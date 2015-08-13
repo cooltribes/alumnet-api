@@ -42,7 +42,11 @@ class Company < ActiveRecord::Base
   ### instance Methods
 
   def employees
-    profiles.distinct
+    profiles.where(experiences: { current: true }).distinct
+  end
+
+  def past_employees
+    profiles.where(experiences: { current: false }).distinct
   end
 
   def country_info

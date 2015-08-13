@@ -121,6 +121,8 @@ Rails.application.routes.draw do
     resources :keywords
 
     resources :companies do
+      get :employees, on: :member
+      get :past_employees, on: :member
       resources :branches, except: :show, controller: 'companies/branches'
       resources :contact_infos, except: :show, controller: 'companies/contact_infos'
       resources :product_services, except: :show, controller: 'companies/product_services'
