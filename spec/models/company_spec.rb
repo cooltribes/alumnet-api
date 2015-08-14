@@ -9,6 +9,7 @@ RSpec.describe Company, :type => :model do
   it { should have_many(:company_relations) }
   it { should have_many(:tasks) }
   it { should have_many(:links) }
+  it { should have_many(:company_admins) }
 
   # it "Some relations" do
   #   company = Company.make!
