@@ -21,9 +21,19 @@ else
   json.logo json.nil!
 end
 
+if company.cover
+  json.cover do
+    json.original company.cover.url
+    json.main company.cover.main.url
+    json.card company.cover.card.url
+  end
+else
+  json.cover json.nil!
+end
+
 json.creator do
   json.id company.creator_id
-  json.name company.creator.name
+  json.name company.creator.try(:name)
 end
 
 json.employees_count company.employees.count
@@ -31,3 +41,4 @@ json.past_employees_count company.past_employees.count
 json.admins_count company.accepted_admins.count
 
 json.is_admin company.is_admin?(current_user)
+json.has_request_for_admin company.has_request_for_admin(current_user)

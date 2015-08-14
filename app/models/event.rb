@@ -2,6 +2,7 @@ class Event < ActiveRecord::Base
   acts_as_paranoid
   include EventHelpers
   include PaymentableMethods
+  include CropingMethods
   mount_uploader :cover, CoverUploader
   enum event_type: [:open, :closed, :secret]
 
@@ -11,7 +12,6 @@ class Event < ActiveRecord::Base
 
   ## Virtual Attributes
   attr_accessor :cover_uploader
-  attr_accessor :imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH
   attr_accessor :invite_group_members
 
   ### Relations
@@ -41,11 +41,6 @@ class Event < ActiveRecord::Base
   scope :non_official, -> { where(official: false) }
 
   ### Instance methods
-
-  ### Croping Cover
-  def crop
-    cover.recreate_versions! if imgX1.present?
-  end
 
   def is_open?
     event_type == 0
