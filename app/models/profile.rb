@@ -4,9 +4,10 @@ class Profile < ActiveRecord::Base
   mount_uploader :cover, UserCoverUploader
   enum register_step: [:initial, :profile, :contact, :experience_a, :experience_b, :experience_c, :experience_d, :skills, :approval]
   include ProfileHelpers
+  include CropingMethods
 
   ##Crop avatar
-  attr_accessor :imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH, :avatar_url
+  attr_accessor :avatar_url
 
   ###Relations
   belongs_to :birth_city, class_name: 'City'
@@ -39,23 +40,6 @@ class Profile < ActiveRecord::Base
 
 
   ###Instance Methods
-
-  def crop(image)
-    if image == "avatar"
-      avatar.recreate_versions! if imgX1.present?
-    elsif image == "cover"
-      cover.recreate_versions! if imgX1.present?
-    end
-    save!
-  end
-
-  def crop_url(image)
-    if image == "avatar"
-      avatar.crop.url
-    elsif image == "cover"
-      cover.crop.url
-    end
-  end
 
   def hidden_last_name
     if last_name

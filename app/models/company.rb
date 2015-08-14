@@ -1,6 +1,8 @@
 class Company < ActiveRecord::Base
 
   mount_uploader :logo, LogoUploader
+  mount_uploader :cover, CoverUploader
+  include CropingMethods
 
   SIZE = {
     1 => "1 - 10",
@@ -46,13 +48,16 @@ class Company < ActiveRecord::Base
   end
 
   ### instance Methods
-
   def accepted_admins
     admins.where(company_admins: { status: 1 })
   end
 
   def get_admin_relation(user)
     company_admins.find_by(user: user, status: 1)
+  end
+
+  def has_request_for_admin(user)
+    company_admins.exists?(user: user, status: 0)
   end
 
   def current_employees

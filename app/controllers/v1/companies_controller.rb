@@ -23,6 +23,13 @@ class V1::CompaniesController < V1::BaseController
     render :employees
   end
 
+  def cropping
+    image = params[:image]
+    @company.assign_attributes(crop_params)
+    @company.crop(image)
+    render json: { status: 'success', url: @company.crop_url(image) }
+  end
+
   def create
     @company = Company.new(company_params)
     @company.creator = current_user
@@ -56,5 +63,8 @@ class V1::CompaniesController < V1::BaseController
         :size, :cover, :country_id, :city_id, :sector_id,)
     end
 
+    def crop_params
+      params.permit(:imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH)
+    end
 end
 
