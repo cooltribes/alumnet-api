@@ -1,4 +1,3 @@
-user = employee.user
 json.(user, :id, :member)
 json.name user.permit_name(current_user)
 json.email user.permit_email(current_user)
@@ -32,3 +31,6 @@ else
     json.friendship nil
   end
 end
+
+json.is_admin company.is_admin?(user)
+json.admin_relation_id company.get_admin_relation(user).try(:id)

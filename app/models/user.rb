@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
   has_many :task_invitations, dependent: :destroy
   has_many :matches, dependent: :destroy
   has_many :payments, dependent: :destroy
-
+  has_many :company_admins, dependent: :destroy
   has_one :profile, dependent: :destroy
   belongs_to :admin_location, polymorphic: true
 

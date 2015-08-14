@@ -1,0 +1,1 @@
+json.partial! 'company_admin', company_admin: @company_admin, current_user: @current_user

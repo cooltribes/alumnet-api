@@ -62,4 +62,42 @@ module ProfileHelpers
       end
     end
   end
+
+  #For public profiles
+  def completeBorn(user)
+    #Date
+    bornDate = permit_born(user)
+    array = []
+    array.push(bornDate[:year]) if bornDate[:year]
+    array.push(bornDate[:month]) if bornDate[:month]
+    array.push(bornDate[:day]) if bornDate[:day]
+    completeDate = array.join("/")
+
+    #Location of origin
+    city = permit_birth_city(user)
+    completeLocation = nil
+    if city
+      country = permit_birth_country(user)
+      completeLocation = "#{city[:text]} - #{country[:text]}"
+    end
+
+    #Born (date and location)
+    array = []
+    array.push(completeLocation) if completeLocation
+    array.push(completeDate) if completeDate != ""
+    completeBorn = array.join(" in ")    
+  end
+
+  def residenceLocation(user)
+    city = permit_residence_city(user)
+    completeLocation = nil
+    if city
+      country = permit_residence_country(user)
+      completeLocation = "#{city[:text]} - #{country[:text]}"
+    end
+    
+  end
+
+
+
 end

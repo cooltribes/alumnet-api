@@ -9,7 +9,7 @@ json.branches company.branches, partial: 'v1/companies/branches/branch', as: :br
 json.products_services company.product_services, partial: 'v1/companies/product_services/product_service', as: :product_service, current_user: current_user
 json.contacts company.contact_infos, partial: 'v1/shared/contact_info', as: :contact_info, current_user: current_user
 json.links company.links, :title, :description, :url, :created_at, :updated_at
-json.employees company.employees, :id, :first_name, :last_name
+json.employees company.employees, :id
 
 if company.logo
   json.logo do
@@ -21,5 +21,13 @@ else
   json.logo json.nil!
 end
 
+json.creator do
+  json.id company.creator_id
+  json.name company.creator.name
+end
+
 json.employees_count company.employees.count
 json.past_employees_count company.past_employees.count
+json.admins_count company.accepted_admins.count
+
+json.is_admin company.is_admin?(current_user)
