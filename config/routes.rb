@@ -123,9 +123,11 @@ Rails.application.routes.draw do
     resources :companies do
       get :employees, on: :member
       get :past_employees, on: :member
+      get :admins, on: :member
       resources :branches, except: :show, controller: 'companies/branches'
       resources :contact_infos, except: :show, controller: 'companies/contact_infos'
       resources :product_services, except: :show, controller: 'companies/product_services'
+      resources :company_admins, except: :show, controller: 'companies/company_admins'
     end
 
     resources :branches, only: :show do

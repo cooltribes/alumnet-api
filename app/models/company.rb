@@ -24,13 +24,19 @@ class Company < ActiveRecord::Base
   has_many :links, as: :linkable, dependent: :destroy
   has_many :experiences
   has_many :profiles, through: :experiences
+  has_many :employees, through: :profiles, source: :user
   has_many :branches, dependent: :destroy
   has_many :contact_infos, as: :contactable, dependent: :destroy
+  has_many :company_admins, dependent: :destroy
+  has_many :admins, through: :company_admins, source: :user
   has_and_belongs_to_many :product_services, dependent: :destroy
 
   ### Validations
   validates_presence_of :name
   validates_uniqueness_of :name, case_sensitive: false
+
+  ### Callbacks
+  after_create :create_admin_for_creator
 
   ### class Methods
 
@@ -41,12 +47,24 @@ class Company < ActiveRecord::Base
 
   ### instance Methods
 
-  def employees
-    profiles.where(experiences: { current: true }).distinct
+  def accepted_admins
+    admins.where(company_admins: { status: 1 })
+  end
+
+  def get_admin_relation(user)
+    company_admins.find_by(user: user, status: 1)
+  end
+
+  def current_employees
+    employees.where(experiences: { current: true }).distinct
   end
 
   def past_employees
-    profiles.where(experiences: { current: false }).distinct
+    employees.where(experiences: { current: false }).distinct
+  end
+
+  def is_admin?(user)
+    accepted_admins.include?(user)
   end
 
   def country_info
@@ -64,4 +82,10 @@ class Company < ActiveRecord::Base
   def size_info
     { text: SIZE[size], value: size}
   end
+
+  private
+
+    def create_admin_for_creator
+      company_admins << CompanyAdmin.new(user: creator, status: 1, accepted_by: creator.id)
+    end
 end
