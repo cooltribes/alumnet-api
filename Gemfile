@@ -52,4 +52,5 @@ group :test do
   gem 'database_cleaner'
   gem 'shoulda-matchers', require: false
   gem 'rspec-sidekiq'
+  gem 'webmock'
 end

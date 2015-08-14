@@ -15,7 +15,7 @@ describe V1::Business::LinksController, type: :request do
   describe "GET /business/:id/links" do
 
     before do
-      3.times { Link.make!(company_relation: business) }
+      3.times { Link.make!(linkable: business) }
     end
 
     it "return all links of business" do
@@ -35,6 +35,7 @@ describe V1::Business::LinksController, type: :request do
         expect(json["title"]).to eq("New Link")
         expect(json["description"]).to eq("description")
         expect(json["url"]).to eq("www.google.com")
+        expect(Link.last.linkable).to eq(business)
       end
     end
 
@@ -51,7 +52,7 @@ describe V1::Business::LinksController, type: :request do
 
   describe "PUT /business/:id/links/:id" do
     it "edit a link of business" do
-      link = Link.make!(company_relation: business)
+      link = Link.make!(linkable: business)
       put business_link_path(business, link), { title: "New name of Link" }, basic_header(current_user.auth_token)
       expect(response.status).to eq 200
       expect(json["title"]).to eq("New name of Link")
@@ -60,7 +61,7 @@ describe V1::Business::LinksController, type: :request do
 
   describe "DELETE /business/:id/links/:id" do
     it "delete a link of business" do
-      link = Link.make!(company_relation: business)
+      link = Link.make!(linkable: business)
       expect {
         delete business_link_path(business, link), {}, basic_header(current_user.auth_token)
       }.to change(Link, :count).by(-1)

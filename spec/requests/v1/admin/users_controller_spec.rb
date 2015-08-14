@@ -79,4 +79,19 @@ describe V1::Admin::UsersController, type: :request do
       expect(response.status).to eq 204
     end
   end
+
+  describe "POST /admin/users/register" do
+    context "with valid attributes" do
+      it "create a new user" do
+        expect {
+          post register_admin_users_path, { email: "test_email@gmail.com", role: "external" }, basic_header(admin.auth_token)
+        }.to change(User, :count).by(1)
+        expect(response.status).to eq 201
+        user = User.last
+        expect(user.email).to eq("test_email@gmail.com")
+        expect(user.role).to eq(User::ROLES[:external])
+        expect(user.created_by_admin).to eq(true)
+      end
+    end
+  end
 end

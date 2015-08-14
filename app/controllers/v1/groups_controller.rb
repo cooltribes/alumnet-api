@@ -7,6 +7,12 @@ class V1::GroupsController < V1::BaseController
   def index
     @q = Group.without_secret.search(params[:q])
     @groups = @q.result
+    #@groups = Kaminari.paginate_array(@groups).page(params[:page]).per(params[:per_page])
+    if @groups.class == Array
+      @groups = Kaminari.paginate_array(@groups).page(params[:page]).per(params[:per_page]) 
+    else
+      @groups = @groups.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object 
+    end
   end
 
   def cropping

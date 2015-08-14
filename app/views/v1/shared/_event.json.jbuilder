@@ -36,7 +36,7 @@ end
 
 payment = event.payment_for(current_user)
 if payment
-  json.payment_info payment, :id, :price, :reference, :event_id, :user_id, :attendance_id, :created_at
+  json.payment_info payment, :id, :subtotal, :iva, :total, :reference, :paymentable_id, :paymentable_type, :user_id, :created_at, :updated_at
 else
   json.payment_info nil
 end

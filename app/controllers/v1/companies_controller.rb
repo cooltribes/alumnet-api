@@ -6,8 +6,26 @@ class V1::CompaniesController < V1::BaseController
     @companies = @q.result
   end
 
+  def employees
+    @q = @company.current_employees.search(params[:q])
+    @employees = @q.result
+  end
+
+  def past_employees
+    @q = @company.past_employees.search(params[:q])
+    @employees = @q.result
+    render :employees
+  end
+
+  def admins
+    @q = @company.accepted_admins.search(params[:q])
+    @employees = @q.result
+    render :employees
+  end
+
   def create
     @company = Company.new(company_params)
+    @company.creator = current_user
     if @company.save
       render :show, status: :created
     else
@@ -34,7 +52,9 @@ class V1::CompaniesController < V1::BaseController
     end
 
     def company_params
-      params.permit(:name, :logo)
+      params.permit(:name, :logo, :profile_id, :description, :main_address,
+        :size, :cover, :country_id, :city_id, :sector_id,)
     end
 
 end
+

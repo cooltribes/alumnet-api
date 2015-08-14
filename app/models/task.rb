@@ -45,7 +45,7 @@ class Task < ActiveRecord::Base
 
   def can_apply(user)
     return false if self.user == user
-    !user_applied?(user)
+    !user_applied?(user) && !user.is_external?
   end
 
   def user_applied?(user)

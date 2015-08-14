@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   include UserHelpers
   include ProfindaRegistration
 
-  ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin",
+  ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin", external: "External",
     regional_admin: "RegionalAdmin", nacional_admin: "NacionalAdmin", regular: "Regular" }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
   VALID_PASSWORD_REGEX = /\A(?=.*[a-zA-Z])(?=.*[0-9]).{8,}\z/
@@ -24,8 +24,7 @@ class User < ActiveRecord::Base
   has_many :likes, dependent: :destroy
   has_many :privacies, dependent: :destroy
   has_many :albums, as: :albumable, dependent: :destroy
-  has_many :user_subscriptions, dependent: :destroy
-  has_many :subscriptions, through: :user_subscriptions
+  has_many :subscriptions, dependent: :destroy
   has_many :attendances, dependent: :destroy
   has_many :events, as: :eventable, dependent: :destroy
   has_many :invited_events, through: :attendances, source: :event
@@ -40,11 +39,13 @@ class User < ActiveRecord::Base
   has_many :prizes, through: :user_prizes
   has_many :task_invitations, dependent: :destroy
   has_many :matches, dependent: :destroy
-
+  has_many :payments, dependent: :destroy
+  has_many :company_admins, dependent: :destroy
   has_one :profile, dependent: :destroy
   belongs_to :admin_location, polymorphic: true
 
   ### Scopes
+  scope :without_externals, -> { where.not(role: ROLES[:external]) }
   scope :active, -> { where(status: 1) }
   scope :inactive, -> { where(status: 0) }
 
@@ -59,9 +60,23 @@ class User < ActiveRecord::Base
 
   ### Callbacks
   before_create :ensure_tokens
-  before_create :set_role, :set_profinda_password
+  before_create :set_default_role, :set_profinda_password
   after_create :create_new_profile
   after_create :create_privacies
+
+  ### Class Methods
+  def self.create_from_admin(params)
+    user = new
+    password = user.generate_random_password
+    attributes = { email: params[:email], password: password, password_confirmation: password }
+    user.attributes = attributes
+    user.created_by_admin = true
+    user.role = ROLES[:alumnet_admin] if params[:role] == "admin"
+    user.role = ROLES[:regular] if params[:role] == "regular"
+    user.role = ROLES[:external] if params[:role] == "external"
+    user.save
+    user
+  end
 
   ### Instance Methods
   def name
@@ -149,8 +164,16 @@ class User < ActiveRecord::Base
     update_column(:role, ROLES[:"#{type}_admin"])
   end
 
+  def set_role(role)
+    send("set_#{role}!")
+  end
+
   def set_regular!
     update_column(:role, ROLES[:regular])
+  end
+
+  def set_external!
+    update_column(:role, ROLES[:external])
   end
 
   def is_admin?
@@ -190,6 +213,10 @@ class User < ActiveRecord::Base
 
   def is_regular?
     role == "Regular"
+  end
+
+  def is_external?
+    role == "External"
   end
 
   ### all about Conversations
@@ -324,7 +351,7 @@ class User < ActiveRecord::Base
   end
 
   def days_membership
-    member == 2 ? user_subscriptions.find_by(status:1).days_left : false
+    member == 2 ? subscriptions.find_by(status:1).days_left : false
   end
 
   ### premium subscriptions
@@ -345,7 +372,8 @@ class User < ActiveRecord::Base
   ### Function to validate users subcription every day
 
   def validate_subscription
-    user_subscriptions.where('status = 1').each do |subscription|
+    byebug
+    subscriptions.where('status = 1').each do |subscription|
       if subscription.end_date && subscription.end_date.past?
         subscription.update_column(:status, 0)
         update_column(:member, 0)
@@ -535,6 +563,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def generate_random_password
+    SecureRandom.urlsafe_base64(8).tr('lIO0', 'sxyz')
+  end
+
   private
 
   ### this a temporary solution to authenticate the api
@@ -544,7 +576,7 @@ class User < ActiveRecord::Base
     end while User.exists?(column => token)
   end
 
-  def set_role
+  def set_default_role
     self[:role] = ROLES[:regular] unless role.present?
   end
 
@@ -563,5 +595,4 @@ class User < ActiveRecord::Base
       end
     end
   end
-
 end

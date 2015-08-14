@@ -17,6 +17,15 @@ class V1::Admin::StatsController < V1::AdminController
     render json: graphs_info
   end
 
+  def seniorities
+    graphs_info = @stats.per_seniorities
+    render json: graphs_info
+  end
+
+  def status
+    graphs_info = @stats.per_status
+    render json: graphs_info
+  end
 
   private
     def set_stats

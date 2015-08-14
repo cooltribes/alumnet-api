@@ -12,6 +12,32 @@ describe V1::CompaniesController, type: :request do
     end
   end
 
+  describe "GET /companies/:id/employees" do
+    it "return all employees of company" do
+      company = Company.make!
+      3.times do
+        user = User.make!
+        Experience.make!(:profesional, company: company, profile: user.profile, current: true)
+      end
+      get employees_company_path(company), {}, basic_header(user.auth_token)
+      expect(response.status).to eq 200
+      expect(json.count).to eq(3)
+    end
+  end
+
+  describe "GET /companies/:id/past_employees" do
+    it "return all past employees of company" do
+      company = Company.make!
+      2.times do
+        user = User.make!
+        Experience.make!(:profesional, company: company, profile: user.profile)
+      end
+      get past_employees_company_path(company), {}, basic_header(user.auth_token)
+      expect(response.status).to eq 200
+      expect(json.count).to eq(2)
+    end
+  end
+
   describe "POST /companies" do
     context "with valid attributes" do
       it "should create a company" do

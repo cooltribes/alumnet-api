@@ -67,6 +67,21 @@ Experience.blueprint do
   profile { Profile.make! }
 end
 
+Experience.blueprint(:profesional) do
+  exp_type { 3 }
+  name { "Experience #{sn}"}
+  description { Faker::Lorem.sentence }
+  start_date { Date.parse("01/08/2000") }
+  end_date { Date.parse("01/08/2001") }
+  organization_name { "Organization #{sn}" }
+  internship { false }
+  committee { Committee.make! }
+  city { City.make! }
+  country { Country.make! }
+  profile { Profile.make! }
+  seniority { Seniority.make! }
+end
+
 Group.blueprint do
   name { "Group #{sn}"}
   description { Faker::Lorem.sentence }
@@ -213,7 +228,7 @@ ContactInfo.blueprint(:email) do
   contact_type { 0 }
   info { Faker::Internet.email }
   privacy { 1 }
-  profile { Profile.make! }
+  contactable { Profile.make! }
 end
 
 PrivacyAction.blueprint do
@@ -257,39 +272,23 @@ Picture.blueprint do
 end
 
 Subscription.blueprint(:lifetime) do
-  name { "LifeTime"}
-  subscription_type { Subscription::TYPES[:lifetime] }
-  status { 1 }
-end
-
-Subscription.blueprint(:premium) do
-  name { "Premium"}
-  subscription_type { Subscription::TYPES[:premium] }
-  status { 1 }
-end
-
-UserSubscription.blueprint(:lifetime) do
   start_date { Date.today }
   end_date { nil }
   lifetime { true }
   status { 1 }
   ownership_type { 1 }
   user { User.make! }
-  subscription { Subscription.make!(:lifetime) }
   creator { User.make! }
-  reference { "XXXX-XXXX"}
 end
 
-UserSubscription.blueprint(:premium) do
+Subscription.blueprint(:premium) do
   start_date { Date.today }
   end_date { Date.today + 365 }
   lifetime { false }
   status { 1 }
   ownership_type { 1 }
   user { User.make! }
-  subscription { Subscription.make!(:premium) }
   creator { User.make! }
-  reference { "XXXX-XXXX"}
 end
 
 Invitation.blueprint do
@@ -390,9 +389,21 @@ UserPrize.blueprint do
   remaining_quantity { 1 }
 end
 
+Sector.blueprint do
+  name { "Sector #{sn}" }
+end
+
 Company.blueprint do
   name { "Company #{sn}"}
+  description { Faker::Lorem.sentence }
+  main_address { Faker::Address.street_address }
+  size { 1 }
   logo { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
+  sector { Sector.make! }
+  country { Country.make! }
+  city { City.make! }
+  creator { User.make! }
+  links(2)
 end
 
 Keyword.blueprint do
@@ -441,7 +452,7 @@ Link.blueprint do
   title { "Link #{sn}"}
   description { Faker::Lorem.sentence }
   url { Faker::Internet.url }
-  company_relation { CompanyRelation.make! }
+  linkable { }
 end
 
 Feature.blueprint do
@@ -459,7 +470,32 @@ EventPayment.blueprint do
   attendance_id { Attendance.make! }
 end
 
+Payment.blueprint do
+  subtotal { 900 }
+  iva { 100 }
+  total { 1000 }
+  reference { "XXXX-XXXX-#{sn}"}
+  user { User.make! }
+  paymentable_id { Subscription.make!(:lifetime).id }
+  paymentable_type { "Subscription" }
+end
+
 Seniority.blueprint do
   name { "Seniority #{sn}"}
   seniority_type { "Profesional" }
+end
+
+Branch.blueprint do
+  address { Faker::Address.street_address }
+  company { Company.make! }
+end
+
+ProductService.blueprint(:service) do
+  name { "Service #{sn}"}
+  service_type { 1 }
+end
+
+ProductService.blueprint(:product) do
+  name { "Product #{sn}"}
+  service_type { 2 }
 end

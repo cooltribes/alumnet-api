@@ -6,7 +6,6 @@ class V1::Me::ApprovalController < V1::BaseController
     @requests = @user.get_pending_approval_requests
   end
 
-
   def create
     @approval_request = @user.create_approval_request_for(@approver)
     if @approval_request.save
@@ -22,7 +21,7 @@ class V1::Me::ApprovalController < V1::BaseController
     countryResidence = @user.profile.residence_country
     superAdmins = User.where(role: "AlumNetAdmin")
     admins = countryResidence.admins | superAdmins
-    
+
     if countryAiesec
       regionAiesec = countryAiesec.region
       admins = admins | countryAiesec.admins | regionAiesec.admins

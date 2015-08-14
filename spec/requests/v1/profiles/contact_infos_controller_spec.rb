@@ -14,7 +14,7 @@ describe V1::Profiles::ContactInfosController, type: :request do
 
   describe "GET /profiles/:id/contact_infos" do
     it "return all contact infos of profile" do
-      3.times { ContactInfo.make!(:email, profile: @profile) }
+      3.times { ContactInfo.make!(:email, contactable: @profile) }
       get profile_contact_infos_path(@profile), {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(3)
@@ -33,7 +33,7 @@ describe V1::Profiles::ContactInfosController, type: :request do
 
   describe "PUT /profiles/:id/contact_infos/:id" do
     it "update an contact_info on given profile" do
-      contact_info = ContactInfo.make!(:email, profile: @profile)
+      contact_info = ContactInfo.make!(:email, contactable: @profile)
       put profile_contact_info_path(@profile, contact_info), { info: "francisco@hotmail.com"} , basic_header(user.auth_token)
       expect(response.status).to eq 200
       expect(json["info"]).to eq("francisco@hotmail.com")
@@ -42,7 +42,7 @@ describe V1::Profiles::ContactInfosController, type: :request do
 
   describe "DELETE /profiles/:id/contact_infos/:id" do
     it "delete a contact_info" do
-      contact_info = ContactInfo.make!(:email, profile: @profile)
+      contact_info = ContactInfo.make!(:email, contactable: @profile)
       expect {
         delete profile_contact_info_path(@profile, contact_info), {}, basic_header(user.auth_token)
       }.to change(ContactInfo, :count).by(-1)
@@ -53,7 +53,7 @@ describe V1::Profiles::ContactInfosController, type: :request do
   context "testing authorization" do
     describe "PUT /profiles/:id/contact_infos/:id" do
       it "should not authorize the action" do
-        contact_info = ContactInfo.make!(:email, profile: @profile)
+        contact_info = ContactInfo.make!(:email, contactable: @profile)
         put profile_contact_info_path(@profile, contact_info), { email: "other@hotmail.com"} , basic_header(other.auth_token)
         expect(response.status).to eq 403
       end

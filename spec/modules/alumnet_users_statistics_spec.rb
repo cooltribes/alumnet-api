@@ -172,4 +172,24 @@ RSpec.describe AlumnetUsersStatistics, type: :stats do
       end
     end
   end
+
+  describe "#group_and_count_users_by_senority()" do
+    context "super admin" do
+      it "return all active user group by seniority of current profesional experience" do
+        super_admin = User.make!(:admin)
+        3.times do
+          country = Country.make!(:simple)
+          seniority = Seniority.make!
+          2.times do
+            user = make_regular_active_user(country, Date.parse('17-10-2010'))
+            Experience.make!(:profesional, profile: user.profile, current: true, seniority: seniority)
+          end
+        end
+        stats = AlumnetUsersStatistics.new(super_admin)
+        expect(stats.group_and_count_users_by_seniority).to eq(
+          {"Seniority 0001"=>2, "Seniority 0002"=>2, "Seniority 0003"=>2})
+        # expect(stats.per_country_and_region("2010-01-01", "2012-12-31", "regions")).to eq("")
+      end
+    end
+  end
 end
