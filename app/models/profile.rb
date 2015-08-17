@@ -136,13 +136,23 @@ class Profile < ActiveRecord::Base
     end
 
     def generate_slug!
+      
       slug = "#{first_name.split(" ")[0].downcase}-#{last_name.split(" ")[0].downcase}"
+      number = 1
+      
+      while User.exists?(slug: slug)
+
+        slug += "#{number}"
+        number += 1
+
+      end      
+
       user.update_column(:slug, slug)
     end
 
     def born_date
       if born.present? && ((Date.current - born).to_i / 365 ) < 20
-        errors.add(:born, 'you must have more than 20 years')
+        errors.add(:born, 'You must have more than 20 years')
       end
     end
 
