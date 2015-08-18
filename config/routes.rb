@@ -71,7 +71,7 @@ Rails.application.routes.draw do
     end
 
     resources :groups do
-      post :cropping, on: :member
+      post :cropping, on: :member, on: :member
       post :add_group, on: :member
       get :subgroups, on: :member
       get :migrate_users, on: :member
@@ -87,7 +87,7 @@ Rails.application.routes.draw do
 
     resources :events do
       get :contacts, on: :member
-      post :cropping, on: :member
+      post :cropping, on: :member, on: :member
       resources :posts, controller: 'events/posts'
       resources :albums, controller: 'events/albums'
       resources :payments, controller: 'events/payments'
@@ -121,6 +121,7 @@ Rails.application.routes.draw do
     resources :keywords
 
     resources :companies do
+      post :cropping, on: :member
       get :employees, on: :member
       get :past_employees, on: :member
       get :admins, on: :member
@@ -175,7 +176,7 @@ Rails.application.routes.draw do
     resources :sectors, only: [:index]
 
     resources :profiles, only: [:show, :update] do
-      post :cropping, on: :member
+      post :cropping, on: :member, on: :member
       resources :experiences, except: [:new, :edit], controller: 'profiles/experiences'
       resources :skills, except: [:show, :new, :edit], controller: 'profiles/skills'
       resources :language_levels, except: [:show, :new, :edit], controller: 'profiles/language_levels'
