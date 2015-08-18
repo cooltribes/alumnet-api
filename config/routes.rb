@@ -120,6 +120,8 @@ Rails.application.routes.draw do
 
     resources :keywords
 
+    resources :tags, only: :index
+
     resources :companies do
       post :cropping, on: :member
       get :employees, on: :member

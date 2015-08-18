@@ -116,7 +116,7 @@ class V1::Admin::UsersController < V1::AdminController
   end
 
   def user_params
-    params.permit(:email, :password, :password_confirmation)
+    params.permit(:tag_list)
   end
 
   def register_params

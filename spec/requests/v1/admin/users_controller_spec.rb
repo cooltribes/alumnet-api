@@ -59,10 +59,10 @@ describe V1::Admin::UsersController, type: :request do
   describe "PUT admin/users/:id" do
     it "edit a user" do
       user = User.make!
-      put admin_user_path(user), { email: "test_email@gmail.com" }, basic_header(admin.auth_token)
+      put admin_user_path(user), { tag_list: "tag, xp, linux" }, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       user.reload
-      expect(user.email).to eq("test_email@gmail.com")
+      expect(user.tag_list).to eq(["linux", "xp", "tag"])
     end
   end
 
