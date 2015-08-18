@@ -1,1 +1,1 @@
-json.partial! 'experience', experience: @experience, current_user: @current_user
+json.partial! 'v1/shared/experience', experience: @experience, current_user: @current_user

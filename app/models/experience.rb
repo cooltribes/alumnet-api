@@ -16,6 +16,9 @@ class Experience < ActiveRecord::Base
   belongs_to :seniority
   belongs_to :company
 
+  ### Scopes
+  scope :professional, -> { where(exp_type: 3) }
+
   ###Callbacks
   before_save :check_end_date
   after_save :check_company
@@ -31,6 +34,14 @@ class Experience < ActiveRecord::Base
 
   def get_info_country
     country.present? ? { id: country.id, text: country.name } : nil
+  end
+
+  def get_info_company
+    company.present? ? { id: company.id, text: company.name } : { id: nil, text: organization_name }
+  end
+
+  def get_info_seniority
+    seniority.present? ? { id: seniority.id, text: seniority.name } : { id: nil, text: nil }
   end
 
   ### Class Methods

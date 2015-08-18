@@ -131,6 +131,15 @@ class User < ActiveRecord::Base
     profile.experiences.find_by(exp_type: 0).try(:committee).try(:name)
   end
 
+  ### Groups
+  def manage_groups
+    groups.where(memberships: { admin: true } )
+  end
+
+  def join_groups
+    groups.where(memberships: { admin: false } )
+  end
+
   ### Roles
   def activate!
     if profile.skills? || profile.approval?
