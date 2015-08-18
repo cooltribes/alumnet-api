@@ -34,6 +34,17 @@ describe V1::Admin::UsersController, type: :request do
     end
   end
 
+  describe "POST admin/users/:id/note" do
+    it "create or update the admin note of user" do
+      user = User.make!
+      expect(user.admin_note).to be_nil
+      post note_admin_user_path(user), { note: "This is a note for test" }, basic_header(admin.auth_token)
+      expect(response.status).to eq 200
+      user.reload
+      expect(user.admin_note.body).to eq("This is a note for test")
+    end
+  end
+
   describe "PUT admin/users/:id/activate" do
     it "change the status of user to active, change register step of profile to approval and return user" do
       user_inactive = User.make!(status: 0)

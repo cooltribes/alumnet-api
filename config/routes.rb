@@ -194,6 +194,7 @@ Rails.application.routes.draw do
       get 'stats/seniorities', to: 'stats#seniorities'
       get 'stats/status', to: 'stats#status'
       resources :users, except: [:new, :edit] do
+        post :note, on: :member
         put :activate, on: :member
         put :banned, on: :member
         put :change_role, on: :member

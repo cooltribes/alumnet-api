@@ -85,3 +85,5 @@ json.events user.limit_attend_events(3) do |event|
   json.city event.city_info
   json.country event.country_info
 end
+
+json.admin_note user.admin_note.try(:body)
