@@ -41,6 +41,14 @@ class Profile < ActiveRecord::Base
 
   ###Instance Methods
 
+  def limit_contact_infos(limit = nil)
+    contact_infos.order(:contact_type).limit(limit)
+  end
+
+  def limit_professional_experiences(limit = nil)
+    experiences.professional.order(:start_date).limit(limit)
+  end
+
   def hidden_last_name
     if last_name
       "#{last_name.first}."

@@ -140,6 +140,12 @@ class User < ActiveRecord::Base
     groups.where(memberships: { admin: false } )
   end
 
+  ### Events
+
+  def limit_attend_events(limit = nil)
+    invited_events.where(attendances: { status: 1 }).order(:start_date).limit(limit)
+  end
+
   ### Roles
   def activate!
     if profile.skills? || profile.approval?

@@ -71,10 +71,17 @@ json.profileData do
 end
 
 ### Contacts
-json.contacts profile.contact_infos, partial: 'v1/shared/contact_info', as: :contact_info, current_user: current_user
+json.contacts profile.limit_contact_infos(3), partial: 'v1/shared/contact_info', as: :contact_info, current_user: current_user
 ### Pro Experiences
-json.experiences profile.experiences.professional, partial: 'v1/shared/experience', as: :experience, current_user: current_user
+json.experiences profile.limit_professional_experiences(3), partial: 'v1/shared/experience', as: :experience, current_user: current_user
 ### Manage Groups
 json.manage_groups user.manage_groups, :id, :name
 ### Join Groups
 json.join_groups user.join_groups, :id, :name
+### Events
+json.events user.limit_attend_events(3) do |event|
+  json.id event.id
+  json.name event.name
+  json.city event.city_info
+  json.country event.country_info
+end
