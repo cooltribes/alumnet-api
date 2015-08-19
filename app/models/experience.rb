@@ -2,7 +2,7 @@ class Experience < ActiveRecord::Base
   include ExperienceHelpers
   acts_as_paranoid
 
-  # 1: 'aiesecExperience'
+  # 0: 'aiesecExperience'
   # 1: 'alumniExperience'
   # 2: 'academicExperience'
   # 3: 'professionalExperience'

@@ -133,6 +133,11 @@ class User < ActiveRecord::Base
     profile.experiences.find_by(exp_type: 0).try(:committee).try(:name)
   end
 
+  def aiesec_location
+    experience = profile.experiences.aisec.first
+    experience ? experience.country.try(:name) : nil
+  end
+
   ### Admin Note
   def set_admin_note(body)
     if admin_note.present?

@@ -2,6 +2,7 @@ json.(user, :id, :name, :email, :created_at)
 
 json.status user.get_status_info
 json.member user.get_member_info
+json.aiesec_location user.aiesec_location
 
 json.is_alumnet_admin user.is_alumnet_admin?
 json.is_system_admin user.is_system_admin?
@@ -74,6 +75,8 @@ end
 json.contacts profile.limit_contact_infos(3), partial: 'v1/shared/contact_info', as: :contact_info, current_user: current_user
 ### Pro Experiences
 json.experiences profile.limit_professional_experiences(3), partial: 'v1/shared/experience', as: :experience, current_user: current_user
+### Skills
+json.skills profile.skills, :id, :name
 ### Manage Groups
 json.manage_groups user.manage_groups, :id, :name
 ### Join Groups
