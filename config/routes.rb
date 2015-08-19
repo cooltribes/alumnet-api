@@ -120,6 +120,8 @@ Rails.application.routes.draw do
 
     resources :keywords
 
+    resources :tags, only: :index
+
     resources :companies do
       post :cropping, on: :member
       get :employees, on: :member
@@ -194,6 +196,7 @@ Rails.application.routes.draw do
       get 'stats/seniorities', to: 'stats#seniorities'
       get 'stats/status', to: 'stats#status'
       resources :users, except: [:new, :edit] do
+        post :note, on: :member
         put :activate, on: :member
         put :banned, on: :member
         put :change_role, on: :member

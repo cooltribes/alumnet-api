@@ -4,6 +4,7 @@ class ProfindaApi
 
   attr_reader :last_response, :user
   validate :success_of_last_response
+  validate :error_flag
 
   base_uri Settings.profinda_api_endpoint
   format :json
@@ -23,11 +24,14 @@ class ProfindaApi
 
   def initialize(email, password, create = false)
     @user = {}
+    @has_error = false
     if create
       create_user(email, password)
     else
       authenticate(email, password)
     end
+  rescue
+    @has_error = true
   end
 
   def me
@@ -189,8 +193,12 @@ class ProfindaApi
       end
     end
 
+    def error_flag
+      errors.add(:base, "Error") if @has_error
+    end
+
     def success_of_last_response
-      if !last_response.success? && last_response["errors"] && last_response["errors"].any?
+      if last_response && !last_response.success? && last_response["errors"] && last_response["errors"].any?
         last_response["errors"].each do |key, value|
           value.each do |message|
             errors.add(key.to_sym, message)

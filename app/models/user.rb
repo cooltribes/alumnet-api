@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   has_secure_password
   acts_as_paranoid
   acts_as_messageable
+  acts_as_taggable
   include UserHelpers
   include ProfindaRegistration
 
@@ -42,6 +43,7 @@ class User < ActiveRecord::Base
   has_many :payments, dependent: :destroy
   has_many :company_admins, dependent: :destroy
   has_one :profile, dependent: :destroy
+  has_one :admin_note, dependent: :destroy
   belongs_to :admin_location, polymorphic: true
 
   ### Scopes
@@ -129,6 +131,35 @@ class User < ActiveRecord::Base
 
   def first_committee
     profile.experiences.find_by(exp_type: 0).try(:committee).try(:name)
+  end
+
+  def aiesec_location
+    experience = profile.experiences.aisec.first
+    experience ? experience.country.try(:name) : nil
+  end
+
+  ### Admin Note
+  def set_admin_note(body)
+    if admin_note.present?
+      admin_note.update(body: body)
+    else
+      create_admin_note!(body: body)
+    end
+  end
+
+  ### Groups
+  def manage_groups
+    groups.where(memberships: { admin: true } )
+  end
+
+  def join_groups
+    groups.where(memberships: { admin: false } )
+  end
+
+  ### Events
+
+  def limit_attend_events(limit = nil)
+    invited_events.where(attendances: { status: 1 }).order(:start_date).limit(limit)
   end
 
   ### Roles

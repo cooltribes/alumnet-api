@@ -21,6 +21,14 @@ class V1::Admin::UsersController < V1::AdminController
     end
   end
 
+  def note
+    if @user.set_admin_note(params[:note])
+      render :show, status: :ok
+    else
+      render json: @user.errors, status: :unprocessable_entity
+    end
+  end
+
   def activate
     activate = AdminActiveUser.new(@user, @mc)
     if activate.valid?
@@ -108,7 +116,7 @@ class V1::Admin::UsersController < V1::AdminController
   end
 
   def user_params
-    params.permit(:email, :password, :password_confirmation)
+    params.permit(:tag_list)
   end
 
   def register_params

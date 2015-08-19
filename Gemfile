@@ -25,6 +25,7 @@ gem 'mailchimp-api'
 gem 'kaminari'
 gem 'sidekiq'
 gem 'sinatra', :require => nil
+gem 'acts-as-taggable-on', '~> 3.4'
 
 group :development do
   gem 'spring'
