@@ -2,9 +2,11 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
 
+  Sidekiq::Web.use Rack::Session::Cookie, :secret => Rails.application.config.secret_token
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
-    username == ENV["SIDEKIQ_USERNAME"] && password == ENV["SIDEKIQ_PASSWORD"]
+    username == 'admin' && password == Settings.sidekiq_password
   end if Rails.env.production? || Rails.env.staging?
+  Sidekiq::Web.instance_eval { @middleware.reverse! }
 
   mount Sidekiq::Web => '/sidekiq'
 
