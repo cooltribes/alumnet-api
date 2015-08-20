@@ -2,12 +2,16 @@ class V1::Admin::UsersController < V1::AdminController
   before_action :set_user, except: [:index, :stats, :register]
 
   def index
-    @q = if @admin_location
-      @admin_location.users.includes(:profile).search(params[:q])
+    if params[:tags].present?
+      @users = User.includes(:profile).tagged_with(params[:tags])
     else
-      User.includes(:profile).search(params[:q])
+      @q = if @admin_location
+        @admin_location.users.includes(:profile).search(params[:q])
+      else
+        User.includes(:profile).search(params[:q])
+      end
+      @users = @q.result
     end
-    @users = @q.result
   end
 
   def show
@@ -19,6 +23,16 @@ class V1::Admin::UsersController < V1::AdminController
     else
       render json: @user.errors, status: :unprocessable_entity
     end
+  end
+
+  def groups
+    @q = @user.groups.search(params[:q])
+    @groups = @q.result
+  end
+
+  def events
+    @q = @user.limit_attend_events.search(params[:q])
+    @events = @q.result
   end
 
   def note
