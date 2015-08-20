@@ -4,6 +4,8 @@ defaults: &defaults
   profinda_api_endpoint: http://apistaging.profinda.com/api
   profinda_account_domain: cooltribes-staging.profinda.com
   sidekiq_password: secret
+  receptive_vendor_id: xxxxxxx
+  receptive_secret_key: xxxxxxx
 
 development:
   <<: *defaults
