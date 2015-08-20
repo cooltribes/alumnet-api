@@ -198,12 +198,19 @@ Rails.application.routes.draw do
       get 'stats/seniorities', to: 'stats#seniorities'
       get 'stats/status', to: 'stats#status'
       resources :users, except: [:new, :edit] do
-        post :note, on: :member
-        put :activate, on: :member
-        put :banned, on: :member
-        put :change_role, on: :member
-        post :register, on: :collection
-        get :stats, on: :collection
+        ## TODO: Refactor this. Splint in new controllers
+        member do
+          get :groups
+          get :events
+          post :note
+          put :activate
+          put :banned
+          put :change_role
+        end
+        collection do
+          post :register
+          get :stats
+        end
       end
       resources :groups, except: [:new, :edit] do
         get :subgroups, on: :member
