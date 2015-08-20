@@ -3,7 +3,8 @@ require 'rails_helper'
 describe V1::MeController, type: :request do
   let!(:user) { User.make! }
 
-  describe "GET /user" do
+
+  describe "GET /me" do
     before do
       stub_request(:post, "http://apistaging.profinda.com/api/auth/sign_in").
         with(:body => "{\"user\":{\"email\":\"#{user.email}\",\"password\":\"#{user.profinda_password}\"}}",
@@ -18,7 +19,14 @@ describe V1::MeController, type: :request do
     end
   end
 
-  describe "PUT /user" do
+  describe "GET /me/receptive_settings" do
+    it "return the settings for receptive.io integration" do
+      get receptive_settings_me_path, {}, basic_header(user.auth_token)
+      expect(response.status).to eq 200
+    end
+  end
+
+  describe "PUT /me" do
     before do
       stub_request(:post, "http://apistaging.profinda.com/api/auth/sign_in").
         with(:body => "{\"user\":{\"email\":\"new_email@email.com\",\"password\":\"#{user.profinda_password}\"}}",
