@@ -8,9 +8,9 @@ class V1::MeController < V1::BaseController
     unsigned_snippet = {
       "timestamp" => DateTime.now.iso8601,
       "account" => {
-        "id" => "a123456",
-        "is_paying" => "false",
-        "monthly_value" => "99.99"
+        "id" => @user.role,
+        "is_paying" => (@user.is_premium?).to_s,
+        "monthly_value" => (@user.receptive_points).to_s
       },
       "vendor" => {
         "id" => Settings.receptive_vendor_id
@@ -81,5 +81,4 @@ class V1::MeController < V1::BaseController
       unsigned["signature"] = signature.to_s
       unsigned
     end
-
 end

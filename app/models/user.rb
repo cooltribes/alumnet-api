@@ -10,6 +10,12 @@ class User < ActiveRecord::Base
     regional_admin: "RegionalAdmin", nacional_admin: "NacionalAdmin", regular: "Regular" }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
   VALID_PASSWORD_REGEX = /\A(?=.*[a-zA-Z])(?=.*[0-9]).{8,}\z/
+
+  #0-> no member, 1-> Subscription for a year, 2-> Subscription for a year (30 days left or less), 3-> Lifetime
+  MEMBER = { 0=> 'No Member', 1=> 'Member', 2=> 'Member', 3=>'Lifetime Member'}
+
+  RECEPTIVE_POINTS = { 'Regular' => 1, 'NacionalAdmin' => 2, 'RegionalAdmin' => 3, 'AlumNetAdmin' => 4 }
+
   ### Enum
   enum status: [:inactive, :active, :banned]
 
@@ -81,6 +87,11 @@ class User < ActiveRecord::Base
   end
 
   ### Instance Methods
+  def receptive_points
+    value = member > 0 ? 1 : 0
+    RECEPTIVE_POINTS[role] + value
+  end
+
   def name
     "#{profile.first_name} #{profile.last_name}"
   end
@@ -232,14 +243,7 @@ class User < ActiveRecord::Base
   end
 
   def membership_type
-    #0-> no member, 1-> Subscription for a year, 2-> Subscription for a year (30 days left or less), 3-> Lifetime
-    if member == 0
-      "No member"
-    elsif member == 1 || member == 2
-      "Member"
-    else
-      "Lifetime member"
-    end
+    MEMBER[member]
   end
 
   def is_regular?
