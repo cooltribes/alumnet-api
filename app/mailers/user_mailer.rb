@@ -56,4 +56,10 @@ class UserMailer < ActionMailer::Base
     mail to: user.email, subject: "Your request to join the group #{group.name} was accepted"
   end
 
+  def user_applied(user, applicant)
+    @user = user
+    @applicant = applicant
+    mail to: user.email, subject: "Someone has applied to your job post"
+  end
+
 end
