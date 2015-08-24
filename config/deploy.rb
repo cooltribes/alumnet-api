@@ -36,6 +36,14 @@ set :linked_dirs, %w{public/uploads}
 
 namespace :deploy do
 
+  after :finished, :create_secrets do
+    on roles(:all) do
+      within current_path do
+        execute :rake, 'app:create_secret_file'
+      end
+    end
+  end
+
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       # Here we can do anything such as:
