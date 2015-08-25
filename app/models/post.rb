@@ -15,6 +15,11 @@ class Post < ActiveRecord::Base
   has_many :pictures, as: :pictureable, dependent: :destroy
   has_many :comment_users, through: :comments, source: :user #users with comments
 
+  ##########
+    has_many :alumnet_taggings, as: :taggable
+    has_many :user_tags, through: :a
+  ##########
+
   ### Scopes
   default_scope -> { order(last_comment_at: :desc) }
 
