@@ -24,9 +24,9 @@ class V1::JobExchangesController < V1::TasksController
 
   def apply
     if @task.can_apply(current_user)
-      # @task.apply(current_user)
-      applicant = @task.user
-      UserMailer.user_applied_to_job(user, applicant).deliver_later
+      @task.apply(current_user)
+      # owner = @task.user
+      # UserMailer.user_applied_to_job(owner, current_user).deliver_later
 
       render 'v1/tasks/show'
     else
