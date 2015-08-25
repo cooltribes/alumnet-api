@@ -3,6 +3,8 @@ class Post < ActiveRecord::Base
   acts_as_commentable
   include LikeableMethods
   include PostHelpers
+  include UserTaggingSystem::Taggable
+
 
   #Paginatin options
   paginates_per 2
@@ -14,11 +16,6 @@ class Post < ActiveRecord::Base
   belongs_to :postable_group, foreign_key: :postable_id, class_name: 'Group'
   has_many :pictures, as: :pictureable, dependent: :destroy
   has_many :comment_users, through: :comments, source: :user #users with comments
-
-  ##########
-    has_many :alumnet_taggings, as: :taggable
-    has_many :user_tags, through: :a
-  ##########
 
   ### Scopes
   default_scope -> { order(last_comment_at: :desc) }
