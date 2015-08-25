@@ -1,1 +1,1 @@
-json.array! @experiences, partial: 'experience', as: :experience, current_user: @current_user
+json.array! @experiences, partial: 'v1/shared/experience', as: :experience, current_user: @current_user

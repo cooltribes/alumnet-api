@@ -4,9 +4,10 @@ class Profile < ActiveRecord::Base
   mount_uploader :cover, UserCoverUploader
   enum register_step: [:initial, :profile, :contact, :experience_a, :experience_b, :experience_c, :experience_d, :skills, :approval]
   include ProfileHelpers
+  include CropingMethods
 
   ##Crop avatar
-  attr_accessor :imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH, :avatar_url
+  attr_accessor :avatar_url
 
   ###Relations
   belongs_to :birth_city, class_name: 'City'
@@ -40,21 +41,12 @@ class Profile < ActiveRecord::Base
 
   ###Instance Methods
 
-  def crop(image)
-    if image == "avatar"
-      avatar.recreate_versions! if imgX1.present?
-    elsif image == "cover"
-      cover.recreate_versions! if imgX1.present?
-    end
-    save!
+  def limit_contact_infos(limit = nil)
+    contact_infos.order(:contact_type).limit(limit)
   end
 
-  def crop_url(image)
-    if image == "avatar"
-      avatar.crop.url
-    elsif image == "cover"
-      cover.crop.url
-    end
+  def limit_professional_experiences(limit = nil)
+    experiences.professional.order(:start_date).limit(limit)
   end
 
   def hidden_last_name
@@ -136,13 +128,23 @@ class Profile < ActiveRecord::Base
     end
 
     def generate_slug!
+      
       slug = "#{first_name.split(" ")[0].downcase}-#{last_name.split(" ")[0].downcase}"
+      number = 1
+      
+      while User.exists?(slug: slug)
+
+        slug += "#{number}"
+        number += 1
+
+      end      
+
       user.update_column(:slug, slug)
     end
 
     def born_date
       if born.present? && ((Date.current - born).to_i / 365 ) < 20
-        errors.add(:born, 'you must have more than 20 years')
+        errors.add(:born, 'You must have more than 20 years')
       end
     end
 

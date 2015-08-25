@@ -34,6 +34,17 @@ describe V1::Admin::UsersController, type: :request do
     end
   end
 
+  describe "POST admin/users/:id/note" do
+    it "create or update the admin note of user" do
+      user = User.make!
+      expect(user.admin_note).to be_nil
+      post note_admin_user_path(user), { note: "This is a note for test" }, basic_header(admin.auth_token)
+      expect(response.status).to eq 200
+      user.reload
+      expect(user.admin_note.body).to eq("This is a note for test")
+    end
+  end
+
   describe "PUT admin/users/:id/activate" do
     it "change the status of user to active, change register step of profile to approval and return user" do
       user_inactive = User.make!(status: 0)
@@ -48,10 +59,10 @@ describe V1::Admin::UsersController, type: :request do
   describe "PUT admin/users/:id" do
     it "edit a user" do
       user = User.make!
-      put admin_user_path(user), { email: "test_email@gmail.com" }, basic_header(admin.auth_token)
+      put admin_user_path(user), { tag_list: "tag, xp, linux" }, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       user.reload
-      expect(user.email).to eq("test_email@gmail.com")
+      expect(user.tag_list).to eq(["linux", "xp", "tag"])
     end
   end
 

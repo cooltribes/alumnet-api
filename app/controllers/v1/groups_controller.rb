@@ -9,15 +9,15 @@ class V1::GroupsController < V1::BaseController
     @groups = @q.result
     #@groups = Kaminari.paginate_array(@groups).page(params[:page]).per(params[:per_page])
     if @groups.class == Array
-      @groups = Kaminari.paginate_array(@groups).page(params[:page]).per(params[:per_page]) 
+      @groups = Kaminari.paginate_array(@groups).page(params[:page]).per(params[:per_page])
     else
-      @groups = @groups.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object 
+      @groups = @groups.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object
     end
   end
 
   def cropping
     @group.assign_attributes(crop_params)
-    @group.crop
+    @group.crop('cover')
     render json: { status: 'success', url: @group.cover.crop.url }
   end
 

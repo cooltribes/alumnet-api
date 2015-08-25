@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   has_secure_password
   acts_as_paranoid
   acts_as_messageable
+  acts_as_taggable
   include UserHelpers
   include ProfindaRegistration
 
@@ -9,6 +10,12 @@ class User < ActiveRecord::Base
     regional_admin: "RegionalAdmin", nacional_admin: "NacionalAdmin", regular: "Regular" }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
   VALID_PASSWORD_REGEX = /\A(?=.*[a-zA-Z])(?=.*[0-9]).{8,}\z/
+
+  #0-> no member, 1-> Subscription for a year, 2-> Subscription for a year (30 days left or less), 3-> Lifetime
+  MEMBER = { 0=> 'No Member', 1=> 'Member', 2=> 'Member', 3=>'Lifetime Member'}
+
+  RECEPTIVE_POINTS = { 'Regular' => 1, 'NacionalAdmin' => 2, 'RegionalAdmin' => 3, 'AlumNetAdmin' => 4 }
+
   ### Enum
   enum status: [:inactive, :active, :banned]
 
@@ -42,6 +49,7 @@ class User < ActiveRecord::Base
   has_many :payments, dependent: :destroy
   has_many :company_admins, dependent: :destroy
   has_one :profile, dependent: :destroy
+  has_one :admin_note, dependent: :destroy
   belongs_to :admin_location, polymorphic: true
 
   ### Scopes
@@ -79,6 +87,11 @@ class User < ActiveRecord::Base
   end
 
   ### Instance Methods
+  def receptive_points
+    value = member > 0 ? 1 : 0
+    RECEPTIVE_POINTS[role] + value
+  end
+
   def name
     "#{profile.first_name} #{profile.last_name}"
   end
@@ -129,6 +142,35 @@ class User < ActiveRecord::Base
 
   def first_committee
     profile.experiences.find_by(exp_type: 0).try(:committee).try(:name)
+  end
+
+  def aiesec_location
+    experience = profile.experiences.aisec.first
+    experience ? experience.country.try(:name) : nil
+  end
+
+  ### Admin Note
+  def set_admin_note(body)
+    if admin_note.present?
+      admin_note.update(body: body)
+    else
+      create_admin_note!(body: body)
+    end
+  end
+
+  ### Groups
+  def manage_groups
+    groups.where(memberships: { admin: true } )
+  end
+
+  def join_groups
+    groups.where(memberships: { admin: false } )
+  end
+
+  ### Events
+
+  def limit_attend_events(limit = nil)
+    invited_events.where(attendances: { status: 1 }).order(:start_date).limit(limit)
   end
 
   ### Roles
@@ -201,14 +243,7 @@ class User < ActiveRecord::Base
   end
 
   def membership_type
-    #0-> no member, 1-> Subscription for a year, 2-> Subscription for a year (30 days left or less), 3-> Lifetime
-    if member == 0
-      "No member"
-    elsif member == 1 || member == 2
-      "Member"
-    else
-      "Lifetime member"
-    end
+    MEMBER[member]
   end
 
   def is_regular?

@@ -2,9 +2,11 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
 
+  Sidekiq::Web.use Rack::Session::Cookie, :secret => Rails.application.config.secret_token
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
-    username == ENV["SIDEKIQ_USERNAME"] && password == ENV["SIDEKIQ_PASSWORD"]
+    username == 'admin' && password == Settings.sidekiq_password
   end if Rails.env.production? || Rails.env.staging?
+  Sidekiq::Web.instance_eval { @middleware.reverse! }
 
   mount Sidekiq::Web => '/sidekiq'
 
@@ -21,6 +23,7 @@ Rails.application.routes.draw do
 
     resource :me, only: [:show, :update], controller: 'me' do
       get :messages
+      get :receptive_settings
       post :send_invitations
       post :activate
       resource :profile, only: [:show, :update], controller: 'me/profiles'
@@ -71,7 +74,7 @@ Rails.application.routes.draw do
     end
 
     resources :groups do
-      post :cropping, on: :member
+      post :cropping, on: :member, on: :member
       post :add_group, on: :member
       get :subgroups, on: :member
       get :migrate_users, on: :member
@@ -87,7 +90,7 @@ Rails.application.routes.draw do
 
     resources :events do
       get :contacts, on: :member
-      post :cropping, on: :member
+      post :cropping, on: :member, on: :member
       resources :posts, controller: 'events/posts'
       resources :albums, controller: 'events/albums'
       resources :payments, controller: 'events/payments'
@@ -120,7 +123,10 @@ Rails.application.routes.draw do
 
     resources :keywords
 
+    resources :tags, only: :index
+
     resources :companies do
+      post :cropping, on: :member
       get :employees, on: :member
       get :past_employees, on: :member
       get :admins, on: :member
@@ -175,7 +181,7 @@ Rails.application.routes.draw do
     resources :sectors, only: [:index]
 
     resources :profiles, only: [:show, :update] do
-      post :cropping, on: :member
+      post :cropping, on: :member, on: :member
       resources :experiences, except: [:new, :edit], controller: 'profiles/experiences'
       resources :skills, except: [:show, :new, :edit], controller: 'profiles/skills'
       resources :language_levels, except: [:show, :new, :edit], controller: 'profiles/language_levels'
@@ -193,11 +199,19 @@ Rails.application.routes.draw do
       get 'stats/seniorities', to: 'stats#seniorities'
       get 'stats/status', to: 'stats#status'
       resources :users, except: [:new, :edit] do
-        put :activate, on: :member
-        put :banned, on: :member
-        put :change_role, on: :member
-        post :register, on: :collection
-        get :stats, on: :collection
+        ## TODO: Refactor this. Splint in new controllers
+        member do
+          get :groups
+          get :events
+          post :note
+          put :activate
+          put :banned
+          put :change_role
+        end
+        collection do
+          post :register
+          get :stats
+        end
       end
       resources :groups, except: [:new, :edit] do
         get :subgroups, on: :member

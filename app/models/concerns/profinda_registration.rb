@@ -2,7 +2,7 @@ module ProfindaRegistration
 
   def profinda_api_token
     profinda = ProfindaApi.new(email, profinda_password)
-    profinda.api_token
+    profinda.valid? ? profinda.api_token : ''
   end
 
   def activate_in_profinda

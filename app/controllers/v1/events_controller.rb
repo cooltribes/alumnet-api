@@ -8,7 +8,7 @@ class V1::EventsController < V1::BaseEventsController
 
   def cropping
     @event.assign_attributes(crop_params)
-    @event.crop
+    @event.crop('cover')
     render json: { status: 'success', url: @event.cover.crop.url }
   end
 
