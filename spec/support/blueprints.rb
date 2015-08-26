@@ -82,17 +82,8 @@ Experience.blueprint(:profesional) do
   seniority { Seniority.make! }
 end
 
-Group.blueprint do
-  name { "Group #{sn}"}
-  description { Faker::Lorem.sentence }
-  group_type { 0 }
-  join_process { 0 }
-  country { Country.make!(:simple) }
-  city { City.make! }
-  official { false }
-end
 
-Group.blueprint(:with_cover) do
+Group.blueprint do
   name { "Group #{sn}"}
   description { Faker::Lorem.sentence }
   cover { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
