@@ -25,6 +25,7 @@ module UserTaggingSystem
 
       def update_user_tags(user_ids, options = {})
         tagger = options.delete(:tagger)
+        user_ids = process_user_ids(user_ids)
         current_user_tag_ids = user_tag_ids
         # Se van a agregar los id de user_ids que no esten en current_user_tag_ids
         ids_to_add = user_ids.reject { |id| current_user_tag_ids.include?(id) }

@@ -19,8 +19,9 @@ class V1::BasePostsController < V1::BaseController
   end
 
   def create
-    service = Posts::CreatePost.new(@postable, current_user, post_params)
+    service = ::Posts::CreatePost.new(@postable, current_user, post_params)
     if service.call
+      @post = service.post
       render :show, status: :created
     else
       render json: service.post.errors, status: :unprocessable_entity
@@ -56,6 +57,6 @@ class V1::BasePostsController < V1::BaseController
   end
 
   def post_params
-    params.permit(:body, picture_ids:[])
+    params.permit(:body, :user_tags_list, picture_ids:[])
   end
 end

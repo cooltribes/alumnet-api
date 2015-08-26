@@ -48,4 +48,14 @@ class NotificationDetail < ActiveRecord::Base
     create!(url: post.url_for_notification, notification_type: "comment", sender: sender,
       mailboxer_notification_id: notification.id)
   end
+
+  def self.notify_tag(notification, sender, taggable)
+    url = if taggable.is_a?(Post) || taggable.is_a?(Picture)
+      taggable.url_for_notification
+    else
+      "no url"
+    end
+    create!(url: url, notification_type: "tag", sender: sender,
+      mailboxer_notification_id: notification.id)
+  end
 end
