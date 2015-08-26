@@ -7,7 +7,7 @@ CarrierWave.configure do |config|
       aws_secret_access_key: '641R+oKWSQLfI+xk2sJ43ZWjMdNuQBzVmXKWF5hd',
       region:                'eu-central-1'
     }
-    config.fog_directory  = 'alumnet-pictures'
+    config.fog_directory  = Settings.fog_directory
     config.cache_dir = "#{Rails.root}/tmp/uploads"
   else
     config.storage :file
