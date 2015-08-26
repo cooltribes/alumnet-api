@@ -1,7 +1,7 @@
 module Posts
   class CreatePost
 
-    attr_reader :postable, :post
+    attr_reader :postable, :post, :errors
 
     def initialize(postable, current_user, params)
       @postable = postable
@@ -17,6 +17,7 @@ module Posts
         @post.update_user_tags(user_tags_list) if user_tags_list
         true
       else
+        @errors = @post.errors
         false
       end
     end
