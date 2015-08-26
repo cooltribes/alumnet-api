@@ -47,6 +47,11 @@ describe V1::Admin::UsersController, type: :request do
 
   describe "PUT admin/users/:id/activate" do
     it "change the status of user to active, change register step of profile to approval and return user" do
+      stub_request(:post, "https://us10.api.mailchimp.com/2.0/lists/merge-vars.json").
+        with(:body => "{\"id\":{\"id\":\"testing\"},\"apikey\":\"f0ad0e019703b02132b2cf15ad458e50-us10\"}",
+             :headers => {'Content-Type'=>'application/json', 'Host'=>'us10.api.mailchimp.com:443', 'User-Agent'=>'excon/0.45.4'}).
+        to_return(:status => 200, :body => "{\"data\": [\"XXXX\"]}", :headers => {})
+        ###Arreglar el response boy de acuerdo con lo que espera mailchimp
       user_inactive = User.make!(status: 0)
       user_inactive.profile.skills!
       put activate_admin_user_path(user_inactive), {}, basic_header(admin.auth_token)

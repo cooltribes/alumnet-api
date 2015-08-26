@@ -6,6 +6,7 @@ defaults: &defaults
   sidekiq_password: secret
   receptive_vendor_id: xxxxxxx
   receptive_secret_key: xxxxxxx
+  fog_directory: xxxxxxxxxx
 
 development:
   <<: *defaults

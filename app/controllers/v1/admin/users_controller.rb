@@ -44,11 +44,11 @@ class V1::Admin::UsersController < V1::AdminController
   end
 
   def activate
-    activate = AdminActiveUser.new(@user, @mc)
-    if activate.valid?
+    service = ::Users::ActivateUser.new(@user, @mc)
+    if service.call
       render :show, status: :ok
     else
-      render json: activate.errors, status: :unprocessable_entity
+      render json: service.errors, status: :unprocessable_entity
     end
   end
 

@@ -25,8 +25,7 @@ class V1::JobExchangesController < V1::TasksController
   def apply
     if @task.can_apply(current_user)
       @task.apply(current_user)
-      # owner = @task.user
-      # UserMailer.user_applied_to_job(owner, current_user).deliver_later
+      UserMailer.user_applied_to_job(@task, current_user, params[:whyme]).deliver_now
 
       render 'v1/tasks/show'
     else
@@ -53,5 +52,8 @@ class V1::JobExchangesController < V1::TasksController
     def task_params
       params.permit(:name, :description, :formatted_description, :must_have_list, :nice_have_list,
         :company_id, :city_id, :country_id, :offer, :employment_type, :seniority_id)
+    end
+    def apply_params
+      params.permit(:whyme)
     end
 end
