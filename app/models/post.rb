@@ -3,6 +3,8 @@ class Post < ActiveRecord::Base
   acts_as_commentable
   include LikeableMethods
   include PostHelpers
+  include UserTaggingSystem::Taggable
+
 
   #Paginatin options
   paginates_per 2

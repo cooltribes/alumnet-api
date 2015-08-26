@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   acts_as_taggable
   include UserHelpers
   include ProfindaRegistration
+  include UserTaggingSystem::Tag
 
   ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin", external: "External",
     regional_admin: "RegionalAdmin", nacional_admin: "NacionalAdmin", regular: "Regular" }
@@ -20,6 +21,7 @@ class User < ActiveRecord::Base
   enum status: [:inactive, :active, :banned]
 
   ### Relations
+
   has_many :memberships, dependent: :destroy
   has_many :groups, -> { where("memberships.approved = ?", true) }, through: :memberships
   has_many :friendships, dependent: :destroy
