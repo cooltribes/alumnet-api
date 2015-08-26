@@ -56,11 +56,17 @@ class UserMailer < ActionMailer::Base
     mail to: user.email, subject: "Your request to join the group #{group.name} was accepted"
   end
 
-  def user_applied_to_job(user, applicant, job_post)
-    @user = user
+  def user_applied_to_job(job_post, applicant, whyme)
+    @user = job_post.user
     @applicant = applicant
     @job_post = job_post
-    mail to: user.email, subject: "#{applicant.name} applied to your job post #{job_post.name}"
+    @whyme = whyme
+    @avatar = if applicant.permit('see-avatar', @user)
+      applicant.avatar.url
+    else
+      applicant.avatar.default_url      
+    end
+    mail to: @user.email, subject: "#{applicant.name} applied to your job post #{job_post.name}"
   end
 
 end
