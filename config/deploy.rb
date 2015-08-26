@@ -39,7 +39,9 @@ namespace :deploy do
   after :finished, :create_secrets do
     on roles(:all) do
       within current_path do
-        execute :rake, 'app:create_secret_file'
+        with rails_env: fetch(:rails_env) do
+          execute :rake, "app:create_secret_file"
+        end
       end
     end
   end
