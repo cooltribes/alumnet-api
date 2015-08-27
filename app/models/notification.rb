@@ -129,13 +129,14 @@ class Notification
 
   def self.notify_approval_request_to_admins(admins, user)
     notification = new(admins)
-    subject = "A new user was registered in AlumNet"
-    body = "The user #{user.name} is waiting for your approval"
-    notification.send_notification(subject, body)
+    subject = "hi Admin! A new user was registered in AlumNet"
+    body = "The user #{user.name} is waiting for your approval in admin section"
+    notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     notification.recipients.each do |admin|
       AdminMailer.user_request_approval(admin, user).deliver_later
     end
+    NotificationDetail.notify_approval_request_to_admins(notfy, user)
   end
 
   def self.notify_approval_request_to_user(user, approver)

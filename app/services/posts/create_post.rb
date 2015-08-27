@@ -14,7 +14,7 @@ module Posts
       @post = Post.new(@params)
       @post.user = @current_user
       if postable.posts << @post
-        @post.update_user_tags(user_tags_list) if user_tags_list
+        @post.update_user_tags(user_tags_list, tagger: @current_user) if user_tags_list
         true
       else
         @errors = @post.errors
