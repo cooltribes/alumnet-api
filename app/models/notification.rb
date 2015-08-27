@@ -129,13 +129,14 @@ class Notification
 
   def self.notify_approval_request_to_admins(admins, user)
     notification = new(admins)
-    subject = "A new user was registered in AlumNet"
-    body = "The user #{user.name} is waiting for your approval"
-    notification.send_notification(subject, body)
+    subject = "hi Admin! A new user was registered in AlumNet"
+    body = "The user #{user.name} is waiting for your approval in admin section"
+    notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     notification.recipients.each do |admin|
       AdminMailer.user_request_approval(admin, user).deliver_later
     end
+    NotificationDetail.notify_approval_request_to_admins(notfy, user)
   end
 
   def self.notify_approval_request_to_user(user, approver)
@@ -190,5 +191,14 @@ class Notification
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     NotificationDetail.notify_comment_in_post(notfy, comment.user, post)
+  end
+
+  def self.notify_tagging(tagging)
+    notification = new(tagging.user)
+    subject = "You were tagged"
+    body = "The user #{tagging.tagger.name} tagged you in a #{tagging.taggable_type}"
+    notfy = notification.send_notification(subject, body)
+    notification.send_pusher_notification
+    NotificationDetail.notify_tag(notfy, tagging.tagger, tagging.taggable)
   end
 end
