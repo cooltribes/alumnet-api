@@ -157,6 +157,7 @@ Rails.application.routes.draw do
         post :like, on: :member
         post :unlike, on: :member
       end
+      resources :user_tags, controller: 'pictures/user_tags', only: [:index, :create, :destroy]
     end
 
     resources :posts, only: :show do
