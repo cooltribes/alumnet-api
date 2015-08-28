@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe BusinessRelation do
+RSpec.describe Companies::CreateBusinessRelation, type: :service do
 
   def valid_params
     {
@@ -26,20 +26,20 @@ RSpec.describe BusinessRelation do
   end
 
   let(:user) { User.make! }
-  let(:business) { BusinessRelation.new(valid_params, user) }
+  let(:business) { ::Companies::CreateBusinessRelation.new(valid_params, user) }
 
 
-  describe "#save" do
+  describe "#call" do
     it "should be create a company and set user as creator" do
       expect {
-        business.save
+        business.call
       }.to change(Company, :count).by(1)
-      expect(Company.last.profile).to eq(user.profile)
+      expect(Company.last.creator).to eq(user)
     end
 
     it "should be create a company_relation with company and user" do
       expect {
-        business.save
+        business.call
       }.to change(CompanyRelation, :count).by(1)
       company_relation = CompanyRelation.last
       expect(company_relation.profile).to eq(user.profile)
@@ -48,15 +48,16 @@ RSpec.describe BusinessRelation do
 
     it "should be create a company_relation with company and user" do
       expect {
-        business.save
+        business.call
       }.to change(Keyword, :count).by(3)
       company_relation = CompanyRelation.last
+      expect(business.company_relation).to eq(company_relation)
       expect(company_relation.offer_keywords.count).to eq(2)
       expect(company_relation.search_keywords.count).to eq(1)
     end
 
     it "should return errors" do
-      business = BusinessRelation.new(invalid_params, user)
+      business = ::Companies::CreateBusinessRelation.new(invalid_params, user)
       business.valid?
       expect(business.errors.full_messages).to eq(["Offer can't be blank",
         "Search can't be blank", "Search keywords must be an array"])
