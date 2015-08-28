@@ -7,6 +7,7 @@ set :scm, :git
 set :linked_files, %w{config/database.yml config/application.yml}
 set :linked_dirs, %w{public/uploads}
 set :nginx_sudo_tasks, ['nginx:restart', 'nginx:configtest']
+set :pty, true
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
@@ -23,7 +24,6 @@ set :nginx_sudo_tasks, ['nginx:restart', 'nginx:configtest']
 # set :log_level, :debug
 
 # Default value for :pty is false
-set :pty, true
 
 # Default value for :linked_files is []
 # set :linked_files, fetch(:linked_files, []).push('config/database.yml')
