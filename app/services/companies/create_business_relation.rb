@@ -38,7 +38,10 @@ module Companies
     end
 
     def create_company
-      Company.create!(company_params)
+      company = Company.find_by_name(company_name)
+      unless company
+        company = Company.create!(company_params)
+      end
     end
 
     def create_company_relation(company)
