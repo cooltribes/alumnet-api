@@ -6,6 +6,9 @@ set :repo_url, 'https://ArmandoMendoza:14941830famg@github.com/cooltribes/alumne
 set :scm, :git
 set :linked_files, %w{config/database.yml config/application.yml}
 set :linked_dirs, %w{public/uploads}
+set :nginx_sudo_tasks, ['nginx:restart', 'nginx:configtest']
+set :pty, true
+
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
