@@ -394,6 +394,25 @@ Sector.blueprint do
   name { "Sector #{sn}" }
 end
 
+Product.blueprint do
+  name { "Product #{sn}" }
+  description { Faker::Lorem.sentence }
+  status { 'active' }
+  price { 100 }
+  product_type { 1 }
+  quantity { 1 }
+  feature { 'subscription' }
+end
+
+UserProduct.blueprint do
+  user { User.make! }
+  product { Product.make! }
+  status { 'active' }
+  start_date { Date.current }
+  end_date { Date.current+1.year }
+  transaction_type { 1 }
+end
+
 Company.blueprint do
   name { "Company #{sn}"}
   description { Faker::Lorem.sentence }
