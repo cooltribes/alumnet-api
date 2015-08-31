@@ -390,10 +390,10 @@ UserPrize.blueprint do
   remaining_quantity { 1 }
 end
 
-<<<<<<< HEAD
 Sector.blueprint do
   name { "Sector #{sn}" }
-=======
+end
+
 Product.blueprint do
   name { "Product #{sn}" }
   description { Faker::Lorem.sentence }
@@ -411,7 +411,6 @@ UserProduct.blueprint do
   start_date { Date.current }
   end_date { Date.current+1.year }
   transaction_type { 1 }
->>>>>>> yondri
 end
 
 Company.blueprint do
