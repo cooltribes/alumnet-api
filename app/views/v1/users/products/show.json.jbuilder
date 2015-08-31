@@ -1,0 +1,1 @@
+json.partial! 'v1/shared/user_product', user_product: @user_product, current_user: @current_user

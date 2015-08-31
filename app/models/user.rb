@@ -46,6 +46,8 @@ class User < ActiveRecord::Base
   has_many :user_actions, dependent: :destroy
   has_many :user_prizes, dependent: :destroy
   has_many :prizes, through: :user_prizes
+  has_many :user_products, dependent: :destroy
+  has_many :products, through: :user_products
   has_many :task_invitations, dependent: :destroy
   has_many :matches, dependent: :destroy
   has_many :payments, dependent: :destroy
