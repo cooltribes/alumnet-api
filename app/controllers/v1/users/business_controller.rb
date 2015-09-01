@@ -11,11 +11,12 @@ class V1::Users::BusinessController < V1::BaseController
   end
 
   def create
-    @businessRelation = BusinessRelation.new(business_params, current_user)
-    if @business = @businessRelation.save
+    service = ::Companies::CreateBusinessRelation.new(business_params, current_user)
+    if service.call
+      @business = service.company_relation
       render :show, status: :created
     else
-      render json: @businessRelation.errors, status: :unprocessable_entity
+      render json: service.errors, status: :unprocessable_entity
     end
   end
 
