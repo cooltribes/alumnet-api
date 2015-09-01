@@ -61,7 +61,6 @@ class UserMailer < ActionMailer::Base
     @applicant = applicant
     @job_post = job_post
     @whyme = whyme
-    byebug
     @avatar = if applicant.permit('see-avatar', @user)
       applicant.avatar.url
     else
