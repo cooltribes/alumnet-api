@@ -23,6 +23,7 @@ Rails.application.routes.draw do
 
     resource :me, only: [:show, :update], controller: 'me' do
       get :messages
+      get :receptive_settings
       post :send_invitations
       post :activate
       resource :profile, only: [:show, :update], controller: 'me/profiles'

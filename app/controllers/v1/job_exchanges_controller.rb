@@ -22,6 +22,17 @@ class V1::JobExchangesController < V1::TasksController
     render 'v1/tasks/index'
   end
 
+  def apply
+    if @task.can_apply(current_user)
+      @task.apply(current_user)
+      UserMailer.user_applied_to_job(@task, current_user, params[:whyme]).deliver_now
+
+      render 'v1/tasks/show'
+    else
+      render json: { error: "The user can not apply to the task" }, status: :unprocessable_entity
+    end
+  end
+
   def applied
     @q = Task.applied_by(current_user).job_exchanges.search(params[:q])
     @tasks = @q.result
@@ -41,5 +52,8 @@ class V1::JobExchangesController < V1::TasksController
     def task_params
       params.permit(:name, :description, :formatted_description, :must_have_list, :nice_have_list,
         :company_id, :city_id, :country_id, :offer, :employment_type, :seniority_id)
+    end
+    def apply_params
+      params.permit(:whyme)
     end
 end

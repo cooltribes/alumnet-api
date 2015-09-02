@@ -7,11 +7,11 @@ class V1::BasePostsController < V1::BaseController
     @q = @postable.posts.search(params[:q])
     @posts = @q.result
     #@posts = @q.page(params[:page]).per(params[:per_page])
-    @posts = Kaminari.paginate_array(@posts).page(params[:page]).per(params[:per_page]) 
+    @posts = Kaminari.paginate_array(@posts).page(params[:page]).per(params[:per_page])
     #if @posts.class == Array
-    #  @posts = Kaminari.paginate_array(@posts).page(params[:page]).per(params[:per_page]) 
+    #  @posts = Kaminari.paginate_array(@posts).page(params[:page]).per(params[:per_page])
     #else
-    #  @posts = @posts.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object 
+    #  @posts = @posts.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object
     #end
   end
 
@@ -19,12 +19,12 @@ class V1::BasePostsController < V1::BaseController
   end
 
   def create
-    @post = Post.new(post_params)
-    @post.user = current_user
-    if @postable.posts << @post
-      render :show, status: :created,  location: [@postable, @post]
+    service = ::Posts::CreatePost.new(@postable, current_user, post_params)
+    if service.call
+      @post = service.post
+      render :show, status: :created
     else
-      render json: @post.errors, status: :unprocessable_entity
+      render json: service.post.errors, status: :unprocessable_entity
     end
   end
 
@@ -57,6 +57,6 @@ class V1::BasePostsController < V1::BaseController
   end
 
   def post_params
-    params.permit(:body, picture_ids:[])
+    params.permit(:body, :user_tags_list, picture_ids:[])
   end
 end

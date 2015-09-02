@@ -4,6 +4,28 @@ class V1::MeController < V1::BaseController
   def show
   end
 
+  def receptive_settings
+    unsigned_snippet = {
+      "timestamp" => DateTime.now.iso8601,
+      "account" => {
+        "id" => @user.role,
+        "is_paying" => (@user.is_premium?).to_s,
+        "monthly_value" => (@user.receptive_points).to_s
+      },
+      "vendor" => {
+        "id" => Settings.receptive_vendor_id
+      },
+      "user" => {
+        "full_name" => @user.name,
+        "email" => @user.email,
+        "id" => @user.id.to_s
+      },
+      "return_url" => Settings.ui_endpoint,
+    }
+
+    render json: { settings: sign_snippet(unsigned_snippet) }
+  end
+
   def activate
     if @user.inactive? && @user.created_by_admin?
       if @user.is_regular? && @user.profile.skills?
@@ -53,4 +75,10 @@ class V1::MeController < V1::BaseController
       @user = current_user if current_user
     end
 
+    def sign_snippet(unsigned)
+      concat_values = ([Settings.receptive_secret_key] + [unsigned["return_url"]] + [unsigned["timestamp"]] + unsigned["account"].values + unsigned["user"].values + unsigned["vendor"].values).sort.join(",")
+      signature = Digest::SHA256.new << concat_values
+      unsigned["signature"] = signature.to_s
+      unsigned
+    end
 end

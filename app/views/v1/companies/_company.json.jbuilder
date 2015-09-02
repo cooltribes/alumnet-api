@@ -18,7 +18,12 @@ if company.logo
     json.card company.logo.card.url
   end
 else
-  json.logo json.nil!
+  # json.logo json.nil!
+  json.logo do
+    json.original company.logo.default_url
+    json.main company.logo.main.default_url
+    json.card company.logo.card.default_url
+  end
 end
 
 if company.cover

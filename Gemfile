@@ -39,6 +39,8 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-rails-collection'
   gem 'capistrano-sidekiq'
+  gem 'capistrano3-nginx', '~> 2.0'
+  gem 'git'
 end
 
 group :test, :development do

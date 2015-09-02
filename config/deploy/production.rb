@@ -8,6 +8,10 @@ server 'alumnet-test.aiesec-alumni.org',
   }
 set :deploy_to, '/home/ec2-user/alumnet_production/alumnet-api'
 set :branch, 'master'
+
+#### Sidekiq options for capistrano-sidekiq
+set :sidekiq_queue, ['default', 'mailers']
+
 # Custom SSH Options
 # ==================
 # You may pass any option but keep in mind that net/ssh understands a

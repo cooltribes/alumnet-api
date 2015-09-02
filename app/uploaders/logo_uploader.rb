@@ -19,4 +19,8 @@ class LogoUploader < CarrierWave::Uploader::Base
     process :crop!
   end
 
+  def default_url
+    Settings.api_endpoint + "/images/logo/" + [version_name, "default_avatar.png"].compact.join('_')
+  end
+
 end
