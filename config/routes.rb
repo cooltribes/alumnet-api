@@ -120,7 +120,9 @@ Rails.application.routes.draw do
 
     resources :prizes
 
-    resources :products
+    resources :products do
+      get :find_by_sku, on: :collection
+    end
 
     resources :banners
 
