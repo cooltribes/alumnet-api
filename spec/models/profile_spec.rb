@@ -73,7 +73,7 @@ RSpec.describe Profile, :type => :model do
       profile = user.profile
       profile = Profile.make(born: "2010-01-01")
       profile.save
-      expect(profile.errors[:born]).to eq(["you must have more than 20 years"])
+      expect(profile.errors[:born]).to eq(["You must have more than 20 years"])
       profile = Profile.make(born: "1980-01-01")
       profile.save
       expect(profile.errors.count).to eq(0)

@@ -5,12 +5,18 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'shoulda/matchers'
 require 'webmock/rspec'
+require 'vcr'
 
-WebMock.disable_net_connect!(:allow_localhost => true)
+# WebMock.disable!
 
 ActiveRecord::Migration.maintain_test_schema!
 
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
+
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
+  c.hook_into :webmock
+end
 
 RSpec.configure do |config|
   config.include RequestsHelper, type: :request
@@ -49,6 +55,8 @@ RSpec.configure do |config|
   # The different available types are documented in the features, such as in
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
+
+  config.filter_run_excluding :slow unless ENV["SLOW"]
 end
 
 RSpec::Sidekiq.configure do |config|
