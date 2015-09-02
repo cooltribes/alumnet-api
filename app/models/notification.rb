@@ -143,11 +143,12 @@ class Notification
     notification = new(approver)
     subject = "#{user.name} wants to be approved in AlumNet"
     body = "Hello, I'm registering in Alumnet. Please approve my membership"
-    notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification()
     notification.recipients.each do |recipient|
       UserMailer.user_request_approval(recipient, user).deliver_later
     end
+    NotificationDetail.notify_approval_request_to_user(notfy, user)
   end
 
   def self.notify_new_post(users, post)
