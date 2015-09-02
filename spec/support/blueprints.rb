@@ -135,6 +135,7 @@ end
 Post.blueprint do
   body { Faker::Lorem.paragraph }
   user { User.make! }
+  postable { User.make! }
 end
 
 Comment.blueprint do
