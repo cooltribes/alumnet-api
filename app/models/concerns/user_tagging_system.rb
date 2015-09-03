@@ -5,11 +5,12 @@ module UserTaggingSystem
       base.has_many :user_tags, through: :user_taggings, source: :user
 
       def add_user_tags(user_ids, options = {})
-        user_ids = process_user_ids(user_ids)
         tagger = options.delete(:tagger)
+        position = options.delete(:position)
+        user_ids = process_user_ids(user_ids)
         user_ids.each do |user_id|
-          attrs = { user_id: user_id, tagger: tagger }
-          user_taggings.create(attrs) unless user_taggings.exists?(attrs)
+          attrs = { user_id: user_id, tagger: tagger, position: position }
+          user_taggings.create(attrs) unless user_taggings.exists?(user_id: user_id, tagger: tagger)
         end
         true
       end
@@ -24,7 +25,6 @@ module UserTaggingSystem
       end
 
       def update_user_tags(user_ids, options = {})
-        tagger = options.delete(:tagger)
         user_ids = process_user_ids(user_ids)
         current_user_tag_ids = user_tag_ids
         # Se van a agregar los id de user_ids que no esten en current_user_tag_ids
@@ -32,7 +32,7 @@ module UserTaggingSystem
         # Se van a eliminar los id de current_user_tag_ids que no esten user_ids
         ids_to_remove = current_user_tag_ids.reject { |id| user_ids.include?(id) }
         ## Remove
-        add_user_tags(ids_to_add, tagger: tagger)
+        add_user_tags(ids_to_add, options)
         remove_user_tags(ids_to_remove)
       end
 
