@@ -11,7 +11,7 @@ RSpec.describe Post, :type => :model do
 
   describe "acts_as_commentable" do
     it "should have methods to handle comments" do
-      post = Post.make!
+      post = Post.make!(postable: User.make!)
       expect {
         post.comments.create(comment: "It is a comment to test!", user: User.make!)
       }.to change(Comment, :count).by(1)

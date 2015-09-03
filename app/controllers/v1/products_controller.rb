@@ -1,5 +1,5 @@
 class V1::ProductsController < V1::BaseController
-  before_action :set_product, except: [:index, :create]
+  before_action :set_product, except: [:index, :create, :find_by_sku]
 
   def index
     @q = Product.search(params[:q])
@@ -26,6 +26,11 @@ class V1::ProductsController < V1::BaseController
   def destroy
     @product.destroy
     head :no_content
+  end
+
+  def find_by_sku
+    @product = Product.find_by(sku: params[:sku])
+    render :show, status: :ok, location: @product
   end
 
   private

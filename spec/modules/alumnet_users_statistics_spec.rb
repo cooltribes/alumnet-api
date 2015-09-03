@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe AlumnetUsersStatistics, type: :stats do
+RSpec.describe AlumnetUsersStatistics, type: :stats, slow: true do
 
   describe "#group_and_count_registrants(init_date, end_date, interval)" do
     it "return all regular active user between the dates given" do

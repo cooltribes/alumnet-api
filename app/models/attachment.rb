@@ -8,6 +8,9 @@ class Attachment < ActiveRecord::Base
   ### Validations
   validates_presence_of :name, :file, :folder_id
 
+  ### Callbacks
+  # before_save :check_name
+
   def user_can_download(user)
     if folder.folderable_type == "Group"
       folder.folderable.user_is_member?(user)
@@ -19,8 +22,7 @@ class Attachment < ActiveRecord::Base
   end
 
   def user_can_edit(user)
-    return true if uploader == user    
-
+    return true if uploader == user
     if folder.folderable_type == "Group"
       folder.folderable.user_is_admin?(user)
     elsif folder.folderable_type == "Event"
@@ -30,9 +32,6 @@ class Attachment < ActiveRecord::Base
     end
   end
 
-  ### Callbacks
-  # before_save :check_name
-
   def filename_and_extension_from_string(string)
     string_array = string.split(".")
     extension = string_array.pop
@@ -40,8 +39,8 @@ class Attachment < ActiveRecord::Base
     return filename, extension
   end
 
-
   private
+
     def check_name
       all_files = Folder.find(folder_id).attachments
       files = all_files.select { |f| f.name == name }
