@@ -71,6 +71,7 @@ Rails.application.routes.draw do
         get :history, on: :collection
       end
       resources :prizes, except: :show, controller: 'users/prizes'
+      resources :products, except: :show, controller: 'users/products'
     end
 
     resources :groups do
@@ -119,6 +120,10 @@ Rails.application.routes.draw do
 
     resources :prizes
 
+    resources :products do
+      get :find_by_sku, on: :collection
+    end
+
     resources :banners
 
     resources :keywords
@@ -157,6 +162,7 @@ Rails.application.routes.draw do
         post :like, on: :member
         post :unlike, on: :member
       end
+      resources :user_tags, controller: 'pictures/user_tags', only: [:index, :create, :destroy]
     end
 
     resources :posts, only: :show do

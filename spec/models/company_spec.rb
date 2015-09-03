@@ -19,10 +19,12 @@ RSpec.describe Company, :type => :model do
   #   expect(company.admins.count).to eq(2)
   # end
 
+  let(:creator) { User.make! }
+
   describe "Validations" do
     it "uniqueness of name" do
-      Company.create(name: "Company")
-      company = Company.new(name: "cOmPaNY")
+      Company.create(name: "Company", creator: creator)
+      company = Company.new(name: "cOmPaNY", creator: creator)
       company.save
       expect(company.errors.full_messages).to eq(["Name has already been taken"])
     end
@@ -31,7 +33,7 @@ RSpec.describe Company, :type => :model do
   describe "Class Methods" do
     describe ".find_by_name" do
       it "find the company name" do
-        Company.create(name: "Company")
+        Company.create(name: "Company", creator: creator)
         company = Company.find_by_name("cOmPaNY")
         expect(company.name).to eq("Company")
       end

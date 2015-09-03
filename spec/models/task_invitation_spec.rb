@@ -7,7 +7,11 @@ RSpec.describe TaskInvitation, :type => :model do
   describe "Instance Methods" do
 
     let(:user) { User.make! }
-    let(:task) { Task.make!(:job) }
+    let(:task) do
+      VCR.use_cassette('create_task') do
+        Task.make!(:job)
+      end
+    end
     let!(:invitation) { TaskInvitation.create!(user: user, task: task )}
 
     describe "#accept!" do

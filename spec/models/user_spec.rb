@@ -62,8 +62,8 @@ RSpec.describe User, type: :model do
 
     describe "has_like_in?(likeable)" do
       it "it return true if user has a like record in the likeable model" do
-        post = Post.make!
         user = User.make!
+        post = Post.make!(postable: user)
         expect(user.has_like_in?(post)).to eq(false)
         Like.make!(user: user, likeable: post)
         expect(user.has_like_in?(post)).to eq(true)
