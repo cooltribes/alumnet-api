@@ -1,1 +1,1 @@
-json.(link, :title, :description, :url, :created_at, :updated_at)
+json.(link, :id, :title, :description, :url, :created_at, :updated_at)
