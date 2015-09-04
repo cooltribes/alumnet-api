@@ -23,7 +23,7 @@ module Users
         if user.activate!
           save_profile_and_activate_in_profinda
           ##TODO: Urgentemente refactorizar este metodo.
-          user.subscribe_to_mailchimp_list(mailchimp, Settings.mailchimp_general_list_id)
+          user.subscribe_to_mailchimp_list(@mailchimp, Settings.mailchimp_general_list_id)
           true
         else
           errors.add(:user, "can't be activate")

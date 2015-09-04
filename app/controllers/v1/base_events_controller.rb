@@ -38,12 +38,13 @@ class V1::BaseEventsController < V1::BaseController
   end
 
   def destroy
-    if @event.event_payments.any?
-      render json: { message: "the event have orders" }, status: 409
-    else
+    # TODO: PREGUNTAR A YONDRI POR ESTO
+    # if @event.event_payments.any?
+    #   render json: { message: "the event have orders" }, status: 409
+    # else
       @event.destroy
       head :no_content
-    end
+    # end
   end
 
   private
