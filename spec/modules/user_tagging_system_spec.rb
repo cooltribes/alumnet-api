@@ -12,9 +12,11 @@ RSpec.describe UserTaggingSystem, :type => :module do
     it "should add user_tags to taggable with tagger " do
       user_ids = []
       3.times { user_ids << User.make!.id }
-      post.add_user_tags(user_ids, tagger: tagger)
+      position = { posX: 100, posY: 170 }
+      post.add_user_tags(user_ids, tagger: tagger, position: position)
       expect(post.user_taggings.count).to eq(3)
       expect(post.user_taggings.last.tagger).to eq(tagger)
+      expect(post.user_taggings.last.position).to eq(position)
     end
   end
 
@@ -33,7 +35,6 @@ RSpec.describe UserTaggingSystem, :type => :module do
     it "should add and remove user_tags to taggable" do
       user_ids = []
       3.times { user_ids << User.make!.id }
-      tagger = User.make
       post.update_user_tags(user_ids, tagger: tagger)
       expect(post.user_taggings.count).to eq(3)
       new_user_ids = [user_ids[1]]
