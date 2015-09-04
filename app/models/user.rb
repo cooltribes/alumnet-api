@@ -606,6 +606,10 @@ class User < ActiveRecord::Base
     SecureRandom.urlsafe_base64(8).tr('lIO0', 'sxyz')
   end
 
+  def remaining_job_posts
+    return 0
+  end
+
   private
 
   ### this a temporary solution to authenticate the api
