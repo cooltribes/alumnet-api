@@ -89,7 +89,7 @@ describe V1::Pictures::CommentsController, type: :request do
       it "add like a comment" do
         user = User.make!
         picture = Picture.make!
-        comment = Comment.make!(commentable: picture)
+        comment = Comment.make!(commentable: picture, user: user)
         expect {
           post like_picture_comment_path(picture, comment), {}, basic_header(user.auth_token)
         }.to change(comment, :likes_count).by(1)
@@ -102,7 +102,7 @@ describe V1::Pictures::CommentsController, type: :request do
       it "return a json with error" do
         user = User.make!
         picture = Picture.make!
-        comment = Comment.make!(commentable: picture)
+        comment = Comment.make!(commentable: picture, user: user)
         Like.make!(user: user, likeable: comment)
         expect {
           post like_picture_comment_path(picture, comment), {}, basic_header(user.auth_token)
