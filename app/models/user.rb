@@ -607,7 +607,15 @@ class User < ActiveRecord::Base
   end
 
   def remaining_job_posts
-    return 0
+    remaining_job_posts = 0
+    user_products.each do |p|
+      if p.transaction_type == 1
+        remaining_job_posts += p.quantity
+      elsif p.transaction_type == 2
+        remaining_job_posts -= p.quantity
+      end
+    end
+    remaining_job_posts
   end
 
   private
