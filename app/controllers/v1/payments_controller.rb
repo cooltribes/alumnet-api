@@ -23,6 +23,8 @@ class V1::PaymentsController < V1::BaseController
         else
           render json: @attendance.errors, status: :unprocessable_entity
         end
+      else
+        render :show, status: :created, location: @payment
       end
     else
       render json: @payment.errors, status: :unprocessable_entity
