@@ -22,7 +22,7 @@ describe V1::UsersController, type: :request do
         u = User.make!
         u.profile.skills!
         u.activate!
-        ContactInfo.make!(:email, profile: u.profile )
+        ContactInfo.make!(:email, contactable: u.profile )
       end
     end
 
@@ -36,7 +36,7 @@ describe V1::UsersController, type: :request do
   describe "GET /users/:id" do
     it "return a user by id" do
       user = User.make!
-      ContactInfo.make!(:email, profile: user.profile )
+      ContactInfo.make!(:email, contactable: user.profile )
       get user_path(user), {}, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       expect(json).to have_key('email')
@@ -47,7 +47,7 @@ describe V1::UsersController, type: :request do
   describe "PUT /users/:id" do
     it "edit a user" do
       user = User.make!
-      ContactInfo.make!(:email, profile: user.profile )
+      ContactInfo.make!(:email, contactable: user.profile )
       put user_path(user), { email: "test_email@gmail.com" }, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       user.reload

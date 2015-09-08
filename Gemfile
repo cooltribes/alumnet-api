@@ -56,4 +56,5 @@ group :test do
   gem 'shoulda-matchers', require: false
   gem 'rspec-sidekiq'
   gem 'webmock'
+  gem 'vcr'
 end
