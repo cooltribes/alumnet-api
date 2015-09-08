@@ -61,7 +61,7 @@ class V1::PaymentsController < V1::BaseController
 
   def set_paymentable
     if params[:paymentable_type]
-      @paymentable = params[:paymentable_type].constantize.find(params[:paymentable_id])
+      @paymentable = Product.find(params[:paymentable_id])
     end
   end
 
