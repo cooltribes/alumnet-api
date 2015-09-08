@@ -14,9 +14,10 @@ class V1::AttendancesController < V1::BaseController
 
 
   def create
+    ## TODO: Add column to store the creator of attendance.
     @attendance = Attendance.new(create_params)
     if @attendance.save
-      Notification.notify_invitation_event_to_user(@attendance)
+      Notification.notify_invitation_event_to_user(@attendance, @current_user)
       render :show, status: :created
     else
       render json: @attendance.errors, status: :unprocessable_entity
