@@ -102,11 +102,12 @@ class Notification
     UserMailer.friend_accept_friendship(user, friend).deliver_later
   end
 
-  def self.notify_invitation_event_to_user(attendance)
+  def self.notify_invitation_event_to_user(attendance, host = nil)
     event = attendance.event
+    host_name = host ? host.name : event.creator.name
     notification = new(attendance.user)
     subject = "You have a new invitation to an event in AlumNet!",
-    body = "The user #{event.creator.name} is inviting you to assist the event #{event.name}"
+    body = "The user #{host_name} is inviting you to assist the event #{event.name}"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     NotificationDetail.invitation_to_event(notfy, event.creator, event)

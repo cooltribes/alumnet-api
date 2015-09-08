@@ -292,7 +292,7 @@ class AlumnetUsersStatistics
 
   def format_for_table_of_regions(data_users)
     data = []
-    data << ["Region", "Registrants", "Members", "LT Members", "Total"]
+    data << ["Region", "Registrants", "Members", "Lifetime members", "Total"]
     registrants, members, lifetime = data_users["registrants"], data_users["members"], data_users["lifetime"]
     keys = (registrants.keys + members.keys + lifetime.keys).uniq
     keys.each do |key|
@@ -304,7 +304,7 @@ class AlumnetUsersStatistics
 
   def format_for_table_of_countries(data_users)
     data = []
-    data << ["Country", "Registrants", "Members", "LT Members", "Total"]
+    data << ["Country", "Registrants", "Members", "Lifetime members", "Total"]
     registrants, members, lifetime = data_users["registrants"], data_users["members"], data_users["lifetime"]
     keys = (registrants.keys + members.keys + lifetime.keys).uniq
     keys.each do |key|
@@ -316,7 +316,7 @@ class AlumnetUsersStatistics
 
   def format_for_line_graph(data_array, interval)
     data = []
-    data << [interval.capitalize, "Registrants", "Members", "LT Members"]
+    data << [interval.capitalize, "Registrants", "Members", "Lifetime members"]
     registrants, members, lifetime = data_array[0], data_array[1], data_array[2]
     keys = (registrants.keys + members.keys + lifetime.keys).uniq
     keys.each do |key|
@@ -328,7 +328,7 @@ class AlumnetUsersStatistics
   def format_for_pie_graph(data_array)
     data = []
     data << ["Users", "Count"]
-    ["Registrants", "Members", "LT Members"].each_with_index do |value, index|
+    ["Registrants", "Members", "Lifetime members"].each_with_index do |value, index|
       data << [value, data_array[index]]
     end
     data

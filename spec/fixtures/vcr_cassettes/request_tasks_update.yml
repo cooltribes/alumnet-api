@@ -1,0 +1,309 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://apistaging.profinda.com/api/auth/sign_in
+    body:
+      encoding: UTF-8
+      string: '{"user":{"email":"admin@cooltribes.com","password":"AlumNet2015"}}'
+    headers:
+      Accept:
+      - application/vnd.profinda+json;version=1
+      Profindaaccountdomain:
+      - cooltribes-staging.profinda.com
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 04 Sep 2015 19:58:45 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 200 OK
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      Etag:
+      - W/"5ee09c596d7cd075b8eb05a6b55f9df7"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Vary:
+      - Origin
+      X-Request-Id:
+      - c16f1b3b-3c52-4d5d-8068-c06a23030def
+      X-Runtime:
+      - '0.067727'
+    body:
+      encoding: UTF-8
+      string: '{"id":2766,"authentication_token":"AFxb9Ck_scPZCMtQrb_t"}'
+    http_version: 
+  recorded_at: Fri, 04 Sep 2015 19:57:08 GMT
+- request:
+    method: get
+    uri: http://apistaging.profinda.com/api/admin/dictionary_objects?ids%5B%5D=1590&ids%5B%5D=1636&ids%5B%5D=1638
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.profinda+json;version=1
+      Profindaaccountdomain:
+      - cooltribes-staging.profinda.com
+      Profindaapitoken:
+      - AFxb9Ck_scPZCMtQrb_t
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 04 Sep 2015 19:58:51 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 200 OK
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      Etag:
+      - W/"975f28dde330a4685e88751710e0b5c5"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Vary:
+      - Origin
+      X-Request-Id:
+      - f82243ae-01b2-4005-aaed-ab4de86bf5f7
+      X-Runtime:
+      - '0.027437'
+    body:
+      encoding: UTF-8
+      string: '{"entries":[{"id":1636,"name":"alumnet_languages","value":"English","connected_profiles_ids":[5813,5600,5296,4059,4060,4968,4230,4091,4092,4219,4229,4231,5111,4031,3949,2776,4245,4246,4357,4489,4496,4500,4514,4598,4856,4884,4921]},{"id":1638,"name":"alumnet_country_origin","value":"Venezuela","connected_profiles_ids":[5813,5812,4900,5600,5296,4060,4062,4967,4968,4230,4219,4229,4231,5111,4029,2776,4496,4500,4514,4598,4246,4856,4884,4091,4933]}],"meta":{"total":2}}'
+    http_version: 
+  recorded_at: Fri, 04 Sep 2015 19:57:13 GMT
+- request:
+    method: get
+    uri: http://apistaging.profinda.com/api/admin/dictionary_objects?ids%5B%5D=1606&ids%5B%5D=1637
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.profinda+json;version=1
+      Profindaaccountdomain:
+      - cooltribes-staging.profinda.com
+      Profindaapitoken:
+      - AFxb9Ck_scPZCMtQrb_t
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 04 Sep 2015 19:58:51 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 200 OK
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      Etag:
+      - W/"2fff7d0a55fd9faf1ce608ea0f5d1fab"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Vary:
+      - Origin
+      X-Request-Id:
+      - c8dc891e-60d4-4007-a4dc-2e1ef62aefa5
+      X-Runtime:
+      - '0.021828'
+    body:
+      encoding: UTF-8
+      string: '{"entries":[{"id":1637,"name":"alumnet_city_origin","value":"San Cristobal","connected_profiles_ids":[2776,5813,4900,5296,4060,4062,4230,4219,4231,4029,4496,4500,4598,4091,4933]}],"meta":{"total":1}}'
+    http_version: 
+  recorded_at: Fri, 04 Sep 2015 19:57:14 GMT
+- request:
+    method: post
+    uri: http://apistaging.profinda.com/api/auth/sign_in
+    body:
+      encoding: UTF-8
+      string: '{"user":{"email":"admin@cooltribes.com","password":"AlumNet2015"}}'
+    headers:
+      Accept:
+      - application/vnd.profinda+json;version=1
+      Profindaaccountdomain:
+      - cooltribes-staging.profinda.com
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 04 Sep 2015 19:58:52 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 200 OK
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      Etag:
+      - W/"5ee09c596d7cd075b8eb05a6b55f9df7"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Vary:
+      - Origin
+      X-Request-Id:
+      - 8fd7aebd-97b6-49d4-ba40-daba1fd6084d
+      X-Runtime:
+      - '0.076424'
+    body:
+      encoding: UTF-8
+      string: '{"id":2766,"authentication_token":"AFxb9Ck_scPZCMtQrb_t"}'
+    http_version: 
+  recorded_at: Fri, 04 Sep 2015 19:57:15 GMT
+- request:
+    method: get
+    uri: http://apistaging.profinda.com/api/admin/dictionary_objects?ids%5B%5D=1590&ids%5B%5D=1636&ids%5B%5D=1638
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.profinda+json;version=1
+      Profindaaccountdomain:
+      - cooltribes-staging.profinda.com
+      Profindaapitoken:
+      - AFxb9Ck_scPZCMtQrb_t
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 04 Sep 2015 19:58:53 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 200 OK
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      Etag:
+      - W/"975f28dde330a4685e88751710e0b5c5"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Vary:
+      - Origin
+      X-Request-Id:
+      - 68d5edf2-1a9c-4a33-9557-8adfbe128fac
+      X-Runtime:
+      - '0.024243'
+    body:
+      encoding: UTF-8
+      string: '{"entries":[{"id":1636,"name":"alumnet_languages","value":"English","connected_profiles_ids":[5813,5600,5296,4059,4060,4968,4230,4091,4092,4219,4229,4231,5111,4031,3949,2776,4245,4246,4357,4489,4496,4500,4514,4598,4856,4884,4921]},{"id":1638,"name":"alumnet_country_origin","value":"Venezuela","connected_profiles_ids":[5813,5812,4900,5600,5296,4060,4062,4967,4968,4230,4219,4229,4231,5111,4029,2776,4496,4500,4514,4598,4246,4856,4884,4091,4933]}],"meta":{"total":2}}'
+    http_version: 
+  recorded_at: Fri, 04 Sep 2015 19:57:15 GMT
+- request:
+    method: get
+    uri: http://apistaging.profinda.com/api/admin/dictionary_objects?ids%5B%5D=1606&ids%5B%5D=1637
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.profinda+json;version=1
+      Profindaaccountdomain:
+      - cooltribes-staging.profinda.com
+      Profindaapitoken:
+      - AFxb9Ck_scPZCMtQrb_t
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 04 Sep 2015 19:58:53 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 200 OK
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      Etag:
+      - W/"2fff7d0a55fd9faf1ce608ea0f5d1fab"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Vary:
+      - Origin
+      X-Request-Id:
+      - 497f5888-19e8-415d-8a60-4af7b6345a6e
+      X-Runtime:
+      - '0.023561'
+    body:
+      encoding: UTF-8
+      string: '{"entries":[{"id":1637,"name":"alumnet_city_origin","value":"San Cristobal","connected_profiles_ids":[2776,5813,4900,5296,4060,4062,4230,4219,4231,4029,4496,4500,4598,4091,4933]}],"meta":{"total":1}}'
+    http_version: 
+  recorded_at: Fri, 04 Sep 2015 19:57:16 GMT
+recorded_with: VCR 2.9.3

@@ -15,8 +15,7 @@ class Attachment < ActiveRecord::Base
     if folder.folderable_type == "Group"
       folder.folderable.user_is_member?(user)
     elsif folder.folderable_type == "Event"
-      folder.folderable.user_is_going?(user)
-      true
+      folder.folderable.user_is_going?(user)      
     else
       false
     end
