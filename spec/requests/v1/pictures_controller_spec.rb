@@ -72,7 +72,7 @@ describe V1::PicturesController, type: :request do
     context "without like from user" do
       it "add like a post" do
         user = User.make!
-        picture = Picture.make!
+        picture = Picture.make!(uploader: user)
         expect {
           post like_picture_path(picture), {}, basic_header(user.auth_token)
         }.to change(picture, :likes_count).by(1)
@@ -84,7 +84,7 @@ describe V1::PicturesController, type: :request do
     context "with like from user" do
       it "return a json with error" do
         user = User.make!
-        picture = Picture.make!
+        picture = Picture.make!(uploader: user)
         Like.make!(user: user, likeable: picture)
         expect {
           post like_picture_path(picture), {}, basic_header(user.auth_token)
@@ -99,7 +99,7 @@ describe V1::PicturesController, type: :request do
     context "with a like" do
       it "remove like of post" do
         user = User.make!
-        picture = Picture.make!
+        picture = Picture.make!(uploader: user)
         Like.make!(user: user, likeable: picture)
         expect {
           post unlike_picture_path(picture), {}, basic_header(user.auth_token)

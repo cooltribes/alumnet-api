@@ -2,6 +2,7 @@ class V1::PaymentsController < V1::BaseController
   before_action :set_payment, except: [:index, :create, :update]
   before_action :set_paymentable, only: [:create]
   before_action :set_payment_by_reference, only: [:update]
+  # TODO: Refactor this controller
 
   def index
     @q = Payment.search(params[:q])
