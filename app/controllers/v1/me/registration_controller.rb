@@ -28,7 +28,7 @@ class V1::Me::RegistrationController < V1::BaseController
 
     def initial
       if @profile.update(profile_params)
-        @profile.update_step
+        @profile.update_next_step
         render @current_step
       else
         render json: @profile.errors, status: :unprocessable_entity
