@@ -205,6 +205,7 @@ class Notification
 
   #When users ask admin rights for a company
   def self.notify_admin_request_to_company_admins(admins, user, company)
+    return if admins.empty?
     notification = new(admins)
     subject = "hi Admin! A new user has requested admin rights in #{company.name}"
     body = "The user #{user.name} requested admin rights in #{company.name}"
