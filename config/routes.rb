@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       post :send_invitations
       post :activate
       resource :profile, only: [:show, :update], controller: 'me/profiles'
+      resource :registration, only: [:show, :update], controller: 'me/registration'
       resources :posts, controller: 'me/posts'
 
       resources :friendships, except: :show, controller: 'me/friendships' do
