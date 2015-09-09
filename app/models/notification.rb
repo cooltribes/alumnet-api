@@ -203,4 +203,23 @@ class Notification
     notification.send_pusher_notification
     NotificationDetail.notify_tag(notfy, tagging.tagger, tagging.taggable)
   end
+
+  #When users ask admin rights for a company
+  def self.notify_admin_request_to_company_admins(admins, user, company)
+    return if admins.empty?
+    notification = new(admins)
+    subject = "hi Admin! A new user has requested admin rights in #{company.name}"
+    body = "The user #{user.name} requested admin rights in #{company.name}"
+    notfy = notification.send_notification(subject, body)
+    notification.send_pusher_notification
+    notification.recipients.each do |admin|
+      AdminMailer.admin_request_to_company_admins(admin, user).deliver_later
+    end
+    # NotificationDetail.notify_admin_request_to_company_admins(notfy, user)
+
+  end
+
+
 end
+
+
