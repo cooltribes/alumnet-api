@@ -4,5 +4,5 @@ class UserProduct < ActiveRecord::Base
 	belongs_to :product
 
 	### Validations
-  	validates_presence_of :transaction_type, :user_id, :product_id
+  	validates_presence_of :transaction_type, :user_id
 end
