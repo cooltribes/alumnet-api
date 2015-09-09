@@ -86,6 +86,18 @@ class Profile < ActiveRecord::Base
     end
   end
 
+  def update_next_step
+    ordinal_value = Profile.register_steps[register_step]
+    next_step = Profile.register_steps.key(ordinal_value + 1)
+    next_step ? send("#{next_step}!") : false
+  end
+
+  def update_prev_step
+    ordinal_value = Profile.register_steps[register_step]
+    next_step = Profile.register_steps.key(ordinal_value - 1)
+    next_step ? send("#{next_step}!") : false
+  end
+
   def update_step
     case register_step
       when "initial" then profile!
@@ -128,16 +140,16 @@ class Profile < ActiveRecord::Base
     end
 
     def generate_slug!
-      
+
       slug = "#{first_name.split(" ")[0].downcase}-#{last_name.split(" ")[0].downcase}"
       number = 1
-      
+
       while User.exists?(slug: slug)
 
         slug += "#{number}"
         number += 1
 
-      end      
+      end
 
       user.update_column(:slug, slug)
     end
@@ -149,6 +161,7 @@ class Profile < ActiveRecord::Base
     end
 
     def save_avatar_in_album
+      ##TODO: Refactor this
       if avatar_changed?
         album = user.albums.create_with(name: 'avatars').find_or_create_by(album_type: Album::TYPES[:avatar])
         picture = Picture.new(uploader: user)
