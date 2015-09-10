@@ -3,7 +3,7 @@ class Profile < ActiveRecord::Base
   mount_uploader :avatar, AvatarUploader
   mount_uploader :cover, UserCoverUploader
   # enum register_step: [:initial, :profile, :contact, :experience_a, :experience_b, :experience_c, :experience_d, :skills, :approval]
-  enum register_step: [:basic_information, :languages_and_skills, :aiesec_experiences]
+  enum register_step: [:basic_information, :languages_and_skills, :aiesec_experiences, :completed]
   include ProfileHelpers
   include CropingMethods
 

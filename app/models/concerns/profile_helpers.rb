@@ -4,7 +4,7 @@ module ProfileHelpers
     if self.birth_city.present? && self.user.permit('see-born', user)
       { id: self.birth_city.id, text: self.birth_city.name }
     else
-      nil
+      { id: nil, text: "" }
     end
   end
 
@@ -12,7 +12,7 @@ module ProfileHelpers
     if self.birth_country.present? && self.user.permit('see-born', user)
       { id: self.birth_country.id, text: self.birth_country.name }
     else
-      nil
+      { id: nil, text: "" }
     end
   end
 
@@ -20,7 +20,7 @@ module ProfileHelpers
     if self.residence_city.present? && self.user.permit('see-residence', user)
       { id: self.residence_city.id, text: self.residence_city.name }
     else
-      nil
+      { id: nil, text: "" }
     end
   end
 
@@ -29,7 +29,7 @@ module ProfileHelpers
       { id: self.residence_country.id, text: self.residence_country.name,
         region: residence_region }
     else
-      nil
+      { id: nil, text: "" }
     end
   end
 
@@ -37,7 +37,7 @@ module ProfileHelpers
     if self.residence_country.region.present?
       { id: self.residence_country.region.id, name: self.residence_country.region.name }
     else
-      { id: nil, name: nil }
+      { id: nil, name: "" }
     end
   end
 
@@ -85,7 +85,7 @@ module ProfileHelpers
     array = []
     array.push(completeLocation) if completeLocation
     array.push(completeDate) if completeDate != ""
-    completeBorn = array.join(" in ")    
+    completeBorn = array.join(" in ")
   end
 
   def residenceLocation(user)
@@ -95,7 +95,7 @@ module ProfileHelpers
       country = permit_residence_country(user)
       completeLocation = "#{city[:text]} - #{country[:text]}"
     end
-    
+
   end
 
 
