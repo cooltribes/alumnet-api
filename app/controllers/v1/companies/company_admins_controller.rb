@@ -11,7 +11,13 @@ class V1::Companies::CompanyAdminsController < V1::BaseController
   def create
     @company_admin = CompanyAdmin.new(company_admin_params)
     if @company.company_admins << @company_admin
-      @company_admin.mark_as_accepted_by(current_user) if @company.is_admin?(current_user)
+
+      if @company.is_admin?(current_user) #If current user is admin, the request is already accepted
+        @company_admin.mark_as_accepted_by(current_user)
+      else  #If another user asked for admin, send an email to admins.
+        Notification.notify_admin_request_to_company_admins(@company.accepted_admins.to_a, @current_user, @company)
+      end  
+
       render :show, status: :created
     else
       render json: @company_admin.errors, status: :unprocessable_entity
