@@ -96,6 +96,11 @@ class User < ActiveRecord::Base
     RECEPTIVE_POINTS[role] + value
   end
 
+  def register_sign_in
+    increment!(:sign_in_count)
+    touch(:last_sign_in_at)
+  end
+
   def name
     "#{profile.first_name} #{profile.last_name}"
   end
