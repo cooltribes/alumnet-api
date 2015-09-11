@@ -158,6 +158,22 @@ class User < ActiveRecord::Base
     experience ? experience.country.try(:name) : nil
   end
 
+  ##Sugestions Methods
+  def suggested_groups
+    aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq || []
+    profile_countries_ids = [profile.residence_country_id, profile.birth_country_id]
+    countries_ids = [aiesec_countries_ids, profile_countries_ids].flatten.uniq
+    Group.where(country_id: countries_ids)
+  end
+
+  def suggested_users
+    committees_ids = profile.committees.pluck(:id).join
+    aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq.join || []
+    User.joins(profile: :experiences).where( experiences: { exp_type: 0 })
+      .where("experiences.committee_id in (?) or experiences.country_id in (?)", committees_ids, aiesec_countries_ids)
+      .where.not(id: id).uniq
+  end
+
   ### Admin Note
   def set_admin_note(body)
     if admin_note.present?

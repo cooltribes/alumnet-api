@@ -17,11 +17,13 @@ class Profile < ActiveRecord::Base
   belongs_to :user
   has_many :contact_infos, as: :contactable, dependent: :destroy
   has_many :experiences, dependent: :destroy
+  has_many :committees, through: :experiences
   has_many :language_levels, dependent: :destroy
   has_many :languages, through: :language_levels
   has_and_belongs_to_many :skills
   has_many :company_relations, dependent: :destroy
   has_many :companies
+
 
 
   ###Validations
@@ -128,16 +130,16 @@ class Profile < ActiveRecord::Base
     end
 
     def generate_slug!
-      
+
       slug = "#{first_name.split(" ")[0].downcase}-#{last_name.split(" ")[0].downcase}"
       number = 1
-      
+
       while User.exists?(slug: slug)
 
         slug += "#{number}"
         number += 1
 
-      end      
+      end
 
       user.update_column(:slug, slug)
     end

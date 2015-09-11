@@ -2,11 +2,11 @@ class V1::Me::SuggestionsController < V1::BaseController
   before_action :set_user
 
   def groups
-    @groups = Group.limit(6)
+    @groups = @user.suggested_groups.limit(6)
   end
 
   def users
-    @users = User.limit(6)
+    @users = @user.suggested_users.limit(6)
   end
 
   private
