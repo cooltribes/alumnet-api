@@ -102,11 +102,12 @@ class Notification
     UserMailer.friend_accept_friendship(user, friend).deliver_later
   end
 
-  def self.notify_invitation_event_to_user(attendance)
+  def self.notify_invitation_event_to_user(attendance, host = nil)
     event = attendance.event
+    host_name = host ? host.name : event.creator.name
     notification = new(attendance.user)
     subject = "You have a new invitation to an event in AlumNet!",
-    body = "The user #{event.creator.name} is inviting you to assist the event #{event.name}"
+    body = "The user #{host_name} is inviting you to assist the event #{event.name}"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     NotificationDetail.invitation_to_event(notfy, event.creator, event)
@@ -143,11 +144,12 @@ class Notification
     notification = new(approver)
     subject = "#{user.name} wants to be approved in AlumNet"
     body = "Hello, I'm registering in Alumnet. Please approve my membership"
-    notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification()
     notification.recipients.each do |recipient|
       UserMailer.user_request_approval(recipient, user).deliver_later
     end
+    NotificationDetail.notify_approval_request_to_user(notfy, user)
   end
 
   def self.notify_new_post(users, post)
@@ -201,4 +203,23 @@ class Notification
     notification.send_pusher_notification
     NotificationDetail.notify_tag(notfy, tagging.tagger, tagging.taggable)
   end
+
+  #When users ask admin rights for a company
+  def self.notify_admin_request_to_company_admins(admins, user, company)
+    return if admins.empty?
+    notification = new(admins)
+    subject = "hi Admin! A new user has requested admin rights in #{company.name}"
+    body = "The user #{user.name} requested admin rights in #{company.name}"
+    notfy = notification.send_notification(subject, body)
+    notification.send_pusher_notification
+    notification.recipients.each do |admin|
+      AdminMailer.admin_request_to_company_admins(admin, user).deliver_later
+    end
+    # NotificationDetail.notify_admin_request_to_company_admins(notfy, user)
+
+  end
+
+
 end
+
+

@@ -27,11 +27,15 @@ class Comment < ActiveRecord::Base
     def notify_to_users
       case commentable_type
         when "Post"
+          ##Notify other users with comments in Post, except the creator of comment.
+          users_with_comments = commentable.users_with_comments([user.id])
+          if users_with_comments.any?
+            Notification.notify_comment_in_post_to_users(users_with_comments.to_a, self, commentable)
+          end
+
+          ##Notify to author of post.
           unless user == commentable.user
             Notification.notify_comment_in_post_to_author(commentable.user, self, commentable)
-          end
-          if commentable.users_with_comments.any?
-            Notification.notify_comment_in_post_to_users(commentable.users_with_comments.to_a, self, commentable)
           end
       end
     end

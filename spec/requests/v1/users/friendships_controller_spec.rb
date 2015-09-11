@@ -25,16 +25,16 @@ describe V1::Users::FriendshipsController, type: :request do
   describe "GET /user/:id/friendships/friends" do
     it "return a friendships accepted if current_user can see friends of user" do
       action = PrivacyAction.make!(name: "see-friends")
-      privacy = Privacy.make!(privacy_action: action, user: user, value: 2)
+      Privacy.make!(privacy_action: action, user: user, value: 2)
       2.times do
         friendship = Friendship.make!(:accepted, user: user)
-        ContactInfo.make!(:email, profile: user.profile )
-        ContactInfo.make!(:email, profile: friendship.friend.profile)
+        ContactInfo.make!(:email, contactable: user.profile )
+        ContactInfo.make!(:email, contactable: friendship.friend.profile)
       end
       1.times do
         friendship = Friendship.make!(:accepted, friend: user)
-        ContactInfo.make!(:email, profile: user.profile )
-        ContactInfo.make!(:email, profile: friendship.user.profile)
+        ContactInfo.make!(:email, contactable: user.profile )
+        ContactInfo.make!(:email, contactable: friendship.user.profile)
       end
       get friends_user_friendships_path(user), {}, basic_header(current_user.auth_token)
       expect(response.status).to eq 200
@@ -43,13 +43,13 @@ describe V1::Users::FriendshipsController, type: :request do
     it "return a empty array if current_user can not see friends of user" do
       2.times do
         friendship = Friendship.make!(:accepted, user: user)
-        ContactInfo.make!(:email, profile: user.profile )
-        ContactInfo.make!(:email, profile: friendship.friend.profile)
+        ContactInfo.make!(:email, contactable: user.profile )
+        ContactInfo.make!(:email, contactable: friendship.friend.profile)
       end
       1.times do
         friendship = Friendship.make!(:accepted, friend: user)
-        ContactInfo.make!(:email, profile: user.profile )
-        ContactInfo.make!(:email, profile: friendship.user.profile)
+        ContactInfo.make!(:email, contactable: user.profile )
+        ContactInfo.make!(:email, contactable: friendship.user.profile)
       end
       get friends_user_friendships_path(user), {}, basic_header(current_user.auth_token)
       expect(response.status).to eq 200

@@ -13,39 +13,49 @@ RSpec.describe Task, :type => :model do
   describe "Instance Methods" do
     describe "#apply(user)" do
       it "should find o create a match with the task and user and set applied to true" do
-        task = Task.make!(:job)
-        user = User.make!
-        expect {
-          task.apply(user)
-        }.to change(Match, :count).by(1)
-        expect(Match.last.user).to eq(user)
-        expect(Match.last.task).to eq(task)
-        expect(Match.last).to be_applied
+        VCR.use_cassette('create_task') do
+          task = Task.make!(:job)
+          user = User.make!
+          expect {
+            task.apply(user)
+          }.to change(Match, :count).by(1)
+          expect(Match.last.user).to eq(user)
+          expect(Match.last.task).to eq(task)
+          expect(Match.last).to be_applied
+        end
       end
     end
 
     describe "#can_apply(user)" do
       it "should return false if user is a creator of task" do
-        user = User.make!
-        task = Task.make!(:job, user: user)
-        expect(task.can_apply(user)).to eq(false)
+        VCR.use_cassette('create_task') do
+          user = User.make!
+          task = Task.make!(:job, user: user)
+          expect(task.can_apply(user)).to eq(false)
+        end
       end
       it "should return false if user has a match with applied eq true" do
-        user = User.make!
-        task = Task.make!(:job)
-        Match.create!(user: user, task: task, applied: true)
-        expect(task.can_apply(user)).to eq(false)
+        VCR.use_cassette('create_task') do
+          user = User.make!
+          task = Task.make!(:job)
+          Match.create!(user: user, task: task, applied: true)
+          expect(task.can_apply(user)).to eq(false)
+        end
       end
       it "should return true if user has a match with applied eq false" do
-        user = User.make!
-        task = Task.make!(:job)
-        Match.create!(user: user, task: task)
-        expect(task.can_apply(user)).to eq(true)
+        VCR.use_cassette('create_task') do
+          user = User.make!
+          task = Task.make!(:job)
+          Match.create!(user: user, task: task)
+          expect(task.can_apply(user)).to eq(true)
+        end
       end
       it "should return true if user has not any match in the task" do
-        user = User.make!
-        task = Task.make!(:job)
-        expect(task.can_apply(user)).to eq(true)
+        VCR.use_cassette('create_task') do
+          user = User.make!
+          task = Task.make!(:job)
+          expect(task.can_apply(user)).to eq(true)
+        end
       end
     end
 
@@ -68,10 +78,12 @@ RSpec.describe Task, :type => :model do
 
   describe "Callbacks" do
     it "should set post_until dependent of help_type" do
-      job = Task.make!(:job)
-      expect(job.post_until).to eq(Date.today + 60)
-      business = Task.make!(:business, post_until: Date.today + 5)
-      expect(business.post_until).to eq(Date.today + 5)
+      VCR.use_cassette('task_help_type_callback') do
+        job = Task.make!(:job)
+        expect(job.post_until).to eq(Date.today + 60)
+        business = Task.make!(:business, post_until: Date.today + 5)
+        expect(business.post_until).to eq(Date.today + 5)
+      end
     end
   end
 end
