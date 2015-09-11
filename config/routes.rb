@@ -72,6 +72,7 @@ Rails.application.routes.draw do
       end
       resources :prizes, except: :show, controller: 'users/prizes'
       resources :products, except: :show, controller: 'users/products'
+      resources :payments, except: :show, controller: 'users/payments'
     end
 
     resources :groups do

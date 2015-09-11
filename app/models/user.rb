@@ -411,12 +411,13 @@ class User < ActiveRecord::Base
   ### Function to validate users subcription every day
 
   def validate_subscription
-    byebug
-    subscriptions.where('status = 1').each do |subscription|
-      if subscription.end_date && subscription.end_date.past?
-        subscription.update_column(:status, 0)
-        update_column(:member, 0)
-        "expired - user_id: #{id} - #{subscription.end_date}"
+    user_products.where('status = 1').each do |user_product|
+      if user_product.product.feature == 'subscription'
+        if user_product.end_date && user_product.end_date.past?
+          user_product.update_column(:status, 0)
+          update_column(:member, 0)
+          "expired - user_id: #{id} - #{user_product.end_date}"
+        end
       end
     end
   end
