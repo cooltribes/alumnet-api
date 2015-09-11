@@ -29,6 +29,7 @@ json.is_system_admin @user.is_system_admin?
 json.is_premium @user.is_premium?
 
 #Counters
+json.sign_in_count @user.sign_in_count
 json.friends_count @user.friends_count
 json.pending_received_friendships_count @user.pending_received_friendships_count
 json.pending_sent_friendships_count @user.pending_sent_friendships_count
