@@ -1,5 +1,7 @@
 class Event < ActiveRecord::Base
   acts_as_paranoid
+  include Alumnet::Localizable
+
   include EventHelpers
   include PaymentableMethods
   include CropingMethods
@@ -21,8 +23,6 @@ class Event < ActiveRecord::Base
   has_many :folders, as: :folderable, dependent: :destroy
   #has_many :event_payments, dependent: :destroy
   belongs_to :creator, class_name: "User"
-  belongs_to :country
-  belongs_to :city
   belongs_to :eventable, polymorphic: true
 
   ### Callbacks

@@ -2,6 +2,7 @@ class Company < ActiveRecord::Base
 
   mount_uploader :logo, LogoUploader
   mount_uploader :cover, CoverUploader
+  include Alumnet::Localizable
   include CropingMethods
 
   SIZE = {
@@ -17,8 +18,6 @@ class Company < ActiveRecord::Base
 
   ### Relations
   belongs_to :profile
-  belongs_to :country
-  belongs_to :city
   belongs_to :sector
   belongs_to :creator, class_name: 'User'
   has_many :company_relations, dependent: :destroy
@@ -72,20 +71,12 @@ class Company < ActiveRecord::Base
     accepted_admins.include?(user)
   end
 
-  def country_info
-    country ? { text: country.name, value: country_id } : { text: "", value: ""}
-  end
-
-  def city_info
-    city ? { text: city.name, value: city_id } : { text: "", value: ""}
-  end
-
   def sector_info
-    sector ? { text: sector.name, value: sector_id } : { text: "", value: ""}
+    { text: sector.try(:name) || "", value: sector_id || "" }
   end
 
   def size_info
-    { text: SIZE[size], value: size}
+    { text: SIZE[size], value: size }
   end
 
   private

@@ -1,10 +1,10 @@
 json.(group, :id, :name, :description, :official, :created_at, :deleted_at, :join_process)
 
-json.group_type group.get_group_type_info
+json.group_type group.group_type_info
 
-json.country group.get_country_info
+json.country group.country_info
 
-json.city group.get_city_info
+json.city group.city_info
 
 json.cover do
   json.admin group.cover.admin.url

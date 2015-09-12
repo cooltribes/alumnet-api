@@ -4,11 +4,11 @@ json.can_be_official group.can_be_official?
 
 json.can_be_unofficial group.can_be_unofficial?
 
-json.group_type group.get_group_type_info
+json.group_type group.group_type_info
 
-json.country group.get_country_info
+json.country group.country_info
 
-json.city group.get_city_info
+json.city group.city_info
 
 
 if group.last_post.present?

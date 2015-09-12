@@ -23,7 +23,7 @@ describe V1::Companies::BranchesController, type: :request do
         }.to change(Branch, :count).by(1)
         expect(response.status).to eq 201
         expect(json["address"]).to eq("New address")
-        expect(json["country"]).to eq({ "text" => country.name, "value" => country.id} )
+        expect(json["country"]).to eq({ "name" => country.name, "id" => country.id, "cc_iso" => nil })
       end
     end
     context "with invalid attributes" do

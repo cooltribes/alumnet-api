@@ -2,13 +2,12 @@ class Picture < ActiveRecord::Base
   acts_as_commentable
   include Alumnet::Likeable
   include Alumnet::Taggable
+  include Alumnet::Localizable
 
   mount_uploader :picture, PictureUploader
 
   ### Relations
   belongs_to :album
-  belongs_to :city, foreign_key: "city_id", class_name: 'City'
-  belongs_to :country, foreign_key: "country_id", class_name: 'Country'
   belongs_to :pictureable, polymorphic: true
   belongs_to :uploader, class_name: 'User'
 
