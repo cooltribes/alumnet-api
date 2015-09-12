@@ -1,10 +1,12 @@
 require 'rails_helper'
 
 ### to test with post
-Post.include UserTaggingSystem::Taggable
-User.include UserTaggingSystem::Tag
+Post.include Alumnet::Taggable
+User.include Alumnet::Tag
 
-RSpec.describe UserTaggingSystem, :type => :module do
+# this module is for user tagging
+
+RSpec.describe Alumnet::Taggable, :type => :module do
   let!(:post){ Post.make! }
   let!(:tagger){ User.make! }
 

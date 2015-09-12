@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 ### to test with post
-Post.include LikeableMethods
+Post.include Alumnet::Likeable
 
-RSpec.describe LikeableMethods, :type => :module do
+RSpec.describe Alumnet::Likeable, :type => :module do
   describe "#likes_count" do
     it "return the numbers of like of likeable" do
       post = Post.make!

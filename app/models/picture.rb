@@ -1,7 +1,7 @@
 class Picture < ActiveRecord::Base
   acts_as_commentable
-  include LikeableMethods
-  include UserTaggingSystem::Taggable
+  include Alumnet::Likeable
+  include Alumnet::Taggable
 
   mount_uploader :picture, PictureUploader
 
