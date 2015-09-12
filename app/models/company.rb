@@ -3,7 +3,7 @@ class Company < ActiveRecord::Base
   mount_uploader :logo, LogoUploader
   mount_uploader :cover, CoverUploader
   include Alumnet::Localizable
-  include CropingMethods
+  include Alumnet::Croppable
 
   SIZE = {
     1 => "1 - 10",

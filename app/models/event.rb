@@ -1,12 +1,11 @@
 class Event < ActiveRecord::Base
   acts_as_paranoid
-  include Alumnet::Localizable
-
-  include EventHelpers
-  include PaymentableMethods
-  include CropingMethods
   mount_uploader :cover, CoverUploader
   enum event_type: [:open, :closed, :secret]
+  include Alumnet::Localizable
+  include Alumnet::Croppable
+  include EventHelpers
+  include PaymentableMethods
 
   #upload_files
   # "0" -> Only the admins can upload

@@ -3,8 +3,8 @@ class Profile < ActiveRecord::Base
   mount_uploader :avatar, AvatarUploader
   mount_uploader :cover, UserCoverUploader
   enum register_step: [:initial, :profile, :contact, :experience_a, :experience_b, :experience_c, :experience_d, :skills, :approval]
+  include Alumnet::Croppable
   include ProfileHelpers
-  include CropingMethods
 
   ##Crop avatar
   attr_accessor :avatar_url
@@ -128,16 +128,16 @@ class Profile < ActiveRecord::Base
     end
 
     def generate_slug!
-      
+
       slug = "#{first_name.split(" ")[0].downcase}-#{last_name.split(" ")[0].downcase}"
       number = 1
-      
+
       while User.exists?(slug: slug)
 
         slug += "#{number}"
         number += 1
 
-      end      
+      end
 
       user.update_column(:slug, slug)
     end

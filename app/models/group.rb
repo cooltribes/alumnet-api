@@ -5,7 +5,7 @@ class Group < ActiveRecord::Base
   enum group_type: [:open, :closed, :secret]
 
   include Alumnet::Localizable
-  include CropingMethods
+  include Alumnet::Croppable
 
   ## Virtual Attributes
   attr_accessor :cover_uploader
