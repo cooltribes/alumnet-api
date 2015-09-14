@@ -2,7 +2,8 @@ class Profile < ActiveRecord::Base
   acts_as_paranoid
   mount_uploader :avatar, AvatarUploader
   mount_uploader :cover, UserCoverUploader
-  enum register_step: [:initial, :profile, :contact, :experience_a, :experience_b, :experience_c, :experience_d, :skills, :approval]
+  # enum register_step: [:initial, :profile, :contact, :experience_a, :experience_b, :experience_c, :experience_d, :skills, :approval]
+  enum register_step: [:basic_information, :languages_and_skills, :aiesec_experiences, :completed]
   include ProfileHelpers
   include CropingMethods
 
@@ -88,6 +89,28 @@ class Profile < ActiveRecord::Base
     end
   end
 
+  def update_next_step
+    ordinal_value = Profile.register_steps[register_step]
+    next_step = Profile.register_steps.key(ordinal_value + 1)
+    next_step ? send("#{next_step}!") : false
+  end
+
+  def update_prev_step
+    ordinal_value = Profile.register_steps[register_step]
+    next_step = Profile.register_steps.key(ordinal_value - 1)
+    next_step ? send("#{next_step}!") : false
+  end
+
+  def first_step_completed?
+    #If user is in last step of registration
+    register_step == Profile.register_steps.to_a.second[0]
+  end
+  
+  def is_in_penultimate_step?
+    #If user is in last step of registration but before the approval
+    register_step == Profile.register_steps.to_a[-2][0]
+  end
+
   def update_step
     case register_step
       when "initial" then profile!
@@ -151,6 +174,7 @@ class Profile < ActiveRecord::Base
     end
 
     def save_avatar_in_album
+      ##TODO: Refactor this
       if avatar_changed?
         album = user.albums.create_with(name: 'avatars').find_or_create_by(album_type: Album::TYPES[:avatar])
         picture = Picture.new(uploader: user)
