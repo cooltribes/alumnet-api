@@ -226,9 +226,10 @@ class User < ActiveRecord::Base
     end
   end
 
-  def activate_in_alumnet    
+  def activate_in_alumnet
     active!
     join_to_initial_groups unless is_external?
+    UserMailer.welcome(self).deliver_later
     touch(:active_at)
   end
 

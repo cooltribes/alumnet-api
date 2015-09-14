@@ -103,9 +103,9 @@ class Profile < ActiveRecord::Base
 
   def first_step_completed?
     #If user is in last step of registration
-    register_step == Profile.register_steps.to_a.second[0]
+    Profile.register_steps[register_step] > 0
   end
-  
+
   def is_in_penultimate_step?
     #If user is in last step of registration but before the approval
     register_step == Profile.register_steps.to_a[-2][0]
