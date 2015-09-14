@@ -228,6 +228,7 @@ class User < ActiveRecord::Base
 
   def activate_in_alumnet    
     active!
+    join_to_initial_groups unless is_external?
     touch(:active_at)
   end
 
