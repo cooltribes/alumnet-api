@@ -6,6 +6,7 @@ class V1::AuthController < V1::BaseController
     email, password = params[:email], params[:password]
     @user = User.find_by(email: email).try(:authenticate, password)
     if @user
+      @user.register_sign_in
       add_provider
     else
       render json: { error: "email or password are incorrect"}, status: 401
@@ -16,6 +17,7 @@ class V1::AuthController < V1::BaseController
     @provider = OauthProvider.find_by(provider_params)
     if @provider
       @user = @provider.user
+      @user.register_sign_in
       render :user, status: :ok, location: @user
     else
       render json: { error: "email or password are incorrect"}, status: 401

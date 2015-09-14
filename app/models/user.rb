@@ -96,6 +96,11 @@ class User < ActiveRecord::Base
     RECEPTIVE_POINTS[role] + value
   end
 
+  def register_sign_in
+    increment!(:sign_in_count)
+    touch(:last_sign_in_at)
+  end
+
   def name
     "#{profile.first_name} #{profile.last_name}"
   end
@@ -151,6 +156,27 @@ class User < ActiveRecord::Base
   def aiesec_location
     experience = profile.experiences.aisec.first
     experience ? experience.country.try(:name) : nil
+  end
+
+  ##Sugestions Methods
+  def suggested_groups(limit = 6)
+    aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq || []
+    profile_countries_ids = [profile.residence_country_id, profile.birth_country_id]
+    countries_ids = [aiesec_countries_ids, profile_countries_ids].flatten.uniq
+    Group.where(country_id: countries_ids)
+  end
+
+  def suggested_users(limit = 6)
+    committees_ids = profile.committees.pluck(:id).join
+    aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq.join || []
+    users = User.joins(profile: :experiences).where( experiences: { exp_type: 0 })
+      .where("experiences.committee_id in (?) or experiences.country_id in (?)", committees_ids, aiesec_countries_ids)
+      .where.not(id: id).uniq
+    if users.size < limit
+      users.to_a | User.order("RANDOM()").limit(limit - users.size).to_a ## complete the limit with ramdon users
+    else
+      users.to_a
+    end
   end
 
   ### Admin Note
