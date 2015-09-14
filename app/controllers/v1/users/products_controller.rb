@@ -11,6 +11,9 @@ class V1::Users::ProductsController < V1::BaseController
   def create
     @user_product = UserProduct.new(create_params)
     if @user_product.save
+      if @product.feature == "subscription"
+        UserMailer.subscription_purchase(@user, @product).deliver_later
+      end
       render :show, status: :created
     else
       render json: @user_product.errors, status: :unprocessable_entity

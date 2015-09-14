@@ -1,0 +1,1 @@
+json.(city, :id, :name, :cc_fips)
