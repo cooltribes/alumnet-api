@@ -18,11 +18,13 @@ class Profile < ActiveRecord::Base
   belongs_to :user
   has_many :contact_infos, as: :contactable, dependent: :destroy
   has_many :experiences, dependent: :destroy
+  has_many :committees, through: :experiences
   has_many :language_levels, dependent: :destroy
   has_many :languages, through: :language_levels
   has_and_belongs_to_many :skills
   has_many :company_relations, dependent: :destroy
   has_many :companies
+
 
 
   ###Validations

@@ -7,6 +7,7 @@ defaults: &defaults
   receptive_vendor_id: xxxxxxx
   receptive_secret_key: xxxxxxx
   fog_directory: xxxxxxxxxx
+  initial_groups: []
 
 development:
   <<: *defaults

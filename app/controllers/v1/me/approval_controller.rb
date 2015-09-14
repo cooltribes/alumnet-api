@@ -26,7 +26,6 @@ class V1::Me::ApprovalController < V1::BaseController
       regionAiesec = countryAiesec.region
       admins = admins | countryAiesec.admins | regionAiesec.admins
     end
-    # byebug
     Notification.notify_approval_request_to_admins(admins, @user)
     head :no_content
   end

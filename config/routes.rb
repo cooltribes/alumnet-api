@@ -51,6 +51,9 @@ Rails.application.routes.draw do
 
       post '/contacts/file', to: 'contacts#file' ###TEMPORAL
       post '/contacts/in_alumnet', to: 'contacts#in_alumnet' ###TEMPORAL
+
+      get '/suggestions/groups', to: 'me/suggestions#groups'
+      get '/suggestions/users', to: 'me/suggestions#users'
     end
 
     resources :users, except: :create do
@@ -73,6 +76,7 @@ Rails.application.routes.draw do
       end
       resources :prizes, except: :show, controller: 'users/prizes'
       resources :products, except: :show, controller: 'users/products'
+      resources :payments, except: :show, controller: 'users/payments'
     end
 
     resources :groups do

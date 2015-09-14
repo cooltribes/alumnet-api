@@ -24,10 +24,10 @@ class V1::TasksController < V1::BaseController
     @q = Task.profinda_automatches(current_user, help_type).search(params[:q])
     @tasks = @q.result
     if @tasks.class == Array
-      @tasks = Kaminari.paginate_array(@tasks).page(params[:page]).per(params[:per_page]) 
+      @tasks = Kaminari.paginate_array(@tasks).page(params[:page]).per(params[:per_page])
     else
-      @tasks = @tasks.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object 
-    end    
+      @tasks = @tasks.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object
+    end
     render 'v1/tasks/index'
   end
 
@@ -50,11 +50,18 @@ class V1::TasksController < V1::BaseController
   end
 
   def create
+    ##TODO Refactor this and FIX test :yondry
     @task = Task.new(task_params)
     @task.help_type = help_type
     if current_user.tasks << @task
       @task.create_profinda_task
-      render 'v1/tasks/show', status: :created
+      @feature = Feature.find_by(key_name: 'job_post')
+      @user_product = UserProduct.new({ quantity: 1, transaction_type: 2, user_id: current_user.id, feature_id: @feature.id })
+      if @user_product.save
+        render 'v1/tasks/show', status: :created
+      else
+        render json: @user_product.errors, status: :unprocessable_entity
+      end
     else
       render json: @task.errors, status: :unprocessable_entity
     end

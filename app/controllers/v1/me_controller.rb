@@ -68,7 +68,7 @@ class V1::MeController < V1::BaseController
 
   private
     def user_params
-      params.permit(:email, :password, :password_confirmation)
+      params.permit(:email, :password, :password_confirmation, :show_onboarding)
     end
 
     def set_user

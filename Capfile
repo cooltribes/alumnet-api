@@ -8,7 +8,7 @@ require 'capistrano/rvm'
 require 'capistrano/bundler'
 require 'capistrano/rails/collection'
 require 'capistrano/sidekiq'
-require 'capistrano/nginx'
+# require 'capistrano/nginx'
 
 # Include tasks from other gems included in your Gemfile
 #
