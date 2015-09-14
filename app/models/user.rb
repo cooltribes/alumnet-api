@@ -163,7 +163,12 @@ class User < ActiveRecord::Base
     aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq || []
     profile_countries_ids = [profile.residence_country_id, profile.birth_country_id]
     countries_ids = [aiesec_countries_ids, profile_countries_ids].flatten.uniq
-    Group.where(country_id: countries_ids)
+    groups = Group.where(country_id: countries_ids).official
+    if groups.size < limit
+      groups.to_a | Group.order("RANDOM()").limit(limit - groups.size).to_a
+    else
+      groups.to_a
+    end
   end
 
   def suggested_users(limit = 6)
@@ -189,6 +194,15 @@ class User < ActiveRecord::Base
   end
 
   ### Groups
+  ###this is temp. Refactor this
+  def join_to_initial_groups
+    initial_groups = Settings.initial_groups
+    groups = Group.find(initial_groups)
+    groups.each do |group|
+      group.build_membership_for(self, true).save unless group.user_has_membership?(self)
+    end
+  end
+
   def manage_groups
     groups.where(memberships: { admin: true } )
   end
@@ -565,7 +579,7 @@ class User < ActiveRecord::Base
   def has_task_invitation(task)
     task_invitations.exists?(task_id: task.id)
   end
-
+  ##TODO Refactor this :yondri
   def subscribe_to_mailchimp_list(mailchimp, list_id)
     mailchimp_vars = mailchimp.lists.merge_vars({'id' => list_id})
     array = []
@@ -595,6 +609,7 @@ class User < ActiveRecord::Base
     mailchimp.lists.subscribe(list_id, {'email' => email}, user_vars, 'html', false, true, true, true)
   end
 
+  ##TODO Refactor this :yondri
   def update_groups_mailchimp()
     all_vars = ["EMAIL", "FNAME", "LNAME", "BIRTHDAY", "GENDER", "B_COUNTRY", "B_CITY", "R_COUNTRY", "R_CITY", "L_EXP", "PREMIUM"]
     groups.official.each do |g|
