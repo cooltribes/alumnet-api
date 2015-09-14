@@ -99,6 +99,16 @@ class Profile < ActiveRecord::Base
     next_step ? send("#{next_step}!") : false
   end
 
+  def first_step_completed?
+    #If user is in last step of registration
+    register_step == Profile.register_steps.to_a.second[0]
+  end
+  
+  def is_in_penultimate_step?
+    #If user is in last step of registration but before the approval
+    register_step == Profile.register_steps.to_a[-2][0]
+  end
+
   def update_step
     case register_step
       when "initial" then profile!

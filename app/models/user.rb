@@ -179,16 +179,14 @@ class User < ActiveRecord::Base
 
   ### Roles
   def activate!
-    if profile.skills? || profile.approval?
+    #To secure that user has completed basic information in first step
+    if profile.first_step_completed?
       activate_in_profinda
       activate_in_alumnet
-    else
-      false
     end
   end
 
-  def activate_in_alumnet
-    profile.approval! unless profile.approval?
+  def activate_in_alumnet    
     active!
     touch(:active_at)
   end
