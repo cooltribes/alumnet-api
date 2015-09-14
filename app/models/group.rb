@@ -167,6 +167,10 @@ class Group < ActiveRecord::Base
     memberships.find_by(user_id: user.id)
   end
 
+  def user_has_membership?(user)
+    memberships.exists?(user_id: user.id)
+  end
+
   private
     def validate_join_process
       if (group_type == "secret" && join_process < 2) || (group_type == "closed" && join_process == 0)

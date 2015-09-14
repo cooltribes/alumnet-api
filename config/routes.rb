@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       post :send_invitations
       post :activate
       resource :profile, only: [:show, :update], controller: 'me/profiles'
+      resource :registration, only: [:show, :update], controller: 'me/registration'
       resources :posts, controller: 'me/posts'
 
       resources :friendships, except: :show, controller: 'me/friendships' do
@@ -50,6 +51,9 @@ Rails.application.routes.draw do
 
       post '/contacts/file', to: 'contacts#file' ###TEMPORAL
       post '/contacts/in_alumnet', to: 'contacts#in_alumnet' ###TEMPORAL
+
+      get '/suggestions/groups', to: 'me/suggestions#groups'
+      get '/suggestions/users', to: 'me/suggestions#users'
     end
 
     resources :users, except: :create do

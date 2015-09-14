@@ -96,6 +96,11 @@ class User < ActiveRecord::Base
     RECEPTIVE_POINTS[role] + value
   end
 
+  def register_sign_in
+    increment!(:sign_in_count)
+    touch(:last_sign_in_at)
+  end
+
   def name
     "#{profile.first_name} #{profile.last_name}"
   end
@@ -153,6 +158,32 @@ class User < ActiveRecord::Base
     experience ? experience.country.try(:name) : nil
   end
 
+  ##Sugestions Methods
+  def suggested_groups(limit = 6)
+    aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq || []
+    profile_countries_ids = [profile.residence_country_id, profile.birth_country_id]
+    countries_ids = [aiesec_countries_ids, profile_countries_ids].flatten.uniq
+    groups = Group.where(country_id: countries_ids).official
+    if groups.size < limit
+      groups.to_a | Group.order("RANDOM()").limit(limit - groups.size).to_a
+    else
+      groups.to_a
+    end
+  end
+
+  def suggested_users(limit = 6)
+    committees_ids = profile.committees.pluck(:id).join
+    aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq.join || []
+    users = User.joins(profile: :experiences).where( experiences: { exp_type: 0 })
+      .where("experiences.committee_id in (?) or experiences.country_id in (?)", committees_ids, aiesec_countries_ids)
+      .where.not(id: id).uniq
+    if users.size < limit
+      users.to_a | User.order("RANDOM()").limit(limit - users.size).to_a ## complete the limit with ramdon users
+    else
+      users.to_a
+    end
+  end
+
   ### Admin Note
   def set_admin_note(body)
     if admin_note.present?
@@ -163,6 +194,15 @@ class User < ActiveRecord::Base
   end
 
   ### Groups
+  ###this is temp. Refactor this
+  def join_to_initial_groups
+    initial_groups = Settings.initial_groups
+    groups = Group.find(initial_groups)
+    groups.each do |group|
+      group.build_membership_for(self, true).save unless group.user_has_membership?(self)
+    end
+  end
+
   def manage_groups
     groups.where(memberships: { admin: true } )
   end
@@ -179,17 +219,17 @@ class User < ActiveRecord::Base
 
   ### Roles
   def activate!
-    if profile.skills? || profile.approval?
+    #To secure that user has completed basic information in first step
+    if profile.first_step_completed?
       activate_in_profinda
       activate_in_alumnet
-    else
-      false
     end
   end
 
   def activate_in_alumnet
-    profile.approval! unless profile.approval?
     active!
+    join_to_initial_groups unless is_external?
+    UserMailer.welcome(self).deliver_later
     touch(:active_at)
   end
 
@@ -539,7 +579,7 @@ class User < ActiveRecord::Base
   def has_task_invitation(task)
     task_invitations.exists?(task_id: task.id)
   end
-
+  ##TODO Refactor this :yondri
   def subscribe_to_mailchimp_list(mailchimp, list_id)
     mailchimp_vars = mailchimp.lists.merge_vars({'id' => list_id})
     array = []
@@ -569,6 +609,7 @@ class User < ActiveRecord::Base
     mailchimp.lists.subscribe(list_id, {'email' => email}, user_vars, 'html', false, true, true, true)
   end
 
+  ##TODO Refactor this :yondri
   def update_groups_mailchimp()
     all_vars = ["EMAIL", "FNAME", "LNAME", "BIRTHDAY", "GENDER", "B_COUNTRY", "B_CITY", "R_COUNTRY", "R_CITY", "L_EXP", "PREMIUM"]
     groups.official.each do |g|
