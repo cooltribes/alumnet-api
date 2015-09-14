@@ -188,6 +188,8 @@ Rails.application.routes.draw do
       get :committees, on: :member
     end
 
+    resources :cities, only: [:show]
+
     resources :committees, only: [:index]
     resources :sectors, only: [:index]
 
