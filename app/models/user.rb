@@ -96,6 +96,11 @@ class User < ActiveRecord::Base
     RECEPTIVE_POINTS[role] + value
   end
 
+  def register_sign_in
+    increment!(:sign_in_count)
+    touch(:last_sign_in_at)
+  end
+
   def name
     "#{profile.first_name} #{profile.last_name}"
   end
@@ -151,6 +156,22 @@ class User < ActiveRecord::Base
   def aiesec_location
     experience = profile.experiences.aisec.first
     experience ? experience.country.try(:name) : nil
+  end
+
+  ##Sugestions Methods
+  def suggested_groups
+    aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq || []
+    profile_countries_ids = [profile.residence_country_id, profile.birth_country_id]
+    countries_ids = [aiesec_countries_ids, profile_countries_ids].flatten.uniq
+    Group.where(country_id: countries_ids)
+  end
+
+  def suggested_users
+    committees_ids = profile.committees.pluck(:id).join
+    aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq.join || []
+    User.joins(profile: :experiences).where( experiences: { exp_type: 0 })
+      .where("experiences.committee_id in (?) or experiences.country_id in (?)", committees_ids, aiesec_countries_ids)
+      .where.not(id: id).uniq
   end
 
   ### Admin Note
@@ -411,12 +432,13 @@ class User < ActiveRecord::Base
   ### Function to validate users subcription every day
 
   def validate_subscription
-    byebug
-    subscriptions.where('status = 1').each do |subscription|
-      if subscription.end_date && subscription.end_date.past?
-        subscription.update_column(:status, 0)
-        update_column(:member, 0)
-        "expired - user_id: #{id} - #{subscription.end_date}"
+    user_products.where('status = 1').each do |user_product|
+      if user_product.product.feature == 'subscription'
+        if user_product.end_date && user_product.end_date.past?
+          user_product.update_column(:status, 0)
+          update_column(:member, 0)
+          "expired - user_id: #{id} - #{user_product.end_date}"
+        end
       end
     end
   end
@@ -604,6 +626,21 @@ class User < ActiveRecord::Base
 
   def generate_random_password
     SecureRandom.urlsafe_base64(8).tr('lIO0', 'sxyz')
+  end
+
+  def remaining_job_posts
+    remaining_job_posts = 0
+    feature = Feature.find_by(key_name: 'job_post')
+    if feature
+      user_products.where(feature_id: feature.id).each do |p|
+        if p.transaction_type == 1
+          remaining_job_posts += p.quantity
+        elsif p.transaction_type == 2
+          remaining_job_posts -= p.quantity
+        end
+      end
+    end
+    remaining_job_posts
   end
 
   private

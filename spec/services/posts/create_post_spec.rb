@@ -6,7 +6,7 @@ RSpec.describe Posts::CreatePost, type: :service do
     user_ids = []
     3.times { user_ids << User.make!.id }
     { body: "Neque dicta enim quasi. Qui corrupti est quisquam consectetur sapiente.",
-      user_tags_list: [] }
+      user_tags_list: user_ids }
   end
 
   it "should create a post and update user_tags if param user_tags_list is given" do

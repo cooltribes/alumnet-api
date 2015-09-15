@@ -35,6 +35,6 @@ class V1::ProfilesController < V1::BaseController
     end
 
     def crop_params
-      params.permit(:imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH)
+      params.permit(:imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH, :image)
     end
 end

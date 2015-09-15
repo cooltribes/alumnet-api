@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       post :send_invitations
       post :activate
       resource :profile, only: [:show, :update], controller: 'me/profiles'
+      resource :registration, only: [:show, :update], controller: 'me/registration'
       resources :posts, controller: 'me/posts'
 
       resources :friendships, except: :show, controller: 'me/friendships' do
@@ -50,6 +51,9 @@ Rails.application.routes.draw do
 
       post '/contacts/file', to: 'contacts#file' ###TEMPORAL
       post '/contacts/in_alumnet', to: 'contacts#in_alumnet' ###TEMPORAL
+
+      get '/suggestions/groups', to: 'me/suggestions#groups'
+      get '/suggestions/users', to: 'me/suggestions#users'
     end
 
     resources :users, except: :create do
@@ -72,6 +76,7 @@ Rails.application.routes.draw do
       end
       resources :prizes, except: :show, controller: 'users/prizes'
       resources :products, except: :show, controller: 'users/products'
+      resources :payments, except: :show, controller: 'users/payments'
     end
 
     resources :groups do
@@ -139,6 +144,7 @@ Rails.application.routes.draw do
       resources :contact_infos, except: :show, controller: 'companies/contact_infos'
       resources :product_services, except: :show, controller: 'companies/product_services'
       resources :company_admins, except: :show, controller: 'companies/company_admins'
+      resources :links, except: :show, controller: 'companies/links'
     end
 
     resources :branches, only: :show do

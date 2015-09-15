@@ -42,11 +42,15 @@ module AlumnetUploader
         # cropH = model.cropH.to_i * (560/150)
         imgX1 = model.imgX1.to_i * ratio
         imgY1 = model.imgY1.to_i * ratio
-        #cropW = model.cropW.to_i
-        #cropH = model.cropH.to_i
-        cropW = 1360
-        cropH = 430
-        resize_to_limit(imgInitW, imgInitH)        
+        cropW = model.cropW.to_i * ratio
+        cropH = model.cropH.to_i * ratio
+
+        if model.image == "cover"
+          cropW = 1360 * ratio
+          cropH = 430 * ratio
+        end
+
+        resize_to_limit(imgInitW, imgInitH)                
         manipulate! do |img|
           img.crop "#{cropW}x#{cropH}+#{imgX1}+#{imgY1}"
           #img.resize "1360x430"       

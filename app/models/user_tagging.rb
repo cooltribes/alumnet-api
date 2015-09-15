@@ -1,4 +1,6 @@
 class UserTagging < ActiveRecord::Base
+  serialize :position, Hash
+
   ### Relations
   belongs_to :user
   belongs_to :tagger, class_name: 'User'

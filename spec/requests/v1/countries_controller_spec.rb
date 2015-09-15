@@ -32,10 +32,12 @@ describe V1::CountriesController, type: :request do
 
   describe "GET /countries/:id/committees" do
     it "return all Committees of country" do
+      # Create "other" committee
+      Committee.create(name: "Other")
       country = Country.make!
       get committees_country_path(country), {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(country.committees.count)
+      expect(json.count).to eq(country.committees.count + 1) #the other committee
     end
   end
 end
