@@ -37,6 +37,23 @@ RSpec.describe Profile, :type => :model do
         expect(profile.register_step).to eq("approval")
       end
     end
+
+    describe "update step methods" do
+      it "update to the next or previous step" do
+        user = User.make!
+        profile = user.profile
+        profile.update(first_name: "Armando", last_name: "Mendoza")
+        expect(profile.register_step).to eq("initial")
+        profile.update_next_step
+        expect(profile.register_step).to eq("profile")
+        profile.update_next_step
+        expect(profile.register_step).to eq("contact")
+        profile.update_prev_step
+        expect(profile.register_step).to eq("profile")
+        profile.update_prev_step
+        expect(profile.register_step).to eq("initial")
+      end
+    end
   end
 
   describe "accept languages attributes" do

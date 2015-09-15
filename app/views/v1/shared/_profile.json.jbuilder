@@ -1,5 +1,5 @@
 # The permit_methods are in ProfileDecorator
-json.(profile, :id, :first_name, :last_name, :register_step, :created_at, :points)
+json.(profile, :id, :first_name, :last_name, :register_step, :created_at, :points, :gender)
 
 json.born profile.permit_born(current_user)
 

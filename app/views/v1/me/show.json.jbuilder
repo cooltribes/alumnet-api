@@ -1,4 +1,5 @@
-json.(@user, :id, :name, :member, :email, :unread_messages_count, :unread_notifications_count, :remaining_job_posts)
+json.(@user, :id, :name, :member, :email, :unread_messages_count, :unread_notifications_count,
+  :remaining_job_posts, :show_onboarding)
 
 json.profinda_api_token @user.profinda_api_token
 json.status @user.get_status_info
@@ -29,6 +30,7 @@ json.is_system_admin @user.is_system_admin?
 json.is_premium @user.is_premium?
 
 #Counters
+json.sign_in_count @user.sign_in_count
 json.friends_count @user.friends_count
 json.pending_received_friendships_count @user.pending_received_friendships_count
 json.pending_sent_friendships_count @user.pending_sent_friendships_count
