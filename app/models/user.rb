@@ -165,22 +165,22 @@ class User < ActiveRecord::Base
     countries_ids = [aiesec_countries_ids, profile_countries_ids].flatten.uniq
     groups = Group.where(country_id: countries_ids).official
     if groups.size < limit
-      groups.to_a | Group.order("RANDOM()").limit(limit - groups.size).to_a
+      groups.to_a | Group.not_secret.order("RANDOM()").limit(limit - groups.size).to_a
     else
-      groups.to_a
+      groups.limit(limit).to_a
     end
   end
 
   def suggested_users(limit = 6)
-    committees_ids = profile.committees.pluck(:id).join
-    aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq.join || []
+    committees_ids = profile.committees.pluck(:id)
+    aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq || []
     users = User.joins(profile: :experiences).where( experiences: { exp_type: 0 })
-      .where("experiences.committee_id in (?) or experiences.country_id in (?)", committees_ids, aiesec_countries_ids)
+      .where("experiences.committee_id in (?) or experiences.country_id in (?)", committees_ids.join(","), aiesec_countries_ids.join(","))
       .where.not(id: id).uniq
     if users.size < limit
       users.to_a | User.order("RANDOM()").limit(limit - users.size).to_a ## complete the limit with ramdon users
     else
-      users.to_a
+      users.limit(limit).to_a
     end
   end
 
@@ -311,7 +311,8 @@ class User < ActiveRecord::Base
   def groups_posts(q)
     #return all posts of groups where the user is member
     groups_ids = groups.pluck(:id)
-    Post.joins(:postable_group).where("groups.id in(?)", groups_ids).search(q).result
+    Post.joins(:postable_group).where("groups.id in(?)", groups_ids).where(postable_type: "Group")
+      .search(q).result
   end
 
   def my_posts(q)
@@ -606,7 +607,7 @@ class User < ActiveRecord::Base
       'L_EXP' => profile.last_experience.name,
       'PREMIUM' => membership_type
     }
-    mailchimp.lists.subscribe(list_id, {'email' => email}, user_vars, 'html', false, true, true, true)
+    mailchimp.lists.subscribe(list_id, {'email' => email}, user_vars, 'html', false, true, true, false)
   end
 
   ##TODO Refactor this :yondri
@@ -639,7 +640,7 @@ class User < ActiveRecord::Base
           'L_EXP' => profile.last_experience.name,
           'PREMIUM' => membership_type
         }
-        group_mailchimp.lists.subscribe(g.list_id, {'email' => email}, user_vars, 'html', false, true, true, true)
+        group_mailchimp.lists.subscribe(g.list_id, {'email' => email}, user_vars, 'html', false, true, true, false)
       end
     end
   end

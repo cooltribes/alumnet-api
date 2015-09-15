@@ -11,6 +11,12 @@ class V1::Users::ProductsController < V1::BaseController
   def create
     @user_product = UserProduct.new(create_params)
     if @user_product.save
+      if @product.feature == "subscription"
+        if @user.show_onboarding
+          @user.update(show_onboarding: false)
+        end
+        UserMailer.subscription_purchase(@user, @product).deliver_later
+      end
       render :show, status: :created
     else
       render json: @user_product.errors, status: :unprocessable_entity
@@ -58,7 +64,6 @@ class V1::Users::ProductsController < V1::BaseController
     def save_subscription
       subscription_params = { start_date: Time.zone.now, end_date: Time.zone.now + @user_product.remaining_quantity.months, user: @user, lifetime: false, ownership_type: 1, creator_id: @user.id }
       #@user_subscription = @user.build_subscription(subscription_params, current_user)
-      byebug
       @user_subscription = Subscription.create(subscription_params)
       #@user_subscription.save
     end
