@@ -607,7 +607,7 @@ class User < ActiveRecord::Base
       'L_EXP' => profile.last_experience.name,
       'PREMIUM' => membership_type
     }
-    mailchimp.lists.subscribe(list_id, {'email' => email}, user_vars, 'html', false, true, true, true)
+    mailchimp.lists.subscribe(list_id, {'email' => email}, user_vars, 'html', false, true, true, false)
   end
 
   ##TODO Refactor this :yondri
@@ -640,7 +640,7 @@ class User < ActiveRecord::Base
           'L_EXP' => profile.last_experience.name,
           'PREMIUM' => membership_type
         }
-        group_mailchimp.lists.subscribe(g.list_id, {'email' => email}, user_vars, 'html', false, true, true, true)
+        group_mailchimp.lists.subscribe(g.list_id, {'email' => email}, user_vars, 'html', false, true, true, false)
       end
     end
   end
