@@ -1,7 +1,7 @@
 module CropingMethods
 
   def self.included(base)
-    base.send(:attr_accessor, :imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH)
+    base.send(:attr_accessor, :imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH, :image)
   end
 
   def crop(image)
