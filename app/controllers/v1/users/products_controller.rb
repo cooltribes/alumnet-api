@@ -15,7 +15,7 @@ class V1::Users::ProductsController < V1::BaseController
         if @user.show_onboarding
           @user.update(show_onboarding: false)
         end
-        UserMailer.subscription_purchase(@user, @product).deliver_later
+        UserMailer.subscription_purchase(@user_product).deliver_later
       end
       render :show, status: :created
     else
