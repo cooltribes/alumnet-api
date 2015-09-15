@@ -26,13 +26,13 @@ class V1::MeController < V1::BaseController
     render json: { settings: sign_snippet(unsigned_snippet) }
   end
 
+  #Only for users created by admins, they approve themselves in the middle of the registration
   def activate
     if @user.inactive? && @user.created_by_admin?
-      if @user.is_regular? && @user.profile.skills?
+      if @user.is_regular? && @user.profile.is_in_penultimate_step?
         @user.activate!
         render json: { status: 'active' }
-      elsif @user.is_external? && @user.profile.contact?
-        @user.profile.skills!
+      elsif @user.is_external? && @user.profile.first_step_completed?
         @user.activate!
         render json: { status: 'active' }
       else
@@ -68,7 +68,7 @@ class V1::MeController < V1::BaseController
 
   private
     def user_params
-      params.permit(:email, :password, :password_confirmation)
+      params.permit(:email, :password, :password_confirmation, :show_onboarding)
     end
 
     def set_user

@@ -36,9 +36,10 @@ class Post < ActiveRecord::Base
     pictures.limit(number)
   end
 
-  def users_with_comments
-    #all users with comments except the post creator
-    comment_users.where.not(comments: { user_id: user.id }).distinct
+  def users_with_comments(user_ids = [])
+    #all users with comments except the users_id given and post creator
+    user_ids << user.id
+    comment_users.where.not(comments: { user_id: user_ids }).distinct
   end
 
   private

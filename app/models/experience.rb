@@ -17,6 +17,7 @@ class Experience < ActiveRecord::Base
   belongs_to :company
 
   ### Scopes
+  scope :aiesec, -> { where(exp_type: 0) }
   scope :professional, -> { where(exp_type: 3) }
 
   ###Callbacks

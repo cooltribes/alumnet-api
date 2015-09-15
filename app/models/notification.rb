@@ -19,6 +19,7 @@ class Notification
   ### Class Methods
 
   def self.notify_join_to_users(users, sender, group)
+    return if users.blank?
     notification = new(users)
     if users == sender
       subject = "You've joined the #{group.name} group!"
@@ -36,6 +37,7 @@ class Notification
   end
 
   def self.notify_join_to_admins(admins, user, group)
+    return if admins.blank?
     notification = new(admins)
     subject = "A new user was invited to join the group #{group.name}"
     body = "The user #{user.name} was invited to join the group #{group.name}"
@@ -48,6 +50,7 @@ class Notification
   end
 
   def self.notify_group_join_accepted_to_user(user, group)
+    return if user.blank?
     notification = new(user)
     # subject = "Your request to join the group #{group.name} was accepted"
     # body = "The user #{user.name} was invited to join the group #{group.name}"
@@ -58,20 +61,22 @@ class Notification
     end
   end
 
-  def self.notify_request_to_users(users, group, current_user)
+  def self.notify_request_to_users(users, group, sender)
+    return if users.blank?
     notification = new(users)
-    if users == current_user
+    if users == sender
       subject = "Your request was sent"
       body = "Your request to join group #{group.name} was sent."
     else
-      subject = "#{current_user.name} added you to the #{group.name} group!"
-      body = "Welcome! #{current_user.name} wants you to join the #{group.name} group, the request was sent."
+      subject = "#{sender.name} added you to the #{group.name} group!"
+      body = "Welcome! #{sender.name} wants you to join the #{group.name} group, the request was sent."
     end
     notification.send_notification(subject, body)
     notification.send_pusher_notification
   end
 
   def self.notify_request_to_admins(admins, user, group)
+    return if admins.blank?
     notification = new(admins)
     subject = "A new user request to join the group #{group.name}"
     body = "The user #{user.name} sent a request to join the group #{group.name}"
@@ -83,6 +88,7 @@ class Notification
   end
 
   def self.notify_friendship_request_to_user(user, friend)
+    return if user.blank? && friend.blank?
     notification = new(friend)
     subject = "Hello, Do you like to be my Friend?"
     body = "The user #{user.name} sent you a friendship request"
@@ -93,6 +99,7 @@ class Notification
   end
 
   def self.notify_accepted_friendship_to_user(user, friend)
+    return if user.blank? && friend.blank?
     notification = new(user)
     subject = "You have a new friend!"
     body = "Your friend #{friend.name} accepted your invitation to connect."
@@ -102,11 +109,13 @@ class Notification
     UserMailer.friend_accept_friendship(user, friend).deliver_later
   end
 
-  def self.notify_invitation_event_to_user(attendance)
+  def self.notify_invitation_event_to_user(attendance, host = nil)
+    return if attendance.blank?
     event = attendance.event
+    host_name = host ? host.name : event.creator.name
     notification = new(attendance.user)
     subject = "You have a new invitation to an event in AlumNet!",
-    body = "The user #{event.creator.name} is inviting you to assist the event #{event.name}"
+    body = "The user #{host_name} is inviting you to assist the event #{event.name}"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     NotificationDetail.invitation_to_event(notfy, event.creator, event)
@@ -114,6 +123,7 @@ class Notification
   end
 
   def self.notify_new_friendship_by_approval(requester, user)
+    return if requester.blank? && user.blank?
     notfy_to_requester = new(requester)
     notfy_to_requester.send_notification("You have a new friend!",
       "#{user.permit_name(requester)} is now your friend.")
@@ -128,6 +138,7 @@ class Notification
   end
 
   def self.notify_approval_request_to_admins(admins, user)
+    return if admins.blank?
     notification = new(admins)
     subject = "hi Admin! A new user was registered in AlumNet"
     body = "The user #{user.name} is waiting for your approval in admin section"
@@ -140,6 +151,7 @@ class Notification
   end
 
   def self.notify_approval_request_to_user(user, approver)
+    return if user.blank? && approver.blank?
     notification = new(approver)
     subject = "#{user.name} wants to be approved in AlumNet"
     body = "Hello, I'm registering in Alumnet. Please approve my membership"
@@ -152,6 +164,7 @@ class Notification
   end
 
   def self.notify_new_post(users, post)
+    return if users.blank?
     notification = new(users)
     subject = "The #{post.postable.class.to_s} #{post.postable.name} has new post"
     body = "Hello! the user #{post.user.name} posted in #{post.postable.class.to_s} #{post.postable.name}"
@@ -177,6 +190,7 @@ class Notification
   end
 
   def self.notify_comment_in_post_to_author(author, comment, post)
+    return if author.blank?
     notification = new(author)
     subject = "You have new comment in Post"
     body = "The user #{comment.user.name} commented in your post"
@@ -186,6 +200,7 @@ class Notification
   end
 
   def self.notify_comment_in_post_to_users(users, comment, post)
+    return if users.blank?
     notification = new(users)
     subject = "You have new comment in Post"
     body = "The user #{comment.user.name} commented in a post where you comment"
@@ -202,4 +217,20 @@ class Notification
     notification.send_pusher_notification
     NotificationDetail.notify_tag(notfy, tagging.tagger, tagging.taggable)
   end
+
+  #When users ask admin rights for a company
+  def self.notify_admin_request_to_company_admins(admins, user, company)
+    return if admins.blank?
+    notification = new(admins)
+    subject = "hi Admin! A new user has requested admin rights in #{company.name}"
+    body = "The user #{user.name} requested admin rights in #{company.name}"
+    notfy = notification.send_notification(subject, body)
+    notification.send_pusher_notification
+    notification.recipients.each do |admin|
+      AdminMailer.admin_request_to_company_admins(admin, user).deliver_later
+    end
+    # NotificationDetail.notify_admin_request_to_company_admins(notfy, user)
+  end
 end
+
+

@@ -1,0 +1,21 @@
+<div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
+    <p>Hello <%= "#{ @user.name }" %></p>
+    <p>
+      Congratulations! You are now a premium member of AlumNet. Your Premium status will last 
+
+      <% if @user_product.end_date %>
+      	<%= "until " + @user_product.end_date.strftime("%d/%m/%Y") + "." %>
+      <% else %>
+      	<%= "forever." %>
+      <% end %>
+      Now you can enjoy of:
+    </p>
+    <ul>
+    	<li>Find your dream job or build your dream team in Job Exchange.</li>
+    	<li>Get advice and investors for your venture in Business Exchange.</li>
+    	<li>Enjoy amazing vacations in every continent through Home Exchange.</li>
+    	<li>Enjoy discounts to AIESEC Alumni International global and regional tours and events.</li>
+    	<li>Take the step to joining an official A-group, or lead one yourself.</li>
+    	<li>Create a request for a Meetup to gather with other members anywhere on earth.</li>
+    </ul>
+</div>

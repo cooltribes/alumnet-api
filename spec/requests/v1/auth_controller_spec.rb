@@ -15,12 +15,6 @@ describe V1::AuthController, type: :request do
     { user: { email: "", password: "12345678A", password_confirmation: "12345678A" } }
   end
 
-  it {
-    get '/public_profile/armando-mendoza',  {}, header
-    expect(response.status).to eq 200
-    expect(response.body).to eq("1")
-  }
-
   describe "POST /sign_in" do
     context "with valid credentials" do
       it "return the user" do
@@ -28,6 +22,13 @@ describe V1::AuthController, type: :request do
         expect(response.status).to eq 200
         expect(json).to eq({"id"=>user.id, "email"=>user.email, "auth_token"=>user.auth_token,
           "name"=>user.name })
+      end
+
+      it "increment the sign_in counter" do
+        expect(user.sign_in_count).to eq(0)
+        post sign_in_path, { email: user.email, password: "12345678A" }, header
+        user.reload
+        expect(user.sign_in_count).to eq(1)
       end
     end
 
