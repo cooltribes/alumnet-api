@@ -101,13 +101,13 @@ class Group < ActiveRecord::Base
       Notification.notify_join_to_users(user, sender, self)
       Notification.notify_join_to_admins(admins.to_a, user, self)
     elsif join_process == 1
-      Notification.notify_request_to_users(user, self, current_user)
+      Notification.notify_request_to_users(user, self, sender)
       Notification.notify_request_to_admins(admins.to_a, user, self)
     elsif join_process == 2
       if admin_flag
         Notification.notify_join_to_users(user, sender, self)
       else
-        Notification.notify_request_to_users(user, self, current_user)
+        Notification.notify_request_to_users(user, self, sender)
         Notification.notify_request_to_admins(admins.to_a, user, self)
       end
     end

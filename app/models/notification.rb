@@ -58,14 +58,14 @@ class Notification
     end
   end
 
-  def self.notify_request_to_users(users, group, current_user)
+  def self.notify_request_to_users(users, group, sender)
     notification = new(users)
-    if users == current_user
+    if users == sender
       subject = "Your request was sent"
       body = "Your request to join group #{group.name} was sent."
     else
-      subject = "#{current_user.name} added you to the #{group.name} group!"
-      body = "Welcome! #{current_user.name} wants you to join the #{group.name} group, the request was sent."
+      subject = "#{sender.name} added you to the #{group.name} group!"
+      body = "Welcome! #{sender.name} wants you to join the #{group.name} group, the request was sent."
     end
     notification.send_notification(subject, body)
     notification.send_pusher_notification
