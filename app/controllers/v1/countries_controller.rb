@@ -1,5 +1,5 @@
 class V1::CountriesController < V1::BaseController
-  before_action :set_country, except: [:index]
+  before_action :set_country, except: [:index, :city]
 
   def index
     ## Too dirty!
@@ -25,7 +25,6 @@ class V1::CountriesController < V1::BaseController
     @q = @country.committees.search(params[:q])
     @committees = @q.result | [other_committee]
   end
-
 
   private
     def set_country
