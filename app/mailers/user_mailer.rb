@@ -74,9 +74,10 @@ class UserMailer < ActionMailer::Base
     mail to: @user.email, subject: "Welcome to AlumNet! Your account has been approved"
   end
 
-  def subscription_purchase(user, product)
-    @user = user
-    @product = product
-    mail to: user.email, subject: "You are now a premium member!"
+  def subscription_purchase(user_product)
+    @user_product = user_product
+    @user = user_product.user
+    @product = user_product.product
+    mail to: @user.email, subject: "You are now a premium member!"
   end
 end
