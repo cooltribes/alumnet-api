@@ -165,9 +165,9 @@ class User < ActiveRecord::Base
     countries_ids = [aiesec_countries_ids, profile_countries_ids].flatten.uniq
     groups = Group.where(country_id: countries_ids).official
     if groups.size < limit
-      groups.to_a | Group.order("RANDOM()").limit(limit - groups.size).to_a
+      groups.to_a | Group.not_secret.order("RANDOM()").limit(limit - groups.size).to_a
     else
-      groups.to_a
+      groups.limit(limit).to_a
     end
   end
 
@@ -180,7 +180,7 @@ class User < ActiveRecord::Base
     if users.size < limit
       users.to_a | User.order("RANDOM()").limit(limit - users.size).to_a ## complete the limit with ramdon users
     else
-      users.to_a
+      users.limit(limit).to_a
     end
   end
 
