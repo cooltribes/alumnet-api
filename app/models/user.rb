@@ -175,7 +175,7 @@ class User < ActiveRecord::Base
     committees_ids = profile.committees.pluck(:id)
     aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq || []
     users = User.joins(profile: :experiences).where( experiences: { exp_type: 0 })
-      .where("experiences.committee_id in (?) or experiences.country_id in (?)", committees_ids.join(","), aiesec_countries_ids.join(","))
+      .where("experiences.committee_id in (?) or experiences.country_id in (?)", committees_ids, aiesec_countries_ids)
       .where.not(id: id).uniq
     if users.size < limit
       users.to_a | User.order("RANDOM()").limit(limit - users.size).to_a ## complete the limit with ramdon users

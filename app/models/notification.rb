@@ -76,7 +76,7 @@ class Notification
   end
 
   def self.notify_request_to_admins(admins, user, group)
-    return if admis.blank?
+    return if admins.blank?
     notification = new(admins)
     subject = "A new user request to join the group #{group.name}"
     body = "The user #{user.name} sent a request to join the group #{group.name}"
@@ -138,7 +138,7 @@ class Notification
   end
 
   def self.notify_approval_request_to_admins(admins, user)
-    return if admis.blank?
+    return if admins.blank?
     notification = new(admins)
     subject = "hi Admin! A new user was registered in AlumNet"
     body = "The user #{user.name} is waiting for your approval in admin section"
