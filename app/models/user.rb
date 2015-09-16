@@ -3,9 +3,9 @@ class User < ActiveRecord::Base
   acts_as_paranoid
   acts_as_messageable
   acts_as_taggable
+  include Alumnet::Tag
   include UserHelpers
   include ProfindaRegistration
-  include UserTaggingSystem::Tag
 
   ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin", external: "External",
     regional_admin: "RegionalAdmin", nacional_admin: "NacionalAdmin", regular: "Regular" }

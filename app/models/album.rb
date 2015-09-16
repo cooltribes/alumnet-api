@@ -1,12 +1,11 @@
 class Album < ActiveRecord::Base
+  include Alumnet::Localizable
 
   TYPES = { regular: 0, cover: 1, timeline: 2, avatar: 3 }
 
   ### Ralations
   belongs_to :user
   belongs_to :albumable, polymorphic: true
-  belongs_to :city, foreign_key: "city_id", class_name: 'City'
-  belongs_to :country, foreign_key: "country_id", class_name: 'Country'
   has_many :pictures, dependent: :destroy
 
   ### Callbacks
