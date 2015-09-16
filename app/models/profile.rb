@@ -110,17 +110,9 @@ class Profile < ActiveRecord::Base
     register_step == Profile.register_steps.to_a[-2][0]
   end
 
-  def update_step
-    case register_step
-      when "initial" then profile!
-      when "profile" then contact!
-      when "contact" then experience_a!
-      when "experience_a" then experience_b!
-      when "experience_b" then experience_c!
-      when "experience_c" then experience_d!
-      when "experience_d" then skills!
-      when "skills" then approval!
-    end
+  def set_last_register_step!
+    last_step = Profile.register_steps.to_a.last
+    send("#{last_step[0]}!")
   end
 
   ## virtual method to set a remote url to avatar if url is present and avatar is nil

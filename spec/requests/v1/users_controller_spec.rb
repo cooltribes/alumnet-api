@@ -20,7 +20,7 @@ describe V1::UsersController, type: :request do
     before do
       5.times do
         u = User.make!
-        u.profile.skills!
+        u.profile.set_last_register_step!
         u.activate!
         ContactInfo.make!(:email, contactable: u.profile )
       end
