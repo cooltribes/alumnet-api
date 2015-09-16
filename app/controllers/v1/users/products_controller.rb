@@ -16,6 +16,11 @@ class V1::Users::ProductsController < V1::BaseController
           @user.update(show_onboarding: false)
         end
         UserMailer.subscription_purchase(@user_product).deliver_later
+      elsif @product.feature == "job_post"
+        feature = Feature.find_by(key_name: 'job_post')
+        if feature
+          @user_product.update(feature_id: feature.id)
+        end
       end
       render :show, status: :created
     else
