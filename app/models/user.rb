@@ -52,6 +52,7 @@ class User < ActiveRecord::Base
   has_many :matches, dependent: :destroy
   has_many :payments, dependent: :destroy
   has_many :company_admins, dependent: :destroy
+  has_many :profile_visits, dependent: :destroy
   has_one :profile, dependent: :destroy
   has_one :admin_note, dependent: :destroy
   belongs_to :admin_location, polymorphic: true

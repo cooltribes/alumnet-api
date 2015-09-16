@@ -64,4 +64,14 @@ describe V1::UsersController, type: :request do
       expect(response.status).to eq 204
     end
   end
+
+  describe "POST /users/:id/register_visit" do
+    it "should create a new record in profile_visits table" do
+      user = User.make!
+      expect {
+        post register_visit_user_path(user), {}, basic_header(admin.auth_token)
+      }.to change(ProfileVisit, :count).by(1)
+      expect(ProfileVisit.last.visitor).to eq(admin)
+    end
+  end
 end

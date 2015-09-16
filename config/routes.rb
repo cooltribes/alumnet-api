@@ -57,6 +57,7 @@ Rails.application.routes.draw do
     end
 
     resources :users, except: :create do
+      post :register_visit, on: :member
       resource :profile, only: [:show, :update], controller: 'users/profiles'
       resources :posts, controller: 'users/posts'
       resources :events, controller: 'users/events'
