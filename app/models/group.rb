@@ -3,7 +3,9 @@ class Group < ActiveRecord::Base
   acts_as_paranoid
   mount_uploader :cover, CoverUploader
   enum group_type: [:open, :closed, :secret]
-  include CropingMethods
+
+  include Alumnet::Localizable
+  include Alumnet::Croppable
 
   ## Virtual Attributes
   attr_accessor :cover_uploader
@@ -25,8 +27,6 @@ class Group < ActiveRecord::Base
   has_many :albums, as: :albumable, dependent: :destroy
   has_many :events, as: :eventable, dependent: :destroy
   belongs_to :creator, class_name: 'User'
-  belongs_to :country
-  belongs_to :city
   has_many :albums, as: :albumable, dependent: :destroy
   has_many :folders, as: :folderable, dependent: :destroy
 
@@ -36,6 +36,7 @@ class Group < ActiveRecord::Base
   scope :open, -> { where(group_type: 0) }
   scope :closed, -> { where(group_type: 1) }
   scope :secret, -> { where(group_type: 2) }
+  scope :not_secret, -> { where.not(group_type: 2) }
 
   scope :official, -> { where(official: true) }
   scope :non_official, -> { where(official: false) }
@@ -100,13 +101,13 @@ class Group < ActiveRecord::Base
       Notification.notify_join_to_users(user, sender, self)
       Notification.notify_join_to_admins(admins.to_a, user, self)
     elsif join_process == 1
-      Notification.notify_request_to_users(user, self, current_user)
+      Notification.notify_request_to_users(user, self, sender)
       Notification.notify_request_to_admins(admins.to_a, user, self)
     elsif join_process == 2
       if admin_flag
         Notification.notify_join_to_users(user, sender, self)
       else
-        Notification.notify_request_to_users(user, self, current_user)
+        Notification.notify_request_to_users(user, self, sender)
         Notification.notify_request_to_admins(admins.to_a, user, self)
       end
     end
@@ -143,24 +144,8 @@ class Group < ActiveRecord::Base
     posts.last
   end
 
-  def get_group_type_info
+  def group_type_info
     { text: group_type, value: Group.group_types[group_type] }
-  end
-
-  def get_country_info
-    if country
-      { text: country.name, value: country_id}
-    else
-      { text: "", value: ""}
-    end
-  end
-
-  def get_city_info
-    if city
-      { text: city.name, value: city_id}
-    else
-      { text: "", value: ""}
-    end
   end
 
   def membership_of_user(user)

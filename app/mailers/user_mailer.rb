@@ -64,9 +64,20 @@ class UserMailer < ActionMailer::Base
     @avatar = if applicant.permit('see-avatar', @user)
       applicant.avatar.url
     else
-      applicant.avatar.default_url      
+      applicant.avatar.default_url
     end
     mail to: @user.email, subject: "#{applicant.name} applied to your job post #{job_post.name}"
   end
 
+  def welcome(user)
+    @user = user
+    mail to: @user.email, subject: "Welcome to AlumNet! Your account has been approved"
+  end
+
+  def subscription_purchase(user_product)
+    @user_product = user_product
+    @user = user_product.user
+    @product = user_product.product
+    mail to: @user.email, subject: "You are now a premium member!"
+  end
 end

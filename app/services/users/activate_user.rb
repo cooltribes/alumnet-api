@@ -22,7 +22,7 @@ module Users
       def activate_process
         if user.activate!
           save_profile_and_activate_in_profinda
-          ##TODO: Urgentemente refactorizar este metodo.
+          ##TODO: Urgentemente refactorizar este metodo. :yondri
           user.subscribe_to_mailchimp_list(@mailchimp, Settings.mailchimp_general_list_id)
           true
         else

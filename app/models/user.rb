@@ -3,9 +3,9 @@ class User < ActiveRecord::Base
   acts_as_paranoid
   acts_as_messageable
   acts_as_taggable
+  include Alumnet::Tag
   include UserHelpers
   include ProfindaRegistration
-  include UserTaggingSystem::Tag
 
   ROLES = { system_admin: "SystemAdmin", alumnet_admin: "AlumNetAdmin", external: "External",
     regional_admin: "RegionalAdmin", nacional_admin: "NacionalAdmin", regular: "Regular" }
@@ -52,6 +52,7 @@ class User < ActiveRecord::Base
   has_many :matches, dependent: :destroy
   has_many :payments, dependent: :destroy
   has_many :company_admins, dependent: :destroy
+  has_many :profile_visits, dependent: :destroy
   has_one :profile, dependent: :destroy
   has_one :admin_note, dependent: :destroy
   belongs_to :admin_location, polymorphic: true
@@ -165,22 +166,22 @@ class User < ActiveRecord::Base
     countries_ids = [aiesec_countries_ids, profile_countries_ids].flatten.uniq
     groups = Group.where(country_id: countries_ids).official
     if groups.size < limit
-      groups.to_a | Group.order("RANDOM()").limit(limit - groups.size).to_a
+      groups.to_a | Group.not_secret.order("RANDOM()").limit(limit - groups.size).to_a
     else
-      groups.to_a
+      groups.limit(limit).to_a
     end
   end
 
   def suggested_users(limit = 6)
-    committees_ids = profile.committees.pluck(:id).join
-    aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq.join || []
+    committees_ids = profile.committees.pluck(:id)
+    aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq || []
     users = User.joins(profile: :experiences).where( experiences: { exp_type: 0 })
       .where("experiences.committee_id in (?) or experiences.country_id in (?)", committees_ids, aiesec_countries_ids)
       .where.not(id: id).uniq
     if users.size < limit
       users.to_a | User.order("RANDOM()").limit(limit - users.size).to_a ## complete the limit with ramdon users
     else
-      users.to_a
+      users.limit(limit).to_a
     end
   end
 
@@ -226,9 +227,10 @@ class User < ActiveRecord::Base
     end
   end
 
-  def activate_in_alumnet    
+  def activate_in_alumnet
     active!
     join_to_initial_groups unless is_external?
+    UserMailer.welcome(self).deliver_later
     touch(:active_at)
   end
 
@@ -310,7 +312,8 @@ class User < ActiveRecord::Base
   def groups_posts(q)
     #return all posts of groups where the user is member
     groups_ids = groups.pluck(:id)
-    Post.joins(:postable_group).where("groups.id in(?)", groups_ids).search(q).result
+    Post.joins(:postable_group).where("groups.id in(?)", groups_ids).where(postable_type: "Group")
+      .search(q).result
   end
 
   def my_posts(q)
@@ -605,7 +608,7 @@ class User < ActiveRecord::Base
       'L_EXP' => profile.last_experience.name,
       'PREMIUM' => membership_type
     }
-    mailchimp.lists.subscribe(list_id, {'email' => email}, user_vars, 'html', false, true, true, true)
+    mailchimp.lists.subscribe(list_id, {'email' => email}, user_vars, 'html', false, true, true, false)
   end
 
   ##TODO Refactor this :yondri
@@ -638,7 +641,7 @@ class User < ActiveRecord::Base
           'L_EXP' => profile.last_experience.name,
           'PREMIUM' => membership_type
         }
-        group_mailchimp.lists.subscribe(g.list_id, {'email' => email}, user_vars, 'html', false, true, true, true)
+        group_mailchimp.lists.subscribe(g.list_id, {'email' => email}, user_vars, 'html', false, true, true, false)
       end
     end
   end
