@@ -67,12 +67,26 @@ describe V1::CompaniesController, type: :request do
   end
 
   describe "DELETE /companies/:id" do
-    it "delete a company" do
-      company = Company.make!
-      expect {
-        delete company_path(company), {}, basic_header(user.auth_token)
-      }.to change(Company, :count).by(-1)
-      expect(response.status).to eq 204
+    context "without tasks" do
+      it "delete a company" do
+        company = Company.make!
+        expect {
+          delete company_path(company), {}, basic_header(user.auth_token)
+        }.to change(Company, :count).by(-1)
+        expect(response.status).to eq 204
+      end
+    end
+
+    context "with tasks" do
+      it "can't delete a company and return an error" do
+        company = Company.make!
+        allow_any_instance_of(Company).to receive(:tasks).and_return([1])
+        expect {
+          delete company_path(company), {}, basic_header(user.auth_token)
+        }.to change(Company, :count).by(0)
+        expect(response.status).to eq 422
+        expect(json["company"]).to eq(["can't be delete because it has active job post"])
+      end
     end
   end
 end

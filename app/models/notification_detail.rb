@@ -68,4 +68,9 @@ class NotificationDetail < ActiveRecord::Base
     create!(url: "approval-requests", notification_type: "approval", sender: user,
       mailboxer_notification_id: notification.id)
   end
+
+  def self.notify_admin_request_to_company_admins(notification, user, company)
+    create!(url: "companies/#{company.id}/employees", notification_type: "approval", sender: user,
+      mailboxer_notification_id: notification.id)
+  end
 end

@@ -79,6 +79,10 @@ class Company < ActiveRecord::Base
     { text: SIZE[size], value: size }
   end
 
+  def can_be_deleted?
+    !tasks.count > 0
+  end
+
   private
 
     def create_admin_for_creator
