@@ -5,26 +5,17 @@ class V1::Profiles::SkillsController < V1::BaseController
 
   def index
     @skills = @profile.skills
+    render :index
   end
 
   def create
-    @skill = Skill.new(skill_params)
     authorize @profile
-    if @profile.skills << @skill
+    service = ::Users::UpdateProfileSkills.new(@profile, params[:skill_names])
+    if service.call
       @profile.save_profinda_profile
-      render :show, status: :created
+      index
     else
-      render json: @skill.errors, status: :unprocessable_entity
-    end
-  end
-
-  def update
-    authorize @profile
-    if @skill.update(skill_params)
-      @profile.save_profinda_profile
-      render :show, status: :ok
-    else
-      render json: @skill.errors, status: :unprocessable_entity
+      render json: service.errors, status: :unprocessable_entity
     end
   end
 
@@ -44,9 +35,4 @@ class V1::Profiles::SkillsController < V1::BaseController
   def set_skill
     @skill = @profile.skills.find(params[:id])
   end
-
-  def skill_params
-    params.permit(:name)
-  end
-
 end
