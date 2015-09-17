@@ -10,11 +10,11 @@ json.api_key group.api_key
 
 json.list_id group.list_id
 
-json.group_type group.get_group_type_info
+json.group_type group.group_type_info
 
-json.country group.get_country_info
+json.country group.country_info
 
-json.city group.get_city_info
+json.city group.city_info
 
 json.user_can_upload_files group.user_can_upload_files?(current_user)
 

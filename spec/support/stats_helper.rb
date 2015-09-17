@@ -13,7 +13,7 @@ module StatsHelper
   end
 
   def activate_user(user)
-    user.profile.skills!
+    user.profile.set_last_register_step!
     user.activate_in_alumnet
   end
 

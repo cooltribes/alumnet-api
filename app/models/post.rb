@@ -1,9 +1,9 @@
 class Post < ActiveRecord::Base
   acts_as_paranoid
   acts_as_commentable
-  include LikeableMethods
+  include Alumnet::Likeable
+  include Alumnet::Taggable
   include PostHelpers
-  include UserTaggingSystem::Taggable
 
 
   #Paginatin options

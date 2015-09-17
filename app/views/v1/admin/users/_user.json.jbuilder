@@ -1,4 +1,4 @@
-json.(user, :id, :name, :email, :created_at)
+json.(user, :id, :name, :email, :created_at, :last_sign_in_at)
 
 json.status user.get_status_info
 json.member user.get_member_info

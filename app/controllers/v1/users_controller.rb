@@ -5,10 +5,10 @@ class V1::UsersController < V1::BaseController
     @q = User.active.without_externals.includes(:profile).search(params[:q])
     @users = @q.result
     if @users.class == Array
-      @users = Kaminari.paginate_array(@users).page(params[:page]).per(params[:per_page]) 
+      @users = Kaminari.paginate_array(@users).page(params[:page]).per(params[:per_page])
     else
-      @users = @users.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object 
-    end    
+      @users = @users.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object
+    end
   end
 
   def show
@@ -30,6 +30,12 @@ class V1::UsersController < V1::BaseController
       @user.suspend_in_profinda
       head :no_content
     end
+  end
+
+  def register_visit
+    ###TODO: this should be in a callback on filter in the appropiate controller. :armando.
+    ProfileVisit.create_visit(@user, current_user)
+    head :no_content
   end
 
   private

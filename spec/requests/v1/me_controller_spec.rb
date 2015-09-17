@@ -43,9 +43,9 @@ describe V1::MeController, type: :request do
 
   describe "POST /activate" do
     context "with a regular user" do
-      it "active user if user completed the registration and was created by an admin" do
+      it "active user if user completed the penultimate and was created by an admin" do
         user = User.make!(status: 0, role: User::ROLES[:regular], created_by_admin: true)
-        user.profile.skills!
+        user.profile.aiesec_experiences!
         post activate_me_path, {}, basic_header(user.auth_token)
         expect(response.status).to eq 200
         expect(json["status"]).to eq("active")
@@ -54,9 +54,9 @@ describe V1::MeController, type: :request do
       end
     end
     context "with a external user" do
-      it "active user if user completed the contact step and was created by an admin" do
+      it "active user if user completed the languages_and_skills step and was created by an admin" do
         user = User.make!(email: "external_user_test@cooltribes.com", status: 0, role: User::ROLES[:external], created_by_admin: true)
-        user.profile.contact!
+        user.profile.languages_and_skills!
         post activate_me_path, {}, basic_header(user.auth_token)
         expect(response.status).to eq 200
         expect(json["status"]).to eq("active")
