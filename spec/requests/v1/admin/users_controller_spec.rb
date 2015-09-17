@@ -53,7 +53,7 @@ describe V1::Admin::UsersController, type: :request do
         to_return(:status => 200, :body => "{\"data\": [\"XXXX\"]}", :headers => {})
         ###Arreglar el response boy de acuerdo con lo que espera mailchimp
       user_inactive = User.make!(status: 0)
-      user_inactive.profile.skills!
+      user_inactive.profile.set_last_register_step!
       put activate_admin_user_path(user_inactive), {}, basic_header(admin.auth_token)
       expect(response.status).to eq 200
       expect(json["status"]["text"]).to eq("active")
