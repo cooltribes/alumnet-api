@@ -22,8 +22,8 @@ module Alumnet
     def remove_user_tags(user_ids)
       user_ids = process_user_ids(user_ids)
       user_ids.each do |user_id|
-        user = user_taggings.find_by(user_id: user_id)
-        user_taggings.destroy(user) if user
+        user_tag = user_taggings.find_by(user_id: user_id)
+        user_taggings.destroy(user_tag) if user_tag
       end
       true
     end
