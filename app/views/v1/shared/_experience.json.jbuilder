@@ -7,4 +7,5 @@ if experience.permit current_user
   json.city experience.get_info_city
   json.company experience.get_info_company
   json.seniority experience.get_info_seniority
+  json.committee_id experience.committee.id
 end
