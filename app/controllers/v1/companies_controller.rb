@@ -49,8 +49,12 @@ class V1::CompaniesController < V1::BaseController
   end
 
   def destroy
-    @company.destroy
-    head :no_content
+    if @company.tasks.any?
+      render json: { company: ["can't be delete because it has active job post"] },  status: :unprocessable_entity
+    else
+      @company.destroy
+      head :no_content
+    end
   end
 
   private
