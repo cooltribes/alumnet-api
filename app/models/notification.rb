@@ -124,15 +124,19 @@ class Notification
 
   def self.notify_new_friendship_by_approval(requester, user)
     return if requester.blank? && user.blank?
+    #to requester
     notfy_to_requester = new(requester)
-    notfy_to_requester.send_notification("You have a new friend!",
+    notfy1 = notfy_to_requester.send_notification("You have a new friend!",
       "#{user.permit_name(requester)} is now your friend.")
     notfy_to_requester.send_pusher_notification
+    NotificationDetail.friendship_accepted(notfy1, requester)
 
+    #to user
     notfy_to_user = new(user)
-    notfy_to_user.send_notification("You have a new friend!",
+    notfy2 = notfy_to_user.send_notification("You have a new friend!",
       "#{requester.permit_name(user)} is now your friend.")
     notfy_to_user.send_pusher_notification
+    NotificationDetail.friendship_accepted(notfy2, user)
 
     UserMailer.approval_request_accepted(requester, user).deliver_later
   end
@@ -229,7 +233,7 @@ class Notification
     notification.recipients.each do |admin|
       AdminMailer.admin_request_to_company_admins(admin, user).deliver_later
     end
-    # NotificationDetail.notify_admin_request_to_company_admins(notfy, user)
+    NotificationDetail.notify_admin_request_to_company_admins(notfy, user, company)
   end
 end
 
