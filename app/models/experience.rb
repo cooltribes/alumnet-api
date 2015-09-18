@@ -1,6 +1,9 @@
 class Experience < ActiveRecord::Base
-  include ExperienceHelpers
   acts_as_paranoid
+
+  include Alumnet::Localizable
+
+  include ExperienceHelpers
 
   # 0: 'aiesecExperience'
   # 1: 'alumniExperience'
@@ -9,8 +12,6 @@ class Experience < ActiveRecord::Base
 
   ### Relations
   belongs_to :region
-  belongs_to :city
-  belongs_to :country
   belongs_to :profile
   belongs_to :committee
   belongs_to :seniority
@@ -25,24 +26,16 @@ class Experience < ActiveRecord::Base
   after_save :check_company
 
   ### Instances Class
-  def get_info_region
-    region.present? ? { id: region.id, text: region.name } : nil
+  def region_info
+    { id: region_id || "", text: region.try(:name) }
   end
 
-  def get_info_city
-    city.present? ? { id: city.id, text: city.name } : nil
+  def company_info
+    { id: company_id, text: company.try(:name) || organization_name }
   end
 
-  def get_info_country
-    country.present? ? { id: country.id, text: country.name } : nil
-  end
-
-  def get_info_company
-    company.present? ? { id: company.id, text: company.name } : { id: nil, text: organization_name }
-  end
-
-  def get_info_seniority
-    seniority.present? ? { id: seniority.id, text: seniority.name } : { id: nil, text: nil }
+  def seniority_info
+    { id: seniority_id, text: seniority.try(:name) }
   end
 
   ### Class Methods

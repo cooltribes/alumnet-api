@@ -1,13 +1,13 @@
 class Task < ActiveRecord::Base
   acts_as_paranoid
+  include Alumnet::Localizable
+
 
   ## Relations
   has_many :matches, dependent: :destroy
   has_many :task_invitations, dependent: :destroy
   has_many :task_attributes, dependent: :destroy
   belongs_to :user
-  belongs_to :city
-  belongs_to :country
   belongs_to :seniority
   belongs_to :company
 
@@ -148,24 +148,16 @@ class Task < ActiveRecord::Base
     seniority.try(:name)
   end
 
-  def country_info
-    country ? { text: country.name, value: country_id } : { text: "", value: ""}
-  end
-
-  def city_info
-    city ? { text: city.name, value: city_id } : { text: "", value: ""}
-  end
-
   def company_info
-    company ? { text: company.name, value: company_id } : { text: "", value: ""}
+    { text: company.try(:name) || "", id: company_id || "" }
   end
 
   def position_info
-    { text: position_type_text, value: seniority_id }
+    { text: position_type_text, id: seniority_id }
   end
 
   def employment_info
-    { text: employment_type_text, value: employment_type }
+    { text: employment_type_text, id: employment_type }
   end
 
 

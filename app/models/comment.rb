@@ -1,7 +1,7 @@
 class Comment < ActiveRecord::Base
   acts_as_paranoid
+  include Alumnet::Likeable
   include ActsAsCommentable::Comment
-  include LikeableMethods
   include CommentHelpers
 
   ### Relations

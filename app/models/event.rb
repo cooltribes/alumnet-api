@@ -1,10 +1,11 @@
 class Event < ActiveRecord::Base
   acts_as_paranoid
-  include EventHelpers
-  include PaymentableMethods
-  include CropingMethods
   mount_uploader :cover, CoverUploader
   enum event_type: [:open, :closed, :secret]
+  include Alumnet::Localizable
+  include Alumnet::Croppable
+  include EventHelpers
+  include PaymentableMethods
 
   #upload_files
   # "0" -> Only the admins can upload
@@ -21,8 +22,6 @@ class Event < ActiveRecord::Base
   has_many :folders, as: :folderable, dependent: :destroy
   #has_many :event_payments, dependent: :destroy
   belongs_to :creator, class_name: "User"
-  belongs_to :country
-  belongs_to :city
   belongs_to :eventable, polymorphic: true
 
   ### Callbacks

@@ -47,7 +47,7 @@ class UserMailer < ActionMailer::Base
     @guest_name = guest_name
     @user = user
     @token = token
-    mail to: email, subject: "Invitation to join to AlumNet"
+    mail to: email, subject: "You’re invited to join AIESEC AlumNet."
   end
 
   def user_was_accepted_in_group(user, group)

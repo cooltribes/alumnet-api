@@ -13,31 +13,6 @@ RSpec.describe Profile, :type => :model do
 
 
   describe "instances methods" do
-    describe "#update_step" do
-      it "should changed the register_step to next step" do
-        user = User.make!
-        profile = user.profile
-        profile.update(first_name: "Armando", last_name: "Mendoza")
-        expect(profile.register_step).to eq("initial")
-        profile.update_step
-        expect(profile.register_step).to eq("profile")
-        profile.update_step
-        expect(profile.register_step).to eq("contact")
-        profile.update_step
-        expect(profile.register_step).to eq("experience_a")
-        profile.update_step
-        expect(profile.register_step).to eq("experience_b")
-        profile.update_step
-        expect(profile.register_step).to eq("experience_c")
-        profile.update_step
-        expect(profile.register_step).to eq("experience_d")
-        profile.update_step
-        expect(profile.register_step).to eq("skills")
-        profile.update_step
-        expect(profile.register_step).to eq("approval")
-      end
-    end
-
     describe "update step methods" do
       it "update to the next or previous step" do
         user = User.make!
