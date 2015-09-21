@@ -32,6 +32,7 @@ Rails.application.routes.draw do
 
       resources :friendships, except: :show, controller: 'me/friendships' do
         get :friends, on: :collection
+        get :suggestions, on: :collection
       end
       resources :conversations, except: [:new, :edit, :update], controller: 'me/conversations' do
         resources :receipts, only: [:index, :show, :create], controller: 'me/receipts' do

@@ -10,6 +10,11 @@ class V1::Me::FriendshipsController < V1::BaseController
     @friends = @user.search_accepted_friends(params[:q])
   end
 
+  def suggestions
+    query = { m: 'or', profile_first_name_cont: params[:term], profile_last_name_cont: params[:term] }
+    @friends = @user.search_accepted_friends(query)
+  end
+
   def create
     @friendship = @user.create_friendship_for(@friend)
     if @friendship.save
