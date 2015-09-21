@@ -63,6 +63,6 @@ class V1::BaseCommentsController < V1::BaseController
   end
 
   def comment_params
-    params.permit(:comment)
+    params.permit(:comment, :markup_comment)
   end
 end
