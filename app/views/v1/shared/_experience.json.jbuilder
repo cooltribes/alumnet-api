@@ -7,7 +7,5 @@ if experience.permit current_user
   json.city experience.city_info
   json.company experience.company_info
   json.seniority experience.seniority_info
-  if experience.committee
-    json.committee_id experience.committee.id
-  end
+  json.committee_id experience.try(:committee).try(:id)
 end
