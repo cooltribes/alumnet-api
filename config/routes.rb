@@ -175,6 +175,7 @@ Rails.application.routes.draw do
     resources :posts, only: :show do
       post :like, on: :member
       post :unlike, on: :member
+      #get :get_tags, on: :member
       resources :comments, controller: 'posts/comments' do
         post :like, on: :member
         post :unlike, on: :member
@@ -206,6 +207,7 @@ Rails.application.routes.draw do
     resources :languages, only: :index
     resources :skills, only: :index
     resources :payments
+    resources :metatags, only: [:index]
 
     namespace :admin do
       get 'stats/type_of_membership', to: 'stats#type_of_membership'
