@@ -7,6 +7,8 @@ class V1::Users::ProductsController < V1::BaseController
     @user_products = @user.user_products
   end
 
+  def show
+  end
 
   def create
     @user_product = UserProduct.new(create_params)

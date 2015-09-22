@@ -76,7 +76,7 @@ Rails.application.routes.draw do
         get :history, on: :collection
       end
       resources :prizes, except: :show, controller: 'users/prizes'
-      resources :products, except: :show, controller: 'users/products'
+      resources :products, controller: 'users/products'
       resources :payments, except: :show, controller: 'users/payments'
     end
 
