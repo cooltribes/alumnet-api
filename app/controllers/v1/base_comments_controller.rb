@@ -22,7 +22,8 @@ class V1::BaseCommentsController < V1::BaseController
 
   def update
     authorize @comment
-    if @comment.update(comment_params)
+    service = ::Comments::UpdateComment.new(@commentable, @comment, current_user, comment_params)
+    if service.call
       render :show, status: :ok,  location: [@commentable, @comment]
     else
       render json: @comment.errors, status: :unprocessable_entity
