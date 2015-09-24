@@ -7,7 +7,9 @@ class V1::Me::FriendshipsController < V1::BaseController
   end
 
   def friends
-    @friends = @user.search_accepted_friends(params[:q])
+    #@friends = @user.search_accepted_friends(params[:q])
+    @q = @user.search_accepted_friends(params[:q])
+    @friends = Kaminari.paginate_array(@q).page(params[:page]).per(params[:per_page])
   end
 
   def suggestions

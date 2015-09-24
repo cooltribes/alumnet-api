@@ -4,6 +4,11 @@ class V1::CompaniesController < V1::BaseController
   def index
     @q = Company.search(params[:q])
     @companies = @q.result
+    if @companies.class == Array
+      @companies = Kaminari.paginate_array(@companies).page(params[:page]).per(params[:per_page])
+    else
+      @companies = @companies.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object
+    end    
   end
 
   def employees

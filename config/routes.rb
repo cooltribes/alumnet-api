@@ -77,7 +77,7 @@ Rails.application.routes.draw do
         get :history, on: :collection
       end
       resources :prizes, except: :show, controller: 'users/prizes'
-      resources :products, except: :show, controller: 'users/products'
+      resources :products, controller: 'users/products'
       resources :payments, except: :show, controller: 'users/payments'
     end
 
@@ -176,6 +176,7 @@ Rails.application.routes.draw do
     resources :posts, only: :show do
       post :like, on: :member
       post :unlike, on: :member
+      #get :get_tags, on: :member
       resources :comments, controller: 'posts/comments' do
         post :like, on: :member
         post :unlike, on: :member
@@ -207,6 +208,7 @@ Rails.application.routes.draw do
     resources :languages, only: :index
     resources :skills, only: :index
     resources :payments
+    resources :metatags, only: [:index]
 
     namespace :admin do
       get 'stats/type_of_membership', to: 'stats#type_of_membership'
