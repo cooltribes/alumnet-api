@@ -6,7 +6,8 @@ describe V1::Posts::CommentsController, type: :request do
   let!(:post_model) { Post.make! }
 
   def valid_attributes
-    { comment: "Neque dicta enim quasi. Qui corrupti est quisquam." }
+    { comment: "Neque dicta enim quasi. Qui corrupti est quisquam.",
+      markup_comment: "@[Francisco Granda](12) Neque dicta enim quasi. Qui corrupti est quisquam." }
   end
 
   def invalid_attributes
