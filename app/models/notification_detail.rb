@@ -52,6 +52,8 @@ class NotificationDetail < ActiveRecord::Base
   def self.notify_tag(notification, sender, taggable)
     url = if taggable.is_a?(Post) || taggable.is_a?(Picture)
       taggable.url_for_notification
+    elsif taggable.is_a?(Comment)
+      taggable.commentable.url_for_notification
     else
       "no url"
     end

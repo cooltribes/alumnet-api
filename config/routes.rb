@@ -32,6 +32,7 @@ Rails.application.routes.draw do
 
       resources :friendships, except: :show, controller: 'me/friendships' do
         get :friends, on: :collection
+        get :suggestions, on: :collection
       end
       resources :conversations, except: [:new, :edit, :update], controller: 'me/conversations' do
         resources :receipts, only: [:index, :show, :create], controller: 'me/receipts' do
@@ -76,7 +77,7 @@ Rails.application.routes.draw do
         get :history, on: :collection
       end
       resources :prizes, except: :show, controller: 'users/prizes'
-      resources :products, except: :show, controller: 'users/products'
+      resources :products, controller: 'users/products'
       resources :payments, except: :show, controller: 'users/payments'
     end
 

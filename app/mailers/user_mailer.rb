@@ -16,7 +16,7 @@ class UserMailer < ActionMailer::Base
   def user_request_friendship(user, friend)
     @user = user
     @friend = friend
-    mail to: friend.email, subject: "You have a new friendship request"
+    mail to: friend.email, subject: "New friendship request from #{friend.name}"
   end
 
   def friend_accept_friendship(user, friend)
