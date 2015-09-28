@@ -1,4 +1,4 @@
-json.(user_product, :id)
+json.(user_product, :id, :start_date, :end_date, :status, :quantity, :transaction_type, :updated_at, :created_at)
 
 json.user_product do
   json.id user_product.id

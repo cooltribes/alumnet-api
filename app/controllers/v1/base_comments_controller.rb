@@ -11,18 +11,19 @@ class V1::BaseCommentsController < V1::BaseController
   end
 
   def create
-    @comment = Comment.new(comment_params)
-    @comment.user = current_user
-    if @commentable.comments << @comment
-      render :show, status: :created,  location: [@commentable, @comment]
+    service = ::Comments::CreateComment.new(@commentable, current_user, comment_params)
+    if service.call
+      @comment = service.comment
+      render :show, status: :created
     else
-      render json: @comment.errors, status: :unprocessable_entity
+      render json: service.comment.errors, status: :unprocessable_entity
     end
   end
 
   def update
     authorize @comment
-    if @comment.update(comment_params)
+    service = ::Comments::UpdateComment.new(@commentable, @comment, current_user, comment_params)
+    if service.call
       render :show, status: :ok,  location: [@commentable, @comment]
     else
       render json: @comment.errors, status: :unprocessable_entity
@@ -63,6 +64,6 @@ class V1::BaseCommentsController < V1::BaseController
   end
 
   def comment_params
-    params.permit(:comment)
+    params.permit(:comment, :markup_comment, :user_tags_list)
   end
 end
