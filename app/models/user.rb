@@ -343,7 +343,7 @@ class User < ActiveRecord::Base
 
   def all_posts(q)
     posts = likes_posts(q) | friends_posts(q) | groups_posts(q) | my_posts(q)
-    posts.sort_by{|e| e[:created_at]}
+    posts.sort!{ |a,b| b.last_comment_at <=> a.last_comment_at }
     posts
   end
 
