@@ -22,7 +22,7 @@ class UserMailer < ActionMailer::Base
   def friend_accept_friendship(user, friend)
     @user = user
     @friend = friend
-    mail to: user.email, subject: "You have a new friend!"
+    mail to: user.email, subject: "#{friend.name} accepted your friendship request"
   end
 
   def invitation_to_event(user, event)
@@ -34,7 +34,7 @@ class UserMailer < ActionMailer::Base
   def approval_request_accepted(requester, approver)
     @approver = approver
     @user = requester
-    mail to: @user.email, subject: "You have a new approved request"
+    mail to: @user.email, subject: "#{approver.name} gave you an Alumni verification (#{user.get_approved_requests.count}/3)"
   end
 
   def user_request_approval(approver, requester)
