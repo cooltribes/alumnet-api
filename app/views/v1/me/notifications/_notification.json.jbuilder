@@ -6,6 +6,10 @@ json.(receipt, :is_read)
 if detail
   json.url detail.url
   json.type detail.notification_type
-  json.sender_name detail.sender.name
-  json.sender_avatar detail.sender.avatar.large.url
+  json.sender_name detail.sender.try(:name)
+  if detail.sender
+    json.sender_avatar detail.sender.avatar.large.url
+  else
+    json.sender_avatar nil
+  end
 end
