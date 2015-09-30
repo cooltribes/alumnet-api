@@ -1,5 +1,5 @@
 class V1::Users::ProductsController < V1::BaseController
-  before_action :set_user_product, except: [:index, :create]
+  before_action :set_user_product, except: [:index, :create, :add_product]
   before_action :set_product
   before_action :set_user
 
@@ -38,6 +38,51 @@ class V1::Users::ProductsController < V1::BaseController
     end
   end
 
+  #todo: refactor this, create user function
+  def add_product
+    @user_product = UserProduct.new(add_params)
+    @user_product.transaction_type = 1
+    @user_product.feature = 'subscription'
+    if(@user.member == 0)
+      @user_product.start_date = DateTime.now
+      if @product.quantity
+        @user_product.end_date = DateTime.now + @product.quantity.months
+        @user_product.quantity = @product.quantity
+        @user.member = 1
+      else
+        @user.member = 3
+      end
+    else
+      @active_subscription = UserProduct.where(user_id: @user.id, feature: 'subscription', status: 1).last
+      if @active_subscription
+        @user_product.start_date = @active_subscription.end_date
+        if @product.quantity
+          @user_product.end_date = @active_subscription.end_date + @product.quantity.months
+          @user_product.quantity = @product.quantity
+          @user.member = 1
+        else
+          @user.member = 3
+        end
+      else
+        @user_product.start_date = DateTime.now
+        if @product.quantity
+          @user_product.end_date = DateTime.now + @product.quantity.months
+          @user_product.quantity = @product.quantity
+          @user.member = 1
+        else
+          @user.member = 3
+        end
+      end
+
+    end
+    if @user_product.save
+      @user.save
+      render :show, status: :created
+    else
+      render json: @user_product.errors, status: :unprocessable_entity
+    end
+  end
+
   # def destroy
   #   authorize @attendance
   #   @attendance.destroy
@@ -65,6 +110,10 @@ class V1::Users::ProductsController < V1::BaseController
 
     def update_params
       params.permit(:status, :start_date, :end_date, :quantity, :transaction_type)
+    end
+
+    def add_params
+      params.permit(:user_id, :product_id)
     end
 
     def save_subscription
