@@ -25,6 +25,7 @@ end
 json.cover do
   json.original user.cover.url
   json.main user.cover.main.url
+  json.position user.profile.cover_position
 end
 
 json.groups do
