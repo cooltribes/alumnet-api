@@ -12,6 +12,11 @@ class V1::Me::FriendshipsController < V1::BaseController
     @friends = Kaminari.paginate_array(@q).page(params[:page]).per(params[:per_page])
   end
 
+  def suggestions
+    query = { m: 'or', profile_first_name_cont: params[:term], profile_last_name_cont: params[:term] }
+    @friends = @user.search_accepted_friends(query)
+  end
+
   def create
     @friendship = @user.create_friendship_for(@friend)
     if @friendship.save

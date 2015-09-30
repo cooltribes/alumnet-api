@@ -53,6 +53,7 @@ class User < ActiveRecord::Base
   has_many :payments, dependent: :destroy
   has_many :company_admins, dependent: :destroy
   has_many :profile_visits, dependent: :destroy
+  has_many :posts_by_like, through: :likes, source: :likeable, source_type: "Post"
   has_one :profile, dependent: :destroy
   has_one :admin_note, dependent: :destroy
   belongs_to :admin_location, polymorphic: true
@@ -316,14 +317,35 @@ class User < ActiveRecord::Base
       .search(q).result
   end
 
+  def my_likes_posts(q)
+    posts_by_like.search(q).result
+  end
+
+  def friends_posts(q)
+    posts = []
+    my_friends.each do |friend|
+      posts << friend.my_posts(q)
+    end
+    posts.flatten
+  end
+
+  def likes_posts(q)
+    posts = []
+    my_friends.each do |friend|
+      posts << friend.my_likes_posts(q)
+    end
+    posts.flatten
+  end
+
   def my_posts(q)
     posts.search(q).result | publications.search(q).result
   end
 
   def all_posts(q)
-    groups_posts(q) | my_posts(q)
+    posts = likes_posts(q) | friends_posts(q) | groups_posts(q) | my_posts(q)
+    posts.sort!{ |a,b| b.last_comment_at <=> a.last_comment_at }
+    posts
   end
-
 
   ### all about friends
   def create_friendship_for(user)
