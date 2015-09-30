@@ -1,7 +1,7 @@
 <div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
    <p>Hello <%= "#{ @admin.name }" %></p>
    <p>
-   	<a href=<%= "#{Settings.ui_endpoint}/#admin/users/#{@user.id}" %>> <%= "#{@user.name}" %></a> just joined the group <a href=<%= "#{Settings.ui_endpoint}/#groups/#{@group.id}/members" %>><%= "#{@group.name}" %>.</a>	 
+   	<a href=<%= "#{Settings.ui_endpoint}/#users/#{@user.id}/about" %>> <%= "#{@user.name}" %></a> just joined the group <a href=<%= "#{Settings.ui_endpoint}/#groups/#{@group.id}/members" %>><%= "#{@group.name}" %>.</a>	 
    </p>
    <p>
    	To visit the group and give a nice welcome to <%= "#{@user.name}" %> click <a href=<%= "#{Settings.ui_endpoint}/#groups/#{@group.id}/members" %>>here</a>
