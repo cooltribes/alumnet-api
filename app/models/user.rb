@@ -674,14 +674,11 @@ class User < ActiveRecord::Base
 
   def remaining_job_posts
     remaining_job_posts = 0
-    feature = Feature.find_by(key_name: 'job_post')
-    if feature
-      user_products.where(feature_id: feature.id).each do |p|
-        if p.transaction_type == 1
-          remaining_job_posts += p.quantity
-        elsif p.transaction_type == 2
-          remaining_job_posts -= p.quantity
-        end
+    user_products.where(feature: 'job_post').each do |p|
+      if p.transaction_type == 1
+        remaining_job_posts += p.quantity
+      elsif p.transaction_type == 2
+        remaining_job_posts -= p.quantity
       end
     end
     remaining_job_posts
