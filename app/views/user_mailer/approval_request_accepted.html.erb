@@ -1,7 +1,21 @@
 <div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
-  <p>Greetings <%= "#{ @user.name }" %></p>
   <p>
-      <%= "#{@approver.name}" %> has accepted your request for AlumNet access. <br>
-      You have <%= "#{@user.get_approved_requests.count}" %> approves and only need <%= 3 - @user.get_approved_requests.count %> more approves to become an active member.      
-    </p>
+  	Hello <%= "#{ @user.name }" %>, <br>
+    <%= "#{@approver.name}" %> gave you an Alumni verification. <br>  
+		You have received already <%= "#{@user.get_approved_requests.count}" %> verifications and you only need <%= 3 - @user.get_approved_requests.count %> more. <br>
+		<a href=<%="#{Settings.ui_endpoint}/#posts" %>>Find more Alumni who can verify your Alumni status</a>	
+  </p>
+	
+  <p>
+  	<b>What is this?</b><br>
+  	In order to keep the integrity of the AIESEC Alumni community, a verification process has been set to ensure that only AIESEC Alumni can have access into this platform. <br>
+  	This is why we are asking every person that registers in AlumNet to find 3 other Alumni who are already in the system and who can verify that you are an AIESEC Alumni. <br>
+  </p>
+
+  <p>
+  	<b>TIP:</b><br>
+  	From AlumNet it is possible to find out who of your contacts from <b>Gmail/Yahoo/Hotmail/LinkedIn</b> is already registered in AlumNet. <br>
+  	<a href=<%="#{Settings.ui_endpoint}/#posts" %>>Find out who of your contacts are already registered in AlumNet</a>
+  </p>
+
 </div>

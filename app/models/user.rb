@@ -343,7 +343,7 @@ class User < ActiveRecord::Base
 
   def all_posts(q)
     posts = likes_posts(q) | friends_posts(q) | groups_posts(q) | my_posts(q)
-    posts.sort_by{|e| e[:created_at]}
+    posts.sort!{ |a,b| b.last_comment_at <=> a.last_comment_at }
     posts
   end
 
@@ -674,14 +674,11 @@ class User < ActiveRecord::Base
 
   def remaining_job_posts
     remaining_job_posts = 0
-    feature = Feature.find_by(key_name: 'job_post')
-    if feature
-      user_products.where(feature_id: feature.id).each do |p|
-        if p.transaction_type == 1
-          remaining_job_posts += p.quantity
-        elsif p.transaction_type == 2
-          remaining_job_posts -= p.quantity
-        end
+    user_products.where(feature: 'job_post').each do |p|
+      if p.transaction_type == 1
+        remaining_job_posts += p.quantity
+      elsif p.transaction_type == 2
+        remaining_job_posts -= p.quantity
       end
     end
     remaining_job_posts

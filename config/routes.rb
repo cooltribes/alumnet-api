@@ -77,7 +77,9 @@ Rails.application.routes.draw do
         get :history, on: :collection
       end
       resources :prizes, except: :show, controller: 'users/prizes'
-      resources :products, controller: 'users/products'
+      resources :products, controller: 'users/products' do
+        post :add_product, on: :member
+      end
       resources :payments, except: :show, controller: 'users/payments'
     end
 

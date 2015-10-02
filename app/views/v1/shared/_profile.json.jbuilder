@@ -30,6 +30,7 @@ end
 json.cover do
   json.original profile.cover.url
   json.main profile.cover.main.url
+  json.position profile.cover_position
 end
 
 json.role profile.user.role
