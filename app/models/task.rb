@@ -22,6 +22,8 @@ class Task < ActiveRecord::Base
   # "task_job_exchange"
   # "task_meetup_exchange"
 
+  enum application_type: [ :alumnet, :external ]
+
   ## Validations
   validates_presence_of :name, :description, :nice_have_list, :help_type, :post_until
 
