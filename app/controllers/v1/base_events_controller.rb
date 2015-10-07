@@ -63,7 +63,7 @@ class V1::BaseEventsController < V1::BaseController
   def event_params
     params.permit(:name, :description, :cover, :event_type, :official, :address,
       :upload_files, :start_date, :start_hour, :end_date, :end_hour, :capacity,
-      :city_id, :country_id, :admission_type, :regular_price, :premium_price)
+      :city_id, :country_id, :admission_type, :regular_price, :premium_price, :cover_position)
   end
 
 end
