@@ -73,6 +73,7 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :oauth_providers
 
   ### Callbacks
+  before_validation :downcase_email
   before_create :ensure_tokens
   before_create :set_default_role, :set_profinda_password
   after_create :create_new_profile
@@ -711,5 +712,9 @@ class User < ActiveRecord::Base
         privacies.create(privacy_action_id: action.id, value: 2)
       end
     end
+  end
+  
+  def downcase_email
+    self.email = self.email.downcase if self.email.present?
   end
 end

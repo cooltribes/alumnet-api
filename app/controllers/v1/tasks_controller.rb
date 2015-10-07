@@ -56,12 +56,12 @@ class V1::TasksController < V1::BaseController
     if current_user.tasks << @task
       @task.create_profinda_task
       @feature = Feature.find_by(key_name: 'job_post')
-      @user_product = UserProduct.new({ quantity: 1, transaction_type: 2, user_id: current_user.id, feature_id: @feature.id })
-      if @user_product.save
-        render 'v1/tasks/show', status: :created
-      else
-        render json: @user_product.errors, status: :unprocessable_entity
-      end
+      #@user_product = UserProduct.new({ quantity: 1, transaction_type: 2, user_id: current_user.id, feature_id: @feature.id })
+      #if @user_product.save
+      render 'v1/tasks/show', status: :created
+      #else
+        #render json: @user_product.errors, status: :unprocessable_entity
+      #end
     else
       render json: @task.errors, status: :unprocessable_entity
     end
@@ -93,7 +93,7 @@ class V1::TasksController < V1::BaseController
 
     def task_params
       params.permit(:name, :description, :duration, :post_until, :must_have_list,
-       :nice_have_list, :company_id, :city_id, :country_id, :offer, :employment_type)
+       :nice_have_list, :company_id, :city_id, :country_id, :offer, :employment_type, :application_type, :external_url)
     end
 
 end
