@@ -12,7 +12,7 @@ class Task < ActiveRecord::Base
   belongs_to :company
 
 
-  EMPLOYMENT_TYPES = { 0 => "Full-time", 1 => "Part-time", 2 => "Internship", 3 => "Temporary"}
+  EMPLOYMENT_TYPES = { 0 => "Full-time", 1 => "Part-time", 2 => "Internship", 3 => "Temporary", 4 => "Special Assignment", 5 => "Specialized Group"}
   POSITION_TYPES = { 0 => "Top Management/Director", 1 => "Middle management", 2 => "Senior Specialist",
     3 => "Junior Specialist", 4 => "Entry job" }
 
