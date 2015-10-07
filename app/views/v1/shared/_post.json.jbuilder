@@ -32,3 +32,11 @@ json.user_tags_list post.user_tags do |user|
   json.id user.id
   json.name user.permit_name(current_user)
 end
+
+json.preview do
+  json.url post.url
+  json.title post.url_title
+  json.description post.url_description
+  json.image post.url_image
+end
+  

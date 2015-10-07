@@ -1,5 +1,5 @@
 json.(task, :id, :name, :description, :formatted_description, :duration, :post_until,
-  :arrival_date, :must_have_list, :nice_have_list, :help_type, :offer, :created_at)
+  :arrival_date, :must_have_list, :nice_have_list, :help_type, :offer, :created_at, :application_type, :external_url)
 
 json.country task.country_info
 json.city task.city_info
