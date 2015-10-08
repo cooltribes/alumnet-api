@@ -42,7 +42,7 @@ json.creator do
   json.name company.creator.try(:name)
 end
 
-json.employees_count company.employees.count
+json.current_employees_count company.current_employees.count
 json.past_employees_count company.past_employees.count
 json.admins_count company.accepted_admins.count
 
