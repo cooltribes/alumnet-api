@@ -80,4 +80,10 @@ class UserMailer < ActionMailer::Base
     @product = user_product.product
     mail to: @user.email, subject: "You are now a premium member!"
   end
+
+  def send_message_to_admin(to, user, message)
+    @user = user
+    @message = message
+    mail to: to, subject: 'New message from contact form'
+  end
 end
