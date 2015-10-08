@@ -18,15 +18,14 @@ RSpec.describe Profile, :type => :model do
         user = User.make!
         profile = user.profile
         profile.update(first_name: "Armando", last_name: "Mendoza")
-        expect(profile.register_step).to eq("initial")
+        # :basic_information, :languages_and_skills, :aiesec_experiences, :completed
+        expect(profile.register_step).to eq("basic_information")
         profile.update_next_step
-        expect(profile.register_step).to eq("profile")
+        expect(profile.register_step).to eq("languages_and_skills")
         profile.update_next_step
-        expect(profile.register_step).to eq("contact")
+        expect(profile.register_step).to eq("aiesec_experiences")
         profile.update_prev_step
-        expect(profile.register_step).to eq("profile")
-        profile.update_prev_step
-        expect(profile.register_step).to eq("initial")
+        expect(profile.register_step).to eq("languages_and_skills")
       end
     end
   end
