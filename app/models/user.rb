@@ -177,11 +177,11 @@ class User < ActiveRecord::Base
   def suggested_users(limit = 6)
     committees_ids = profile.committees.pluck(:id)
     aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq || []
-    users = User.joins(profile: :experiences).where( experiences: { exp_type: 0 })
+    users = User.active.joins(profile: :experiences).where( experiences: { exp_type: 0 })
       .where("experiences.committee_id in (?) or experiences.country_id in (?)", committees_ids, aiesec_countries_ids)
       .where.not(id: id).uniq
     if users.size < limit
-      users.to_a | User.order("RANDOM()").limit(limit - users.size).to_a ## complete the limit with ramdon users
+      users.to_a | User.active.where.not(id: id).order("RANDOM()").limit(limit - users.size).to_a ## complete the limit with ramdon users
     else
       users.limit(limit).to_a
     end
@@ -713,7 +713,7 @@ class User < ActiveRecord::Base
       end
     end
   end
-  
+
   def downcase_email
     self.email = self.email.downcase if self.email.present?
   end
