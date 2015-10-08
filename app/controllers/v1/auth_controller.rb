@@ -3,7 +3,7 @@ class V1::AuthController < V1::BaseController
   before_action :check_params, only: [:sign_in]
 
   def sign_in
-    email, password = params[:email], params[:password]
+    email, password = params[:email].downcase, params[:password]
     @user = User.find_by(email: email).try(:authenticate, password)
     if @user
       @user.register_sign_in
@@ -95,5 +95,4 @@ class V1::AuthController < V1::BaseController
       end
     end
   end
-
 end
