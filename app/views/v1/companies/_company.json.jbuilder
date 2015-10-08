@@ -31,6 +31,7 @@ if company.cover
     json.original company.cover.url
     json.main company.cover.main.url
     json.card company.cover.card.url
+    json.position company.cover_position
   end
 else
   json.cover json.nil!
