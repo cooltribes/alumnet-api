@@ -17,7 +17,7 @@ class PicturePolicy < ApplicationPolicy
   end
 
   def destroy?
-    record.album.user == user
+    record.can_be_deleted_by user
   end
 
 end

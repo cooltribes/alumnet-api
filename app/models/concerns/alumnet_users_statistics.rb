@@ -274,9 +274,9 @@ class AlumnetUsersStatistics
   def format_for_status_pie_graph(data_hash)
     data = []
     data << ["Status", "Count"]
-    data << ["Inactive", data_hash[0] || 0]
-    data << ["Active", data_hash[1] || 0]
-    data << ["Banned", data_hash[2] || 0]
+    data << ["Inactive = Alumni who are not yet being approved", data_hash[0] || 0]
+    data << ["Active = Alumni who are approved in AlumNet", data_hash[1] || 0]
+    data << ["Banned = User who have been banned from the system", data_hash[2] || 0]
     data
   end
 
