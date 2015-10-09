@@ -19,7 +19,6 @@ class Album < ActiveRecord::Base
     pictures.first.try(:picture)
   end
 
-
   def pictures_count
     self.pictures.count
   end

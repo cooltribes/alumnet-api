@@ -69,7 +69,7 @@ class V1::CompaniesController < V1::BaseController
 
     def company_params
       params.permit(:name, :logo, :profile_id, :description, :main_address,
-        :size, :cover, :country_id, :city_id, :sector_id,)
+        :size, :cover, :country_id, :city_id, :sector_id, :cover_position)
     end
 
     def crop_params
