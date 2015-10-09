@@ -45,7 +45,7 @@ describe V1::MeController, type: :request do
     context "with a regular user" do
       it "active user if user completed the penultimate and was created by an admin" do
         user = User.make!(status: 0, role: User::ROLES[:regular], created_by_admin: true)
-        user.profile.aiesec_experiences!
+        user.profile.completed!
         post activate_me_path, {}, basic_header(user.auth_token)
         expect(response.status).to eq 200
         expect(json["status"]).to eq("active")

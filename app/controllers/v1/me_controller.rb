@@ -29,14 +29,14 @@ class V1::MeController < V1::BaseController
   #Only for users created by admins, they approve themselves in the middle of the registration
   def activate
     if @user.inactive? && @user.created_by_admin?
-      if @user.is_regular? && @user.profile.is_in_penultimate_step?
+      if @user.is_regular? && @user.profile.penultimate_step_complete?
         @user.activate!
         render json: { status: 'active' }
       elsif @user.is_external? && @user.profile.first_step_completed?
         @user.activate!
         render json: { status: 'active' }
       else
-        render json: { status: 'fail'}
+        render json: { status: 'user can\'t be activate' }
       end
     else
       render json: { status: 'user is active' }

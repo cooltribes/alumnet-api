@@ -9,12 +9,12 @@ class V1::MetatagsController < V1::BaseController
       image = photo_url
     end
     description = 'no description'
-    if !Nokogiri::HTML(open(params[:url])).css("meta[property='og:description']").blank?
-      description = Nokogiri::HTML(open(params[:url])).css("meta[property='og:description']").first.attributes["content"]
+    if !webPage.css("meta[property='og:description']").blank?
+      description = webPage.css("meta[property='og:description']").first.attributes["content"]
     end    
     title = 'no title'
-    if !Nokogiri::HTML(open(params[:url])).css("meta[property='og:title']").blank?
-      title = Nokogiri::HTML(open(params[:url])).css("meta[property='og:title']").first.attributes["content"]
+    if !webPage.css("meta[property='og:title']").blank?
+      title = webPage.css("meta[property='og:title']").first.attributes["content"]
     end 
 
     msg = { :image => image.value, :description => description.value, :title => title.value }
