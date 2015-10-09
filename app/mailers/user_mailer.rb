@@ -3,7 +3,7 @@ class UserMailer < ActionMailer::Base
 
   def password_reset(user)
     @user = user
-    mail to: user.email, subject: "Password reset"
+    mail to: user.email, subject: "Password Reset"
   end
 
   def join_to_group(user, sender, group)
