@@ -139,6 +139,8 @@ Rails.application.routes.draw do
 
     resources :tags, only: :index
 
+    resources :contact, only: :create
+
     resources :companies do
       post :cropping, on: :member
       get :employees, on: :member
