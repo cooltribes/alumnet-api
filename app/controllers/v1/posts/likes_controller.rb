@@ -1,4 +1,4 @@
-class V1::Posts::LikesController < V1::BaseCommentsController
+class V1::Posts::LikesController < V1::BaseLikesController
 
   private
 

@@ -3,7 +3,7 @@ class V1::BaseLikesController < V1::BaseController
   before_action :set_likeable
 
   def index
-    @q = @likeable.likes.search(params[:q])
+    @q = @likeable.likes.without_user(current_user).search(params[:q])
     @likes = @q.result
   end
 
