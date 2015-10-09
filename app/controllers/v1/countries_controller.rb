@@ -24,6 +24,7 @@ class V1::CountriesController < V1::BaseController
     other_committee = Committee.find_by(name: "Other")
     @q = @country.committees.search(params[:q])
     @committees = @q.result | [other_committee]
+    @committees = @committees.sort_by(&:name)
   end
 
   private
