@@ -4,13 +4,15 @@
 	  	<%= "#{@applicant.name}" %> applied to your job post <%= "#{@job_post.name}" %>, below you can see more detailed information about this candidate <br>
     </p>
     <div>
-    	<div style="float: left; width: 25%;">
-		    <img src="<%= @avatar %>" style="border-radius: 50%;">
+    	<div style="float: left;">
+		    <img src="<%= @avatar %>" style="border-radius: 50%; width: 60px; height: 60px;">
 		</div>
-		<div style="float: left; width: 75%;">
+		<div style="width: 75%; margin-left: 80px; padding: 10px;">
 		    <strong>Full Name:</strong> <%= "#{@applicant.name}" %><br>
 		    <strong>Why me?:</strong> <%= "#{@whyme}" %><br>
 		</div>
 	</div>	
-	<p>Click <a href="<%= "#{Settings.ui_endpoint}/#users/#{@applicant.id}/about" %>" >here</a> to go to this profile</p>
+	<div style="margin-top: 20px;">
+		<p>Click <a href="<%= "#{Settings.ui_endpoint}/#users/#{@applicant.id}/about" %>" >here</a> to go to this profile</p>
+	</div>
 </div>
