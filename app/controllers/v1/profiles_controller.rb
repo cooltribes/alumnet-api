@@ -31,7 +31,7 @@ class V1::ProfilesController < V1::BaseController
 
     def profile_params
       params.permit(:first_name, :last_name, :avatar, :born, :birth_city_id, :residence_city_id,
-        :birth_country_id, :residence_country_id, :gender, :cover, :cover_position)
+        :birth_country_id, :residence_country_id, :gender, :cover, :cover_position, :professional_headline)
     end
 
     def crop_params
