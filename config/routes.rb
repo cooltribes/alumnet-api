@@ -185,6 +185,7 @@ Rails.application.routes.draw do
         post :like, on: :member
         post :unlike, on: :member
       end
+      resources :likes, controller: 'posts/likes', only: :index
     end
 
     resources :albums do
