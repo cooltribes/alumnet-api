@@ -1,7 +1,7 @@
 <div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
-	<p>Greetings <%= "#{ @approver.name }" %></p>
+	<p>Hello <%= "#{ @approver.name }" %>,</p>
 	<p>
-	  <%= "#{ @requester.name }" %> says: Hello, I'm registering in Alumnet. Please approve my membership      
+	  <%= "#{ @requester.name }" %> would like you to approve her request to be a registered member of AlumNet.     
 	</p>
 	<p>
 	  Check your pending approval requests <a href=<%= "#{Settings.ui_endpoint}/#approval-requests" %>>here</a>.
