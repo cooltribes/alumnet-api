@@ -625,9 +625,9 @@ class User < ActiveRecord::Base
       'BIRTHDAY' => profile.born,
       'GENDER' => profile.gender,
       'B_COUNTRY' => profile.birth_country.name,
-      'B_CITY' => profile.birth_city.name,
+      'B_CITY' => profile.birth_city.present? ? profile.birth_city.name : "",
       'R_COUNTRY' => profile.residence_country.name,
-      'R_CITY' => profile.residence_city.name,
+      'R_CITY' => profile.residence_city.present? ? profile.residence_city.name : "",
       'L_EXP' => profile.last_experience.name,
       'PREMIUM' => membership_type
     }
@@ -658,9 +658,9 @@ class User < ActiveRecord::Base
           'BIRTHDAY' => profile.born,
           'GENDER' => profile.gender,
           'B_COUNTRY' => profile.birth_country.name,
-          'B_CITY' => profile.birth_city.name,
+          'B_CITY' => profile.birth_city.present? ? profile.birth_city.name : "",
           'R_COUNTRY' => profile.residence_country.name,
-          'R_CITY' => profile.residence_city.name,
+          'R_CITY' => profile.residence_city.present? ? profile.residence_city.name : "",
           'L_EXP' => profile.last_experience.name,
           'PREMIUM' => membership_type
         }
