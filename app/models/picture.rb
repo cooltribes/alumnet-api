@@ -16,7 +16,11 @@ class Picture < ActiveRecord::Base
 
   ### Instances Methods
   def url_for_notification
-    "#{pictureable.class.to_s.pluralize.downcase}/#{pictureable.id}/pictures/#{id}"
+    if pictureable
+      "#{pictureable.class.to_s.pluralize.downcase}/#{pictureable.id}/pictures/#{id}"
+    else
+      "albums/#{album.id}/pictures/#{id}"
+    end
   end
 
   #TODO: maybe put this in own module for permissions
