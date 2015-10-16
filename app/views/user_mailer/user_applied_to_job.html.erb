@@ -1,12 +1,18 @@
 <div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
 	<p>Greetings <%= "#{ @user.name }" %></p>
 	<p>
-	  <%= "#{@applicant.name}" %> applied to your job post 
-    <%= "#{@job_post.name}" %>, below you can see more detailed information about this candidate <br>
-    
-    <strong>Avatar:</strong> <img src="<%= @avatar %>"><br>
-    <strong>Full Name:</strong> <%= "#{@applicant.name}" %><br>
-    <strong>Why me?:</strong> <%= "#{@whyme}" %><br>
-	  Click <a href="<%= "#{Settings.ui_endpoint}/#users/#{@applicant.id}/about" %>" >here</a> to go to this profile
-	</p>	
+	  	<%= "#{@applicant.name}" %> applied to your job post <%= "#{@job_post.name}" %>, below you can see more detailed information about this candidate <br>
+    </p>
+    <div>
+    	<div style="float: left;">
+		    <img src="<%= @avatar %>" style="border-radius: 50%; width: 60px; height: 60px;">
+		</div>
+		<div style="width: 75%; margin-left: 80px; padding: 10px;">
+		    <strong>Full Name:</strong> <%= "#{@applicant.name}" %><br>
+		    <strong>Why me?:</strong> <%= "#{@whyme}" %><br>
+		</div>
+	</div>	
+	<div style="margin-top: 20px;">
+		<p>Click <a href="<%= "#{Settings.ui_endpoint}/#users/#{@applicant.id}/about" %>" >here</a> to go to this profile</p>
+	</div>
 </div>

@@ -73,6 +73,7 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :oauth_providers
 
   ### Callbacks
+  before_validation :downcase_email
   before_create :ensure_tokens
   before_create :set_default_role, :set_profinda_password
   after_create :create_new_profile
@@ -176,11 +177,11 @@ class User < ActiveRecord::Base
   def suggested_users(limit = 6)
     committees_ids = profile.committees.pluck(:id)
     aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq || []
-    users = User.joins(profile: :experiences).where( experiences: { exp_type: 0 })
+    users = User.active.joins(profile: :experiences).where( experiences: { exp_type: 0 })
       .where("experiences.committee_id in (?) or experiences.country_id in (?)", committees_ids, aiesec_countries_ids)
       .where.not(id: id).uniq
     if users.size < limit
-      users.to_a | User.order("RANDOM()").limit(limit - users.size).to_a ## complete the limit with ramdon users
+      users.to_a | User.active.where.not(id: id).order("RANDOM()").limit(limit - users.size).to_a ## complete the limit with ramdon users
     else
       users.limit(limit).to_a
     end
@@ -624,9 +625,9 @@ class User < ActiveRecord::Base
       'BIRTHDAY' => profile.born,
       'GENDER' => profile.gender,
       'B_COUNTRY' => profile.birth_country.name,
-      'B_CITY' => profile.birth_city.name,
+      'B_CITY' => profile.birth_city.present? ? profile.birth_city.name : "",
       'R_COUNTRY' => profile.residence_country.name,
-      'R_CITY' => profile.residence_city.name,
+      'R_CITY' => profile.residence_city.present? ? profile.residence_city.name : "",
       'L_EXP' => profile.last_experience.name,
       'PREMIUM' => membership_type
     }
@@ -657,9 +658,9 @@ class User < ActiveRecord::Base
           'BIRTHDAY' => profile.born,
           'GENDER' => profile.gender,
           'B_COUNTRY' => profile.birth_country.name,
-          'B_CITY' => profile.birth_city.name,
+          'B_CITY' => profile.birth_city.present? ? profile.birth_city.name : "",
           'R_COUNTRY' => profile.residence_country.name,
-          'R_CITY' => profile.residence_city.name,
+          'R_CITY' => profile.residence_city.present? ? profile.residence_city.name : "",
           'L_EXP' => profile.last_experience.name,
           'PREMIUM' => membership_type
         }
@@ -674,14 +675,11 @@ class User < ActiveRecord::Base
 
   def remaining_job_posts
     remaining_job_posts = 0
-    feature = Feature.find_by(key_name: 'job_post')
-    if feature
-      user_products.where(feature_id: feature.id).each do |p|
-        if p.transaction_type == 1
-          remaining_job_posts += p.quantity
-        elsif p.transaction_type == 2
-          remaining_job_posts -= p.quantity
-        end
+    user_products.where(feature: 'job_post').each do |p|
+      if p.transaction_type == 1
+        remaining_job_posts += p.quantity
+      elsif p.transaction_type == 2
+        remaining_job_posts -= p.quantity
       end
     end
     remaining_job_posts
@@ -714,5 +712,9 @@ class User < ActiveRecord::Base
         privacies.create(privacy_action_id: action.id, value: 2)
       end
     end
+  end
+
+  def downcase_email
+    self.email = self.email.downcase if self.email.present?
   end
 end

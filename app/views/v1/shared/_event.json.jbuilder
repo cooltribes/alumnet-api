@@ -10,6 +10,7 @@ json.cover do
   json.original event.cover.url
   json.main event.cover.main.url
   json.card event.cover.card.url
+  json.position event.cover_position
 end
 
 json.creator do

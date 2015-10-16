@@ -28,6 +28,7 @@ json.cover do
   json.original group.cover.url
   json.main group.cover.main.url
   json.card group.cover.card.url
+  json.position group.cover_position
 end
 
 json.parent do

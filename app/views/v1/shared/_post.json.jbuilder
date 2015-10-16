@@ -12,6 +12,18 @@ end
 
 json.likes_count post.likes_count
 json.you_like post.has_like_for?(current_user)
+json.likes post.likes.without_user(current_user) do |like|
+  json.(like, :id, :created_at)
+  json.user do
+    json.id like.user.id
+    json.name like.user.permit_name(current_user)
+    if like.user.permit('see-avatar', current_user)
+      json.avatar like.user.avatar.medium.url
+    else
+      json.avatar like.user.avatar.medium.default_url
+    end
+  end
+end
 
 json.postable_info post.postable_info(current_user)
 
@@ -32,3 +44,11 @@ json.user_tags_list post.user_tags do |user|
   json.id user.id
   json.name user.permit_name(current_user)
 end
+
+json.preview do
+  json.url post.url
+  json.title post.url_title
+  json.description post.url_description
+  json.image post.url_image
+end
+

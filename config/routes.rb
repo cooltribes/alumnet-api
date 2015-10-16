@@ -77,7 +77,9 @@ Rails.application.routes.draw do
         get :history, on: :collection
       end
       resources :prizes, except: :show, controller: 'users/prizes'
-      resources :products, controller: 'users/products'
+      resources :products, controller: 'users/products' do
+        post :add_product, on: :member
+      end
       resources :payments, except: :show, controller: 'users/payments'
     end
 
@@ -137,6 +139,8 @@ Rails.application.routes.draw do
 
     resources :tags, only: :index
 
+    resources :contact, only: :create
+
     resources :companies do
       post :cropping, on: :member
       get :employees, on: :member
@@ -181,6 +185,7 @@ Rails.application.routes.draw do
         post :like, on: :member
         post :unlike, on: :member
       end
+      resources :likes, controller: 'posts/likes', only: :index
     end
 
     resources :albums do

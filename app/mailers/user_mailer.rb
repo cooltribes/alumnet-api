@@ -3,7 +3,7 @@ class UserMailer < ActionMailer::Base
 
   def password_reset(user)
     @user = user
-    mail to: user.email, subject: "Password reset"
+    mail to: user.email, subject: "Password Reset"
   end
 
   def join_to_group(user, sender, group)
@@ -16,13 +16,13 @@ class UserMailer < ActionMailer::Base
   def user_request_friendship(user, friend)
     @user = user
     @friend = friend
-    mail to: friend.email, subject: "New friendship request from #{friend.name}"
+    mail to: friend.email, subject: "New friendship request from #{user.name}"
   end
 
   def friend_accept_friendship(user, friend)
     @user = user
     @friend = friend
-    mail to: user.email, subject: "You have a new friend!"
+    mail to: user.email, subject: "#{friend.name} accepted your friendship request"
   end
 
   def invitation_to_event(user, event)
@@ -34,13 +34,13 @@ class UserMailer < ActionMailer::Base
   def approval_request_accepted(requester, approver)
     @approver = approver
     @user = requester
-    mail to: @user.email, subject: "You have a new approved request"
+    mail to: @user.email, subject: "#{approver.name} gave you an Alumni verification (#{user.get_approved_requests.count}/3)"
   end
 
   def user_request_approval(approver, requester)
     @approver = approver
     @requester = requester
-    mail to: @approver.email, subject: "#{requester.name} wants to be approved in AlumNet"
+    mail to: @approver.email, subject: "#{requester.name}, is requesting your approval for AlumNet"
   end
 
   def invitation_to_alumnet(email, guest_name, user, token)
@@ -53,7 +53,7 @@ class UserMailer < ActionMailer::Base
   def user_was_accepted_in_group(user, group)
     @user = user
     @group = group
-    mail to: user.email, subject: "Your request to join the group #{group.name} was accepted"
+    mail to: user.email, subject: "You are now a member of the #{group.name} group"
   end
 
   def user_applied_to_job(job_post, applicant, whyme)
@@ -79,5 +79,11 @@ class UserMailer < ActionMailer::Base
     @user = user_product.user
     @product = user_product.product
     mail to: @user.email, subject: "You are now a premium member!"
+  end
+
+  def send_message_to_admin(to, user, message)
+    @user = user
+    @message = message
+    mail to: to, subject: 'New message from contact form'
   end
 end
