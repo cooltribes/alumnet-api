@@ -214,6 +214,7 @@ Rails.application.routes.draw do
     resources :skills, only: :index
     resources :payments
     resources :metatags, only: [:index]
+    resources :tempfiles, only: [:index]
 
     namespace :admin do
       get 'stats/type_of_membership', to: 'stats#type_of_membership'
