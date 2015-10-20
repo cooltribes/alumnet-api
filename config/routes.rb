@@ -139,6 +139,8 @@ Rails.application.routes.draw do
 
     resources :tags, only: :index
 
+    resources :contact, only: :create
+
     resources :companies do
       post :cropping, on: :member
       get :employees, on: :member
@@ -183,6 +185,7 @@ Rails.application.routes.draw do
         post :like, on: :member
         post :unlike, on: :member
       end
+      resources :likes, controller: 'posts/likes', only: :index
     end
 
     resources :albums do
@@ -211,6 +214,7 @@ Rails.application.routes.draw do
     resources :skills, only: :index
     resources :payments
     resources :metatags, only: [:index]
+    resources :tempfiles, only: [:index]
 
     namespace :admin do
       get 'stats/type_of_membership', to: 'stats#type_of_membership'

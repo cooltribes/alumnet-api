@@ -26,7 +26,7 @@ class Notification
       body = "Welcome! You've joined the #{group.name} group"
     else
       subject = "#{sender.name} added you to the #{group.name} group!"
-      body = "Welcome! the user #{sender.name} added you to the #{group.mode} group #{group.name}"
+      body = "Welcome! #{sender.name} added you to the #{group.mode} group #{group.name}"
     end
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
@@ -40,7 +40,7 @@ class Notification
     return if admins.blank?
     notification = new(admins)
     subject = "A new user was invited to join the group #{group.name}"
-    body = "The user #{user.name} was invited to join the group #{group.name}"
+    body = "Was invited to join the group #{group.name}"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     NotificationDetail.join_group_admins(notfy, user, group)
@@ -79,7 +79,7 @@ class Notification
     return if admins.blank?
     notification = new(admins)
     subject = "A new user request to join the group #{group.name}"
-    body = "The user #{user.name} sent a request to join the group #{group.name}"
+    body = "Sent a request to join the group #{group.name}"
     notification.send_notification(subject, body)
     notification.send_pusher_notification
     notification.recipients.each do |admin|
@@ -90,8 +90,8 @@ class Notification
   def self.notify_friendship_request_to_user(user, friend)
     return if user.blank? && friend.blank?
     notification = new(friend)
-    subject = "New friendship request from #{user.name}"
-    body = "#{user.name} sent you a friendship request on AlumNet."
+    subject = "New friendship request"
+    body = "Sent you a friendship request on AlumNet."
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     NotificationDetail.friendship_request(notfy, user)
@@ -102,7 +102,7 @@ class Notification
     return if user.blank? && friend.blank?
     notification = new(user)
     subject = "You have a new friend!"
-    body = "Your friend #{friend.name} accepted your invitation to connect."
+    body = "Your friend accepted your invitation to connect."
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     NotificationDetail.friendship_accepted(notfy, friend)
@@ -115,7 +115,7 @@ class Notification
     host_name = host ? host.name : event.creator.name
     notification = new(attendance.user)
     subject = "You have a new invitation to an event in AlumNet!",
-    body = "The user #{host_name} is inviting you to assist the event #{event.name}"
+    body = "Is inviting you to assist the event #{event.name}"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     NotificationDetail.invitation_to_event(notfy, event.creator, event)
@@ -145,7 +145,7 @@ class Notification
     return if admins.blank?
     notification = new(admins)
     subject = "hi Admin! A new user was registered in AlumNet"
-    body = "The user #{user.name} is waiting for your approval in admin section"
+    body = "Is waiting for your approval in admin section"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     notification.recipients.each do |admin|
@@ -171,7 +171,7 @@ class Notification
     return if users.blank?
     notification = new(users)
     subject = "The #{post.postable.class.to_s} #{post.postable.name} has new post"
-    body = "Hello! the user #{post.user.name} posted in #{post.postable.class.to_s} #{post.postable.name}"
+    body = "Hello! #{post.user.name} posted in #{post.postable.class.to_s} #{post.postable.name}"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     NotificationDetail.notify_new_post(notfy, post)
@@ -186,8 +186,8 @@ class Notification
       return if likeable.uploader == like.user
       notification = new(likeable.uploader)
     end
-    subject = "The user #{like.user.name} likes your #{likeable.class.to_s}"
-    body = "The user #{like.user.name} likes your #{likeable.class.to_s}"
+    subject = "#{like.user.name} likes your #{likeable.class.to_s}"
+    body = "Likes your #{likeable.class.to_s}"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     NotificationDetail.notify_like(notfy, like.user, likeable)
@@ -197,7 +197,7 @@ class Notification
     return if author.blank?
     notification = new(author)
     subject = "You have new comment in Post"
-    body = "The user #{comment.user.name} commented in your post"
+    body = "Commented in your post"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     NotificationDetail.notify_comment_in_post(notfy, comment.user, post)
@@ -207,7 +207,7 @@ class Notification
     return if users.blank?
     notification = new(users)
     subject = "You have new comment in Post"
-    body = "The user #{comment.user.name} commented in a post where you comment"
+    body = "Commented in a post where you comment"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     NotificationDetail.notify_comment_in_post(notfy, comment.user, post)
@@ -216,7 +216,7 @@ class Notification
   def self.notify_tagging(tagging)
     notification = new(tagging.user)
     subject = "You were tagged"
-    body = "The user #{tagging.tagger.name} tagged you in a #{tagging.taggable_type}"
+    body = "Tagged you in a #{tagging.taggable_type}"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     NotificationDetail.notify_tag(notfy, tagging.tagger, tagging.taggable)
@@ -227,7 +227,7 @@ class Notification
     return if admins.blank?
     notification = new(admins)
     subject = "hi Admin! A new user has requested admin rights in #{company.name}"
-    body = "The user #{user.name} requested admin rights in #{company.name}"
+    body = "Requested admin rights in #{company.name}"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     notification.recipients.each do |admin|
