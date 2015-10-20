@@ -144,6 +144,10 @@ class Group < ActiveRecord::Base
     posts.last
   end
 
+  def first_post
+    posts.first
+  end
+
   def group_type_info
     { text: group_type, value: Group.group_types[group_type] }
   end

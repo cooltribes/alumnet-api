@@ -24,6 +24,12 @@ else
   json.last_post_at nil
 end
 
+if group.first_post.present?
+  json.first_post_at group.first_post.last_comment_at
+else
+  json.first_post_at nil
+end
+
 json.cover do
   json.original group.cover.url
   json.main group.cover.main.url
