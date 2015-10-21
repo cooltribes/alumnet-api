@@ -1,5 +1,5 @@
 class V1::UsersController < V1::BaseController
-  before_action :set_user, except: [:index, :create]
+  before_action :set_user, except: [:index, :create, :change_password]
 
   def index
     @q = User.active.without_externals.includes(:profile).search(params[:q])
@@ -38,6 +38,19 @@ class V1::UsersController < V1::BaseController
     head :no_content
   end
 
+  def change_password
+    @user = User.find(params[:id]).try(:authenticate, params[:old_password])
+    if @user
+      if @user.update(password_params)
+        render json: { message: "Password has been reset"}, status: :ok
+      else
+        render json: { errors: @user.errors }, status: 401
+      end
+    else
+      render json: { error: "incorrect current password"}, status: 401
+    end
+  end
+
   private
 
   def set_user
@@ -46,6 +59,10 @@ class V1::UsersController < V1::BaseController
 
   def user_params
     params.permit(:email, :password, :password_confirmation, :avatar, :name, :member)
+  end
+
+  def password_params
+    params.permit(:id, :password, :password_confirmation)
   end
 
   def check_if_current_user_can_invite_on_group
