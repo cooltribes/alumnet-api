@@ -3,7 +3,8 @@
   Your request to join the group <%= "#{@group.name}" %> was accepted, and now you can join the conversation!
 </p>
 <p>
-  Click here to visit the group <%= "#{@group.name}" %>  
+  Click here to visit the group <a href=<%= "#{Settings.ui_endpoint}/#groups/#{@group.id}/posts" %>><%= "#{@group.name}" %> </a>
+
 </p>
   Once you have entered the AlumNet group page, you may:
 <ul>
