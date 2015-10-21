@@ -226,7 +226,7 @@ class Notification
   def self.notify_admin_request_to_company_admins(admins, user, company)
     return if admins.blank?
     notification = new(admins)
-    subject = "hi Admin! A new user has requested admin rights in #{company.name}"
+    subject = "Hi Admin! A new user has requested admin rights in #{company.name}"
     body = "Requested admin rights in #{company.name}"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
@@ -235,6 +235,19 @@ class Notification
     end
     NotificationDetail.notify_admin_request_to_company_admins(notfy, user, company)
   end
+
+  def self.notify_new_company_admin(company_admin)    
+    return if company_admin.user.blank?   
+    user = company_admin.user
+    company = company_admin.company
+    notification = new(user)
+    subject = "Hi #{user.name}, now you are an admin in #{company.name}"
+    body = "Congratulations, now you are an admin in #{company.name}"
+    notfy = notification.send_notification(subject, body)
+    notification.send_pusher_notification
+    notification.recipients.each do |user|
+      UserMailer.new_company_admin(user, company).deliver_later
+    end
+    NotificationDetail.notify_new_company_admin(notfy, user, company)
+  end
 end
-
-

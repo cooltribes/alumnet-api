@@ -86,4 +86,10 @@ class UserMailer < ActionMailer::Base
     @message = message
     mail to: to, subject: 'New message from contact form'
   end
+
+  def new_company_admin(user, company)
+    @user = user
+    @company = company
+    mail to: user, subject: 'New admin rights in #{company.name}'
+  end
 end

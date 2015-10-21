@@ -14,6 +14,7 @@ class V1::Companies::CompanyAdminsController < V1::BaseController
 
       if @company.is_admin?(current_user) #If current user is admin, the request is already accepted
         @company_admin.mark_as_accepted_by(current_user)
+        Notification.notify_new_company_admin(@company_admin)
       else  #If another user asked for admin, send an email to admins.
         Notification.notify_admin_request_to_company_admins(@company.accepted_admins.to_a, @current_user, @company)
       end  
@@ -27,7 +28,8 @@ class V1::Companies::CompanyAdminsController < V1::BaseController
   def update
     authorize(@company)
     if @company_admin.mark_as_accepted_by(current_user)
-      render :show, status: :ok
+      Notification.notify_new_company_admin(@company_admin)
+      render :show, status: :ok    
     else
       render json: @company_admin.errors, status: :unprocessable_entity
     end
