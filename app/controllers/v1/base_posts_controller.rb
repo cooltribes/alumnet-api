@@ -30,10 +30,11 @@ class V1::BasePostsController < V1::BaseController
 
   def update
     authorize @post
-    if @post.update(post_params)
+    service = ::Posts::UpdatePost.new(@postable, @post, current_user, post_params)
+    if service.call
       render :show, status: :ok,  location: [@postable, @post]
     else
-      render json: @post.errors, status: :unprocessable_entity
+      render json: service.post.errors, status: :unprocessable_entity
     end
   end
 

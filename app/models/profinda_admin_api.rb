@@ -10,7 +10,7 @@ class ProfindaAdminApi
 
   DEFAULT_HEADERS = {
     "Accept" => "application/vnd.profinda+json;version=1",
-    "PROFINDAACCOUNTDOMAIN" => "cooltribes-staging.profinda.com"
+    "PROFINDAACCOUNTDOMAIN" => Settings.profinda_account_domain
   }
 
   ADMIN_CREDENTIALS = {
