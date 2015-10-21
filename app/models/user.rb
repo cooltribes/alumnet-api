@@ -314,7 +314,8 @@ class User < ActiveRecord::Base
   def groups_posts(q)
     #return all posts of groups where the user is member
     groups_ids = groups.pluck(:id)
-    Post.joins(:postable_group).where("groups.id in(?)", groups_ids).where(postable_type: "Group")
+    Post.joins(:postable_group).where(postable_type: "Group")
+      .where("groups.id in(?) and groups.group_type = ?", groups_ids, 0)
       .search(q).result
   end
 
