@@ -81,6 +81,7 @@ Rails.application.routes.draw do
         post :add_product, on: :member
       end
       resources :payments, except: :show, controller: 'users/payments'
+      post :change_password, on: :member
     end
 
     resources :groups do
