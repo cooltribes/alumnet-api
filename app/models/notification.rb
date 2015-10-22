@@ -71,8 +71,9 @@ class Notification
       subject = "#{sender.name} added you to the #{group.name} group!"
       body = "Welcome! #{sender.name} wants you to join the #{group.name} group, the request was sent."
     end
-    notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
+    NotificationDetail.join_group(notfy, sender, group)
   end
 
   def self.notify_request_to_admins(admins, user, group)
@@ -80,8 +81,9 @@ class Notification
     notification = new(admins)
     subject = "A new user request to join the group #{group.name}"
     body = "Sent a request to join the group #{group.name}"
-    notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
+    NotificationDetail.join_group(notfy, user, group)
     notification.recipients.each do |admin|
      AdminMailer.user_request_to_join(admin, user, group).deliver_later
     end
