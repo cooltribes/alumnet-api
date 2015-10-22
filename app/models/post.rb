@@ -43,19 +43,26 @@ class Post < ActiveRecord::Base
   end
 
   private
+
+    def in_group_or_event?
+      postable_type == 'Group' || postable_type == 'Event'
+    end
+
+    def in_own_timeline?
+      postable_type == "User" && user_id == postable_id
+    end
+
     def set_last_comment_at
       self[:last_comment_at] ||= Time.current
     end
 
-    def assign_pictures_to_album
-      if pictures.length > 0
-        if postable_type == 'Group' || postable_type == 'Event'
-          album = postable.albums.create_with(name: 'timeline').find_or_create_by(album_type: Album::TYPES[:timeline])
-          pictures.each do |picture|
-            album.pictures << picture
-          end
+    def assign_pictures_to_album     
+      if pictures.length > 0 && in_group_or_event? || in_own_timeline?
+        album = postable.albums.create_with(name: 'timeline').find_or_create_by(album_type: Album::TYPES[:timeline])
+        pictures.each do |picture|
+          album.pictures << picture
         end
-      end
+      end      
     end
 
     def notify_to_users
