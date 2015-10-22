@@ -17,6 +17,7 @@ class Event < ActiveRecord::Base
 
   ### Relations
   has_many :attendances, dependent: :destroy
+  has_many :users, through: :attendances
   has_many :posts, as: :postable, dependent: :destroy
   has_many :albums, as: :albumable, dependent: :destroy
   has_many :folders, as: :folderable, dependent: :destroy
@@ -42,21 +43,21 @@ class Event < ActiveRecord::Base
   ### Instance methods
 
   def is_open?
-    event_type == 0
+    event_type == "open"
   end
 
-  def is_close?
-    event_type == 1
+  def is_closed?
+    event_type == "closed"
   end
 
   def is_secret?
-    event_type == 2
+    event_type == "secret"
   end
 
-  def assistants
+  def assistants(excluded_users: nil)
     ##TODO: Apply logic for close and secret.
     if is_open?
-      attendances.going
+      users.where(attendances: { status: 1 }).where.not(attendances: { user_id: excluded_users })
     else
       []
     end

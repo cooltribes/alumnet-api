@@ -61,8 +61,8 @@ class Group < ActiveRecord::Base
   end
 
   ### all membership
-  def members
-    users.where("memberships.approved = ?", true)
+  def members(excluded_users: nil)
+    users.where("memberships.approved = ?", true).where.not(id: excluded_users)
   end
 
   def admins
