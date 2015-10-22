@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   #0-> no member, 1-> Subscription for a year, 2-> Subscription for a year (30 days left or less), 3-> Lifetime
   MEMBER = { 0=> 'No Member', 1=> 'Member', 2=> 'Member', 3=>'Lifetime Member'}
 
-  RECEPTIVE_POINTS = { 'Regular' => 1, 'NacionalAdmin' => 2, 'RegionalAdmin' => 3, 'AlumNetAdmin' => 4 }
+  RECEPTIVE_POINTS = { 'Regular' => 1, 'NacionalAdmin' => 2, 'RegionalAdmin' => 3, 'AlumNetAdmin' => 4, 'SystemAdmin' => 4 }
 
   ### Enum
   enum status: [:inactive, :active, :banned]

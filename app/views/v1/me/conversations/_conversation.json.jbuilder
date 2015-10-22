@@ -4,9 +4,13 @@ json.is_read conversation.is_read?(current_user)
 
 originator = conversation.originator
 json.originator do
-  json.id originator.id
-  json.name originator.name
-  json.avatar originator.avatar.medium.url
+  if originator
+    json.id originator.id
+    json.name originator.name
+    json.avatar originator.avatar.medium.url
+  else
+    json.null!
+  end
 end
 
 json.participants do
