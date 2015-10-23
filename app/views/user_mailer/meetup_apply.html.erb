@@ -1,0 +1,24 @@
+<div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
+    <p>Hello <%= @task.user.profile.first_name %>!</p>
+
+    <p>
+    	The Alumni 
+    	<%= @user.name %> 
+    	have marked 
+    	<%= @user.profile.gender == 'M' ? 'his' : 'her' %> 
+    	interest to organise the Meet-up you have proposed 
+    	<%= @task.city.present? ? 'in ' + @task.city.name : '' %> 
+    	on the following days:
+    </p>
+
+    <p>
+    	Arrival date: <%= @task.arrival_date.strftime("%B %d %Y") %></br>
+    	Departure date: <%= @task.post_until.strftime("%B %d %Y") %>
+    </p>
+    	We encourage you to 
+    	<a href=<%="#{Settings.ui_endpoint}/#conversations" %>>send a message</a> 
+    	to polish details, where you can propose or ask for a specific day, hour and place. Get the best from the AAI family and enjoy your trip while networking with incredible people!
+    <p>
+    	
+    </p>
+</div>
