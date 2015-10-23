@@ -3,9 +3,13 @@ json.(business, :id, :offer, :search, :business_me, :tagline)
 user = business.profile.user
 
 json.company do
-  json.id business.company.id
-  json.name business.company.name
-  json.logo business.company.logo.url
+  if business.company
+    json.id business.company.id
+    json.name business.company.name
+    json.logo business.company.logo.url
+  else
+    json.null
+  end
 end
 
 json.offer_keywords do
