@@ -56,7 +56,7 @@ class Experience < ActiveRecord::Base
     end
 
     def check_company
-      unless company_id.present?
+      unless company_id.present? && exp_type == 3
         company = Company.find_by_name(organization_name)
         update_column(:company_id, company.id) if company
       end
