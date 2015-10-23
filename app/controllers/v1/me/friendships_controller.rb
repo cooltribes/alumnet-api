@@ -3,11 +3,10 @@ class V1::Me::FriendshipsController < V1::BaseController
   before_action :set_and_check_friend, only: :create
 
   def index
-    @friendships = @user.get_pending_friendships(params[:filter])
+    @friendships = @user.get_pending_friendships(params[:filter], params[:q])
   end
 
   def friends
-    #@friends = @user.search_accepted_friends(params[:q])
     @q = @user.search_accepted_friends(params[:q])
     @friends = Kaminari.paginate_array(@q).page(params[:page]).per(params[:per_page])
   end
@@ -29,14 +28,12 @@ class V1::Me::FriendshipsController < V1::BaseController
 
   def update
     @friendship = @user.pending_inverse_friendships.find(params[:id])
-    #if @friendship.friend_id == current_user.id #this a policy refactor!
     @friendship.accept!
     render :show
   end
 
   def destroy
     @friendship = Friendship.find(params[:id])
-    #if @friendship.friend_id == current_user.id || @friendship.user_id == current_user.id
     @friendship.destroy
     head :no_content
   end

@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
   has_many :memberships, dependent: :destroy
   has_many :groups, -> { where("memberships.approved = ?", true) }, through: :memberships
   has_many :friendships, dependent: :destroy
-  has_many :inverse_friendships, class_name: "Friendship", foreign_key: "friend_id"
+  has_many :inverse_friendships, class_name: "Friendship", foreign_key: "friend_id", dependent: :destroy
   has_many :friends, through: :friendships
   has_many :inverse_friends, through: :inverse_friendships, source: :user
   has_many :posts, as: :postable, dependent: :destroy
@@ -376,13 +376,13 @@ class User < ActiveRecord::Base
     accepted_friendship_with(user).present? || accepted_inverse_friendship_with(user).present?
   end
 
-  def get_pending_friendships(filter)
+  def get_pending_friendships(filter, query = nil)
     if filter == "sent"
-      pending_friendships
+      search_pending_friendship(query)
     elsif filter == "received"
-      pending_inverse_friendships
+      search_pending_inverse_friendships(query)
     else
-      pending_friendships | pending_inverse_friendships
+      search_pending_friendship(query) | search_pending_inverse_friendships(query)
     end
   end
 
@@ -396,6 +396,14 @@ class User < ActiveRecord::Base
     accepted_friends_search = accepted_friends.search(q)
     accepted_inverse_friends_search = accepted_inverse_friends.search(q)
     accepted_friends_search.result | accepted_inverse_friends_search.result
+  end
+
+  def search_pending_friendship(query)
+    pending_friendships.search(query).result.to_a
+  end
+
+  def search_pending_inverse_friendships(query)
+    pending_inverse_friendships.search(query).result.to_a
   end
 
   def my_friends

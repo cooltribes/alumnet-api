@@ -9,6 +9,7 @@ class Experience < ActiveRecord::Base
   # 1: 'alumniExperience'
   # 2: 'academicExperience'
   # 3: 'professionalExperience'
+  # NOTE: Only exp_type 3 belongs to company
 
   ### Relations
   belongs_to :region
