@@ -238,8 +238,8 @@ class Notification
     NotificationDetail.notify_admin_request_to_company_admins(notfy, user, company)
   end
 
-  def self.notify_new_company_admin(company_admin)    
-    return if company_admin.user.blank?   
+  def self.notify_new_company_admin(company_admin)
+    return if company_admin.user.blank?
     user = company_admin.user
     company = company_admin.company
     notification = new(user)
@@ -247,8 +247,8 @@ class Notification
     body = "Congratulations, now you are an admin in #{company.name}"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
-    notification.recipients.each do |user|
-      UserMailer.new_company_admin(user, company).deliver_later
+    notification.recipients.each do |u|
+      UserMailer.new_company_admin(u, company).deliver_later
     end
     NotificationDetail.notify_new_company_admin(notfy, user, company)
   end

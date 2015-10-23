@@ -13,13 +13,18 @@ json.cover do
   json.position event.cover_position
 end
 
+
 json.creator do
-  json.id event.creator.id
-  json.name event.creator.permit_name(current_user)
-  if event.creator.permit('see-avatar', current_user)
-    json.avatar event.creator.avatar.large.url
+  if event.creator
+    json.id event.creator.id
+    json.name event.creator.permit_name(current_user)
+    if event.creator.permit('see-avatar', current_user)
+      json.avatar event.creator.avatar.large.url
+    else
+      json.avatar event.creator.avatar.large.default_url
+    end
   else
-    json.avatar event.creator.avatar.large.default_url
+    json.null!
   end
 end
 
