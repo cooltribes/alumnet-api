@@ -19,6 +19,10 @@ class NotificationDetail < ActiveRecord::Base
       mailboxer_notification_id: notification.id)
   end
 
+  def self.join_group_approval_request(notification, sender, group)
+    create!(url: "groups/#{group.id}/members", notification_type: "group", sender: sender,
+      mailboxer_notification_id: notification.id)
+  end
   def self.join_group_admins(notification, sender, group)
     create!(url: "users/#{sender.id}/posts", notification_type: "group", sender: sender,
       mailboxer_notification_id: notification.id)

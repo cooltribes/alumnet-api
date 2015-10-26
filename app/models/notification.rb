@@ -83,7 +83,7 @@ class Notification
     body = "Sent a request to join the group #{group.name}"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
-    NotificationDetail.join_group(notfy, user, group)
+    NotificationDetail.join_group_approval_request(notfy, user, group)
     notification.recipients.each do |admin|
      AdminMailer.user_request_to_join(admin, user, group).deliver_later
     end
@@ -253,3 +253,4 @@ class Notification
     NotificationDetail.notify_new_company_admin(notfy, user, company)
   end
 end
+
