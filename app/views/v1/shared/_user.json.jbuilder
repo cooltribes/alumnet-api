@@ -5,6 +5,7 @@ json.email user.permit_email(current_user)
 json.status user.get_status_info
 
 json.last_experience user.permit_last_experience(current_user)
+json.professional_headline user.profile.professional_headline
 
 json.avatar do
   if user.permit('see-avatar', current_user)

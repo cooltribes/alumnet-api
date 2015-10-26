@@ -22,6 +22,7 @@ class V1::MeetupExchangesController < V1::TasksController
     if @task.can_apply(current_user)
       @task.apply(current_user)
       ##TODO: SEND MAIL
+      UserMailer.meetup_apply(current_user, @task).deliver_now
       render 'v1/tasks/show'
     else
       render json: { error: "The user can not apply to the task" }, status: :unprocessable_entity
