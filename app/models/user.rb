@@ -320,31 +320,43 @@ class User < ActiveRecord::Base
   end
 
   def my_likes_posts(q)
-    posts_by_like.search(q).result
+    posts = posts_by_like.includes(:postable).search(q).result.to_a
+    posts.reject! do |post|
+      post.in_group_closed_or_secret? || post.in_event_closed_or_secret?
+    end
+    posts
   end
 
-  def friends_posts(q)
+  def friends_posts(query)
     posts = []
     my_friends.each do |friend|
-      posts << friend.my_posts(q)
+      posts << friend.publicable_posts(query)
     end
     posts.flatten
   end
 
-  def likes_posts(q)
+  def likes_posts(query)
     posts = []
     my_friends.each do |friend|
-      posts << friend.my_likes_posts(q)
+      posts << friend.my_likes_posts(query)
     end
     posts.flatten
   end
 
-  def my_posts(q)
-    posts.search(q).result | publications.search(q).result
+  def my_posts(query)
+    posts.includes(:postable).search(query).result | publications.includes(:postable).search(query).result
   end
 
-  def all_posts(q)
-    posts = likes_posts(q) | friends_posts(q) | groups_posts(q) | my_posts(q)
+  def publicable_posts(query)
+    posts = []
+    my_posts(query).each do |post|
+      posts << post unless post.in_group_closed_or_secret? || post.in_event_closed_or_secret?
+    end
+    posts
+  end
+
+  def all_posts(query)
+    posts = likes_posts(query) | friends_posts(query) | groups_posts(query) | my_posts(query)
     posts.sort!{ |a,b| b.last_comment_at <=> a.last_comment_at }
     posts
   end

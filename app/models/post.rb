@@ -13,7 +13,7 @@ class Post < ActiveRecord::Base
   ### Relations
   belongs_to :user ##Creator
   belongs_to :postable, polymorphic: true
-  belongs_to :postable_group, foreign_key: :postable_id, class_name: 'Group'
+  belongs_to :postable_group, foreign_key: :postable_id, class_name: "Group"
   has_many :pictures, as: :pictureable, dependent: :destroy
   has_many :comment_users, through: :comments, source: :user #users with comments
 
@@ -42,27 +42,35 @@ class Post < ActiveRecord::Base
     comment_users.where.not(comments: { user_id: user_ids }).distinct
   end
 
+  def in_group_or_event?
+    postable_type == "Group" || postable_type == "Event"
+  end
+
+  def in_own_timeline?
+    postable_type == "User" && user_id == postable_id
+  end
+
+  def in_group_closed_or_secret?
+    postable_type == "Group" && (postable.closed? || postable.secret?)
+  end
+
+  def in_event_closed_or_secret?
+    postable_type == "Event" && (postable.closed? || postable.secret?)
+  end
   private
 
-    def in_group_or_event?
-      postable_type == 'Group' || postable_type == 'Event'
-    end
-
-    def in_own_timeline?
-      postable_type == "User" && user_id == postable_id
-    end
 
     def set_last_comment_at
       self[:last_comment_at] ||= Time.current
     end
 
-    def assign_pictures_to_album     
+    def assign_pictures_to_album
       if pictures.length > 0 && in_group_or_event? || in_own_timeline?
-        album = postable.albums.create_with(name: 'timeline').find_or_create_by(album_type: Album::TYPES[:timeline])
+        album = postable.albums.create_with(name: "timeline").find_or_create_by(album_type: Album::TYPES[:timeline])
         pictures.each do |picture|
           album.pictures << picture
         end
-      end      
+      end
     end
 
     def notify_to_users
