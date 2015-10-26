@@ -1,7 +1,7 @@
 class V1::MeetupExchangesController < V1::TasksController
 
   def index
-    @q = Task.meetup_exchanges.search(params[:q])
+    @q = Task.meetup_exchanges.current.search(params[:q])
     @tasks = @q.result
     render 'v1/tasks/index'
   end

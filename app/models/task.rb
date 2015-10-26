@@ -33,6 +33,8 @@ class Task < ActiveRecord::Base
   scope :job_exchanges, -> { where(help_type: "task_job_exchange") }
   scope :meetup_exchanges, -> { where(help_type: "task_meetup_exchange") }
 
+  scope :current, -> { where("arrival_date >= ?", Date.today) }
+
   ## Callbacks
   before_validation :check_help_type_and_set_values
   after_save :set_task_attributes
