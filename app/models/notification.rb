@@ -52,10 +52,11 @@ class Notification
   def self.notify_group_join_accepted_to_user(user, group)
     return if user.blank?
     notification = new(user)
-    # subject = "Your request to join the group #{group.name} was accepted"
-    # body = "The user #{user.name} was invited to join the group #{group.name}"
-    # notification.send_notification(subject, body)
-    # notification.send_pusher_notification
+    subject = "You were accepted to join the group #{group.name}"
+    body = "Your request to join the group #{group.name} was accepted"
+    notfy = notification.send_notification(subject, body)
+    notification.send_pusher_notification
+    NotificationDetail.join_group(notfy, user, group)
     notification.recipients.each do |admin|
       UserMailer.user_was_accepted_in_group(user, group).deliver_later
     end
