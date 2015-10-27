@@ -39,7 +39,7 @@ class V1::UsersController < V1::BaseController
   end
 
   def change_password
-    @user = User.find(params[:id]).try(:authenticate, params[:old_password])
+    @user = User.find(params[:id]).try(:authenticate, params[:current_password])
     if @user
       if @user.update(password_params)
         render json: { message: "Password has been reset"}, status: :ok
