@@ -52,3 +52,10 @@ json.preview do
   json.image post.url_image
 end
 
+json.content do
+  if post.content
+    json.partial! 'v1/shared/shared_post', post: post.content
+  else
+    json.nil!
+  end
+end
