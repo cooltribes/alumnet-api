@@ -9,6 +9,9 @@ class Post < ActiveRecord::Base
   paginates_per 2
   max_paginates_per 2
 
+  ### types
+  # TYPES = ["regular", "share"]
+
   ### Relations
   belongs_to :user ##Creator
   belongs_to :postable, polymorphic: true
@@ -27,10 +30,10 @@ class Post < ActiveRecord::Base
   default_scope -> { order(last_comment_at: :desc) }
 
   ### Validations
-  validates_presence_of :body, :user_id
+  validates_presence_of :user_id
 
   ### Callbacks
-  before_create :set_last_comment_at
+  before_create :set_last_comment_at, :set_type
   after_create :assign_pictures_to_album, :notify_to_users
 
   ### Instance Methods
@@ -63,8 +66,16 @@ class Post < ActiveRecord::Base
   def in_event_closed_or_secret?
     postable_type == "Event" && (postable.closed? || postable.secret?)
   end
+
   private
 
+    def set_type
+      if content && content_type == "Post"
+        self[:post_type] = "share"
+      else
+        self[:post_type] = "regular"
+      end
+    end
 
     def set_last_comment_at
       self[:last_comment_at] ||= Time.current
