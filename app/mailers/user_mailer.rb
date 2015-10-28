@@ -34,7 +34,7 @@ class UserMailer < ActionMailer::Base
   def approval_request_accepted(requester, approver)
     @approver = approver
     @user = requester
-    mail to: @user.email, subject: "#{approver.name} gave you an Alumni verification (#{user.get_approved_requests.count}/3)"
+    mail to: @user.email, subject: "#{approver.name} gave you an Alumni verification (#{@user.get_approved_requests.count}/3)"
   end
 
   def user_request_approval(approver, requester)
