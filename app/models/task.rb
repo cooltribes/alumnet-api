@@ -42,7 +42,9 @@ class Task < ActiveRecord::Base
   def apply(user)
     match = matches.find_or_initialize_by(user: user)
     match.applied = true
-    match.save
+    if match.save
+      UserMailer.meetup_apply(user, self).deliver_later
+    end
   end
 
   def can_apply(user)
