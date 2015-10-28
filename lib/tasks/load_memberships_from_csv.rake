@@ -11,12 +11,12 @@ namespace :data_fixture do
         if user
           if user.member ==  0
             end_date = nil
-            user_member = 1
+            user_member = 3
             quantity = nil
             product = Product.where(feature: 'subscription', quantity: nil).first
             if array[0][:membership_expiration_date] != 'LTM'
               end_date = DateTime.parse(array[0][:membership_expiration_date])
-              user_member = 3
+              user_member = 1
               quantity = (end_date.year * 12 + end_date.month) - (DateTime.now.year * 12 + DateTime.now.month)
               product = Product.where(feature: 'subscription', quantity: 12).first
             end
