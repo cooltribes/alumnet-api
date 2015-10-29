@@ -67,6 +67,11 @@ class Post < ActiveRecord::Base
     postable_type == "Event" && (postable.closed? || postable.secret?)
   end
 
+  def can_shared?
+    return false if in_group_closed_or_secret? || in_event_closed_or_secret?
+    true
+  end
+
   private
 
     def set_type

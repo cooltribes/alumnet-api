@@ -14,6 +14,12 @@ json.postable_info post.postable_info(current_user)
 
 json.resource_path post.resource_path
 
+json.permissions do
+  json.canShare post.can_shared?
+  json.canEdit post.can_edited_by(current_user)
+  json.canDelete post.can_deleted_by(current_user)
+end
+
 if post.pictures.any?
   json.pictures post.pictures, partial: 'v1/shared/picture', as: :picture, current_user: current_user
 else
