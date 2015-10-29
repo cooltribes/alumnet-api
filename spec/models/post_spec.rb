@@ -20,15 +20,14 @@ RSpec.describe Post, :type => :model do
   end
 
   describe "Callbacks" do
-    describe "notify_to_users" do
-      it "should creata a notifications to members or assistants of postable" do
-        # group = Group.make!
-        # author = User.make!
-        # member = User.make!
-        # Membership.create_membership_for_creator(group, author)
-        # group.build_membership_for(member, true).save
-        # post = Post.make(postable: group, user: member)
-        # post.save
+    describe "set_type" do
+      it "should set type in function of content" do
+        user = User.make!
+        shared_post = Post.make!(postable: user, user: user)
+        expect(shared_post.post_type).to eq("regular")
+        post = Post.make!(postable: user, user: user, content: shared_post)
+        expect(post.content).to eq(shared_post)
+        expect(post.post_type).to eq("share")
       end
     end
   end

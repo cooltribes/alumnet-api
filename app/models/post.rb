@@ -5,10 +5,12 @@ class Post < ActiveRecord::Base
   include Alumnet::Taggable
   include PostHelpers
 
-
   #Paginatin options
   paginates_per 2
   max_paginates_per 2
+
+  ### types
+  # TYPES = ["regular", "share"]
 
   ### Relations
   belongs_to :user ##Creator
@@ -16,15 +18,22 @@ class Post < ActiveRecord::Base
   belongs_to :postable_group, foreign_key: :postable_id, class_name: "Group"
   has_many :pictures, as: :pictureable, dependent: :destroy
   has_many :comment_users, through: :comments, source: :user #users with comments
+  ###THIS IS EXPERIMENTAL
+    ##Un post pertenece o tiene un Content polimorfico. [post-link-video]
+  belongs_to :content, polymorphic: true
+    ##Al mismo tiempo un posts puede tener muchos posts como Content.
+    ##Es decir, los posts donde el post es contenido, osea un post que se compartio. :s
+  has_many :posts, as: :content, dependent: :destroy
+  #########################
 
   ### Scopes
   default_scope -> { order(last_comment_at: :desc) }
 
   ### Validations
-  validates_presence_of :body, :user_id
+  validates_presence_of :user_id
 
   ### Callbacks
-  before_create :set_last_comment_at
+  before_create :set_last_comment_at, :set_type
   after_create :assign_pictures_to_album, :notify_to_users
 
   ### Instance Methods
@@ -57,8 +66,21 @@ class Post < ActiveRecord::Base
   def in_event_closed_or_secret?
     postable_type == "Event" && (postable.closed? || postable.secret?)
   end
+
+  def can_shared?
+    return false if in_group_closed_or_secret? || in_event_closed_or_secret?
+    true
+  end
+
   private
 
+    def set_type
+      if content && content_type == "Post"
+        self[:post_type] = "share"
+      else
+        self[:post_type] = "regular"
+      end
+    end
 
     def set_last_comment_at
       self[:last_comment_at] ||= Time.current

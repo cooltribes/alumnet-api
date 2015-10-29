@@ -1,4 +1,4 @@
-json.(post, :id, :body, :created_at, :last_comment_at)
+json.(post, :id, :body, :post_type, :created_at, :last_comment_at)
 
 json.user do
   json.(post.user, :id)
@@ -28,6 +28,7 @@ end
 json.postable_info post.postable_info(current_user)
 
 json.permissions do
+  json.canShare post.can_shared?
   json.canEdit post.can_edited_by(current_user)
   json.canDelete post.can_deleted_by(current_user)
 end
@@ -52,3 +53,11 @@ json.preview do
   json.image post.url_image
 end
 
+json.content do
+  if post.content
+    json.partial! 'v1/shared/post', post: post.content, current_user: current_user
+    # json.partial! 'v1/shared/shared_post', post: post.content, current_user: current_user
+  else
+    json.nil!
+  end
+end
