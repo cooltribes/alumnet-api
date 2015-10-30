@@ -91,6 +91,9 @@ class Profile < ActiveRecord::Base
   def update_next_step
     ordinal_value = Profile.register_steps[register_step]
     next_step = Profile.register_steps.key(ordinal_value + 1)
+    if ordinal_value == 2
+      UserMailer.ask_for_approval(user).deliver_now
+    end
     next_step ? send("#{next_step}!") : false
   end
 

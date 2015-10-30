@@ -98,4 +98,9 @@ class UserMailer < ActionMailer::Base
     @task = task
     mail to: @task.user.email, subject: "#{user.name} wants to organize your meetup"
   end
+
+  def ask_for_approval(user)
+    @user = user
+    mail to: @user.email, subject: "You need three approvals to complete AlumNet registration"
+  end
 end
