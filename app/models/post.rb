@@ -55,7 +55,7 @@ class Post < ActiveRecord::Base
   end
 
   def in_event_closed_or_secret?
-    postable_type == "Event" && (postable.closed? || postable.secret?)
+    postable.present? ? postable_type == "Event" && (postable.closed? || postable.secret?) : false
   end
   private
 
