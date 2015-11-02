@@ -90,12 +90,12 @@ class UserMailer < ActionMailer::Base
   def new_company_admin(user, company)
     @user = user
     @company = company
-    mail to: user, subject: 'New admin rights in #{company.name}'
+    mail to: user, subject: "New admin rights in #{company.name}"
   end
 
   def meetup_apply(user, task)
     @user = user
     @task = task
-    mail to: user, subject: '#{user.name} wants to organize your meetup'
+    mail to: @task.user.email, subject: "#{user.name} wants to organize your meetup"
   end
 end
