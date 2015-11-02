@@ -174,7 +174,7 @@ class Notification
     return if users.blank?
     notification = new(users)
     subject = "The #{post.postable.class.to_s} #{post.postable.name} has new post"
-    body = "Hello! #{post.user.name} posted in #{post.postable.class.to_s} #{post.postable.name}"
+    body = "Posted in #{post.postable.class.to_s} #{post.postable.name}"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     NotificationDetail.notify_new_post(notfy, post)
