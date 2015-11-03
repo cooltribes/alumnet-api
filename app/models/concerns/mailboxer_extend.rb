@@ -6,5 +6,3 @@ module MailboxerExtend
   end
 
 end
-
-Mailboxer::Notification.send(:include, MailboxerExtend)
