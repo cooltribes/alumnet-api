@@ -1,0 +1,1 @@
+require "mailboxer_extend"

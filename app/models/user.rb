@@ -161,6 +161,13 @@ class User < ActiveRecord::Base
     experience ? experience.country.try(:name) : nil
   end
 
+
+  ##Mailboxer Methods
+  def notification_by(type)
+    mailbox.notifications.joins(:notification_detail)
+    .where(notification_details: {notification_type: type})
+  end
+
   ##Sugestions Methods
   def suggested_groups(limit = 6)
     aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq || []
