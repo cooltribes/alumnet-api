@@ -50,6 +50,8 @@ Rails.application.routes.draw do
         put :notify_admins, on: :collection
       end
 
+      resources :devices, only: [:index, :create], controller: 'me/devices'
+
       post '/contacts/file', to: 'contacts#file' ###TEMPORAL
       post '/contacts/in_alumnet', to: 'contacts#in_alumnet' ###TEMPORAL
 

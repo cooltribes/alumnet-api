@@ -520,3 +520,9 @@ ProductService.blueprint(:product) do
   name { "Product #{sn}"}
   service_type { 2 }
 end
+
+Device.blueprint do
+  platform { "android" }
+  token { "XXX-TOKEN-#{sn}" }
+  user { User.make! }
+end
