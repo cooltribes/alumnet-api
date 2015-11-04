@@ -1,6 +1,6 @@
 class NotificationDetail < ActiveRecord::Base
   ### Relations
-  belongs_to :mailboxer_notification
+  belongs_to :mailboxer_notification, class_name: "Mailboxer::Notification"
   belongs_to :sender, class_name: "User"
 
   ### Class methods
