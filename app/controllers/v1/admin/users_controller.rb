@@ -10,7 +10,9 @@ class V1::Admin::UsersController < V1::AdminController
       else
         User.includes(:profile).search(params[:q])
       end
-      @users = @q.result
+      @users = @q.result.order(params[:sort_by]+' '+params[:order_by])
+      @totalRecords = @users.size
+      @users = Kaminari.paginate_array(@users).page(params[:page]).per(params[:per_page])
     end
   end
 

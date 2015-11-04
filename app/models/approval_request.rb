@@ -19,7 +19,7 @@ class ApprovalRequest < ActiveRecord::Base
     unless accepted?
       update_column(:accepted, true)
       touch(:accepted_at)
-      # Notification.notify_accepted_friendship_to_user(user, friend)
+      #Notification.notify_accepted_friendship_to_user(user, friend)
     end
   end
   

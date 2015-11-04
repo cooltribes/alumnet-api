@@ -118,7 +118,7 @@ class Notification
     host_name = host ? host.name : event.creator.name
     notification = new(attendance.user)
     subject = "You have a new invitation to an event in AlumNet!",
-    body = "Is inviting you to assist the event #{event.name}"
+    body = "Is inviting you to attend the event #{event.name}"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     NotificationDetail.invitation_to_event(notfy, event.creator, event)
@@ -141,7 +141,7 @@ class Notification
     notfy_to_user.send_pusher_notification
     NotificationDetail.friendship_accepted(notfy2, user)
 
-    UserMailer.approval_request_accepted(requester, user).deliver_later
+    UserMailer.approval_request_accepted(requester, user).deliver_now
   end
 
   def self.notify_approval_request_to_admins(admins, user)
@@ -174,7 +174,7 @@ class Notification
     return if users.blank?
     notification = new(users)
     subject = "The #{post.postable.class.to_s} #{post.postable.name} has new post"
-    body = "Hello! #{post.user.name} posted in #{post.postable.class.to_s} #{post.postable.name}"
+    body = "Posted in #{post.postable.class.to_s} #{post.postable.name}"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     NotificationDetail.notify_new_post(notfy, post)

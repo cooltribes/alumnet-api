@@ -31,8 +31,12 @@ namespace :data_fixture do
               })
             if user_product.save
               user.update(member: user_member)
+              end_date = user_product.end_date.present? ? user_product.end_date.strftime("%Y-%m-%d %I:%M%P") : 'LTM'
+              product_name = product.present? ? product.name : 'No name available'
+              puts 'Membership saved, user: ' + array[0][:email_address] + ' | Product: ' + product_name  + ' | End date: ' + end_date
+            else
+              puts 'Error saving membership, user: ' + array[0][:email_address]
             end
-            puts 'Membership saved, user: ' + array[0][:email_address]
           else
             puts 'User has membership already: ' + array[0][:email_address]
           end

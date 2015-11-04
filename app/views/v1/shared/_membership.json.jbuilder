@@ -18,6 +18,12 @@ json.group do
   else
     json.last_post_at nil
   end
+
+  if group.first_post.present?
+    json.first_post_at group.first_post.last_comment_at
+  else
+    json.first_post_at nil
+  end
 end
 
 json.is_admin group.user_is_admin?(@current_user)
