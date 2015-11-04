@@ -118,7 +118,7 @@ class Notification
     host_name = host ? host.name : event.creator.name
     notification = new(attendance.user)
     subject = "You have a new invitation to an event in AlumNet!",
-    body = "Is inviting you to assist the event #{event.name}"
+    body = "Is inviting you to attend the event #{event.name}"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     NotificationDetail.invitation_to_event(notfy, event.creator, event)
