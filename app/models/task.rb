@@ -25,7 +25,7 @@ class Task < ActiveRecord::Base
   enum application_type: [ :alumnet, :external ]
 
   ## Validations
-  validates_presence_of :name, :description, :nice_have_list, :help_type, :post_until
+  validates_presence_of :name, :description, :nice_have_list, :help_type, :post_until, :user_id
 
   ## Scopes
   scope :business_exchanges, -> { where(help_type: "task_business_exchange") }
@@ -57,81 +57,6 @@ class Task < ActiveRecord::Base
   def user_applied?(user)
     match = matches.find_by(user_id: user.id)
     match ? match.applied? : false
-  end
-
-  def create_profinda_task
-    CreateProfindaTaskJob.perform_later(id) unless Rails.env.test?
-  end
-
-  def update_profinda_task
-    UpdateProfindaTaskJob.perform_later(id) unless Rails.env.test?
-  end
-
-  def delete_profinda_task
-    if user && profinda_id
-      DeleteProfindaTaskJob.perform_later(user.id, profinda_id) unless Rails.env.test?
-    end
-  end
-
-  def create_in_profinda
-    if user
-      profinda_api = ProfindaApi.new(user.email, user.profinda_password)
-      profinda_task = profinda_api.create_task(profinda_attributes, help_type)
-      update_column(:profinda_id, profinda_task["id"])
-      matches = profinda_api.matches(profinda_task["id"])
-      save_matches(matches)
-    end
-  end
-
-  def update_in_profinda
-    if profinda_id
-      profinda_api = ProfindaApi.new(user.email, user.profinda_password)
-      profinda_api.update_task(profinda_id, profinda_attributes)
-      matches = profinda_api.matches(profinda_id)
-      save_matches(matches)
-    end
-  end
-
-  def delete_from_profinda
-    if user && profinda_id
-      Task.delete_from_profinda(user, profinda_id)
-    end
-  end
-
-  def profinda_matches
-    if profinda_id
-      profinda_api = ProfindaApi.new(user.email, user.profinda_password)
-      matches = profinda_api.matches(profinda_id)
-      save_matches(matches)
-    end
-  end
-
-  def save_matches(p_matches)
-    matches.delete_with_profinda_uid(p_matches)
-    User.where(profinda_uid: p_matches).each do |user|
-      matches.find_or_create_by(user: user)
-      AdminMailer.user_have_match_in_task(user, self).deliver_later
-    end
-  end
-
-  def profinda_attributes
-    p_attributtes = attributes.slice("name", "description", "post_until", "duration",
-      "must_have_list", "nice_have_list")
-    p_attributtes.merge({"post_until" => post_until.strftime("%d/%m/%Y")})
-  end
-
-  def set_task_attributes_from_profinda(attribute_type = "nice_have")
-    delete_all_tasks_attributes(attribute_type)
-    dictionary_objects = get_dictionary_object_from_profinda(attribute_type)
-    dictionary_objects.each do |dictionary_object|
-      TaskAttribute.create_from_dictionary_object(self, dictionary_object, attribute_type)
-    end
-  end
-
-  def get_dictionary_object_from_profinda(attribute_type = "nice_have")
-    @profinda_admin_api ||= ProfindaAdminApi.new
-    collection_ids = attribute_type == "nice_have" ? nice_have_array : must_have_array
-    @profinda_admin_api.dictionary_objects_by_id(collection_ids)
   end
 
   def delete_all_tasks_attributes(attribute_type = "nice_have")
@@ -166,6 +91,86 @@ class Task < ActiveRecord::Base
     { text: employment_type_text, id: employment_type }
   end
 
+  # PROFINDA INTEGRATION
+
+  def create_profinda_task
+    CreateProfindaTaskJob.perform_later(id) unless Rails.env.test?
+  end
+
+  def update_profinda_task
+    UpdateProfindaTaskJob.perform_later(id) unless Rails.env.test?
+  end
+
+  def delete_profinda_task
+    if user && profinda_id
+      DeleteProfindaTaskJob.perform_later(user.id, profinda_id) unless Rails.env.test?
+    end
+  end
+
+  def create_in_profinda
+    if user && profinda_api.valid?
+      profinda_task = profinda_api.create_task(profinda_attributes, help_type)
+      if profinda_task
+        update_column(:profinda_id, profinda_task["id"])
+        matches = profinda_api.matches(profinda_task["id"])
+        save_matches(matches)
+      end
+    end
+  end
+
+  def update_in_profinda
+    if profinda_id && profinda_api.valid?
+      profinda_api.update_task(profinda_id, profinda_attributes)
+      matches = profinda_api.matches(profinda_id)
+      save_matches(matches)
+    end
+  end
+
+  def delete_from_profinda
+    if user && profinda_id
+      Task.delete_from_profinda(user, profinda_id)
+    end
+  end
+
+  def profinda_matches
+    if profinda_id && profinda_api.valid?
+      matches = profinda_api.matches(profinda_id)
+      save_matches(matches)
+    end
+  end
+
+  def save_matches(p_matches)
+    matches.delete_with_profinda_uid(p_matches)
+    User.where(profinda_uid: p_matches).each do |user|
+      matches.find_or_create_by(user: user)
+      AdminMailer.user_have_match_in_task(user, self).deliver_later
+    end
+  end
+
+  def profinda_attributes
+    p_attributtes = attributes.slice("name", "description", "post_until", "duration",
+      "must_have_list", "nice_have_list")
+    p_attributtes.merge({"post_until" => post_until.strftime("%d/%m/%Y")})
+  end
+
+  def set_task_attributes_from_profinda(attribute_type = "nice_have")
+    delete_all_tasks_attributes(attribute_type)
+    dictionary_objects = get_dictionary_object_from_profinda(attribute_type)
+    dictionary_objects.each do |dictionary_object|
+      TaskAttribute.create_from_dictionary_object(self, dictionary_object, attribute_type)
+    end
+  end
+
+  def get_dictionary_object_from_profinda(attribute_type = "nice_have")
+    @profinda_admin_api ||= ProfindaAdminApiClient.new
+    collection_ids = attribute_type == "nice_have" ? nice_have_array : must_have_array
+    @profinda_admin_api.dictionary_objects_by_id(collection_ids)
+  end
+
+  def profinda_api
+    @profinda_api ||= ProfindaApiClient.new(user.email, user.profinda_password)
+  end
+
 
   ## class methods
 
@@ -176,18 +181,20 @@ class Task < ActiveRecord::Base
   def self.delete_from_profinda(user, profinda_id)
     if profinda_id
       profinda_api = ProfindaApi.new(user.email, user.profinda_password)
-      profinda_api.delete_task(profinda_id)
+      profinda_api.delete_task(profinda_id) if profinda_api
     end
   end
 
   def self.profinda_automatches(user, help_type)
     profinda_api = ProfindaApi.new(user.email, user.profinda_password)
-    profinda_tasks = profinda_api.automatches
-    tasks = Task.where(profinda_id: profinda_tasks, help_type: help_type)
-    tasks.each do |task|
-      task.matches.find_or_create_by(user: user)
+    if profinda_api
+      profinda_tasks = profinda_api.automatches
+      tasks = Task.where(profinda_id: profinda_tasks, help_type: help_type)
+      tasks.each do |task|
+        task.matches.find_or_create_by(user: user)
+      end
+      tasks
     end
-    tasks
   end
 
   private
