@@ -180,13 +180,13 @@ class Task < ActiveRecord::Base
 
   def self.delete_from_profinda(user, profinda_id)
     if profinda_id
-      profinda_api = ProfindaApi.new(user.email, user.profinda_password)
+      profinda_api = ProfindaApiClient.new(user.email, user.profinda_password)
       profinda_api.delete_task(profinda_id) if profinda_api
     end
   end
 
   def self.profinda_automatches(user, help_type)
-    profinda_api = ProfindaApi.new(user.email, user.profinda_password)
+    profinda_api = ProfindaApiClient.new(user.email, user.profinda_password)
     if profinda_api
       profinda_tasks = profinda_api.automatches
       tasks = Task.where(profinda_id: profinda_tasks, help_type: help_type)
