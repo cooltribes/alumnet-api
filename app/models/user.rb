@@ -163,9 +163,14 @@ class User < ActiveRecord::Base
 
 
   ##Mailboxer Methods
-  def notification_by(type)
+  def friendship_notifications()
     mailbox.notifications.joins(:notification_detail)
-    .where(notification_details: {notification_type: type})
+    .where(notification_details: {notification_type: 'friendship'})
+  end
+
+  def general_notifications()
+    mailbox.notifications.joins(:notification_detail)
+    .where.not(notification_details: {notification_type: 'friendship'})
   end
 
   ##Sugestions Methods
