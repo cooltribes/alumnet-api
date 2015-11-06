@@ -4,6 +4,15 @@ class V1::MeController < V1::BaseController
   def show
   end
 
+  def profinda_token
+    token = @user.profinda_api_token
+    if token
+      render json: { profinda_api_token: token }
+    else
+      render json: { errors: { api_token: ['Profinda TOKEN no found'] } }, status: :unprocessable_entity
+    end
+  end
+
   def receptive_settings
     unsigned_snippet = {
       "timestamp" => DateTime.now.iso8601,

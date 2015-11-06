@@ -1,14 +1,14 @@
 module ProfindaRegistration
 
   def profinda_api_token
-    profinda = ProfindaApi.new(email, profinda_password)
-    profinda.valid? ? profinda.api_token : ''
+    profinda_api = ProfindaApiClient.new(email, profinda_password)
+    profinda_api.try(:api_token)
   end
 
   def activate_in_profinda
     if profinda_uid.present?
-      profinda = ProfindaAdminApi.new
-      profinda.activate profinda_uid
+      profinda_api = ProfindaAdminApiClient.new
+      profinda_api.activate(profinda_uid)
     else
       false
     end
@@ -16,8 +16,8 @@ module ProfindaRegistration
 
   def suspend_in_profinda
     if profinda_uid.present?
-      profinda = ProfindaAdminApi.new
-      profinda.suspend profinda_uid
+      profinda = ProfindaAdminApiClient.new
+      profinda.suspend(profinda_uid)
     else
       false
     end
@@ -28,7 +28,7 @@ module ProfindaRegistration
   end
 
   def save_data_in_profinda
-    profinda_api = ProfindaApi.sign_in_or_sign_up(email, profinda_password)
+    profinda_api = ProfindaApiClient.sign_in_or_sign_up(email, profinda_password)
     if profinda_api.valid?
       set_profinda_uid(profinda_api.user['id'])
       profinda_api.profile = info_for_profinda_registration

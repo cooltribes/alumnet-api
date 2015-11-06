@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     resource :me, only: [:show, :update], controller: 'me' do
       get :messages
       get :receptive_settings
+      get :profinda_token
       post :send_invitations
       post :activate
       resource :profile, only: [:show, :update], controller: 'me/profiles'
@@ -51,6 +52,8 @@ Rails.application.routes.draw do
       resources :approval_requests, except: [:show], controller: 'me/approval' do
         put :notify_admins, on: :collection
       end
+
+      resources :devices, only: [:index, :create], controller: 'me/devices'
 
       post '/contacts/file', to: 'contacts#file' ###TEMPORAL
       post '/contacts/in_alumnet', to: 'contacts#in_alumnet' ###TEMPORAL

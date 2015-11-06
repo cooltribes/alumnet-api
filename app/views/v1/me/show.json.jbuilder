@@ -1,7 +1,7 @@
 json.(@user, :id, :name, :member, :email, :unread_messages_count, :unread_notifications_count,
   :remaining_job_posts, :show_onboarding)
 
-json.profinda_api_token @user.profinda_api_token
+# json.profinda_api_token @user.profinda_api_token
 json.status @user.get_status_info
 
 json.avatar do

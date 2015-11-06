@@ -31,9 +31,11 @@ class Post < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :user_id
+  validates_presence_of :body, if: Proc.new { |p| p.post_type == "regular" }
 
   ### Callbacks
-  before_create :set_last_comment_at, :set_type
+  before_validation :set_type
+  before_create :set_last_comment_at
   after_create :assign_pictures_to_album, :notify_to_users
 
   ### Instance Methods
