@@ -92,6 +92,10 @@ class User < ActiveRecord::Base
   end
 
   ### Instance Methods
+  def devices_tokens(platform)
+    devices.where(platform: platform).where(active: true).pluck(:token)
+  end
+
   def receptive_points
     value = member > 0 ? 1 : 0
     RECEPTIVE_POINTS[role] + value
