@@ -234,7 +234,7 @@ class Notification
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     notification.recipients.each do |admin|
-      AdminMailer.admin_request_to_company_admins(admin, user).deliver_later
+      AdminMailer.admin_request_to_company_admins(admin, user, company).deliver_later
     end
     NotificationDetail.notify_admin_request_to_company_admins(notfy, user, company)
   end
