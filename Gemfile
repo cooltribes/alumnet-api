@@ -27,6 +27,8 @@ gem 'sidekiq'
 gem 'sinatra', :require => nil
 gem 'acts-as-taggable-on', '~> 3.4'
 gem 'gcm'
+gem 'elasticsearch-model'
+gem 'elasticsearch-rails'
 
 group :development do
   gem 'spring'
