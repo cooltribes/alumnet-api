@@ -141,7 +141,7 @@ class Notification
     notfy_to_user.send_pusher_notification
     NotificationDetail.friendship_accepted(notfy2, user)
 
-    UserMailer.approval_request_accepted(requester, user).deliver_now
+    UserMailer.approval_request_accepted(requester, user).deliver_later
   end
 
   def self.notify_approval_request_to_admins(admins, user)
@@ -234,7 +234,7 @@ class Notification
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     notification.recipients.each do |admin|
-      AdminMailer.admin_request_to_company_admins(admin, user).deliver_later
+      AdminMailer.admin_request_to_company_admins(admin, user, company).deliver_later
     end
     NotificationDetail.notify_admin_request_to_company_admins(notfy, user, company)
   end

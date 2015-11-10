@@ -28,9 +28,10 @@ class AdminMailer < ActionMailer::Base
     mail to: user.email, subject: "You have a match in a task"
   end
 
-  def admin_request_to_company_admins(admin, user)
+  def admin_request_to_company_admins(admin, user, company)
     @user = user
     @admin = admin
-    mail to: admin.email, subject: "A new user has requested admin rights in your company"
+    @company = company
+    mail to: admin.email, subject: "#{user.name} requested admin rights in your company #{company.name}"
   end
 end
