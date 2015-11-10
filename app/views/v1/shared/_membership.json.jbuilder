@@ -6,6 +6,7 @@ json.group do
   json.name group.name
   json.updated_at group.updated_at
   json.description group.description
+  json.short_description group.short_description
   json.official group.official
   json.cover do
     json.main group.cover.main.url
