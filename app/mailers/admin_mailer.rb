@@ -25,7 +25,7 @@ class AdminMailer < ActionMailer::Base
   def user_have_match_in_task(user, task)
     @user = user
     @task = task
-    mail to: user.email, subject: "You have a match in a task"
+    mail to: user.email, subject: "A job post from #{task.company.name} matches with your profile"
   end
 
   def admin_request_to_company_admins(admin, user, company)
