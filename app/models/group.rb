@@ -6,6 +6,7 @@ class Group < ActiveRecord::Base
 
   include Alumnet::Localizable
   include Alumnet::Croppable
+  include Alumnet::Searchable
 
   ## Virtual Attributes
   attr_accessor :cover_uploader
