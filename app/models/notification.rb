@@ -16,6 +16,10 @@ class Notification
     PusherDelegator.notifiy_new_notification(message, recipients)
   end
 
+  def send_gcm_notification
+    GcmDelegator.notifiy_new_notification(message, recipients)
+  end
+
   ### Class Methods
 
   def self.notify_join_to_users(users, sender, group)

@@ -1,4 +1,5 @@
-json.(group, :id, :name, :description, :official, :created_at, :join_process, :upload_files)
+json.(group, :id, :name, :description, :short_description, :official, :created_at,
+  :join_process, :upload_files)
 
 json.can_be_official group.can_be_official?
 
