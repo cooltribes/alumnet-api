@@ -6,9 +6,9 @@ class V1::Admin::UsersController < V1::AdminController
       @users = User.includes(:profile).tagged_with(params[:tags])
     else
       @q = if @admin_location
-        @admin_location.users.includes(:profile).search(params[:q])
+        @admin_location.users.includes(:profile).ransack(params[:q])
       else
-        User.includes(:profile).search(params[:q])
+        User.includes(:profile).ransack(params[:q])
       end
       @users = @q.result.order(params[:sort_by]+' '+params[:order_by])
       @totalRecords = @users.size
@@ -28,12 +28,12 @@ class V1::Admin::UsersController < V1::AdminController
   end
 
   def groups
-    @q = @user.groups.search(params[:q])
+    @q = @user.groups.ransack(params[:q])
     @groups = @q.result
   end
 
   def events
-    @q = @user.limit_attend_events.search(params[:q])
+    @q = @user.limit_attend_events.ransack(params[:q])
     @events = @q.result
   end
 
@@ -100,7 +100,7 @@ class V1::Admin::UsersController < V1::AdminController
     else
       User.includes(:profile)
     end
-    @all_users = @q.search().result
+    @all_users = @q.ransack().result
     @counters = Hash[
       "users_all", @all_users.count,
       "users", @all_users.where(member: 0).count,
@@ -111,7 +111,7 @@ class V1::Admin::UsersController < V1::AdminController
 
     if params[:q] && params[:q] != ""
       @q = User.includes(:profile)
-      query_users = @q.search(params[:q]).result
+      query_users = @q.ransack(params[:q]).result
       @query_counters = Hash[
         "users_all", query_users.count,
         "users", query_users.where(member: 0).count,

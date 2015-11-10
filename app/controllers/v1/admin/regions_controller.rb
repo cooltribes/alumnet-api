@@ -2,7 +2,7 @@ class V1::Admin::RegionsController < V1::AdminController
   before_action :set_region, except: [:index, :create]
 
   def index
-    @q = Region.search(params[:q])
+    @q = Region.ransack(params[:q])
     @regions = @q.result
   end
 

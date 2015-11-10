@@ -3,7 +3,7 @@ class V1::Companies::BranchesController < V1::BaseController
   before_action :set_branch, except: [:index, :create]
 
   def index
-    @q = @company.branches.search(params[:q])
+    @q = @company.branches.ransack(params[:q])
     @branches = @q.result
   end
 

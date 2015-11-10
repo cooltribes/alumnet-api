@@ -5,7 +5,7 @@ class V1::Users::BusinessController < V1::BaseController
   before_action :set_business, only: [:update]
 
   def index
-    @q = @user.profile.company_relations.search(params[:q])
+    @q = @user.profile.company_relations.ransack(params[:q])
     @companies = @q.result
     # render :index
   end

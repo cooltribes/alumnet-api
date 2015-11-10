@@ -1,7 +1,7 @@
 class V1::Users::EventsController < V1::BaseEventsController
 
   def index
-    @q = @eventable.invited_events.search(params[:q])
+    @q = @eventable.invited_events.ransack(params[:q])
     @events = @q.result
   end
 

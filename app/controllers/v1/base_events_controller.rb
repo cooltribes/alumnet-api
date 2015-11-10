@@ -4,7 +4,7 @@ class V1::BaseEventsController < V1::BaseController
   before_action :set_event, except: [:index, :create]
 
   def index
-    @q = @eventable.events.search(params[:q])
+    @q = @eventable.events.ransack(params[:q])
     @events = @q.result
   end
 

@@ -1,24 +1,24 @@
 class V1::JobExchangesController < V1::TasksController
 
   def index
-    @q = Task.job_exchanges.search(params[:q])
+    @q = Task.job_exchanges.ransack(params[:q])
     @tasks = @q.result
     if @tasks.class == Array
-      @tasks = Kaminari.paginate_array(@tasks).page(params[:page]).per(params[:per_page]) 
+      @tasks = Kaminari.paginate_array(@tasks).page(params[:page]).per(params[:per_page])
     else
-      @tasks = @tasks.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object 
-    end    
+      @tasks = @tasks.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object
+    end
     render 'v1/tasks/index'
   end
 
   def my
-    @q = current_user.tasks.job_exchanges.search(params[:q])
+    @q = current_user.tasks.job_exchanges.ransack(params[:q])
     @tasks = @q.result
     if @tasks.class == Array
-      @tasks = Kaminari.paginate_array(@tasks).page(params[:page]).per(params[:per_page]) 
+      @tasks = Kaminari.paginate_array(@tasks).page(params[:page]).per(params[:per_page])
     else
-      @tasks = @tasks.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object 
-    end     
+      @tasks = @tasks.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object
+    end
     render 'v1/tasks/index'
   end
 
@@ -34,13 +34,13 @@ class V1::JobExchangesController < V1::TasksController
   end
 
   def applied
-    @q = Task.applied_by(current_user).job_exchanges.search(params[:q])
+    @q = Task.applied_by(current_user).job_exchanges.ransack(params[:q])
     @tasks = @q.result
     if @tasks.class == Array
-      @tasks = Kaminari.paginate_array(@tasks).page(params[:page]).per(params[:per_page]) 
+      @tasks = Kaminari.paginate_array(@tasks).page(params[:page]).per(params[:per_page])
     else
-      @tasks = @tasks.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object 
-    end     
+      @tasks = @tasks.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object
+    end
     render 'v1/tasks/index'
   end
 

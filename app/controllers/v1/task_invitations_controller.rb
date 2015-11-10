@@ -2,7 +2,7 @@ class V1::TaskInvitationsController < V1::BaseController
   before_action :set_invitation, except: [:index, :create]
 
   def index
-    @q = current_user.task_invitations.not_accepted.search(params[:q])
+    @q = current_user.task_invitations.not_accepted.ransack(params[:q])
     @task_invitations = @q.result
   end
 

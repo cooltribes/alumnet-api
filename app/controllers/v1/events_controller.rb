@@ -2,7 +2,7 @@ class V1::EventsController < V1::BaseEventsController
   skip_before_action :set_eventable
 
   def index
-    @q = Event.open.search(params[:q])
+    @q = Event.open.ransack(params[:q])
     @events = @q.result
   end
 

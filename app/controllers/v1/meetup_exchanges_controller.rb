@@ -1,19 +1,19 @@
 class V1::MeetupExchangesController < V1::TasksController
 
   def index
-    @q = Task.meetup_exchanges.current.search(params[:q])
+    @q = Task.meetup_exchanges.current.ransack(params[:q])
     @tasks = @q.result
     render 'v1/tasks/index'
   end
 
   def my
-    @q = current_user.tasks.meetup_exchanges.search(params[:q])
+    @q = current_user.tasks.meetup_exchanges.ransack(params[:q])
     @tasks = @q.result
     render 'v1/tasks/index'
   end
 
   def applied
-    @q = Task.applied_by(current_user).meetup_exchanges.search(params[:q])
+    @q = Task.applied_by(current_user).meetup_exchanges.ransack(params[:q])
     @tasks = @q.result
     render 'v1/tasks/index'
   end

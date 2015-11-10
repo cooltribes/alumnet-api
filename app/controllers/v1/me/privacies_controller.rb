@@ -3,7 +3,7 @@ class V1::Me::PrivaciesController < V1::BaseController
   before_action :set_privacy, except: [:index, :create]
 
   def index
-    @q = @user.privacies.search(params[:q])
+    @q = @user.privacies.ransack(params[:q])
     @privacies = @q.result
     render :index
   end

@@ -2,7 +2,7 @@ class V1::KeywordsController < V1::BaseController
   before_action :set_keyword, except: [:index, :create]
 
   def index
-    @q = Keyword.search(params[:q])
+    @q = Keyword.ransack(params[:q])
     @keywords = @q.result
   end
 

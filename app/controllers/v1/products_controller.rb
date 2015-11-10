@@ -2,7 +2,7 @@ class V1::ProductsController < V1::BaseController
   before_action :set_product, except: [:index, :create, :find_by_sku]
 
   def index
-    @q = Product.search(params[:q])
+    @q = Product.ransack(params[:q])
     @products = @q.result
   end
 

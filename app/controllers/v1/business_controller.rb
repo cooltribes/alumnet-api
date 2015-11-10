@@ -1,8 +1,8 @@
 class V1::BusinessController < V1::BaseController
 
   def index
-    @q = CompanyRelation.search(params[:q])
-    
+    @q = CompanyRelation.ransack(params[:q])
+
     @companies = @q.result
     if @companies.class == Array
       @companies = Kaminari.paginate_array(@companies).page(params[:page]).per(params[:per_page])

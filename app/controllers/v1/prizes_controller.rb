@@ -2,7 +2,7 @@ class V1::PrizesController < V1::BaseController
   before_action :set_prize, except: [:index, :create]
 
   def index
-    @q = Prize.search(params[:q])
+    @q = Prize.ransack(params[:q])
     @prizes = @q.result
   end
 

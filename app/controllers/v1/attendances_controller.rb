@@ -5,9 +5,9 @@ class V1::AttendancesController < V1::BaseController
 
   def index
     @q = if @event
-      @event.attendances.search(params[:q])
+      @event.attendances.ransack(params[:q])
     else
-      Attendance.search(params[:q])
+      Attendance.ransack(params[:q])
     end
     @attendances = @q.result
   end

@@ -4,7 +4,7 @@ class V1::BasePostsController < V1::BaseController
   before_action :set_post, except: [:index, :create]
 
   def index
-    @q = @postable.posts.search(params[:q])
+    @q = @postable.posts.ransack(params[:q])
     @posts = @q.result
     #@posts = @q.page(params[:page]).per(params[:per_page])
     @posts = Kaminari.paginate_array(@posts).page(params[:page]).per(params[:per_page])

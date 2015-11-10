@@ -2,7 +2,7 @@ class V1::ActionsController < V1::BaseController
   before_action :set_action, except: [:index, :create]
 
   def index
-    @q = Action.search(params[:q])
+    @q = Action.ransack(params[:q])
     @actions = @q.result
   end
 

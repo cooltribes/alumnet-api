@@ -3,7 +3,7 @@ class V1::Companies::ProductServicesController < V1::BaseController
   before_action :set_product_service, except: [:index, :create]
 
   def index
-    @q = @company.product_services.search(params[:q])
+    @q = @company.product_services.ransack(params[:q])
     @product_services = @q.result
   end
 
