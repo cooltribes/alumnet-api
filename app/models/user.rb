@@ -174,6 +174,20 @@ class User < ActiveRecord::Base
     .where.not(notification_details: {notification_type: 'friendship'})
   end
 
+  ### all about Conversations
+  def unread_messages_count
+    mailbox.inbox.where("mailboxer_receipts.is_read = false").count
+  end
+
+  def unread_notifications_count
+    mailbox.notifications.unread.count
+  end
+
+  def unread_friendship_notifications_count
+    mailbox.notifications.joins(:notification_detail)
+    .where(notification_details: {notification_type: 'friendship'}).unread.count
+  end
+
   ##Sugestions Methods
   def suggested_groups(limit = 6)
     aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq || []
@@ -312,15 +326,6 @@ class User < ActiveRecord::Base
 
   def is_external?
     role == "External"
-  end
-
-  ### all about Conversations
-  def unread_messages_count
-    mailbox.inbox.where("mailboxer_receipts.is_read = false").count
-  end
-
-  def unread_notifications_count
-    mailbox.notifications.unread.count
   end
 
   ### all about Post
