@@ -222,8 +222,8 @@ class Notification
 
   def self.notify_tagging(tagging)
     notification = new(tagging.user)
-    subject = "You were tagged"
-    body = "Tagged you in a #{tagging.taggable_type}"
+    subject = "You were mentioned"
+    body = "Mentioned you in a #{tagging.taggable_type}"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
     NotificationDetail.notify_tag(notfy, tagging.tagger, tagging.taggable)
