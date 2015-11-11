@@ -1,9 +1,20 @@
 class V1::Me::NotificationsController < V1::BaseController
   before_action :set_user
-  before_action :set_notification, except: [:index, :mark_all_read]
+  before_action :set_notification, except: [:index, :mark_all_read, :friendship, :general]
 
   def index
-    @notifications = @user.mailbox.notifications.limit(params[:limit]).order(created_at: :asc)
+    #@notifications = @user.mailbox.notifications.limit(params[:limit]).order(created_at: :asc)
+    @notifications = @user.general_notifications.limit(params[:limit]).order(created_at: :asc)
+  end
+
+  def friendship
+    @notifications = @user.friendship_notifications.limit(params[:limit]).order(created_at: :asc)
+    render :index
+  end
+
+  def general
+    @notifications = @user.general_notifications.limit(params[:limit]).order(created_at: :asc)
+    render :index
   end
 
   def mark_as_read
