@@ -9,6 +9,7 @@ defaults: &defaults
   fog_directory: xxxxxxxxxx
   initial_groups: []
   google_api_key: xxxxxxxxxxx
+  elasticsearch_url: http://localhost:9200
 
 
 development:
