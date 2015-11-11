@@ -63,8 +63,9 @@ profile.experiences.build(name: "AlumNet SuperAdmin", description: "AlumNet Supe
   country_id: belgium.id, committee_id: committee.id, exp_type: 0)
 profile.skills << Skill.first
 profile.language_levels << LanguageLevel.new(language_id: english.id, level: 5)
-profile.skills!
+profile.set_last_register_step!
 admin.activate!
+
 
 ####Initial Groups
 # alumnet = Group.create!(name: "AlumNet", description: "This is the official group of AlumNet",
