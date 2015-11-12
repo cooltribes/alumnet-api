@@ -180,8 +180,9 @@ class Notification
     subject = "The #{post.postable.class.to_s} #{post.postable.name} has new post"
     body = "Posted in #{post.postable.class.to_s} #{post.postable.name}"
     notfy = notification.send_notification(subject, body)
-    notification.send_pusher_notification
     NotificationDetail.notify_new_post(notfy, post)
+    notification.send_pusher_notification
+    notification.send_gcm_notification
   end
 
   def self.notify_like(like)
