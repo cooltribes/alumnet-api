@@ -1,5 +1,5 @@
 class PusherNotificationJob < ActiveJob::Base
-  queue_as :default
+  queue_as :pusher
 
   def perform(notification, recipients_collection)
     recipients_collection.each do |recipient|
