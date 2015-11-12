@@ -7,8 +7,9 @@ class Notification
   end
 
   ### Instance Methods
-  def send_notification(subject, body)
-    receipts = Mailboxer::Notification.notify_all(recipients, subject, body)
+  def send_notification(subject, body, object = nil, sender = nil)
+    receipts = Mailboxer::Notification.notify_all(recipients, subject,
+      body, object, true, nil, false, sender)
     @notification = receipts.is_a?(Array) ? receipts.first.notification : receipts.notification
   end
 
@@ -32,7 +33,7 @@ class Notification
       subject = "#{sender.name} added you to the #{group.name} group!"
       body = "Welcome! #{sender.name} added you to the #{group.mode} group #{group.name}"
     end
-    notfy = notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body, group, sender)
     notification.send_pusher_notification
     NotificationDetail.join_group(notfy, sender, group)
     notification.recipients.each do |user|
@@ -40,29 +41,29 @@ class Notification
     end
   end
 
-  def self.notify_join_to_admins(admins, user, group)
+  def self.notify_join_to_admins(admins, sender, group)
     return if admins.blank?
     notification = new(admins)
     subject = "A new user was invited to join the group #{group.name}"
     body = "Was invited to join the group #{group.name}"
-    notfy = notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body, group, sender)
     notification.send_pusher_notification
-    NotificationDetail.join_group_admins(notfy, user, group)
+    NotificationDetail.join_group_admins(notfy, sender, group)
     notification.recipients.each do |admin|
-      AdminMailer.user_was_joined(admin, user, group).deliver_later
+      AdminMailer.user_was_joined(admin, sender, group).deliver_later
     end
   end
 
-  def self.notify_group_join_accepted_to_user(user, group)
-    return if user.blank?
-    notification = new(user)
+  def self.notify_group_join_accepted_to_user(sender, group)
+    return if sender.blank?
+    notification = new(sender)
     subject = "You were accepted to join the group #{group.name}"
     body = "Your request to join the group #{group.name} was accepted"
-    notfy = notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body, group, sender)
     notification.send_pusher_notification
-    NotificationDetail.join_group(notfy, user, group)
+    NotificationDetail.join_group(notfy, sender, group)
     notification.recipients.each do |admin|
-      UserMailer.user_was_accepted_in_group(user, group).deliver_later
+      UserMailer.user_was_accepted_in_group(sender, group).deliver_later
     end
   end
 
@@ -76,21 +77,21 @@ class Notification
       subject = "#{sender.name} added you to the #{group.name} group!"
       body = "Welcome! #{sender.name} wants you to join the #{group.name} group, the request was sent."
     end
-    notfy = notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body, group, sender)
     notification.send_pusher_notification
     NotificationDetail.join_group(notfy, sender, group)
   end
 
-  def self.notify_request_to_admins(admins, user, group)
+  def self.notify_request_to_admins(admins, sender, group)
     return if admins.blank?
     notification = new(admins)
     subject = "A new user request to join the group #{group.name}"
     body = "Sent a request to join the group #{group.name}"
     notfy = notification.send_notification(subject, body)
     notification.send_pusher_notification
-    NotificationDetail.join_group_approval_request(notfy, user, group)
+    NotificationDetail.join_group_approval_request(notfy, sender, group)
     notification.recipients.each do |admin|
-     AdminMailer.user_request_to_join(admin, user, group).deliver_later
+     AdminMailer.user_request_to_join(admin, sender, group).deliver_later
     end
   end
 
@@ -99,7 +100,7 @@ class Notification
     notification = new(friend)
     subject = "New friendship request"
     body = "Sent you a friendship request on AlumNet."
-    notfy = notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body, friend, sender)
     notification.send_pusher_notification
     NotificationDetail.friendship_request(notfy, user)
     UserMailer.user_request_friendship(user, friend).deliver_later
@@ -110,7 +111,7 @@ class Notification
     notification = new(user)
     subject = "You have a new friend!"
     body = "Your friend accepted your invitation to connect."
-    notfy = notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body, user, friend)
     notification.send_pusher_notification
     NotificationDetail.friendship_accepted(notfy, friend)
     UserMailer.friend_accept_friendship(user, friend).deliver_later
@@ -119,11 +120,11 @@ class Notification
   def self.notify_invitation_event_to_user(attendance, host = nil)
     return if attendance.blank?
     event = attendance.event
-    host_name = host ? host.name : event.creator.name
+    # host_name = host ? host.name : event.creator.name
     notification = new(attendance.user)
     subject = "You have a new invitation to an event in AlumNet!",
     body = "Is inviting you to attend the event #{event.name}"
-    notfy = notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body, event, attendance.user)
     notification.send_pusher_notification
     NotificationDetail.invitation_to_event(notfy, event.creator, event)
     UserMailer.invitation_to_event(attendance.user, event).deliver_later
@@ -134,14 +135,14 @@ class Notification
     #to requester
     notfy_to_requester = new(requester)
     notfy1 = notfy_to_requester.send_notification("You have a new friend!",
-      "#{user.permit_name(requester)} is now your friend.")
+      "#{user.permit_name(requester)} is now your friend.", requester, requester)
     notfy_to_requester.send_pusher_notification
     NotificationDetail.friendship_accepted(notfy1, requester)
 
     #to user
     notfy_to_user = new(user)
     notfy2 = notfy_to_user.send_notification("You have a new friend!",
-      "#{requester.permit_name(user)} is now your friend.")
+      "#{requester.permit_name(user)} is now your friend.", user, user)
     notfy_to_user.send_pusher_notification
     NotificationDetail.friendship_accepted(notfy2, user)
 
@@ -153,7 +154,7 @@ class Notification
     notification = new(admins)
     subject = "hi Admin! A new user was registered in AlumNet"
     body = "Is waiting for your approval in admin section"
-    notfy = notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body, user, user)
     notification.send_pusher_notification
     notification.recipients.each do |admin|
       AdminMailer.user_request_approval(admin, user).deliver_later
@@ -166,7 +167,7 @@ class Notification
     notification = new(approver)
     subject = "#{user.name} wants to be approved in AlumNet"
     body = "Hello, I'm registering in Alumnet. Please approve my membership"
-    notfy = notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body, approver, user)
     notification.send_pusher_notification()
     notification.recipients.each do |recipient|
       UserMailer.user_request_approval(recipient, user).deliver_later
@@ -179,7 +180,7 @@ class Notification
     notification = new(users)
     subject = "The #{post.postable.class.to_s} #{post.postable.name} has new post"
     body = "Posted in #{post.postable.class.to_s} #{post.postable.name}"
-    notfy = notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body, post, post.user)
     NotificationDetail.notify_new_post(notfy, post)
     notification.send_pusher_notification
     notification.send_gcm_notification
@@ -196,7 +197,7 @@ class Notification
     end
     subject = "#{like.user.name} likes your #{likeable.class.to_s}"
     body = "Likes your #{likeable.class.to_s}"
-    notfy = notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body, likeable, like.user)
     notification.send_pusher_notification
     NotificationDetail.notify_like(notfy, like.user, likeable)
   end
@@ -206,7 +207,7 @@ class Notification
     notification = new(author)
     subject = "You have new comment in Post"
     body = "Commented in your post"
-    notfy = notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body, post, comment.user)
     notification.send_pusher_notification
     NotificationDetail.notify_comment_in_post(notfy, comment.user, post)
   end
@@ -216,7 +217,7 @@ class Notification
     notification = new(users)
     subject = "You have new comment in Post"
     body = "Commented in a post where you comment"
-    notfy = notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body, post, comment.user)
     notification.send_pusher_notification
     NotificationDetail.notify_comment_in_post(notfy, comment.user, post)
   end
@@ -225,7 +226,7 @@ class Notification
     notification = new(tagging.user)
     subject = "You were tagged"
     body = "Tagged you in a #{tagging.taggable_type}"
-    notfy = notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body, tagging.taggable, tagging.tagger)
     notification.send_pusher_notification
     NotificationDetail.notify_tag(notfy, tagging.tagger, tagging.taggable)
   end
@@ -236,7 +237,7 @@ class Notification
     notification = new(admins)
     subject = "Hi Admin! A new user has requested admin rights in #{company.name}"
     body = "Requested admin rights in #{company.name}"
-    notfy = notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body, company, user)
     notification.send_pusher_notification
     notification.recipients.each do |admin|
       AdminMailer.admin_request_to_company_admins(admin, user, company).deliver_later
@@ -251,7 +252,7 @@ class Notification
     notification = new(user)
     subject = "Hi #{user.name}, now you are an admin in #{company.name}"
     body = "Congratulations, now you are an admin in #{company.name}"
-    notfy = notification.send_notification(subject, body)
+    notfy = notification.send_notification(subject, body, company, user)
     notification.send_pusher_notification
     notification.recipients.each do |u|
       UserMailer.new_company_admin(u, company).deliver_later
