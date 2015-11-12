@@ -1,5 +1,5 @@
 class Notification
-  attr_reader :recipients, :message
+  attr_reader :recipients, :notification
 
   #Param is the array or single object
   def initialize(recipients)
@@ -9,15 +9,15 @@ class Notification
   ### Instance Methods
   def send_notification(subject, body)
     receipts = Mailboxer::Notification.notify_all(recipients, subject, body)
-    @message = receipts.is_a?(Array) ? receipts.first.notification : receipts.notification
+    @notification = receipts.is_a?(Array) ? receipts.first.notification : receipts.notification
   end
 
   def send_pusher_notification
-    PusherDelegator.notifiy_new_notification(message, recipients)
+    PusherDelegator.send_notification(notification, recipients)
   end
 
   def send_gcm_notification
-    GcmDelegator.notifiy_new_notification(message, recipients)
+    GcmDelegator.send_notification(notification, recipients)
   end
 
   ### Class Methods

@@ -1,7 +1,7 @@
 class GcmDelegator
   class << self
 
-    def notifiy_new_notification(notification, recipients_collection)
+    def send_notification(notification, recipients_collection)
       GcmNotificationJob.perform_later(parse_notification(notification), recipients_collection)
     end
 

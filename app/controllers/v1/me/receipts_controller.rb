@@ -12,7 +12,7 @@ class V1::Me::ReceiptsController < V1::BaseController
     @receipt = @user.reply_to_conversation(@conversation, body)
     recipients = @conversation.recipients
     recipients.delete(@user)
-    PusherDelegator.notify_new_message(@receipt.message, recipients)
+    PusherDelegator.send_message(@receipt.message, recipients)
     render :show, status: :created
   end
 
