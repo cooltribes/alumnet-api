@@ -185,8 +185,9 @@ class User < ActiveRecord::Base
   end
 
   def unread_friendship_notifications_count
-    mailbox.notifications.joins(:notification_detail)
-    .where(notification_details: {notification_type: 'friendship'}).unread.count
+    # mailbox.notifications.joins(:notification_detail)
+    # .where(notification_details: {notification_type: 'friendship'}).unread.count
+    mailbox.notifications.unread.count
   end
 
   ##Sugestions Methods
