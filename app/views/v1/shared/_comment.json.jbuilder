@@ -1,12 +1,10 @@
 json.(comment, :id, :comment, :markup_comment, :created_at)
 
 json.user do
-  json.(comment.user, :id, :email)
-  json.name comment.user.permit_name(current_user)
-  if comment.user.permit('see-avatar', current_user)
-    json.avatar comment.user.avatar.medium.url
+  if comment.user
+    json.partial! 'v1/shared/user_info', user: comment.user, current_user: current_user
   else
-    json.avatar comment.user.avatar.medium.default_url
+    json.nil!
   end
 end
 

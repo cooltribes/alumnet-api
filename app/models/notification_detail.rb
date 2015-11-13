@@ -6,36 +6,36 @@ class NotificationDetail < ActiveRecord::Base
   ### Class methods
   def self.friendship_request(notification, sender)
     create!(url: "friends", notification_type: "friendship", sender: sender,
-      mailboxer_notification_id: notification.id)
+      mailboxer_notification_id: notification.id, notified_object_id: sender.id)
   end
 
   def self.friendship_accepted(notification, sender)
     create!(url: "users/#{sender.id}/posts", notification_type: "friendship", sender: sender,
-      mailboxer_notification_id: notification.id)
+      mailboxer_notification_id: notification.id, notified_object_id: sender.id)
   end
 
   def self.join_group(notification, sender, group)
     create!(url: "groups/#{group.id}/posts", notification_type: "group", sender: sender,
-      mailboxer_notification_id: notification.id)
+      mailboxer_notification_id: notification.id, notified_object_id: group.id)
   end
 
   def self.join_group_approval_request(notification, sender, group)
     create!(url: "groups/#{group.id}/members", notification_type: "group", sender: sender,
-      mailboxer_notification_id: notification.id)
+      mailboxer_notification_id: notification.id, notified_object_id: group.id)
   end
   def self.join_group_admins(notification, sender, group)
     create!(url: "users/#{sender.id}/posts", notification_type: "group", sender: sender,
-      mailboxer_notification_id: notification.id)
+      mailboxer_notification_id: notification.id, notified_object_id: group.id)
   end
 
   def self.invitation_to_event(notification, sender, event)
     create!(url: "events/#{event.id}/posts", notification_type: "event", sender: sender,
-      mailboxer_notification_id: notification.id)
+      mailboxer_notification_id: notification.id, notified_object_id: event.id)
   end
 
   def self.notify_new_post(notification, post)
     create!(url: post.url_for_notification, notification_type: "post", sender: post.user,
-      mailboxer_notification_id: notification.id)
+      mailboxer_notification_id: notification.id, notified_object_id: post.id)
   end
 
   def self.notify_like(notification, sender, likeable)
@@ -44,13 +44,13 @@ class NotificationDetail < ActiveRecord::Base
     elsif likeable.is_a?(Comment)
       likeable.commentable.url_for_notification
     end
-    create!(url: url, notification_type: "post", sender: sender,
-      mailboxer_notification_id: notification.id)
+    create!(url: url, notification_type: "like", sender: sender,
+      mailboxer_notification_id: notification.id, notified_object_id: likeable.id)
   end
 
   def self.notify_comment_in_post(notification, sender, post)
     create!(url: post.url_for_notification, notification_type: "comment", sender: sender,
-      mailboxer_notification_id: notification.id)
+      mailboxer_notification_id: notification.id, notified_object_id: post.id)
   end
 
   def self.notify_tag(notification, sender, taggable)
@@ -62,25 +62,25 @@ class NotificationDetail < ActiveRecord::Base
       "no url"
     end
     create!(url: url, notification_type: "tag", sender: sender,
-      mailboxer_notification_id: notification.id)
+      mailboxer_notification_id: notification.id, notified_object_id: taggable.id)
   end
 
   def self.notify_approval_request_to_admins(notification, user)
     create!(url: "admin/users/#{user.id}", notification_type: "approval", sender: user,
-      mailboxer_notification_id: notification.id)
+      mailboxer_notification_id: notification.id, notified_object_id: user.id)
   end
 
   def self.notify_approval_request_to_user(notification, user)
     create!(url: "approval-requests", notification_type: "approval", sender: user,
-      mailboxer_notification_id: notification.id)
+      mailboxer_notification_id: notification.id, notified_object_id: user.id)
   end
 
   def self.notify_admin_request_to_company_admins(notification, user, company)
     create!(url: "companies/#{company.id}/employees", notification_type: "approval", sender: user,
-      mailboxer_notification_id: notification.id)
+      mailboxer_notification_id: notification.id, notified_object_id: company.id)
   end
   def self.notify_new_company_admin(notification, user, company)
     create!(url: "companies/#{company.id}/about", notification_type: "approval", sender: user,
-      mailboxer_notification_id: notification.id)
+      mailboxer_notification_id: notification.id, notified_object_id: company.id)
   end
 end
