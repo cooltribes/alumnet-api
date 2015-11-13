@@ -3,11 +3,18 @@ json.(post, :id, :body, :post_type, :created_at, :last_comment_at)
 json.user do
   json.(post.user, :id)
   json.name post.user.permit_name(current_user)
+  if post.user.cover
+    json.cover post.user.cover.card.url
+  else
+    json.cover nil
+  end
   if post.user.permit('see-avatar', current_user)
     json.avatar post.user.avatar.large.url
   else
     json.avatar post.user.avatar.large.default_url
   end
+  json.residence_city post.user.profile.permit_residence_city(current_user)
+  json.residence_country post.user.profile.permit_residence_country(current_user)
 end
 
 json.likes_count post.likes_count
