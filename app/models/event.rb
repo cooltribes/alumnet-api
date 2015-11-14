@@ -4,6 +4,7 @@ class Event < ActiveRecord::Base
   enum event_type: [:open, :closed, :secret]
   include Alumnet::Localizable
   include Alumnet::Croppable
+  include Alumnet::Searchable
   include EventHelpers
   include PaymentableMethods
 
