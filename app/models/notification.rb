@@ -134,16 +134,16 @@ class Notification
     #to requester
     notfy_to_requester = new(requester)
     notfy1 = notfy_to_requester.send_notification("You have a new friend!",
-      "#{user.permit_name(requester)} is now your friend.")
+      "Is now your friend.")
     notfy_to_requester.send_pusher_notification
-    NotificationDetail.friendship_accepted(notfy1, requester)
+    NotificationDetail.friendship_accepted(notfy1, user)
 
     #to user
     notfy_to_user = new(user)
     notfy2 = notfy_to_user.send_notification("You have a new friend!",
-      "#{requester.permit_name(user)} is now your friend.")
+      "Is now your friend.")
     notfy_to_user.send_pusher_notification
-    NotificationDetail.friendship_accepted(notfy2, user)
+    NotificationDetail.friendship_accepted(notfy2, requester)
 
     UserMailer.approval_request_accepted(requester, user).deliver_later
   end
