@@ -57,6 +57,11 @@ class Group < ActiveRecord::Base
     where.not(group_type: 2)
   end
 
+  ### instance Methods
+  def as_indexed_json(options = {})
+    as_json(methods: [:city_info, :country_info], include: { creator: {} })
+  end
+
   def mode
     official? ? "Official" : "Unofficial"
   end

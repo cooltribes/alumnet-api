@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
   acts_as_taggable
   include Alumnet::Amigable
   include Alumnet::Tag
+  include Alumnet::Searchable
+
   include UserHelpers
   include ProfindaRegistration
 
