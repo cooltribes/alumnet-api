@@ -5,7 +5,6 @@ class User < ActiveRecord::Base
   acts_as_taggable
   include Alumnet::Amigable
   include Alumnet::Tag
-  include Alumnet::Searchable
 
   include UserHelpers
   include ProfindaRegistration
@@ -94,6 +93,7 @@ class User < ActiveRecord::Base
   end
 
   ### Instance Methods
+
   def devices_tokens(platform)
     devices.where(platform: platform).where(active: true).pluck(:token)
   end
@@ -162,7 +162,7 @@ class User < ActiveRecord::Base
 
   def aiesec_location
     experience = profile.experiences.aisec.first
-    experience ? experience.country.try(:name) : nil
+    experience.try(:country).try(:name)
   end
 
 

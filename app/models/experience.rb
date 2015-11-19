@@ -21,6 +21,7 @@ class Experience < ActiveRecord::Base
   ### Scopes
   scope :aiesec, -> { where(exp_type: 0) }
   scope :professional, -> { where(exp_type: 3) }
+  scope :current, -> { where(exp_type: 3, current: true) }
 
   ###Callbacks
   before_save :check_end_date
