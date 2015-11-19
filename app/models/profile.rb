@@ -45,9 +45,10 @@ class Profile < ActiveRecord::Base
   ###Instance Methods
 
   def as_indexed_json(options = {})
-    as_json(methods: [:local_committee, :current_experience],
+    as_json(methods: [:name, :local_committee, :current_experience],
       include: { birth_city: { only: :name }, birth_country: { only: :name },
-      residence_city: { only: :name }, residence_country: { only: :name } })
+      residence_city: { only: :name }, residence_country: { only: :name },
+      user: { only: [:id, :email, :role]} })
   end
 
   def limit_contact_infos(limit = nil)
@@ -60,6 +61,10 @@ class Profile < ActiveRecord::Base
 
   def current_experience
     experiences.current.order(:start_date).first || last_experience
+  end
+
+  def name
+    "#{first_name} #{last_name}"
   end
 
   def hidden_last_name

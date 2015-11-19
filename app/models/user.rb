@@ -109,7 +109,7 @@ class User < ActiveRecord::Base
   end
 
   def name
-    "#{profile.first_name} #{profile.last_name}"
+    profile.name
   end
 
   def profile

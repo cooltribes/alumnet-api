@@ -1,7 +1,7 @@
 class Task < ActiveRecord::Base
   acts_as_paranoid
   include Alumnet::Localizable
-
+  include Alumnet::Searchable
 
   ## Relations
   has_many :matches, dependent: :destroy
