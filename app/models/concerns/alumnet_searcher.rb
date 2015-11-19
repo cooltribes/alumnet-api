@@ -31,6 +31,6 @@ class AlumnetSearcher
   end
 
   def searchable_models
-    [Group, Event]
+    [Group, Event, Company, Task]
   end
 end

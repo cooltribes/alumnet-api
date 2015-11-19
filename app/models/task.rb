@@ -40,6 +40,10 @@ class Task < ActiveRecord::Base
   after_save :set_task_attributes
 
   ## Instance methods
+  def as_indexed_json(options = {})
+    as_json(methods: [:city_info, :country_info],
+      include: { task_attributes: { only: [:value, :attribute_type] } })
+  end
 
   def apply(user)
     match = matches.find_or_initialize_by(user: user)

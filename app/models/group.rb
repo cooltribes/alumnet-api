@@ -59,7 +59,7 @@ class Group < ActiveRecord::Base
 
   ### instance Methods
   def as_indexed_json(options = {})
-    as_json(methods: [:city_info, :country_info], include: { creator: {} })
+    as_json(methods: [:city_info, :country_info])
   end
 
   def mode

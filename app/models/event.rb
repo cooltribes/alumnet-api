@@ -42,6 +42,9 @@ class Event < ActiveRecord::Base
   scope :non_official, -> { where(official: false) }
 
   ### Instance methods
+  def as_indexed_json(options = {})
+    as_json(methods: [:city_info, :country_info])
+  end
 
   def is_open?
     event_type == "open"
