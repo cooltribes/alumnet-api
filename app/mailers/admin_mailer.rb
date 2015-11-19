@@ -29,6 +29,7 @@ class AdminMailer < ActionMailer::Base
       mail to: user.email, subject: "A job post from #{task.company.name} matches with your profile"
     else
       mail to: user.email, subject: "A job post matches with your profile"
+    end
   end
 
   def admin_request_to_company_admins(admin, user, company)
