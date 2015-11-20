@@ -15,6 +15,9 @@ class V1::Me::ConversationsController < V1::BaseController
     recipients = User.where(id: users_ids)
     @conversation = @user.send_message(recipients, body, subject).conversation
     PusherDelegator.send_message(@conversation.last_message, recipients.to_a)
+    recipients.each do |recipient|
+      UserMailer.new_message_direct(@user, recipient, @conversation).deliver_now
+    end
     render :show, status: :created
   end
 
