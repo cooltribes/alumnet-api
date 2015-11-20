@@ -47,6 +47,7 @@ Rails.application.routes.draw do
         put :mark_as_unread, on: :member
         get :friendship, on: :collection
         get :general, on: :collection
+        put :mark_requests_all_read, on: :collection
       end
       resources :privacies, except: :show, controller: 'me/privacies'
       resources :approval_requests, except: [:show], controller: 'me/approval' do
