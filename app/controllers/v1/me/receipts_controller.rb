@@ -14,7 +14,7 @@ class V1::Me::ReceiptsController < V1::BaseController
     recipients.delete(@user)
     PusherDelegator.send_message(@receipt.message, recipients)
     recipients.each do |recipient|
-      UserMailer.new_message_direct(@user, recipient, @conversation).deliver_now
+      UserMailer.new_message_direct(@user, recipient, @conversation).deliver_later
     end
     render :show, status: :created
   end
