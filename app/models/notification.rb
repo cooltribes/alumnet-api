@@ -100,7 +100,7 @@ class Notification
     notification = new(friend)
     subject = "New friendship request"
     body = "Sent you a friendship request on AlumNet."
-    notfy = notification.send_notification(subject, body, friend, sender)
+    notfy = notification.send_notification(subject, body, friend, user)
     notification.send_pusher_notification
     NotificationDetail.friendship_request(notfy, user)
     UserMailer.user_request_friendship(user, friend).deliver_later
