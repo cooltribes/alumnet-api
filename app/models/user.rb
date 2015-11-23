@@ -167,12 +167,12 @@ class User < ActiveRecord::Base
   ##Mailboxer Methods
   def friendship_notifications()
     mailbox.notifications.joins(:notification_detail)
-    .where(notification_details: {notification_type: 'friendship'})
+    .where(notification_details: {notification_type: ['friendship', 'approval']})
   end
 
   def general_notifications()
     mailbox.notifications.joins(:notification_detail)
-    .where.not(notification_details: {notification_type: 'friendship'})
+    .where.not(notification_details: {notification_type: ['friendship', 'approval']})
   end
 
   ### all about Conversations
@@ -181,13 +181,13 @@ class User < ActiveRecord::Base
   end
 
   def unread_notifications_count
-    mailbox.notifications.unread.count
+    mailbox.notifications.joins(:notification_detail)
+    .where.not(notification_details: {notification_type: ['friendship', 'approval']}).unread.count
   end
 
   def unread_friendship_notifications_count
-    # mailbox.notifications.joins(:notification_detail)
-    # .where(notification_details: {notification_type: 'friendship'}).unread.count
-    mailbox.notifications.unread.count
+    mailbox.notifications.joins(:notification_detail)
+    .where(notification_details: {notification_type: ['friendship', 'approval']}).unread.count
   end
 
   ##Sugestions Methods

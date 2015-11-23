@@ -1,8 +1,15 @@
 <div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
   <p>Hello <%= "#{ @user.name }" %></p>
   <p>
-    The company <%= "#{@task.company.name}" %> added a the job post <%= "#{@task.name}" %> that matches with your profile
+  	<% if @task.company.present? %>
+    	The company <%= "#{@task.company.name}" %> added a the job post <%= "#{@task.name}" %> that matches with your profile
+    <% else %>
+    	A new job post <%= "#{@task.name}" %> matches with your profile
+    <% end %>
     <br>
+  </p>
+  <p>  
     See more details <a href=<%= "#{Settings.ui_endpoint}/#job-exchange/#{@task.id}" %>>here</a>.
   </p>
+
 </div>

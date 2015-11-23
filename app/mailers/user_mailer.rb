@@ -103,4 +103,10 @@ class UserMailer < ActionMailer::Base
     @user = user
     mail to: @user.email, subject: "You need three approvals to complete AlumNet registration"
   end
+
+  def new_message_direct(sender, user, message)
+    @sender = sender
+    @user = user
+    mail to: @user.email, subject: "You have a new message from  #{sender.name}"
+  end
 end
