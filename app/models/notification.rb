@@ -170,7 +170,10 @@ class Notification
     notfy = notification.send_notification(subject, body, approver, user)
     notification.send_pusher_notification()
     notification.recipients.each do |recipient|
-      UserMailer.user_request_approval(recipient, user).deliver_later
+      preference = recipient.email_preferences.find_by(name: 'approval')
+      if preference.present? && preference.value == 0
+        UserMailer.user_request_approval(recipient, user).deliver_now
+      end
     end
     NotificationDetail.notify_approval_request_to_user(notfy, user)
   end
