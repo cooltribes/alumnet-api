@@ -10,8 +10,8 @@ describe V1::GroupsController, type: :request do
   end
 
   def valid_attributes
-    { name: "Group 1", description: "short description", cover: cover_file,
-      country_id: country.id, city_id: city.id, join_process: 0,
+    { name: "Group 1", description: "description", short_description: "short description",
+      cover: cover_file, country_id: country.id, city_id: city.id, join_process: 0,
       mailchimp: true, api_key: 'f0ad0e019703b02132b2cf15ad458e50-us10', list_id: "f3034576a5" }
   end
 
@@ -112,10 +112,11 @@ describe V1::GroupsController, type: :request do
     it "edit a group" do
       group = Group.make!(:with_parent_and_childen)
       Membership.create_membership_for_creator(group, user)
-      put group_path(group), { name: "New name group" }, basic_header(user.auth_token)
+      put group_path(group), { name: "New name group", short_description: "short description" }, basic_header(user.auth_token)
       expect(response.status).to eq 200
       group.reload
       expect(group.name).to eq("New name group")
+      expect(group.short_description).to eq("short description")
       #expect(valid_schema('group', json)).to be_empty
     end
   end

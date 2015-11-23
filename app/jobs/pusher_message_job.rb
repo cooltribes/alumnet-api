@@ -1,5 +1,5 @@
 class PusherMessageJob < ActiveJob::Base
-  queue_as :default
+  queue_as :pusher
 
   def perform(message, recipients_collection)
     recipients_collection.each do |recipient|

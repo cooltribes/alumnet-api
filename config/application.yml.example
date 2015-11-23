@@ -8,6 +8,8 @@ defaults: &defaults
   receptive_secret_key: xxxxxxx
   fog_directory: xxxxxxxxxx
   initial_groups: []
+  google_api_key: xxxxxxxxxxx
+
 
 development:
   <<: *defaults

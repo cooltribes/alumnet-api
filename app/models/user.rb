@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   acts_as_paranoid
   acts_as_messageable
   acts_as_taggable
+  include Alumnet::Amigable
   include Alumnet::Tag
   include UserHelpers
   include ProfindaRegistration
@@ -24,10 +25,6 @@ class User < ActiveRecord::Base
 
   has_many :memberships, dependent: :destroy
   has_many :groups, -> { where("memberships.approved = ?", true) }, through: :memberships
-  has_many :friendships, dependent: :destroy
-  has_many :inverse_friendships, class_name: "Friendship", foreign_key: "friend_id", dependent: :destroy
-  has_many :friends, through: :friendships
-  has_many :inverse_friends, through: :inverse_friendships, source: :user
   has_many :posts, as: :postable, dependent: :destroy
   has_many :publications, class_name: "Post", dependent: :destroy
   has_many :likes, dependent: :destroy
@@ -97,6 +94,10 @@ class User < ActiveRecord::Base
   end
 
   ### Instance Methods
+  def devices_tokens(platform)
+    devices.where(platform: platform).where(active: true).pluck(:token)
+  end
+
   def receptive_points
     value = member > 0 ? 1 : 0
     RECEPTIVE_POINTS[role] + value
@@ -166,9 +167,29 @@ class User < ActiveRecord::Base
 
 
   ##Mailboxer Methods
-  def notification_by(type)
+  def friendship_notifications()
     mailbox.notifications.joins(:notification_detail)
-    .where(notification_details: {notification_type: type})
+    .where(notification_details: {notification_type: ['friendship', 'approval']})
+  end
+
+  def general_notifications()
+    mailbox.notifications.joins(:notification_detail)
+    .where.not(notification_details: {notification_type: ['friendship', 'approval']})
+  end
+
+  ### all about Conversations
+  def unread_messages_count
+    mailbox.inbox.where("mailboxer_receipts.is_read = false").count
+  end
+
+  def unread_notifications_count
+    mailbox.notifications.joins(:notification_detail)
+    .where.not(notification_details: {notification_type: ['friendship', 'approval']}).unread.count
+  end
+
+  def unread_friendship_notifications_count
+    mailbox.notifications.joins(:notification_detail)
+    .where(notification_details: {notification_type: ['friendship', 'approval']}).unread.count
   end
 
   ##Sugestions Methods
@@ -176,7 +197,7 @@ class User < ActiveRecord::Base
     aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq || []
     profile_countries_ids = [profile.residence_country_id, profile.birth_country_id]
     countries_ids = [aiesec_countries_ids, profile_countries_ids].flatten.uniq
-    groups = Group.where(country_id: countries_ids).official
+    groups = Group.where(country_id: countries_ids).not_secret
     if groups.size < limit
       groups.to_a | Group.not_secret.order("RANDOM()").limit(limit - groups.size).to_a
     else
@@ -311,15 +332,6 @@ class User < ActiveRecord::Base
     role == "External"
   end
 
-  ### all about Conversations
-  def unread_messages_count
-    mailbox.inbox.where("mailboxer_receipts.is_read = false").count
-  end
-
-  def unread_notifications_count
-    mailbox.notifications.unread.count
-  end
-
   ### all about Post
   def groups_posts(q)
     #return all posts of groups where the user is member
@@ -371,110 +383,6 @@ class User < ActiveRecord::Base
     posts
   end
 
-  ### all about friends
-  def create_friendship_for(user)
-    friendships.build(friend_id: user.id)
-  end
-
-  def friendship_with(user)
-    Friendship.where("(friend_id = :id and user_id = :user_id) or (friend_id = :user_id and user_id = :id)", id: id, user_id: user.id).first
-    # friendships.find_by(friend_id: user.id) || inverse_friendships.find_by(user_id: user.id)
-  end
-
-  def friendship_status_with(user)
-    ##Optimize this
-    if is_friend_of?(user) || id == user.id
-      "accepted"
-    elsif pending_friendship_with(user).present?
-      "sent"
-    elsif pending_inverse_friendship_with(user).present?
-      "received"
-    else
-      "none"
-    end
-  end
-
-  def is_friend_of?(user)
-    accepted_friendship_with(user).present? || accepted_inverse_friendship_with(user).present?
-  end
-
-  def get_pending_friendships(filter, query = nil)
-    if filter == "sent"
-      search_pending_friendship(query)
-    elsif filter == "received"
-      search_pending_inverse_friendships(query)
-    else
-      search_pending_friendship(query) | search_pending_inverse_friendships(query)
-    end
-  end
-
-  def search_accepted_friendships(q)
-    accepted_friendships_search = accepted_friendships.search(q)
-    accepted_inverse_friendships_search = accepted_inverse_friendships.search(q)
-    accepted_friendships_search.result | accepted_inverse_friendships_search.result
-  end
-
-  def search_accepted_friends(q)
-    accepted_friends_search = accepted_friends.search(q)
-    accepted_inverse_friends_search = accepted_inverse_friends.search(q)
-    accepted_friends_search.result | accepted_inverse_friends_search.result
-  end
-
-  def search_pending_friendship(query)
-    pending_friendships.search(query).result.to_a
-  end
-
-  def search_pending_inverse_friendships(query)
-    pending_inverse_friendships.search(query).result.to_a
-  end
-
-  def my_friends
-    accepted_friends | accepted_inverse_friends
-  end
-
-  def pending_friendship_with(user)
-    pending_friendships.find_by(friend_id: user.id)
-  end
-
-  def pending_inverse_friendship_with(user)
-    pending_inverse_friendships.find_by(user_id: user.id)
-  end
-
-  def accepted_friendship_with(user)
-    accepted_friendships.find_by(friend_id: user.id)
-  end
-
-  def accepted_inverse_friendship_with(user)
-    accepted_inverse_friendships.find_by(user_id: user.id)
-  end
-
-  def accepted_friends
-    friends.where("friendships.accepted = ?", true).where(status: 1)
-  end
-
-  def accepted_inverse_friends
-    inverse_friends.where("friendships.accepted = ?", true).where(status: 1)
-  end
-
-  def accepted_friendships
-    friendships.where(accepted: true)
-  end
-
-  def accepted_inverse_friendships
-    inverse_friendships.where(accepted: true)
-  end
-
-  def pending_friendships
-    friendships.where(accepted: false)
-  end
-
-  def pending_inverse_friendships
-    inverse_friendships.where(accepted: false)
-  end
-
-  def common_friends_with(user)
-    my_friends & user.my_friends
-  end
 
   ### about groups and Membership
   def build_membership_for(group)
@@ -490,7 +398,6 @@ class User < ActiveRecord::Base
   end
 
   ### premium subscriptions
-  #User.member
   #0-> no member, 1-> Subscription for a year, 2-> Subscription for a year (30 days left or less), 3-> Lifetime
   def build_subscription(params, current_user)
     user_subscription = user_subscriptions.build(params)
@@ -516,32 +423,6 @@ class User < ActiveRecord::Base
         end
       end
     end
-  end
-
-  ### Counts
-
-  def friends_count
-    my_friends.count
-  end
-
-  def pending_received_friendships_count
-    pending_inverse_friendships.count
-  end
-
-  def pending_sent_friendships_count
-    pending_friendships.count
-  end
-
-  def pending_approval_requests_count
-    get_pending_approval_requests.count
-  end
-
-  def approved_requests_count
-    get_approved_requests.count
-  end
-
-  def mutual_friends_count(user)
-    common_friends_with(user).count
   end
 
   #### Privacy Methods
@@ -635,6 +516,7 @@ class User < ActiveRecord::Base
   def has_task_invitation(task)
     task_invitations.exists?(task_id: task.id)
   end
+
   ##TODO Refactor this :yondri
   def subscribe_to_mailchimp_list(mailchimp, list_id)
     mailchimp_vars = mailchimp.lists.merge_vars({'id' => list_id})

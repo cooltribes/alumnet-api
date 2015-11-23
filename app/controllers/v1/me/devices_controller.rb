@@ -7,8 +7,8 @@ class V1::Me::DevicesController < V1::BaseController
   end
 
   def create
-    @device = Device.new(device_params)
-    if @user.devices << @device
+    @device = @user.devices.find_or_create_by(device_params)
+    if @device.valid?
       render :show, status: :created
     else
       render json: @device.errors, status: :unprocessable_entity

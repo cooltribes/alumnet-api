@@ -40,7 +40,7 @@ class UserMailer < ActionMailer::Base
   def user_request_approval(approver, requester)
     @approver = approver
     @requester = requester
-    mail to: @approver.email, subject: "#{requester.name}, is requesting your approval for AlumNet"
+    mail to: @approver.email, subject: "Is #{requester.name} an AIESEC Alumni you know?"
   end
 
   def invitation_to_alumnet(email, guest_name, user, token)
@@ -102,5 +102,11 @@ class UserMailer < ActionMailer::Base
   def ask_for_approval(user)
     @user = user
     mail to: @user.email, subject: "You need three approvals to complete AlumNet registration"
+  end
+
+  def new_message_direct(sender, user, message)
+    @sender = sender
+    @user = user
+    mail to: @user.email, subject: "You have a new message from  #{sender.name}"
   end
 end
