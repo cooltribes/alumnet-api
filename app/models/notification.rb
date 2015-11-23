@@ -103,7 +103,10 @@ class Notification
     notfy = notification.send_notification(subject, body, friend, user)
     notification.send_pusher_notification
     NotificationDetail.friendship_request(notfy, user)
-    UserMailer.user_request_friendship(user, friend).deliver_later
+    preference = friend.email_preferences.find_by(name: 'friendship')
+    if preference.present? && preference.value == 0
+      UserMailer.user_request_friendship(user, friend).deliver_now
+    end
   end
 
   def self.notify_accepted_friendship_to_user(user, friend)
