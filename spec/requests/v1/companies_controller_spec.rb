@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe V1::CompaniesController, type: :request do
   let!(:user) { User.make! }
+  let!(:othe_user) { User.make! }
 
   describe "GET /companies" do
     it "return all companies" do
@@ -9,6 +10,14 @@ describe V1::CompaniesController, type: :request do
       get companies_path, {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(3)
+    end
+
+    it "return only the companies where the user is admin" do
+      4.times { Company.make! }
+      CompanyAdmin.create!(user: othe_user, company: Company.last, status: 1, accepted_by: user)
+      get companies_path, { q: { company_admins_user_id_eq: othe_user.id, status_eq: 1 } }, basic_header(othe_user.auth_token)
+      expect(response.status).to eq 200
+      expect(json.count).to eq(1)
     end
   end
 

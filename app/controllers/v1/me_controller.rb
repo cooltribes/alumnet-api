@@ -5,11 +5,20 @@ class V1::MeController < V1::BaseController
   end
 
   def profinda_token
-    token = @user.profinda_api_token
-    if token
-      render json: { profinda_api_token: token }
+    if @user.profinda_uid.present?
+      token = @user.profinda_api_token
+      if token
+        render json: { profinda_api_token: token }
+      else
+        render json: { errors: { api_token: ['Profinda TOKEN no found'] } }, status: :unprocessable_entity
+      end
     else
-      render json: { errors: { api_token: ['Profinda TOKEN no found'] } }, status: :unprocessable_entity
+      profinda = ProfindaApiClient.new(@user.email, @user.profinda_password)
+      if profinda.valid?
+        render json: { profinda_api_token: profinda.api_token }
+      else
+        render json: { errors: profinda.errors }, status: :unprocessable_entity
+      end
     end
   end
 

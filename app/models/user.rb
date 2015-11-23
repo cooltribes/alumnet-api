@@ -168,8 +168,6 @@ class User < ActiveRecord::Base
   def friendship_notifications()
     mailbox.notifications.joins(:notification_detail)
     .where(notification_details: {notification_type: ['friendship', 'approval']})
-    #.where(notification_details: {'notification_type= ? OR notification_type= ?', 'friendship', 'approval'})
-    #.where(notification_details: {notification_type: 'friendship'}).or.where(notification_details: {notification_type: 'approval'})
   end
 
   def general_notifications()
@@ -183,13 +181,13 @@ class User < ActiveRecord::Base
   end
 
   def unread_notifications_count
-    mailbox.notifications.unread.count
+    mailbox.notifications.joins(:notification_detail)
+    .where.not(notification_details: {notification_type: ['friendship', 'approval']}).unread.count
   end
 
   def unread_friendship_notifications_count
-    # mailbox.notifications.joins(:notification_detail)
-    # .where(notification_details: {notification_type: 'friendship'}).unread.count
-    mailbox.notifications.unread.count
+    mailbox.notifications.joins(:notification_detail)
+    .where(notification_details: {notification_type: ['friendship', 'approval']}).unread.count
   end
 
   ##Sugestions Methods
