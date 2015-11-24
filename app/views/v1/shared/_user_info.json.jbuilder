@@ -10,7 +10,7 @@
     json.avatar_large user.avatar.large.default_url
   end
   if user.cover
-    json.cover user.cover.card.url
+    json.cover user.cover.main.url
   else
     json.cover nil
   end
