@@ -1,0 +1,1 @@
+json.array! @email_preferences, partial: 'v1/shared/email_preference', as: :email_preference, current_user: @current_user

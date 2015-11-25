@@ -37,7 +37,10 @@ class Notification
     notification.send_pusher_notification
     NotificationDetail.join_group(notfy, sender, group)
     notification.recipients.each do |user|
-      UserMailer.join_to_group(user, sender, group).deliver_later
+      preference = user.email_preferences.find_by(name: 'join_group_invitation')
+      if not(preference.present?) || (preference.present? && preference.value == 0)
+        UserMailer.join_to_group(user, sender, group).deliver_later
+      end
     end
   end
 
@@ -91,7 +94,10 @@ class Notification
     notification.send_pusher_notification
     NotificationDetail.join_group_approval_request(notfy, sender, group)
     notification.recipients.each do |admin|
-     AdminMailer.user_request_to_join(admin, sender, group).deliver_later
+      preference = admin.email_preferences.find_by(name: 'join_group_request')
+      if not(preference.present?) || (preference.present? && preference.value == 0)
+        AdminMailer.user_request_to_join(admin, sender, group).deliver_later
+      end
     end
   end
 
@@ -103,7 +109,10 @@ class Notification
     notfy = notification.send_notification(subject, body, friend, user)
     notification.send_pusher_notification
     NotificationDetail.friendship_request(notfy, user)
-    UserMailer.user_request_friendship(user, friend).deliver_later
+    preference = friend.email_preferences.find_by(name: 'friendship')
+    if not(preference.present?) || (preference.present? && preference.value == 0)
+      UserMailer.user_request_friendship(user, friend).deliver_later
+    end
   end
 
   def self.notify_accepted_friendship_to_user(user, friend)
@@ -114,7 +123,10 @@ class Notification
     notfy = notification.send_notification(subject, body, user, friend)
     notification.send_pusher_notification
     NotificationDetail.friendship_accepted(notfy, friend)
-    UserMailer.friend_accept_friendship(user, friend).deliver_later
+    preference = user.email_preferences.find_by(name: 'friendship_accepted')
+    if not(preference.present?) || (preference.present? && preference.value == 0)
+      UserMailer.friend_accept_friendship(user, friend).deliver_later
+    end
   end
 
   def self.notify_invitation_event_to_user(attendance, host = nil)
@@ -170,7 +182,10 @@ class Notification
     notfy = notification.send_notification(subject, body, approver, user)
     notification.send_pusher_notification()
     notification.recipients.each do |recipient|
-      UserMailer.user_request_approval(recipient, user).deliver_later
+      preference = recipient.email_preferences.find_by(name: 'approval')
+      if not(preference.present?) || (preference.present? && preference.value == 0)
+        UserMailer.user_request_approval(recipient, user).deliver_later
+      end
     end
     NotificationDetail.notify_approval_request_to_user(notfy, user)
   end

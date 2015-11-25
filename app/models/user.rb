@@ -52,9 +52,11 @@ class User < ActiveRecord::Base
   has_many :profile_visits, dependent: :destroy
   has_many :posts_by_like, through: :likes, source: :likeable, source_type: "Post"
   has_many :devices, dependent: :destroy
+  has_many :email_preferences, dependent: :destroy
   has_one :profile, dependent: :destroy
   has_one :admin_note, dependent: :destroy
   belongs_to :admin_location, polymorphic: true
+
 
   ### Scopes
   scope :without_externals, -> { where.not(role: ROLES[:external]) }
