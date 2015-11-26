@@ -3,6 +3,15 @@ require 'rails_helper'
 describe V1::Admin::RegionsController, type: [:request, :stats] do
   let!(:current_user) { User.make!(:admin) }
 
+
+  describe "GET /admin/stats/posts" do
+    it "should responde with 200" do
+      params = { init_date: "2010-01-01", end_date: "2015-12-31", group_by: "years"}
+      get admin_stats_posts_path, params, basic_header(current_user.auth_token)
+      expect(response.status).to eq(200)
+    end
+  end
+
   describe "GET /admin/stats/type_of_membership" do
     it "return the data for the line and pie graph of the dashboard" do
       user = make_regional_admin
