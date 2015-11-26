@@ -17,6 +17,7 @@ class AlumnetPostsStatistics
     data = []
     data << ["Element", "#"]
     data << ["Created Posts", created_posts.count]
+    data << ["Comments", comments.count]
     data << ["Like in Posts", likes_in_created_posts.count]
     data << ["Shared Posts", shared_created_posts.count]
     data
@@ -25,17 +26,22 @@ class AlumnetPostsStatistics
   def column_data
     data = []
     created_posts_grouped = group_collection(created_posts)
+    comments_grouped = group_collection(comments)
     likes_in_created_posts_grouped = group_collection(likes_in_created_posts)
     shared_created_posts_grouped = group_collection(shared_created_posts)
-    data << [@group_by, "Created Posts", "Like in Posts", "Shared Posts"]
+    data << [@group_by, "Created Posts", "Comments", "Like in Posts", "Shared Posts"]
     date_keys.each do |date|
-      data << [date, created_posts_grouped[date] || 0, likes_in_created_posts_grouped[date] || 0, shared_created_posts_grouped[date] || 0]
+      data << [date, created_posts_grouped[date] || 0, comments_grouped[date] || 0, likes_in_created_posts_grouped[date] || 0, shared_created_posts_grouped[date] || 0]
     end
     data
   end
 
   def created_posts
     @cache_created_post ||= Post.where(created_at: interval).where.not(post_type: "share")
+  end
+
+  def comments
+    @cache_comments ||= Comment.where(created_at: interval)
   end
 
   def likes_in_created_posts
