@@ -238,6 +238,7 @@ Rails.application.routes.draw do
           put :activate
           put :banned
           put :change_role
+          get :statistics
         end
         collection do
           post :register
