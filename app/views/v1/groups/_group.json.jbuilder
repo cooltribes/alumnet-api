@@ -68,6 +68,17 @@ json.members do
     json.name user.name
     json.email user.email
     json.avatar user.avatar.small.url
+    json.avatar_medium user.avatar.medium.url
+  end
+end
+
+json.admins do
+  json.array! group.admins do |user|
+    json.id user.id
+    json.name user.name
+    json.email user.email
+    json.avatar user.avatar.small.url
+    json.avatar_medium user.avatar.medium.url
   end
 end
 
