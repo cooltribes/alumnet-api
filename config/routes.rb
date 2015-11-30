@@ -230,6 +230,7 @@ Rails.application.routes.draw do
       get 'stats/generation_and_gender', to: 'stats#generation_and_gender'
       get 'stats/seniorities', to: 'stats#seniorities'
       get 'stats/status', to: 'stats#status'
+      get 'stats/posts', to: 'stats#posts_stats'
       resources :users, except: [:new, :edit] do
         ## TODO: Refactor this. Splint in new controllers
         member do
@@ -239,6 +240,7 @@ Rails.application.routes.draw do
           put :activate
           put :banned
           put :change_role
+          get :statistics
         end
         collection do
           post :register
