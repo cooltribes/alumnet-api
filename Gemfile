@@ -27,6 +27,7 @@ gem 'sidekiq'
 gem 'sinatra', :require => nil
 gem 'acts-as-taggable-on', '~> 3.4'
 gem 'gcm'
+gem 'rollbar', '~> 2.4.0'
 
 group :development do
   gem 'spring'

@@ -10,7 +10,7 @@ set :deploy_to, '/home/ec2-user/alumnet/alumnet-api'
 set :branch, 'staging'
 
 #### Sidekiq options for capistrano-sidekiq
-set :sidekiq_queue, ['default', 'mailers', 'pusher']
+set :sidekiq_queue, ['default', 'mailers', 'pusher', 'rollbar']
 
 # Custom SSH Options
 # ==================
