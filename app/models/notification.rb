@@ -22,7 +22,7 @@ class Notification
   end
 
   ### Class Methods
-
+  # TODO: hacer review y refactor de preferences :yondry
   def self.notify_join_to_users(users, sender, group)
     return if users.blank?
     notification = new(users)

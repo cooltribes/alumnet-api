@@ -10,29 +10,39 @@ class AlumnetPostsStatistics
   end
 
   def get_data
-    { bar_data: bar_data, column_data: column_data }
+    { total: total, data_by_date: data_by_date, data_by_users: data_by_users }
   end
 
-  def bar_data
+  def total
     data = []
-    data << ["Element", "#"]
+    data << ["Type", "Cant."]
     data << ["Created Posts", created_posts.count]
     data << ["Comments", comments.count]
-    data << ["Like in Posts", likes_in_created_posts.count]
+    data << ["Likes", likes_in_created_posts.count]
     data << ["Shared Posts", shared_created_posts.count]
     data
   end
 
-  def column_data
+  def data_by_date
     data = []
-    created_posts_grouped = group_collection(created_posts)
-    comments_grouped = group_collection(comments)
-    likes_in_created_posts_grouped = group_collection(likes_in_created_posts)
-    shared_created_posts_grouped = group_collection(shared_created_posts)
-    data << [@group_by, "Created Posts", "Comments", "Like in Posts", "Shared Posts"]
+    created_posts_grouped = group_by_created(created_posts)
+    comments_grouped = group_by_created(comments)
+    likes_in_created_posts_grouped = group_by_created(likes_in_created_posts)
+    shared_created_posts_grouped = group_by_created(shared_created_posts)
+    data << [@group_by, "Created Posts", "Comments", "Likes", "Shared Posts"]
     date_keys.each do |date|
       data << [date, created_posts_grouped[date] || 0, comments_grouped[date] || 0, likes_in_created_posts_grouped[date] || 0, shared_created_posts_grouped[date] || 0]
     end
+    data
+  end
+
+  def data_by_users
+    data = []
+    data << ["Type", "Users"]
+    data << ["Created Posts", group_by_user(created_posts)]
+    data << ["Comments", group_by_user(comments)]
+    data << ["Likes", group_by_user(likes_in_created_posts)]
+    data << ["Shared Posts", group_by_user(shared_created_posts)]
     data
   end
 
@@ -72,8 +82,12 @@ class AlumnetPostsStatistics
     end
   end
 
-  def group_collection(collection)
+  def group_by_created(collection)
     result = collection.group_by { |c| c.created_at.strftime(intvl) }
     result.each { |k,v| result[k] = v.size }
+  end
+
+  def group_by_user(collection)
+    collection.group_by { |c| c.user_id }.size
   end
 end

@@ -7,13 +7,14 @@ class V1::Users::EmailPreferencesController < V1::BaseController
 
 
   def create
+    # TODO: Hacer review a esto :yondry
     @email_preference = EmailPreference.find_by(name: params[:name], user_id: params[:user_id])
     if @email_preference.present?
       @email_preference.value = params[:value]
     else
       @email_preference = EmailPreference.new(create_params)
     end
-    
+
     if @email_preference.save
       render :show, status: :created
     else
