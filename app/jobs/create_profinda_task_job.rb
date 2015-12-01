@@ -1,4 +1,5 @@
 class CreateProfindaTaskJob < ActiveJob::Base
+  include Rollbar::ActiveJob
   queue_as :default
 
   def perform(task_id)

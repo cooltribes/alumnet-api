@@ -1,4 +1,5 @@
 class DeleteProfindaTaskJob < ActiveJob::Base
+  include Rollbar::ActiveJob
   queue_as :default
 
   def perform(user_id, profinda_id)
