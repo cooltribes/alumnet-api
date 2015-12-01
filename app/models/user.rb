@@ -179,7 +179,7 @@ class User < ActiveRecord::Base
 
   ### all about Conversations
   def unread_messages_count
-    mailbox.inbox.where("mailboxer_receipts.is_read = false").count
+    mailbox.conversations.where("mailboxer_receipts.is_read = false").count
   end
 
   def unread_notifications_count
