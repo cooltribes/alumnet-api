@@ -7,6 +7,11 @@ set :scm, :git
 set :linked_files, %w{config/database.yml config/application.yml}
 set :linked_dirs, %w{public/uploads}
 
+# Rollbar integration
+set :rollbar_token, 'ff2f3b4759d746b9b955259ab820144e'
+set :rollbar_env, Proc.new { fetch :stage }
+set :rollbar_role, Proc.new { :app }
+
 # there is a known bug that prevents sidekiq from starting when pty is true on Capistrano 3.
 
 # set :nginx_sudo_tasks, ['nginx:restart', 'nginx:configtest']
