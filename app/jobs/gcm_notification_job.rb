@@ -1,5 +1,4 @@
 class GcmNotificationJob < ActiveJob::Base
-  include Rollbar::ActiveJob
   queue_as :default
 
   def perform(notification, recipients_collection)

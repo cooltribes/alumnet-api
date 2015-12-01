@@ -1,5 +1,4 @@
 class SaveProfindaProfileJob < ActiveJob::Base
-  include Rollbar::ActiveJob
   queue_as :default
 
   def perform(user_id)

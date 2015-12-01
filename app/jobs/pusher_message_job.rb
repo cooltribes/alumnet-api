@@ -1,5 +1,4 @@
 class PusherMessageJob < ActiveJob::Base
-  include Rollbar::ActiveJob
   queue_as :pusher
 
   def perform(message, recipients_collection)

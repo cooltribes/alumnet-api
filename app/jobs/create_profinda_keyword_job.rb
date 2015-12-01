@@ -1,5 +1,4 @@
 class CreateProfindaKeywordJob < ActiveJob::Base
-  include Rollbar::ActiveJob
   queue_as :default
 
   def perform(user_id, keywords, keyword_type)
