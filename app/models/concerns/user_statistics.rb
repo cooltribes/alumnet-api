@@ -3,10 +3,10 @@ class UserStatistics
 
   # group_by = "years"-"months"-"days"
 
-  def initialize(user, init_date = nil, end_date = nil, group_by = nil)
+  def initialize(user, init_date = (Date.today - 7), end_date = Date.today, group_by = nil)
     @user = user
-    @init_date = init_date || "01-01-2015"
-    @end_date = end_date || Date.today.strftime("%d-%m-%Y")
+    @init_date = parse_date(init_date)
+    @end_date = parse_date(end_date)
     @group_by = group_by || "days"
   end
 
@@ -54,7 +54,7 @@ class UserStatistics
   private
 
   def date_keys
-    (Date.parse(init_date)..Date.parse(end_date)).map { |d| d.strftime(intvl) }.uniq if interval
+    interval.map { |d| d.strftime(intvl) }.uniq if interval
   end
 
   def interval
@@ -73,5 +73,15 @@ class UserStatistics
   def group_collection(collection)
     result = collection.group_by { |c| c.created_at.strftime(intvl) }
     result.each { |k,v| result[k] = v.size }
+  end
+
+  def parse_date(date)
+    if date.is_a?(String)
+      Date.parse(date)
+    elsif date.is_a?(Date)
+      date
+    else
+      Date.today
+    end
   end
 end
