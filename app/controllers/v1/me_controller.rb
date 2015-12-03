@@ -5,11 +5,16 @@ class V1::MeController < V1::BaseController
   end
 
   def profinda_token
-    token = @user.profinda_api_token
-    if token
-      render json: { profinda_api_token: token }
+    if @user.profinda_uid.present?
+      profinda_api = ProfindaApiClient.new(@user.email, @user.profinda_password)
     else
-      render json: { errors: { api_token: ['Profinda TOKEN no found'] } }, status: :unprocessable_entity
+      profinda_api = @user.save_data_in_profinda #TODO: esto es raro. refactorizar en proxima ver. :armando
+    end
+
+    if profinda_api.valid?
+      render json: { profinda_api_token: profinda_api.api_token }
+    else
+      render json: { errors: profinda_api.errors }
     end
   end
 
@@ -63,7 +68,7 @@ class V1::MeController < V1::BaseController
   end
 
   def messages
-    @receipts = @user.receipts.messages_receipts.limit(3)
+    @receipts = @user.receipts.messages_receipts.limit(6)
     render "v1/me/receipts/index", status: :ok
   end
 

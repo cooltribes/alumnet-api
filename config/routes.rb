@@ -48,6 +48,9 @@ Rails.application.routes.draw do
         put :mark_all_read, on: :collection
         put :mark_as_read, on: :member
         put :mark_as_unread, on: :member
+        get :friendship, on: :collection
+        get :general, on: :collection
+        put :mark_requests_all_read, on: :collection
       end
       resources :privacies, except: :show, controller: 'me/privacies'
       resources :approval_requests, except: [:show], controller: 'me/approval' do
@@ -88,6 +91,7 @@ Rails.application.routes.draw do
       end
       resources :payments, except: :show, controller: 'users/payments'
       post :change_password, on: :member
+      resources :email_preferences, controller: 'users/email_preferences'
     end
 
     resources :groups do
@@ -229,6 +233,7 @@ Rails.application.routes.draw do
       get 'stats/generation_and_gender', to: 'stats#generation_and_gender'
       get 'stats/seniorities', to: 'stats#seniorities'
       get 'stats/status', to: 'stats#status'
+      get 'stats/posts', to: 'stats#posts_stats'
       resources :users, except: [:new, :edit] do
         ## TODO: Refactor this. Splint in new controllers
         member do
@@ -238,6 +243,7 @@ Rails.application.routes.draw do
           put :activate
           put :banned
           put :change_role
+          get :statistics
         end
         collection do
           post :register

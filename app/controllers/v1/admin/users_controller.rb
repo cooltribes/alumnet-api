@@ -27,6 +27,11 @@ class V1::Admin::UsersController < V1::AdminController
     end
   end
 
+  def statistics
+    stats = UserStatistics.new(@user, params[:init_date], params[:end_date], params[:group_by])
+    render json: stats.get_data
+  end
+
   def groups
     @q = @user.groups.ransack(params[:q])
     @groups = @q.result

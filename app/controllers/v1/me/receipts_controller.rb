@@ -12,7 +12,13 @@ class V1::Me::ReceiptsController < V1::BaseController
     @receipt = @user.reply_to_conversation(@conversation, body)
     recipients = @conversation.recipients
     recipients.delete(@user)
-    PusherDelegator.notify_new_message(@receipt.message, recipients)
+    PusherDelegator.send_message(@receipt.message, recipients)
+    recipients.each do |recipient|
+      preference = recipient.email_preferences.find_by(name: 'message')
+      if not(preference.present?) || (preference.present? && preference.value == 0)
+        UserMailer.new_message_direct(@user, recipient, @conversation).deliver_later
+      end
+    end
     render :show, status: :created
   end
 

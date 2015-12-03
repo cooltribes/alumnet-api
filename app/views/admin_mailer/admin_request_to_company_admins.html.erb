@@ -1,7 +1,10 @@
 <div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
-	<p>Greetings <%= "#{ @admin.name }" %></p>
+	<p>Hello <%= "#{ @admin.name }" %></p>
 	<p>
-	  <%= "#{@user.name}" %> sent a request for admin righst in your company.
+	  <%= "#{@user.name}" %> sent you a request to administer your company <%= "#{@company.name}" %>.
 	  <br>	  
+	</p>
+	<p>
+	Visit your company <a href=<%= "#{Settings.ui_endpoint}/#companies/#{@company.id}/employees" %>>here</a>
 	</p>
 </div>

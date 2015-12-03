@@ -10,6 +10,11 @@ class UserCoverUploader < CarrierWave::Uploader::Base
     # process :resize_to_fill => [1600, 500]
   end
 
+  version :card do
+    process :crop!
+    process :resize_to_fill => [170, 450]
+  end
+
   version :crop do
     process :crop!
   end

@@ -27,6 +27,11 @@ class V1::Admin::StatsController < V1::AdminController
     render json: graphs_info
   end
 
+  def posts_stats
+    stats = AlumnetPostsStatistics.new(@init_date, @end_date, params[:group_by])
+    render json: stats.get_data
+  end
+
   private
     def set_stats
       @stats = AlumnetUsersStatistics.new(current_user)

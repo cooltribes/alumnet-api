@@ -29,6 +29,7 @@ class User < ActiveRecord::Base
   has_many :posts, as: :postable, dependent: :destroy
   has_many :publications, class_name: "Post", dependent: :destroy
   has_many :likes, dependent: :destroy
+  has_many :comments, dependent: :destroy
   has_many :privacies, dependent: :destroy
   has_many :albums, as: :albumable, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
@@ -53,9 +54,11 @@ class User < ActiveRecord::Base
   has_many :profile_visits, dependent: :destroy
   has_many :posts_by_like, through: :likes, source: :likeable, source_type: "Post"
   has_many :devices, dependent: :destroy
+  has_many :email_preferences, dependent: :destroy
   has_one :profile, dependent: :destroy
   has_one :admin_note, dependent: :destroy
   belongs_to :admin_location, polymorphic: true
+
 
   ### Scopes
   scope :without_externals, -> { where.not(role: ROLES[:external]) }
@@ -167,9 +170,29 @@ class User < ActiveRecord::Base
 
 
   ##Mailboxer Methods
-  def notification_by(type)
+  def friendship_notifications()
     mailbox.notifications.joins(:notification_detail)
-    .where(notification_details: {notification_type: type})
+    .where(notification_details: {notification_type: ['friendship', 'approval']})
+  end
+
+  def general_notifications()
+    mailbox.notifications.joins(:notification_detail)
+    .where.not(notification_details: {notification_type: ['friendship', 'approval']})
+  end
+
+  ### all about Conversations
+  def unread_messages_count
+    mailbox.conversations.where("mailboxer_receipts.is_read = false").count
+  end
+
+  def unread_notifications_count
+    mailbox.notifications.joins(:notification_detail)
+    .where.not(notification_details: {notification_type: ['friendship', 'approval']}).unread.count
+  end
+
+  def unread_friendship_notifications_count
+    mailbox.notifications.joins(:notification_detail)
+    .where(notification_details: {notification_type: ['friendship', 'approval']}).unread.count
   end
 
   ##Sugestions Methods
@@ -177,7 +200,7 @@ class User < ActiveRecord::Base
     aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq || []
     profile_countries_ids = [profile.residence_country_id, profile.birth_country_id]
     countries_ids = [aiesec_countries_ids, profile_countries_ids].flatten.uniq
-    groups = Group.where(country_id: countries_ids).official
+    groups = Group.where(country_id: countries_ids).not_secret
     if groups.size < limit
       groups.to_a | Group.not_secret.order("RANDOM()").limit(limit - groups.size).to_a
     else
@@ -310,15 +333,6 @@ class User < ActiveRecord::Base
 
   def is_external?
     role == "External"
-  end
-
-  ### all about Conversations
-  def unread_messages_count
-    mailbox.inbox.where("mailboxer_receipts.is_read = false").count
-  end
-
-  def unread_notifications_count
-    mailbox.notifications.unread.count
   end
 
   ### all about Post

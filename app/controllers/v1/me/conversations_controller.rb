@@ -14,7 +14,13 @@ class V1::Me::ConversationsController < V1::BaseController
   def create
     recipients = User.where(id: users_ids)
     @conversation = @user.send_message(recipients, body, subject).conversation
-    PusherDelegator.notify_new_message(@conversation.last_message, recipients.to_a)
+    PusherDelegator.send_message(@conversation.last_message, recipients.to_a)
+    recipients.each do |recipient|
+      preference = recipient.email_preferences.find_by(name: 'message')
+      if not(preference.present?) || (preference.present? && preference.value == 0)
+        UserMailer.new_message_direct(@user, recipient, @conversation).deliver_later
+      end
+    end
     render :show, status: :created
   end
 
