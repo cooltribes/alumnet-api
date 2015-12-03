@@ -1,5 +1,5 @@
 class V1::CompaniesController < V1::BaseController
-  before_action :set_company, except: [:index, :create]
+  before_action :set_company, except: [:index, :create, :all]
 
   def index
     @q = Company.search(params[:q])
@@ -8,7 +8,12 @@ class V1::CompaniesController < V1::BaseController
       @companies = Kaminari.paginate_array(@companies).page(params[:page]).per(params[:per_page])
     else
       @companies = @companies.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object
-    end    
+    end
+  end
+
+  def all
+    @companies = Company.all.order(:name)
+    render :index
   end
 
   def employees

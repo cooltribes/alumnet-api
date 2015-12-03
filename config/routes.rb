@@ -151,6 +151,7 @@ Rails.application.routes.draw do
 
     resources :companies do
       post :cropping, on: :member
+      get :all, on: :collection
       get :employees, on: :member
       get :past_employees, on: :member
       get :admins, on: :member

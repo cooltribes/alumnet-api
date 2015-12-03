@@ -14,7 +14,7 @@ class V1::MeController < V1::BaseController
     if profinda_api.valid?
       render json: { profinda_api_token: profinda_api.api_token }
     else
-      render json: { errors: profinda_api.errors }
+      render json: { errors: profinda_api.errors }, status: :unprocessable_entity
     end
   end
 
@@ -45,6 +45,7 @@ class V1::MeController < V1::BaseController
     if @user.inactive? && @user.created_by_admin?
       if @user.is_regular? && @user.profile.penultimate_step_complete?
         @user.activate!
+        @user.save_profinda_profile
         render json: { status: 'active' }
       elsif @user.is_external? && @user.profile.first_step_completed?
         @user.activate!
