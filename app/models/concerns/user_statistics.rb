@@ -72,7 +72,7 @@ class UserStatistics
   end
 
   def created_comments
-    @cache_created_likes ||= user.comments.where(created_at: interval)
+    @cache_created_comments ||= user.comments.where(created_at: interval)
   end
 
   def likes_in_created_posts
