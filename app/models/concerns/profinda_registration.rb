@@ -33,6 +33,7 @@ module ProfindaRegistration
       set_profinda_uid(profinda_api.user['id'])
       profinda_api.profile = info_for_profinda_registration
     end
+    profinda_api
   end
 
   def info_for_profinda_registration
