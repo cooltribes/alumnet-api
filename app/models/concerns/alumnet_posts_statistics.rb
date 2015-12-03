@@ -15,7 +15,7 @@ class AlumnetPostsStatistics
 
   def total
     data = []
-    data << ["Type", "Cant."]
+    data << ["Type", "Total"]
     data << ["Created Posts", created_posts.count]
     data << ["Comments", comments.count]
     data << ["Likes", likes_in_created_posts.count]

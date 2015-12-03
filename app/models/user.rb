@@ -28,6 +28,7 @@ class User < ActiveRecord::Base
   has_many :posts, as: :postable, dependent: :destroy
   has_many :publications, class_name: "Post", dependent: :destroy
   has_many :likes, dependent: :destroy
+  has_many :comments, dependent: :destroy
   has_many :privacies, dependent: :destroy
   has_many :albums, as: :albumable, dependent: :destroy
   has_many :subscriptions, dependent: :destroy

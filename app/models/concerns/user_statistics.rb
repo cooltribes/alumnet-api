@@ -11,19 +11,30 @@ class UserStatistics
   end
 
   def get_data
-    { bar_data: bar_data, column_data: column_data }
+    { influence_total: influence_total, influence_detail: influence_detail,
+      activity_total: activity_total, activity_detail: activity_detail }
   end
 
-  def bar_data
+  def influence_total
     data = []
-    data << ["Element", "#"]
+    data << ["Element", "Total"]
     data << ["Created Posts", created_posts.count]
     data << ["Like in Posts", likes_in_created_posts.count]
     data << ["Shared Posts", shared_created_posts.count]
     data
   end
 
-  def column_data
+  def activity_total
+    data = []
+    data << ["Element", "Total"]
+    data << ["Created Posts", created_posts.count]
+    data << ["Created Likes", created_likes.count]
+    data << ["Created Comments", created_comments.count]
+    data << ["Created Shared Posts", created_shared_posts.count]
+    data
+  end
+
+  def influence_detail
     data = []
     created_posts_grouped = group_collection(created_posts)
     likes_in_created_posts_grouped = group_collection(likes_in_created_posts)
@@ -35,8 +46,33 @@ class UserStatistics
     data
   end
 
+  def activity_detail
+    data = []
+    created_posts_grouped = group_collection(created_posts)
+    created_likes_grouped = group_collection(created_likes)
+    created_comments_grouped = group_collection(created_comments)
+    created_shared_grouped = group_collection(created_shared_posts)
+    data << [@group_by, "Created Posts", "Created Likes", "Created Comments", "Created Shared Posts"]
+    date_keys.each do |date|
+      data << [date, created_posts_grouped[date] || 0, created_likes_grouped[date] || 0, created_comments_grouped[date] || 0, created_shared_grouped[date] || 0]
+    end
+    data
+  end
+
   def created_posts
-    @cache_created_post ||= user.publications.where(created_at: interval)
+    @cache_created_post ||= user.publications.where(post_type: "regular", created_at: interval)
+  end
+
+  def created_shared_posts
+    @cache_shared ||= user.publications.where(post_type: "share", created_at: interval)
+  end
+
+  def created_likes
+    @cache_created_likes ||= user.likes.where(created_at: interval)
+  end
+
+  def created_comments
+    @cache_created_likes ||= user.comments.where(created_at: interval)
   end
 
   def likes_in_created_posts
