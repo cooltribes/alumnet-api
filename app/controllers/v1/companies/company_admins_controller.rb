@@ -4,7 +4,7 @@ class V1::Companies::CompanyAdminsController < V1::BaseController
   before_action :set_company_admin, except: [:index, :create]
 
   def index
-    @q = @company.company_admins.sent.search(params[:q])
+    @q = @company.company_admins.sent.ransack(params[:q])
     @company_admins = @q.result
   end
 
@@ -17,7 +17,7 @@ class V1::Companies::CompanyAdminsController < V1::BaseController
         Notification.notify_new_company_admin(@company_admin)
       else  #If another user asked for admin, send an email to admins.
         Notification.notify_admin_request_to_company_admins(@company.accepted_admins.to_a, @current_user, @company)
-      end  
+      end
 
       render :show, status: :created
     else
@@ -29,7 +29,7 @@ class V1::Companies::CompanyAdminsController < V1::BaseController
     authorize(@company)
     if @company_admin.mark_as_accepted_by(current_user)
       Notification.notify_new_company_admin(@company_admin)
-      render :show, status: :ok    
+      render :show, status: :ok
     else
       render json: @company_admin.errors, status: :unprocessable_entity
     end

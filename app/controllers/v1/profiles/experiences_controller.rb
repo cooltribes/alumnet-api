@@ -4,7 +4,7 @@ class V1::Profiles::ExperiencesController < V1::BaseController
   before_action :set_experience, except: [:index, :create]
 
   def index
-    @q = @profile.experiences.search(params[:q])
+    @q = @profile.experiences.ransack(params[:q])
     @experiences = @q.result
   end
 

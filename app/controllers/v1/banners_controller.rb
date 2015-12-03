@@ -3,7 +3,7 @@ class V1::BannersController < V1::BaseController
   before_action :set_banner, except: [:index, :create]
 
   def index
-    @q = Banner.search(params[:q])
+    @q = Banner.ransack(params[:q])
     @banners = @q.result
   end
 

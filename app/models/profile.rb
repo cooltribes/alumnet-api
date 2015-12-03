@@ -2,8 +2,11 @@ class Profile < ActiveRecord::Base
   acts_as_paranoid
   mount_uploader :avatar, AvatarUploader
   mount_uploader :cover, UserCoverUploader
+
   enum register_step: [:basic_information, :languages_and_skills, :aiesec_experiences, :completed]
+
   include Alumnet::Croppable
+  include Alumnet::Searchable
   include ProfileHelpers
 
   ##Crop avatar
@@ -24,8 +27,6 @@ class Profile < ActiveRecord::Base
   has_many :company_relations, dependent: :destroy
   has_many :companies
 
-
-
   ###Validations
   validates_presence_of :user_id, :first_name, :last_name, on: :update
   validates_inclusion_of :gender, in: ["M", "F"], on: :update
@@ -43,12 +44,27 @@ class Profile < ActiveRecord::Base
 
   ###Instance Methods
 
+  def as_indexed_json(options = {})
+    as_json(methods: [:name, :local_committee, :current_experience],
+      include: { birth_city: { only: :name }, birth_country: { only: :name },
+      residence_city: { only: :name }, residence_country: { only: :name },
+      user: { only: [:id, :email, :role]} })
+  end
+
   def limit_contact_infos(limit = nil)
     contact_infos.order(:contact_type).limit(limit)
   end
 
   def limit_professional_experiences(limit = nil)
     experiences.professional.order(:start_date).limit(limit)
+  end
+
+  def current_experience
+    experiences.current.order(:start_date).first || last_experience
+  end
+
+  def name
+    "#{first_name} #{last_name}"
   end
 
   def hidden_last_name
@@ -60,9 +76,7 @@ class Profile < ActiveRecord::Base
   end
 
   def local_committee
-    if first_aiesec_experience
-      first_aiesec_experience.committee if first_aiesec_experience.committee.present?
-    end
+    first_aiesec_experience.try(:committee)
   end
 
   def first_aiesec_experience
@@ -70,8 +84,6 @@ class Profile < ActiveRecord::Base
   end
 
   def last_experience
-    # experiences.where.not(exp_type: 2).last
-    #Getting the last experience added if is Current or not.
     experiences.where.not(exp_type: 2).order(end_date: :desc, id: :desc).first
   end
 

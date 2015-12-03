@@ -3,7 +3,7 @@ class V1::FeaturesController < V1::BaseController
   before_action :set_feature_for_validation, only: [:validate]
 
   def index
-    @q = Feature.search(params[:q])
+    @q = Feature.ransack(params[:q])
     @features = @q.result
   end
 

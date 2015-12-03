@@ -3,7 +3,7 @@ class V1::BaseLinksController < V1::BaseController
   before_action :set_link, except: [:index, :create]
 
   def index
-    @q = @linkable.links.search(params[:q])
+    @q = @linkable.links.ransack(params[:q])
     @links = @q.result
   end
 

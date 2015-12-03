@@ -3,9 +3,9 @@ class V1::Admin::Deleted::GroupsController < V1::AdminController
 
   def index
     @q = if @admin_location
-      @admin_location.groups.only_deleted.search(params[:q])
+      @admin_location.groups.only_deleted.ransack(params[:q])
     else
-      Group.only_deleted.search(params[:q])
+      Group.only_deleted.ransack(params[:q])
     end
     @groups = @q.result
   end

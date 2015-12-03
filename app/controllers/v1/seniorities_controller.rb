@@ -3,7 +3,7 @@ class V1::SenioritiesController < V1::BaseController
   before_action :set_seniority, except: [:index, :create]
 
   def index
-    @q = Seniority.search(params[:q])
+    @q = Seniority.ransack(params[:q])
     @seniorities = @q.result
   end
 

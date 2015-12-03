@@ -4,6 +4,7 @@ class Event < ActiveRecord::Base
   enum event_type: [:open, :closed, :secret]
   include Alumnet::Localizable
   include Alumnet::Croppable
+  include Alumnet::Searchable
   include EventHelpers
   include PaymentableMethods
 
@@ -41,6 +42,9 @@ class Event < ActiveRecord::Base
   scope :non_official, -> { where(official: false) }
 
   ### Instance methods
+  def as_indexed_json(options = {})
+    as_json(methods: [:city_info, :country_info])
+  end
 
   def is_open?
     event_type == "open"
@@ -86,7 +90,7 @@ class Event < ActiveRecord::Base
 
   def contacts_for(user, query)
     if eventable_type == 'Group'
-      group_members = eventable.members.search(query).result
+      group_members = eventable.members.ransack(query).result
       user_friends = user.search_accepted_friends(query)
       users = group_members | user_friends
     elsif eventable_type == 'User'

@@ -3,9 +3,9 @@ class V1::Admin::Deleted::UsersController < V1::AdminController
 
   def index
     @q = if @admin_location
-      @admin_location.users.only_deleted.search(params[:q])
+      @admin_location.users.only_deleted.ransack(params[:q])
     else
-      User.only_deleted.search(params[:q])
+      User.only_deleted.ransack(params[:q])
     end
     @users = @q.result
   end

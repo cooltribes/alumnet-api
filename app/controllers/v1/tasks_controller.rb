@@ -3,25 +3,25 @@ class V1::TasksController < V1::BaseController
   before_action :set_task, except: [:index, :my, :applied, :create, :automatches]
 
   def index
-    @q = Task.search(params[:q])
+    @q = Task.ransack(params[:q])
     @tasks = @q.result.limit(params[:limit])
     render 'v1/tasks/index'
   end
 
   def my
-    @q = current_user.tasks.search(params[:q])
+    @q = current_user.tasks.ransack(params[:q])
     @tasks = @q.result
     render 'v1/tasks/index'
   end
 
   def applied
-    @q = Task.applied_by(current_user).search(params[:q])
+    @q = Task.applied_by(current_user).ransack(params[:q])
     @tasks = @q.result
     render 'v1/tasks/index'
   end
 
   def automatches
-    @q = Task.profinda_automatches(current_user, help_type).search(params[:q])
+    @q = Task.profinda_automatches(current_user, help_type).ransack(params[:q])
     @tasks = @q.result
     if @tasks.class == Array
       @tasks = Kaminari.paginate_array(@tasks).page(params[:page]).per(params[:per_page])

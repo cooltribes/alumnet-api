@@ -4,7 +4,7 @@ class V1::BaseFoldersController < V1::BaseController
   before_action :set_folder, except: [:index, :create]
 
   def index
-    @q = @folderable.folders.search(params[:q])
+    @q = @folderable.folders.ransack(params[:q])
     @folders = @q.result
   end
 

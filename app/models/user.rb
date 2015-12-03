@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   acts_as_taggable
   include Alumnet::Amigable
   include Alumnet::Tag
+
   include UserHelpers
   include ProfindaRegistration
 
@@ -94,6 +95,7 @@ class User < ActiveRecord::Base
   end
 
   ### Instance Methods
+
   def devices_tokens(platform)
     devices.where(platform: platform).where(active: true).pluck(:token)
   end
@@ -109,7 +111,7 @@ class User < ActiveRecord::Base
   end
 
   def name
-    "#{profile.first_name} #{profile.last_name}"
+    profile.name
   end
 
   def profile
@@ -162,7 +164,7 @@ class User < ActiveRecord::Base
 
   def aiesec_location
     experience = profile.experiences.aisec.first
-    experience ? experience.country.try(:name) : nil
+    experience.try(:country).try(:name)
   end
 
 
@@ -338,11 +340,11 @@ class User < ActiveRecord::Base
     groups_ids = groups.pluck(:id)
     Post.joins(:postable_group).where(postable_type: "Group")
       .where("groups.id in(?) and groups.group_type = ?", groups_ids, 0)
-      .search(q).result
+      .ransack(q).result
   end
 
   def my_likes_posts(q)
-    posts = posts_by_like.includes(:postable).search(q).result.to_a
+    posts = posts_by_like.includes(:postable).ransack(q).result.to_a
     posts.reject! do |post|
       post.in_group_closed_or_secret? || post.in_event_closed_or_secret?
     end
@@ -366,7 +368,7 @@ class User < ActiveRecord::Base
   end
 
   def my_posts(query)
-    posts.includes(:postable).search(query).result | publications.includes(:postable).search(query).result
+    posts.includes(:postable).ransack(query).result | publications.includes(:postable).ransack(query).result
   end
 
   def publicable_posts(query)

@@ -3,15 +3,15 @@ class V1::Users::AlbumsController < V1::BaseController
 
   before_action :set_user
   before_action :set_album, except: [:index, :create]
-  
+
   def index
-    @q = @user.albums.search(params[:q])
+    @q = @user.albums.ransack(params[:q])
     @albums = @q.result
-  end  
+  end
 
   def show
   end
-  
+
   def create
     @album = Album.new(album_params)
     @album.user = current_user #set the creator

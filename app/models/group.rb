@@ -6,6 +6,7 @@ class Group < ActiveRecord::Base
 
   include Alumnet::Localizable
   include Alumnet::Croppable
+  include Alumnet::Searchable
 
   ## Virtual Attributes
   attr_accessor :cover_uploader
@@ -54,6 +55,11 @@ class Group < ActiveRecord::Base
   ### class Methods
   def self.without_secret
     where.not(group_type: 2)
+  end
+
+  ### instance Methods
+  def as_indexed_json(options = {})
+    as_json(methods: [:city_info, :country_info])
   end
 
   def mode

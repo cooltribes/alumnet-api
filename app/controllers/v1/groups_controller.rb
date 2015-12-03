@@ -5,7 +5,7 @@ class V1::GroupsController < V1::BaseController
   before_action :set_group, except: [:index, :create]
 
   def index
-    @q = Group.without_secret.search(params[:q])
+    @q = Group.without_secret.ransack(params[:q])
     @groups = @q.result
     #@groups = Kaminari.paginate_array(@groups).page(params[:page]).per(params[:per_page])
     if @groups.class == Array
@@ -22,7 +22,7 @@ class V1::GroupsController < V1::BaseController
   end
 
   def subgroups
-    @q = @group.children.search(params[:q])
+    @q = @group.children.ransack(params[:q])
     @groups = @q.result
     render :index, status: :ok
   end

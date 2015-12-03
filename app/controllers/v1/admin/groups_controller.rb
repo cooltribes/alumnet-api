@@ -3,9 +3,9 @@ class V1::Admin::GroupsController < V1::AdminController
 
   def index
     @q = if @admin_location
-      @admin_location.groups.search(params[:q])
+      @admin_location.groups.ransack(params[:q])
     else
-      Group.search(params[:q])
+      Group.ransack(params[:q])
     end
     @groups = @q.result
   end
@@ -14,7 +14,7 @@ class V1::Admin::GroupsController < V1::AdminController
   end
 
   def subgroups
-    @q = @group.children.search(params[:q])
+    @q = @group.children.ransack(params[:q])
     @groups = @q.result
     render :index, status: :ok
   end

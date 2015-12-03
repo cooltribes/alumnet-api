@@ -5,7 +5,7 @@ class V1::Folders::AttachmentsController < V1::BaseController
   before_action :check_new_folder, only: :update
 
   def index
-    @q = @folder.attachments.search(params[:q])
+    @q = @folder.attachments.ransack(params[:q])
     @attachments = @q.result
   end
 

@@ -10,7 +10,7 @@ class V1::Groups::MembershipsController < V1::BaseController
   end
 
   def members
-    @q = @group.memberships.accepted.search(params[:q])
+    @q = @group.memberships.accepted.ransack(params[:q])
     @memberships = @q.result
     render :index
   end

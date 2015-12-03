@@ -5,6 +5,11 @@ class CoverUploader < CarrierWave::Uploader::Base
   include AlumnetUploader::Base
   include AlumnetUploader::Crop
 
+  version :small do
+    process :crop!
+    process :resize_to_fill => [20, 20]
+  end
+
   version :main do
     process :crop!
     process :resize_to_fit => [1360, 430]

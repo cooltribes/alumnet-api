@@ -4,6 +4,7 @@ class Company < ActiveRecord::Base
   mount_uploader :cover, CoverUploader
   include Alumnet::Localizable
   include Alumnet::Croppable
+  include Alumnet::Searchable
 
   SIZE = {
     1 => "1 - 10",
@@ -30,7 +31,9 @@ class Company < ActiveRecord::Base
   has_many :contact_infos, as: :contactable, dependent: :destroy
   has_many :company_admins, dependent: :destroy
   has_many :admins, through: :company_admins, source: :user
-  has_and_belongs_to_many :product_services, dependent: :destroy
+  has_and_belongs_to_many :product_services, dependent: :destroy #,
+    # after_add: [ lambda { |a,c| a.__elasticsearch__.index_document } ],
+    # after_remove: [ lambda { |a,c| a.__elasticsearch__.index_document } ]
 
   ### Validations
   validates_presence_of :name
@@ -47,6 +50,13 @@ class Company < ActiveRecord::Base
   end
 
   ### instance Methods
+
+  ### Elastic ###
+  def as_indexed_json(options = {})
+    as_json(methods: [:city_info, :country_info],
+      include: { sector: { only: :name }, product_services: { only: :name } })
+  end
+
   def accepted_admins
     admins.where(company_admins: { status: 1 })
   end

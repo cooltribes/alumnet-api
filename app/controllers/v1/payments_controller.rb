@@ -5,7 +5,7 @@ class V1::PaymentsController < V1::BaseController
   # TODO: Refactor this controller
 
   def index
-    @q = Payment.search(params[:q])
+    @q = Payment.ransack(params[:q])
     @payments = @q.result
   end
 
