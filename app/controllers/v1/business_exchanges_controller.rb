@@ -1,14 +1,8 @@
 class V1::BusinessExchangesController < V1::TasksController
 
   def index
-    @q = Task.business_exchanges.search(params[:q])
-    @tasks = @q.result
-    if @tasks.class == Array
-      @tasks = Kaminari.paginate_array(@tasks).page(params[:page]).per(params[:per_page])
-    else
-      @tasks = @tasks.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object
-    end    
-    #@tasks = @q.result.limit(params[:limit])
+    @q = Task.business_exchanges.current_tasks.search(params[:q])
+    @tasks = @q.result.page(params[:page]).per(params[:per_page])
     render 'v1/tasks/index'
   end
 

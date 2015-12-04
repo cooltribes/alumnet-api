@@ -1,5 +1,7 @@
 require 'rails_helper'
 
+Mailboxer::Notification.send(:include, MailboxerExtend)
+
 describe V1::MeController, type: :request do
   let!(:user) { User.make! }
 

@@ -33,7 +33,8 @@ class Task < ActiveRecord::Base
   scope :job_exchanges, -> { where(help_type: "task_job_exchange") }
   scope :meetup_exchanges, -> { where(help_type: "task_meetup_exchange") }
 
-  scope :current, -> { where("arrival_date >= ?", Date.today) }
+  scope :current_meetups, -> { where("arrival_date >= ?", Date.today) }
+  scope :current_tasks, -> { where("post_until >= ?", Date.today) }
 
   ## Callbacks
   before_validation :check_help_type_and_set_values
