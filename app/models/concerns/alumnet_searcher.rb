@@ -40,6 +40,8 @@ class AlumnetSearcher
   def searcheable
     model = @type.capitalize.constantize
     return model if searchable_models.include?(model)
+  rescue
+    return nil
   end
 
   def searchable_models
