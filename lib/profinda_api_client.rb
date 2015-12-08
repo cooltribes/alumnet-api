@@ -189,7 +189,6 @@ class ProfindaApiClient
       else
         if response.success?
           @valid = true
-          response.parsed_response
           parse_data(response.parsed_response)
         else
           @valid = false
