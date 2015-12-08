@@ -16,16 +16,13 @@ class Task < ActiveRecord::Base
   POSITION_TYPES = { 0 => "Top Management/Director", 1 => "Middle management", 2 => "Senior Specialist",
     3 => "Junior Specialist", 4 => "Entry job" }
 
-  # HELP TYPES
-  # "task_business_exchange"
-  # "task_home_exchange"
-  # "task_job_exchange"
-  # "task_meetup_exchange"
+  HELP_TYPES = ["task_business_exchange", "task_home_exchange", "task_job_exchange", "task_meetup_exchange"]
 
   enum application_type: [ :alumnet, :external ]
 
   ## Validations
   validates_presence_of :name, :description, :nice_have_list, :help_type, :post_until, :user_id
+  validates_presence_of :arrival_date,  if: Proc.new { |t| t.task_meetup_exchange? }
 
   ## Scopes
   scope :business_exchanges, -> { where(help_type: "task_business_exchange") }
@@ -40,13 +37,21 @@ class Task < ActiveRecord::Base
   before_validation :check_help_type_and_set_values
   after_save :set_task_attributes
 
+  ## Dinamics methods
+
+  HELP_TYPES.each do |type|
+    define_method("#{type}?") do
+      help_type == type
+    end
+  end
+
   ## Instance methods
 
   def apply(user)
     match = matches.find_or_initialize_by(user: user)
     match.applied = true
     if match.save
-      UserMailer.meetup_apply(user, self).deliver_later
+      UserMailer.meetup_apply(user, self).deliver_later if task_meetup_exchange?
     end
   end
 
