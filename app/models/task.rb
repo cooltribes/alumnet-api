@@ -195,7 +195,7 @@ class Task < ActiveRecord::Base
     profinda_api = ProfindaApiClient.new(user.email, user.profinda_password)
     if profinda_api
       profinda_tasks = profinda_api.automatches
-      tasks = Task.where(profinda_id: profinda_tasks, help_type: help_type)
+      tasks = Task.current_tasks.where(profinda_id: profinda_tasks, help_type: help_type)
       tasks.each do |task|
         task.matches.find_or_create_by(user: user)
       end
