@@ -170,6 +170,7 @@ class User < ActiveRecord::Base
 
 
   ##Mailboxer Methods
+  #TODO: quitar parentesis y refatorizar los counts :yondri
   def friendship_notifications()
     mailbox.notifications.joins(:notification_detail)
     .where(notification_details: {notification_type: ['friendship', 'approval']})

@@ -10,6 +10,9 @@ Rails.application.routes.draw do
 
   mount Sidekiq::Web => '/sidekiq'
 
+  root 'home#index'
+  get '/status', to: 'home#status'
+
   api_version(:module => "V1", :header => {:name => "Accept", :value => "application/vnd.alumnet+json;version=1"}) do
 
     post '/sign_in', to: 'auth#sign_in', as: :sign_in
@@ -154,6 +157,7 @@ Rails.application.routes.draw do
 
     resources :companies do
       post :cropping, on: :member
+      get :all, on: :collection
       get :employees, on: :member
       get :past_employees, on: :member
       get :admins, on: :member

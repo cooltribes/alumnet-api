@@ -10,7 +10,7 @@ class Keyword < ActiveRecord::Base
   ### Class Methods
   def self.add_keywords_to_profinda(user, keywords, keyword_type = 1)
     key = keyword_type == 0 ? "pcf_alumnet_business_exchange_offers" : "pcf_alumnet_business_exchange_search"
-    profinda_api = ProfindaApi.new(user.email, user.profinda_password)
+    profinda_api = ProfindaApiClient.new(user.email, user.profinda_password)
     profinda_api.profile = { key => keywords.join("&#x2c;") }
   end
 

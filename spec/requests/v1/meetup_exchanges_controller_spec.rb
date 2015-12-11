@@ -18,7 +18,7 @@ describe V1::MeetupExchangesController, type: :request do
     it "return all meetup_exchanges" do
       VCR.use_cassette('request_tasks_index') do
         3.times { Task.make!(:job) }
-        3.times { Task.make!(:meetup) }
+        3.times { Task.make!(:meetup, arrival_date: (Date.today + 1)) }
       end
       get meetup_exchanges_path, {}, basic_header(user.auth_token)
       expect(response.status).to eq 200

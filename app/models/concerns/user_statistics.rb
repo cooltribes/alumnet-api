@@ -19,8 +19,10 @@ class UserStatistics
     data = []
     data << ["Element", "Total"]
     data << ["Created Posts", created_posts.count]
-    data << ["Like in Posts", likes_in_created_posts.count]
+    data << ["Likes in Posts", likes_in_created_posts.count]
+    data << ["Comments in Posts", comments_in_created_posts.count]
     data << ["Shared Posts", shared_created_posts.count]
+    data << ["Login Count", @user.sign_in_count]
     data
   end
 
@@ -31,6 +33,7 @@ class UserStatistics
     data << ["Created Likes", created_likes.count]
     data << ["Created Comments", created_comments.count]
     data << ["Created Shared Posts", created_shared_posts.count]
+    data << ["Login Count", @user.sign_in_count]
     data
   end
 
@@ -38,10 +41,12 @@ class UserStatistics
     data = []
     created_posts_grouped = group_collection(created_posts)
     likes_in_created_posts_grouped = group_collection(likes_in_created_posts)
+    comments_in_created_posts_grouped = group_collection(comments_in_created_posts)
     shared_created_posts_grouped = group_collection(shared_created_posts)
-    data << [@group_by, "Created Posts", "Like in Posts", "Shared Posts"]
+    data << [@group_by, "Created Posts", "Likes in Posts", "Comments in Posts", "Shared Posts"]
     date_keys.each do |date|
-      data << [date, created_posts_grouped[date] || 0, likes_in_created_posts_grouped[date] || 0, shared_created_posts_grouped[date] || 0]
+      data << [date, created_posts_grouped[date] || 0, likes_in_created_posts_grouped[date] || 0,
+      comments_in_created_posts_grouped[date] || 0, shared_created_posts_grouped[date] || 0]
     end
     data
   end
@@ -75,10 +80,14 @@ class UserStatistics
     @cache_created_comments ||= user.comments.where(created_at: interval)
   end
 
+  def comments_in_created_posts
+    @cache_comments_in_created_posts ||= Comment.joins("INNER JOIN posts ON posts.id = comments.commentable_id")
+    .where(commentable_type: "Post", created_at: interval, posts: { user_id: user.id })
+  end
+
   def likes_in_created_posts
-    @cache_like_in_created_posts ||= Like.joins("INNER JOIN posts ON posts.id = likes.likeable_id")
-    .where(likeable_type: "Post", posts: { user_id: user.id })
-    .where(posts: { created_at: interval })
+    @cache_likes_in_created_posts ||= Like.joins("INNER JOIN posts ON posts.id = likes.likeable_id")
+    .where(likeable_type: "Post", created_at: interval, posts: { user_id: user.id })
   end
 
   def shared_created_posts
