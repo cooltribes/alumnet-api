@@ -23,6 +23,8 @@ class Event < ActiveRecord::Base
   has_many :albums, as: :albumable, dependent: :destroy
   has_many :folders, as: :folderable, dependent: :destroy
   #has_many :event_payments, dependent: :destroy
+  ##this is for pictures in description.
+  has_many :pictures, as: :pictureable, dependent: :destroy
   belongs_to :creator, class_name: "User"
   belongs_to :eventable, polymorphic: true
 

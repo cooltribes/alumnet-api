@@ -27,9 +27,10 @@ class Group < ActiveRecord::Base
   has_many :posts, as: :postable, dependent: :destroy
   has_many :albums, as: :albumable, dependent: :destroy
   has_many :events, as: :eventable, dependent: :destroy
-  belongs_to :creator, class_name: 'User'
-  has_many :albums, as: :albumable, dependent: :destroy
   has_many :folders, as: :folderable, dependent: :destroy
+  ##this is for pictures in description.
+  has_many :pictures, as: :pictureable, dependent: :destroy
+  belongs_to :creator, class_name: 'User'
 
   validates_presence_of :api_key, :list_id, if: 'mailchimp?'
 

@@ -98,7 +98,8 @@ Rails.application.routes.draw do
     end
 
     resources :groups do
-      post :cropping, on: :member, on: :member
+      post :picture, on: :member
+      post :cropping, on: :member
       post :add_group, on: :member
       get :subgroups, on: :member
       get :migrate_users, on: :member
@@ -113,8 +114,9 @@ Rails.application.routes.draw do
     end
 
     resources :events do
+      post :picture, on: :member
       get :contacts, on: :member
-      post :cropping, on: :member, on: :member
+      post :cropping, on: :member
       resources :posts, controller: 'events/posts'
       resources :albums, controller: 'events/albums'
       resources :payments, controller: 'events/payments'
