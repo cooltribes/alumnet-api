@@ -104,6 +104,7 @@ Rails.application.routes.draw do
       end
       resources :albums, controller: 'groups/albums'
       resources :folders, controller: 'groups/folders'
+      resources :campaigns, controller: 'groups/campaigns'
     end
 
     resources :events do
