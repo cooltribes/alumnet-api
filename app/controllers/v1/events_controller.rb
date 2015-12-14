@@ -12,6 +12,17 @@ class V1::EventsController < V1::BaseEventsController
     render json: { status: 'success', url: @event.cover.crop.url }
   end
 
+  def picture
+    render json: { error: "Not file given" }, status: :unprocessable_entity unless params.key?(:file)
+    service = ::Pictures::CreatePicture.new(@event, current_user, params)
+    if service.call
+      @picture = service.picture
+      render 'v1/pictures/show', status: :created
+    else
+      render json: service.errors, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_event
