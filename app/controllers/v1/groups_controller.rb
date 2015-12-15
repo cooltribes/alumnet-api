@@ -169,7 +169,7 @@ class V1::GroupsController < V1::BaseController
 
   def group_params
     params.permit(:name, :description, :short_description, :cover, :group_type, :official, :country_id,
-      :city_id, :join_process, :mailchimp, :api_key, :list_id, :upload_files, :cover_position)
+      :city_id, :join_process, :mailchimp, :api_key, :list_id, :upload_files, :cover_position, picture_ids:[])
   end
 
   def crop_params
