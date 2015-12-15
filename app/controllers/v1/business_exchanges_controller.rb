@@ -1,7 +1,7 @@
 class V1::BusinessExchangesController < V1::TasksController
 
   def index
-    @q = Task.business_exchanges.current_tasks.search(params[:q])
+    @q = Task.business_exchanges.current_tasks.ransack(params[:q])
     @tasks = @q.result.page(params[:page]).per(params[:per_page])
     render 'v1/tasks/index'
   end
