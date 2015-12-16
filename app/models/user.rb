@@ -418,6 +418,7 @@ class User < ActiveRecord::Base
   ### Function to validate users subcription every day
 
   def validate_subscription
+    # TODO: refactorizar esto con : through para acceder directo a .product :yondri
     user_products.where('status = 1').each do |user_product|
       if user_product.product.feature == 'subscription'
         if user_product.end_date && user_product.end_date.past?
