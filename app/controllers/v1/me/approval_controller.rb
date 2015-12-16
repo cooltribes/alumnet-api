@@ -3,7 +3,8 @@ class V1::Me::ApprovalController < V1::BaseController
   before_action :set_and_check_approver, only: :create
 
   def index
-    @requests = @user.get_pending_approval_requests
+    @q = @user.get_pending_approval_requests
+    @requests = Kaminari.paginate_array(@q).page(params[:page]).per(params[:per_page])
   end
 
   def create

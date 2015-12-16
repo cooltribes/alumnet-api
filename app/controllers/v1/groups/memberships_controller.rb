@@ -12,6 +12,11 @@ class V1::Groups::MembershipsController < V1::BaseController
   def members
     @q = @group.memberships.accepted.search(params[:q])
     @memberships = @q.result
+    if @memberships.class == Array
+      @memberships = Kaminari.paginate_array(@memberships).page(params[:page]).per(params[:per_page]) 
+    else
+      @memberships = @memberships.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object 
+    end    
     render :index
   end
 
