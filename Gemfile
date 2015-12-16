@@ -61,4 +61,5 @@ group :test do
   gem 'rspec-sidekiq'
   gem 'webmock'
   gem 'vcr'
+  gem 'rspec-activejob'
 end

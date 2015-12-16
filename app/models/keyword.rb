@@ -15,7 +15,7 @@ class Keyword < ActiveRecord::Base
   end
 
   def self.add_to_profinda(user, keywords, keyword_type = 1)
-    CreateProfindaKeywordJob.perform_later(user.id, keywords, keyword_type) unless Rails.env.test?
+    CreateProfindaKeywordJob.perform_later(user.id, keywords, keyword_type)
   end
 
 end
