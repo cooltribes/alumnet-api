@@ -59,6 +59,6 @@ class V1::BasePostsController < V1::BaseController
 
   def post_params
     params.permit(:body, :user_tags_list, :url, :url_title, :url_description,
-      :url_image, :content_id, :content_type, picture_ids:[])
+      :url_image, :content_id, :content_type, :markup_body, picture_ids:[])
   end
 end
