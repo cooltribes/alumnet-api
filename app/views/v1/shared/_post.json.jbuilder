@@ -1,4 +1,4 @@
-json.(post, :id, :body, :post_type, :created_at, :last_comment_at)
+json.(post, :id, :body, :markup_body, :post_type, :created_at, :last_comment_at)
 
 json.user do
   if post.user
