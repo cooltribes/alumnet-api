@@ -3,7 +3,8 @@ class V1::Me::FriendshipsController < V1::BaseController
   before_action :set_and_check_friend, only: :create
 
   def index
-    @friendships = @user.get_pending_friendships(params[:filter], params[:q])
+    @q = @user.get_pending_friendships(params[:filter], params[:q])
+    @friendships = Kaminari.paginate_array(@q).page(params[:page]).per(params[:per_page])
   end
 
   def friends
