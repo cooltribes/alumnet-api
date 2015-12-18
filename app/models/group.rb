@@ -29,6 +29,7 @@ class Group < ActiveRecord::Base
   belongs_to :creator, class_name: 'User'
   has_many :albums, as: :albumable, dependent: :destroy
   has_many :folders, as: :folderable, dependent: :destroy
+  has_many :campaigns, dependent: :destroy
 
   validates_presence_of :api_key, :list_id, if: 'mailchimp?'
 
