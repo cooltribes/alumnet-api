@@ -210,16 +210,8 @@ class User < ActiveRecord::Base
   end
 
   def suggested_users(limit = 6)
-    committees_ids = profile.committees.pluck(:id)
-    aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq || []
-    users = User.active.joins(profile: :experiences).where( experiences: { exp_type: 0 })
-      .where("experiences.committee_id in (?) or experiences.country_id in (?)", committees_ids, aiesec_countries_ids)
-      .where.not(id: id).uniq
-    if users.size < limit
-      users.to_a | User.active.where.not(id: id).order("RANDOM()").limit(limit - users.size).to_a ## complete the limit with ramdon users
-    else
-      users.limit(limit).to_a
-    end
+    suggestions = SuggesterUsers.new(self, limit: 6)
+    suggestions.results[0..(limit-1)]
   end
 
   ### Admin Note
