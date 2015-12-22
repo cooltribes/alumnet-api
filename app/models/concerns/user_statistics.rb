@@ -12,7 +12,8 @@ class UserStatistics
 
   def get_data
     { influence_total: influence_total, influence_detail: influence_detail,
-      activity_total: activity_total, activity_detail: activity_detail }
+      activity_total: activity_total, activity_detail: activity_detail,
+      login_count: @user.sign_in_count }
   end
 
   def influence_total
@@ -22,7 +23,6 @@ class UserStatistics
     data << ["Likes in Posts", likes_in_created_posts.count]
     data << ["Comments in Posts", comments_in_created_posts.count]
     data << ["Shared Posts", shared_created_posts.count]
-    data << ["Login Count", @user.sign_in_count]
     data
   end
 
@@ -33,7 +33,6 @@ class UserStatistics
     data << ["Created Likes", created_likes.count]
     data << ["Created Comments", created_comments.count]
     data << ["Created Shared Posts", created_shared_posts.count]
-    data << ["Login Count", @user.sign_in_count]
     data
   end
 
