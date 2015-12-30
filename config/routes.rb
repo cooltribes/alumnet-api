@@ -52,6 +52,7 @@ Rails.application.routes.draw do
       resources :privacies, except: :show, controller: 'me/privacies'
       resources :approval_requests, except: [:show], controller: 'me/approval' do
         put :notify_admins, on: :collection
+        get :approval_requests, on: :collection
       end
 
       resources :devices, only: [:index, :create], controller: 'me/devices'
