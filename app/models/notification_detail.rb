@@ -5,7 +5,7 @@ class NotificationDetail < ActiveRecord::Base
 
   ### Class methods
   def self.friendship_request(notification, sender)
-    create!(url: "friends", notification_type: "friendship", sender: sender,
+    create!(url: "alumni/received", notification_type: "friendship", sender: sender,
       mailboxer_notification_id: notification.id, notified_object_id: sender.id)
   end
 
