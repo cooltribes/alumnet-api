@@ -177,8 +177,8 @@ class Notification
   def self.notify_approval_request_to_user(user, approver)
     return if user.blank? && approver.blank?
     notification = new(approver)
-    subject = "#{user.name} wants to be approved in AlumNet"
-    body = "Hello, I'm registering in Alumnet. Please approve my membership"
+    subject = "#{user.name} requested your Alumni verification"
+    body = "If you know this person, click here to give your approval"
     notfy = notification.send_notification(subject, body, approver, user)
     notification.send_pusher_notification()
     notification.recipients.each do |recipient|
