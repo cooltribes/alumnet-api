@@ -22,7 +22,7 @@ Rails.application.routes.draw do
 
     get '/public_profile/:slug', to: 'public_profiles#show'
 
-    get '/search', to: 'search#search'
+    match '/search', to: 'search#search', via: [:post, :get]
     get '/suggestions', to: 'search#suggestions'
 
     resources :password_resets, only: [:create, :update]
