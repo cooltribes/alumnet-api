@@ -11,9 +11,9 @@ module ExperienceHelpers
   def get_location
     location = "No Location"
 
-    location = "#{get_info_city[:text]} - " if city
+    location = "#{city_info[:name]} - " if city
 
-    location += "#{get_info_country[:text]}" if country
+    location += "#{country_info[:name]}" if country
 
     return location
 

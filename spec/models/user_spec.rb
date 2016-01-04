@@ -22,6 +22,15 @@ RSpec.describe User, type: :model do
     expect(User.paranoid?).to eq(true)
   end
 
+  describe "#save_profinda_profile" do
+    let!(:user){ User.make! }
+    it "should queue a job" do
+      expect {
+        user.save_profinda_profile
+      }.to enqueue_a(SaveProfindaProfileJob).with(user.id)
+    end
+  end
+
   describe "callbacks" do
     it "should set a api_key on save" do
       user = User.make

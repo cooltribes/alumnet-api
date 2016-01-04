@@ -345,6 +345,7 @@ Task.blueprint(:meetup) do
   description { "testing task" }
   offer { Faker::Lorem.sentence }
   duration { "hours" }
+  arrival_date { Date.today + 30 }
   nice_have_list { "1638,1590,1636" }
   must_have_list { "1637,1606" }
   post_until { Date.today + 30 }

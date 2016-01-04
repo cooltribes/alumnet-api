@@ -58,7 +58,7 @@ describe V1::MeetupExchangesController, type: :request do
         get meetup_exchange_path(task), {}, basic_header(user.auth_token)
         expect(response.status).to eq 200
         expect(json['name']).to eq(task.name)
-        expect(json['arrival_date']).to eq(task.arrival_date)
+        expect(json['arrival_date']).to eq(task.arrival_date.strftime("%Y-%m-%d"))
       end
     end
   end
@@ -93,7 +93,7 @@ describe V1::MeetupExchangesController, type: :request do
         expect {
           post meetup_exchanges_path, invalid_attributes, basic_header(user.auth_token)
         }.to change(Task, :count).by(0)
-        expect(json).to eq({"name"=>["can't be blank"]})
+        expect(json).to eq({"name"=>["can't be blank"], "arrival_date"=>["can't be blank"]})
         expect(response.status).to eq 422
       end
     end

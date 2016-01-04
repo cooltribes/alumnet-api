@@ -10,6 +10,12 @@ json.country group.country_info
 
 json.city group.city_info
 
+json.mailchimp group.mailchimp?
+
+json.api_key group.api_key
+
+json.list_id group.list_id
+
 
 if group.last_post.present?
   json.last_post_at group.last_post.last_comment_at

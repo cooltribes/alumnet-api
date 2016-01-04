@@ -210,16 +210,8 @@ class User < ActiveRecord::Base
   end
 
   def suggested_users(limit = 6)
-    committees_ids = profile.committees.pluck(:id)
-    aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq || []
-    users = User.active.joins(profile: :experiences).where( experiences: { exp_type: 0 })
-      .where("experiences.committee_id in (?) or experiences.country_id in (?)", committees_ids, aiesec_countries_ids)
-      .where.not(id: id).uniq
-    if users.size < limit
-      users.to_a | User.active.where.not(id: id).order("RANDOM()").limit(limit - users.size).to_a ## complete the limit with ramdon users
-    else
-      users.limit(limit).to_a
-    end
+    suggestions = SuggesterUsers.new(self, limit: 6)
+    suggestions.results[0..(limit-1)]
   end
 
   ### Admin Note
@@ -418,6 +410,7 @@ class User < ActiveRecord::Base
   ### Function to validate users subcription every day
 
   def validate_subscription
+    # TODO: refactorizar esto con : through para acceder directo a .product :yondri
     user_products.where('status = 1').each do |user_product|
       if user_product.product.feature == 'subscription'
         if user_product.end_date && user_product.end_date.past?
@@ -503,6 +496,10 @@ class User < ActiveRecord::Base
     pending_approval_requests.where(user_id: user.id, accepted: true).take.present?
   end
 
+  def has_rejected_request_with(user)
+    approval_requests.where(approver_id: user.id, accepted: false).take.present?
+  end
+
   def approval_status_with(user)
     ##Optimize this
     if has_approved_request_with(user) || id == user.id
@@ -511,6 +508,8 @@ class User < ActiveRecord::Base
       "sent"
     elsif pending_approval_by(user).present?
       "received"
+    elsif has_rejected_request_with(user).present?
+      "rejected"
     else
       "none"
     end
@@ -541,11 +540,11 @@ class User < ActiveRecord::Base
       'LNAME' => profile.last_name,
       'BIRTHDAY' => profile.born,
       'GENDER' => profile.gender,
-      'B_COUNTRY' => profile.birth_country.name,
+      'B_COUNTRY' => profile.birth_country.present? ? profile.birth_country.name : "",
       'B_CITY' => profile.birth_city.present? ? profile.birth_city.name : "",
-      'R_COUNTRY' => profile.residence_country.name,
+      'R_COUNTRY' => profile.residence_country.present? ? profile.residence_country.name : "",
       'R_CITY' => profile.residence_city.present? ? profile.residence_city.name : "",
-      'L_EXP' => profile.last_experience.name,
+      'L_EXP' => profile.last_experience.present? ? profile.last_experience.name : "",
       'PREMIUM' => membership_type
     }
     mailchimp.lists.subscribe(list_id, {'email' => email}, user_vars, 'html', false, true, true, false)
@@ -574,11 +573,11 @@ class User < ActiveRecord::Base
           'LNAME' => profile.last_name,
           'BIRTHDAY' => profile.born,
           'GENDER' => profile.gender,
-          'B_COUNTRY' => profile.birth_country.name,
+          'B_COUNTRY' => profile.birth_country.present? ? profile.birth_country.name : "",
           'B_CITY' => profile.birth_city.present? ? profile.birth_city.name : "",
-          'R_COUNTRY' => profile.residence_country.name,
+          'R_COUNTRY' => profile.residence_country.present? ? profile.residence_country.name : "",
           'R_CITY' => profile.residence_city.present? ? profile.residence_city.name : "",
-          'L_EXP' => profile.last_experience.name,
+          'L_EXP' => profile.last_experience.present? ? profile.last_experience.name : "",
           'PREMIUM' => membership_type
         }
         group_mailchimp.lists.subscribe(g.list_id, {'email' => email}, user_vars, 'html', false, true, true, false)

@@ -30,6 +30,7 @@ gem 'gcm'
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 gem 'rollbar', '~> 2.4.0'
+gem 'whenever', :require => false
 
 group :development do
   gem 'spring'
@@ -61,4 +62,5 @@ group :test do
   gem 'rspec-sidekiq'
   gem 'webmock'
   gem 'vcr'
+  gem 'rspec-activejob'
 end

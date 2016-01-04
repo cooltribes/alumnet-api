@@ -9,6 +9,7 @@ module Alumnet
     end
 
     def add_user_tags(user_ids, options = {})
+      return if user_ids.blank?
       tagger = options.delete(:tagger)
       position = options.delete(:position)
       user_ids = process_user_ids(user_ids)
@@ -20,6 +21,7 @@ module Alumnet
     end
 
     def remove_user_tags(user_ids)
+      return if user_ids.blank?
       user_ids = process_user_ids(user_ids)
       user_ids.each do |user_id|
         user_tag = user_taggings.find_by(user_id: user_id)
@@ -29,6 +31,7 @@ module Alumnet
     end
 
     def update_user_tags(user_ids, options = {})
+      return if user_ids.blank?
       user_ids = process_user_ids(user_ids)
       current_user_tag_ids = user_tag_ids
       # Se van a agregar los id de user_ids que no esten en current_user_tag_ids
@@ -41,13 +44,14 @@ module Alumnet
     end
 
     def process_user_ids(user_ids)
-      if user_ids.is_a?(String)
+      array = if user_ids.is_a?(String)
         user_ids.split(",")
       elsif user_ids.is_a?(Integer)
         [user_ids]
       else
         user_ids
       end
+      array.map(&:to_i)
     end
   end
 end

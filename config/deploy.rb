@@ -11,6 +11,7 @@ set :linked_dirs, %w{public/uploads}
 set :rollbar_token, 'ff2f3b4759d746b9b955259ab820144e'
 set :rollbar_env, Proc.new { fetch :stage }
 set :rollbar_role, Proc.new { :app }
+set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
 
 # there is a known bug that prevents sidekiq from starting when pty is true on Capistrano 3.
 

@@ -58,6 +58,7 @@ Rails.application.routes.draw do
       resources :privacies, except: :show, controller: 'me/privacies'
       resources :approval_requests, except: [:show], controller: 'me/approval' do
         put :notify_admins, on: :collection
+        get :approval_requests, on: :collection
       end
 
       resources :devices, only: [:index, :create], controller: 'me/devices'
@@ -98,7 +99,8 @@ Rails.application.routes.draw do
     end
 
     resources :groups do
-      post :cropping, on: :member, on: :member
+      post :picture, on: :member
+      post :cropping, on: :member
       post :add_group, on: :member
       get :subgroups, on: :member
       get :migrate_users, on: :member
@@ -110,11 +112,13 @@ Rails.application.routes.draw do
       end
       resources :albums, controller: 'groups/albums'
       resources :folders, controller: 'groups/folders'
+      resources :campaigns, controller: 'groups/campaigns'
     end
 
     resources :events do
+      post :picture, on: :member
       get :contacts, on: :member
-      post :cropping, on: :member, on: :member
+      post :cropping, on: :member
       resources :posts, controller: 'events/posts'
       resources :albums, controller: 'events/albums'
       resources :payments, controller: 'events/payments'

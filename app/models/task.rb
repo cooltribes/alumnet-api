@@ -104,16 +104,16 @@ class Task < ActiveRecord::Base
   # PROFINDA INTEGRATION
 
   def create_profinda_task
-    CreateProfindaTaskJob.perform_later(id) unless Rails.env.test?
+    CreateProfindaTaskJob.perform_later(id)
   end
 
   def update_profinda_task
-    UpdateProfindaTaskJob.perform_later(id) unless Rails.env.test?
+    UpdateProfindaTaskJob.perform_later(id)
   end
 
   def delete_profinda_task
     if user && profinda_id
-      DeleteProfindaTaskJob.perform_later(user.id, profinda_id) unless Rails.env.test?
+      DeleteProfindaTaskJob.perform_later(user.id, profinda_id)
     end
   end
 

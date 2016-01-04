@@ -41,6 +41,15 @@ RSpec.configure do |config|
     end
   end
 
+  # ActiveJob Testing
+  config.include(RSpec::ActiveJob)
+
+  # clean out the queue after each spec
+  config.after(:each) do
+    ActiveJob::Base.queue_adapter.enqueued_jobs = []
+    ActiveJob::Base.queue_adapter.performed_jobs = []
+  end
+
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
   # `post` in specs under `spec/controllers`.
@@ -57,10 +66,4 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   config.filter_run_excluding :slow unless ENV["SLOW"]
-end
-
-RSpec::Sidekiq.configure do |config|
-  config.clear_all_enqueued_jobs = true
-  config.enable_terminal_colours = true
-  config.warn_when_jobs_not_processed_by_sidekiq = false
 end

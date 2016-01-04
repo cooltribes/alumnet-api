@@ -1,5 +1,5 @@
 require 'mailchimp'
-
+# TODO: Refactorizar mailchimp este controlador :yondry
 class V1::GroupsController < V1::BaseController
   include Pundit
   before_action :set_group, except: [:index, :create]
@@ -12,6 +12,17 @@ class V1::GroupsController < V1::BaseController
       @groups = Kaminari.paginate_array(@groups).page(params[:page]).per(params[:per_page])
     else
       @groups = @groups.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object
+    end
+  end
+
+  def picture
+    render json: { error: "Not file given" }, status: :unprocessable_entity unless params.key?(:file)
+    service = ::Pictures::CreatePicture.new(@group, current_user, params)
+    if service.call
+      @picture = service.picture
+      render 'v1/pictures/show', status: :created
+    else
+      render json: service.errors, status: :unprocessable_entity
     end
   end
 
@@ -158,11 +169,10 @@ class V1::GroupsController < V1::BaseController
 
   def group_params
     params.permit(:name, :description, :short_description, :cover, :group_type, :official, :country_id,
-      :city_id, :join_process, :mailchimp, :api_key, :list_id, :upload_files, :cover_position)
+      :city_id, :join_process, :mailchimp, :api_key, :list_id, :upload_files, :cover_position, picture_ids:[])
   end
 
   def crop_params
     params.permit(:imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH)
   end
-
 end
