@@ -496,6 +496,10 @@ class User < ActiveRecord::Base
     pending_approval_requests.where(user_id: user.id, accepted: true).take.present?
   end
 
+  def has_rejected_request_with(user)
+    approval_requests.where(approver_id: user.id, accepted: false).take.present?
+  end
+
   def approval_status_with(user)
     ##Optimize this
     if has_approved_request_with(user) || id == user.id
@@ -504,6 +508,8 @@ class User < ActiveRecord::Base
       "sent"
     elsif pending_approval_by(user).present?
       "received"
+    elsif has_rejected_request_with(user).present?
+      "rejected"
     else
       "none"
     end

@@ -54,6 +54,7 @@ else
   approval_request = user.approval_with(current_user)
   if approval_request
     json.approval_status current_user.approval_status_with(user)
+    json.approval_update_at approval_request.updated_at
   else
     json.approval_status "none"
   end
