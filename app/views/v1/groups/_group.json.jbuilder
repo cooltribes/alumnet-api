@@ -91,6 +91,7 @@ membership = group.membership_of_user(current_user)
 if membership
   json.admin group.user_is_admin?(current_user)
   json.membership_status membership.status
+  json.membership_created membership.created_at
   json.permissions do
     json.(membership, :edit_group, :create_subgroup, :delete_member,
       :change_join_process, :moderate_posts, :make_admin)
