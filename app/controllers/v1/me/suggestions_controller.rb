@@ -6,7 +6,8 @@ class V1::Me::SuggestionsController < V1::BaseController
   end
 
   def users
-    @users = @user.suggested_users #this is an array not ar:r
+    #this is an array not ar:r
+    @users = @user.suggested_users(params[:limit])
   end
 
   private
