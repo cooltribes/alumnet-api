@@ -20,6 +20,14 @@ module Alumnet
       # friendships.find_by(friend_id: user.id) || inverse_friendships.find_by(user_id: user.id)
     end
 
+    def has_friendship_with?(user)
+      if is_friend_of?(user) || pending_friendship_with(user).present? || pending_inverse_friendship_with(user).present?
+        true
+      else
+        false
+      end
+    end
+
     def friendship_status_with(user)
       ##Optimize this
       if is_friend_of?(user) || id == user.id
