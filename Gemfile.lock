@@ -450,3 +450,6 @@ DEPENDENCIES
   vcr
   versionist
   webmock
+
+BUNDLED WITH
+   1.10.6

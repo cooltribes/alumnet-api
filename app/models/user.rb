@@ -486,8 +486,8 @@ class User < ActiveRecord::Base
     get_pending_approval_requests.where(user_id: user.id).take.present?
   end
 
-  def get_pending_approval_requests
-    pending_approval_requests.where(accepted: false)
+  def get_pending_approval_requests(q = nil)
+    pending_approval_requests.where(accepted: false).ransack(q).result
   end
 
   def get_approved_requests
