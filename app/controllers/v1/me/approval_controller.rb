@@ -13,6 +13,11 @@ class V1::Me::ApprovalController < V1::BaseController
     render :index
   end
 
+  def approval_requests
+    @requests = @user.approval_requests
+    render :index
+  end
+
   def create
     @approval_request = @user.create_approval_request_for(@approver)
     if @approval_request.save
