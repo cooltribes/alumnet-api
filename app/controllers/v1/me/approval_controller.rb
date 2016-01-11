@@ -8,12 +8,6 @@ class V1::Me::ApprovalController < V1::BaseController
   end
 
   def approval_requests
-    #@requests = @user.approval_requests
-    @requests = @user.get_pending_approval_requests(params[:q])
-    render :index
-  end
-
-  def approval_requests
     @requests = @user.approval_requests
     render :index
   end
