@@ -31,5 +31,19 @@ json.array! @users do |user|
       json.friendship_status "none"
       json.friendship nil
     end
+    approval = user.approval_with(@current_user)
+    if approval
+      json.approval_status @current_user.approval_status_with(user)
+      json.approval approval, :id, :accepted, :created_at
+    else
+      json.approval_status "none"
+      json.approval nil
+    end
+    approval_request = user.approval_with(@current_user)
+    if approval_request
+      json.approval_status @current_user.approval_status_with(user)
+    else
+      json.approval_status "none"
+    end
   end
 end
