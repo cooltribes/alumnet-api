@@ -4,15 +4,18 @@ class V1::Me::NotificationsController < V1::BaseController
 
   def index
     @notifications = @user.general_notifications.limit(params[:limit]).order(created_at: :asc)
+    @notifications = @notifications.page(params[:page]).per(params[:per_page])
   end
 
   def friendship
     @notifications = @user.friendship_notifications.limit(params[:limit]).order(created_at: :asc)
+    @notifications = @notifications.page(params[:page]).per(params[:per_page])
     render :index
   end
 
   def general
     @notifications = @user.general_notifications.limit(params[:limit]).order(created_at: :asc)
+    @notifications = @notifications.page(params[:page]).per(params[:per_page])
     render :index
   end
 
