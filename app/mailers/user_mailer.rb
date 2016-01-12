@@ -10,7 +10,7 @@ class UserMailer < ActionMailer::Base
     @user = user
     @group = group
     @sender = sender
-    mail to: user.email, subject: "You've joined to the Group #{group.name}!"
+    mail to: user.email, subject: "You've joined the Group #{group.name}!"
   end
 
   def user_request_friendship(user, friend)

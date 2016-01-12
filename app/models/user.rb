@@ -209,7 +209,8 @@ class User < ActiveRecord::Base
     end
   end
 
-  def suggested_users(limit = 6)
+  def suggested_users(limit)
+    limit = limit.present? ? limit.to_i : 6
     suggestions = SuggesterUsers.new(self, limit: 6)
     suggestions.results[0..(limit-1)]
   end
