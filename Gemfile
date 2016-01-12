@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.1'
+gem 'rails', '4.2.5'
 gem 'rails-api'
 gem 'pg'
 gem 'jbuilder'
@@ -29,7 +29,7 @@ gem 'acts-as-taggable-on', '~> 3.4'
 gem 'gcm'
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
-gem 'rollbar', '~> 2.4.0'
+gem 'rollbar', '~> 2.7.1'
 gem 'whenever', :require => false
 
 group :development do
