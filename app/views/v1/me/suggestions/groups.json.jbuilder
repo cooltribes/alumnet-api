@@ -3,7 +3,7 @@ json.array! @groups do |group|
   json.name group.name
   json.cover group.cover.card.url
   json.members group.members.count
-  json.description group.description
+  json.short_description group.short_description
   json.group_type group.group_type
 
   json.members_avatar group.members.limit(2) do |member|
