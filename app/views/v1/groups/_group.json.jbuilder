@@ -89,6 +89,7 @@ end
 membership = group.membership_of_user(current_user)
 
 if membership
+  json.id membership.id
   json.admin group.user_is_admin?(current_user)
   json.membership_status membership.status
   json.membership_created membership.created_at
@@ -97,6 +98,7 @@ if membership
       :change_join_process, :moderate_posts, :make_admin)
   end
 else
+  json.id nil
   json.admin false
   json.membership_status "none"
   json.permissions nil

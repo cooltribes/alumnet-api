@@ -63,6 +63,11 @@ Rails.application.routes.draw do
 
       resources :devices, only: [:index, :create], controller: 'me/devices'
 
+      resources :groups, only: :index, controller: 'me/groups' do
+        get :my_groups, on: :collection
+      end
+
+
       post '/contacts/file', to: 'contacts#file' ###TEMPORAL
       post '/contacts/in_alumnet', to: 'contacts#in_alumnet' ###TEMPORAL
 

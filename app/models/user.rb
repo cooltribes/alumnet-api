@@ -26,6 +26,7 @@ class User < ActiveRecord::Base
 
   has_many :memberships, dependent: :destroy
   has_many :groups, -> { where("memberships.approved = ?", true) }, through: :memberships
+  has_many :created_groups, class_name: "Group", foreign_key: "creator_id"
   has_many :posts, as: :postable, dependent: :destroy
   has_many :publications, class_name: "Post", dependent: :destroy
   has_many :likes, dependent: :destroy
