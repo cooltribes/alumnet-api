@@ -1,19 +1,22 @@
 class V1::Admin::UsersController < V1::AdminController
-  before_action :set_user, except: [:index, :stats, :register]
+  skip_before_action :set_request_format, only: :csv
+  before_action :set_user, except: [:index, :stats, :register, :csv]
 
   def index
     if params[:tags].present?
       @users = User.includes(:profile).tagged_with(params[:tags])
     else
-      @q = if @admin_location
-        @admin_location.users.includes(:profile).ransack(params[:q])
-      else
-        User.includes(:profile).ransack(params[:q])
-      end
-      @users = @q.result.order("#{params[:sort_by]} #{params[:order_by]}")
-      @total_records = @users.size
-      @users = Kaminari.paginate_array(@users).page(params[:page]).per(params[:per_page])
+      @users = users
     end
+    @total_records = @users.size
+    @users = Kaminari.paginate_array(@users).page(params[:page]).per(params[:per_page])
+  end
+
+  def csv
+    @users = users
+    headers['Content-Disposition'] = "attachment; filename=\"user-list\""
+    headers['Content-Type'] ||= 'text/csv'
+    render "export", :formats => [:csv]
   end
 
   def show
@@ -142,5 +145,14 @@ class V1::Admin::UsersController < V1::AdminController
 
   def register_params
     params.permit(:email, :role)
+  end
+
+  def users
+    q = if @admin_location
+      @admin_location.users.includes(:profile).ransack(params[:q])
+    else
+      User.includes(:profile).ransack(params[:q])
+    end
+    q.result.order("#{params[:sort_by]} #{params[:order_by]}")
   end
 end

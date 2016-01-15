@@ -256,6 +256,7 @@ Rails.application.routes.draw do
         collection do
           post :register
           get :stats
+          post :csv
         end
       end
       resources :groups, except: [:new, :edit] do

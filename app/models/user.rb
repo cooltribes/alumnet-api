@@ -115,6 +115,10 @@ class User < ActiveRecord::Base
     profile.name
   end
 
+  def age
+    profile.age
+  end
+
   def profile
     Profile.unscoped { super }
   end
