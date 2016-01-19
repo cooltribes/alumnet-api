@@ -3,7 +3,8 @@ require 'mailchimp'
 class V1::Groups::CampaignsController < V1::BaseController
   before_action :set_group
   before_action :set_campaign, only: [:update, :destroy, :show]
-  before_action :set_user, only: :create
+  before_action :set_user, only: [:create, :send_test]
+  before_action :create_campaign, only: [:create, :send_test]
   before_action :set_mailchimp
 
   def index
@@ -11,18 +12,16 @@ class V1::Groups::CampaignsController < V1::BaseController
   end
 
   def create
-    @campaign = Campaign.new(campaign_params)
     if @group.mailchimp
       @campaign.status = :saved
       @campaign.list_id = @group.list_id
       if @campaign.save
-        #@response = @campaign.save_campaign(@mailchimp, @group)
         @response = @mailchimp.campaigns.create('regular', 
           {
             'list_id' => @group.list_id, 
             'subject' => @campaign.subject, 
-            'from_email' => 'yondri@gmail.com',
-            'from_name' => 'Alumnet',
+            'from_email' => 'alumnet-noreply@aiesec-alumni.org',
+            'from_name' => 'AlumNet',
             'to_name' => @group.name
           },
           {
@@ -30,11 +29,33 @@ class V1::Groups::CampaignsController < V1::BaseController
           }
         )
         @campaign.update(provider_id: @response['id'])
-        #@campaign.send()
-        #@mailchimp.campaigns.send_test(@campaign.provider_id, ['yroa@upsidecorp.ch'])
         @mailchimp.campaigns.send(@campaign.provider_id)
-        #@sent_campaign = @mailchimp.campaigns.list({'campaign_id' => @campaign.provider_id})
-        #render json: @response
+        render :show, status: :created
+      end
+    else
+      render json: @campaign.errors, status: :unprocessable_entity
+    end
+  end
+
+  def send_test
+    if @group.mailchimp
+      @campaign.status = :saved
+      @campaign.list_id = @group.list_id
+      if @campaign.save
+        @response = @mailchimp.campaigns.create('regular', 
+          {
+            'list_id' => @group.list_id, 
+            'subject' => @campaign.subject, 
+            'from_email' => 'alumnet-noreply@aiesec-alumni.org',
+            'from_name' => 'AlumNet',
+            'to_name' => @group.name
+          },
+          {
+            'html' => @campaign.body
+          }
+        )
+        @campaign.update(provider_id: @response['id'])
+        @mailchimp.campaigns.send_test(@campaign.provider_id, [@user.email, 'yroa@upsidecorp.ch'])
         render :show, status: :created
       end
     else
@@ -85,6 +106,15 @@ class V1::Groups::CampaignsController < V1::BaseController
       @campaign = @group.campaigns.find(params[:id])
     end
 
+    def create_campaign
+      if params[:provider_id]
+        @campaign = @group.campaigns.find_by(provider_id: params[:provider_id])
+        @campaign.attributes = campaign_params
+      else
+        @campaign = Campaign.new(campaign_params)
+      end
+    end
+
     def set_user
       unless @user = User.find_by(id: params[:user_id])
         render json: { error: "User not found" }
@@ -100,6 +130,6 @@ class V1::Groups::CampaignsController < V1::BaseController
     end
 
     def campaign_params
-      params.permit(:user_id, :group_id, :subject, :body)
+      params.permit(:user_id, :group_id, :subject, :body, :provider_id)
     end
 end
