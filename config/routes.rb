@@ -117,7 +117,9 @@ Rails.application.routes.draw do
       end
       resources :albums, controller: 'groups/albums'
       resources :folders, controller: 'groups/folders'
-      resources :campaigns, controller: 'groups/campaigns'
+      resources :campaigns, controller: 'groups/campaigns' do
+        post :send_test, on: :collection
+      end
     end
 
     resources :events do
