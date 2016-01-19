@@ -63,6 +63,11 @@ Rails.application.routes.draw do
 
       resources :devices, only: [:index, :create], controller: 'me/devices'
 
+      resources :groups, only: :index, controller: 'me/groups' do
+        get :my_groups, on: :collection
+      end
+
+
       post '/contacts/file', to: 'contacts#file' ###TEMPORAL
       post '/contacts/in_alumnet', to: 'contacts#in_alumnet' ###TEMPORAL
 
@@ -112,7 +117,10 @@ Rails.application.routes.draw do
       end
       resources :albums, controller: 'groups/albums'
       resources :folders, controller: 'groups/folders'
-      resources :campaigns, controller: 'groups/campaigns'
+      resources :campaigns, controller: 'groups/campaigns' do
+        post :send_test, on: :collection
+        post :preview, on: :collection
+      end
     end
 
     resources :events do
@@ -256,6 +264,7 @@ Rails.application.routes.draw do
         collection do
           post :register
           get :stats
+          post :csv
         end
       end
       resources :groups, except: [:new, :edit] do

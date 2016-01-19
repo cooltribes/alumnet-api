@@ -1,62 +1,69 @@
 module ProfileHelpers
 
+  def empty_location_info
+    { id: nil, name: "", cc_iso: nil }
+  end
+
+  def birth_city_info
+    { id: birth_city_id, name: birth_city.try(:name) || "", cc_iso: birth_city.try(:cc_iso) }
+  end
+
+  def birth_country_info
+    { id: birth_country_id, name: birth_country.try(:name) || "", cc_iso: birth_country.try(:cc_iso) }
+  end
+
+  def residence_city_info
+    { id: residence_city_id, name: residence_city.try(:name) || "", cc_iso: residence_city.try(:cc_iso) }
+  end
+
+  def residence_country_info
+    { id: residence_country_id, name: residence_country.try(:name) || "", cc_iso: residence_country.try(:cc_iso) }
+  end
+
   def permit_birth_city(user)
-    if self.birth_city.present? && self.user.permit('see-born', user)
-      { id: self.birth_city.id, text: self.birth_city.name }
-    else
-      { id: nil, text: "" }
-    end
+    return birth_city_info if user.permit('see-born', user)
+    empty_location_info
   end
 
   def permit_birth_country(user)
-    if self.birth_country.present? && self.user.permit('see-born', user)
-      { id: self.birth_country.id, text: self.birth_country.name }
-    else
-      { id: nil, text: "" }
-    end
+    return birth_country_info if user.permit('see-born', user)
+    empty_location_info
   end
 
   def permit_residence_city(user)
-    if self.residence_city.present? && self.user.permit('see-residence', user)
-      { id: self.residence_city.id, text: self.residence_city.name }
-    else
-      { id: nil, text: "" }
-    end
+    return residence_city_info if user.permit('see-residence', user)
+    empty_location_info
   end
 
   def permit_residence_country(user)
-    if self.residence_country.present? && self.user.permit('see-residence', user)
-      { id: self.residence_country.id, text: self.residence_country.name,
-        region: residence_region }
-    else
-      { id: nil, text: "" }
-    end
+    return residence_country_info if user.permit('see-residence', user)
+    empty_location_info
   end
 
   def residence_region
-    if self.residence_country.region.present?
-      { id: self.residence_country.region.id, name: self.residence_country.region.name }
+    if residence_country.region.present?
+      { id: residence_country.region.id, name: residence_country.region.name }
     else
       { id: nil, name: "" }
     end
   end
 
   def permit_last_experience(user)
-    if self.last_experience.present? && self.user.permit('see-job', user)
-      self.last_experience.name
+    if last_experience.present? && user.permit('see-job', user)
+      last_experience.name
     else
       nil
     end
   end
 
   def permit_born(user)
-    if self.born
-      if self.user.permit('see-birthdate', user) && self.user.permit('see-birth-year', user)
-        { day: self.born.day, month: self.born.month, year: self.born.year }
-      elsif self.user.permit('see-birthdate', user)
-        { day: self.born.day, month: self.born.month, year: nil }
-      elsif self.user.permit('see-birth-year', user)
-        { day: nil, month: nil, year: self.born.year }
+    if born
+      if user.permit('see-birthdate', user) && user.permit('see-birth-year', user)
+        { day: born.day, month: born.month, year: born.year }
+      elsif user.permit('see-birthdate', user)
+        { day: born.day, month: born.month, year: nil }
+      elsif user.permit('see-birth-year', user)
+        { day: nil, month: nil, year: born.year }
       else
         { day: nil, month: nil, year: nil }
       end
@@ -78,7 +85,7 @@ module ProfileHelpers
     completeLocation = nil
     if city
       country = permit_birth_country(user)
-      completeLocation = "#{city[:text]} - #{country[:text]}"
+      completeLocation = "#{city[:name]} - #{country[:name]}"
     end
 
     #Born (date and location)
@@ -93,7 +100,7 @@ module ProfileHelpers
     completeLocation = nil
     if city
       country = permit_residence_country(user)
-      completeLocation = "#{city[:text]} - #{country[:text]}"
+      completeLocation = "#{city[:name]} - #{country[:name]}"
     end
 
   end

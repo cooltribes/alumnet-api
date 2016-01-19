@@ -21,6 +21,7 @@ end
 
 profile = user.profile
 json.profile_id profile.id
+
 json.profileData do
   json.first_name profile.first_name || nil
   json.last_name profile.last_name || nil

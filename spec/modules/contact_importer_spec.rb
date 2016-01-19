@@ -8,13 +8,14 @@ RSpec.describe ContactImporter do
       expect(importer.contacts).to eq([
         {"name"=>"Armando Mendoza", "email"=>"fcoarmandomendoza@gmail.com"},
         {"name"=>"Flor Mendez", "email"=>"flor.maria.mendez@gmail.com"},
-        {"name"=>"Cristal Montañez", "email"=>" cristalmontanez@gmail.com"}])
+        {"name"=>"Cristal MontaÃ±ez", "email"=>" cristalmontanez@gmail.com"},
+        {"name"=>"Enrique SÃ¡nchez", "email"=>"kike79@hotmail2.com"} ])
     end
   end
 
   describe "#count" do
     it "return the number of contacts in file" do
-      expect(importer.count).to eq(3)
+      expect(importer.count).to eq(4)
     end
   end
 
