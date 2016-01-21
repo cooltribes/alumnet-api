@@ -82,6 +82,7 @@ class V1::Groups::CampaignsController < V1::BaseController
         )
         @campaign.update(provider_id: @response['id'])
         @preview = @mailchimp.campaigns.content(@campaign.provider_id, {'view' => 'preview'})
+        @preview[:campaign] = @campaign
         render json: @preview, status: :created
       end
     else
