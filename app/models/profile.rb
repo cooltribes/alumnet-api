@@ -67,6 +67,13 @@ class Profile < ActiveRecord::Base
     "#{first_name} #{last_name}"
   end
 
+  def age
+    if born
+      age = Date.today.year - born.year
+      age -= 1 if Date.today < born + age.years
+    end
+  end
+
   def hidden_last_name
     if last_name
       "#{last_name.first}."

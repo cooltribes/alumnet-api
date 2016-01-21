@@ -3,16 +3,16 @@ class V1::Me::NotificationsController < V1::BaseController
   before_action :set_notification, except: [:index, :mark_all_read, :friendship, :general, :mark_requests_all_read]
 
   def index
-    @notifications = @user.general_notifications.limit(params[:limit]).order(created_at: :asc)
+    @notifications = @user.general_notifications.order(created_at: :desc).page(params[:page]).per(params[:per_page])
   end
 
   def friendship
-    @notifications = @user.friendship_notifications.limit(params[:limit]).order(created_at: :asc)
+    @notifications = @user.friendship_notifications.order(created_at: :desc).page(params[:page]).per(params[:per_page])
     render :index
   end
 
   def general
-    @notifications = @user.general_notifications.limit(params[:limit]).order(created_at: :asc)
+    @notifications = @user.general_notifications.order(created_at: :desc).page(params[:page]).per(params[:per_page])
     render :index
   end
 
