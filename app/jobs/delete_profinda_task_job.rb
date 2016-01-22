@@ -1,5 +1,5 @@
 class DeleteProfindaTaskJob < ActiveJob::Base
-  queue_as :default
+  queue_as :profinda
 
   def perform(user_id, profinda_id)
     user = User.find_by(id: user_id)

@@ -1,5 +1,5 @@
 class CreateProfindaKeywordJob < ActiveJob::Base
-  queue_as :default
+  queue_as :profinda
 
   def perform(user_id, keywords, keyword_type)
     user = User.find_by(id: user_id)
