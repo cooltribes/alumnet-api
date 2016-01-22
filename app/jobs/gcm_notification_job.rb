@@ -1,5 +1,5 @@
 class GcmNotificationJob < ActiveJob::Base
-  queue_as :default
+  queue_as :pusher
 
   def perform(notification, recipients_collection)
     # the recipients are Users

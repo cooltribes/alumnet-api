@@ -41,7 +41,6 @@ class Profile < ActiveRecord::Base
   after_save :save_avatar_in_album
   after_update :generate_slug
 
-
   ###Instance Methods
 
   def as_indexed_json(options = {})

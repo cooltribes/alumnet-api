@@ -51,6 +51,11 @@ class Membership < ActiveRecord::Base
     create!(attrs).approved!
   end
 
+  ## this return the memberships in group where the user is creator. This is a hack for the ui
+  def self.by_creation_of_group(user)
+    joins(:group).where({ groups: { creator_id: user.id } })
+  end
+
   private
     def set_admin
       if permissions_attributes.all? { |pa| send(pa) == 0 }

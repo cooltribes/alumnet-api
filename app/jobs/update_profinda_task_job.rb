@@ -1,5 +1,5 @@
 class UpdateProfindaTaskJob < ActiveJob::Base
-  queue_as :default
+  queue_as :profinda
 
   def perform(task_id)
     task = Task.find_by(id: task_id)

@@ -86,6 +86,7 @@ end
 Group.blueprint do
   name { "Group #{sn}"}
   description { Faker::Lorem.sentence }
+  short_description { Faker::Lorem.sentence }
   cover { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
   group_type { 0 }
   join_process { 0 }
@@ -97,6 +98,7 @@ end
 Group.blueprint(:with_parent_and_childen) do
   name { "Group #{sn}"}
   description {  Faker::Lorem.sentence }
+  short_description { Faker::Lorem.sentence }
   cover { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
   group_type { 0 }
   country { Country.make! }
@@ -110,6 +112,7 @@ end
 Group.blueprint(:all_relations) do
   name { "Group #{sn}"}
   description {  Faker::Lorem.sentence }
+  short_description { Faker::Lorem.sentence }
   cover { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
   group_type { 1 }
   country { Country.make! }

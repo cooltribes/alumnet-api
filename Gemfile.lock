@@ -86,8 +86,6 @@ GEM
       activesupport (>= 3.2.0)
       json (>= 1.7)
       mime-types (>= 1.16)
-    celluloid (0.16.0)
-      timers (~> 4.0.0)
     chronic (0.10.2)
     coderay (1.1.0)
     colorize (0.7.7)
@@ -226,7 +224,6 @@ GEM
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     hashie (3.4.3)
-    hitimes (1.2.2)
     httparty (0.13.5)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
@@ -320,7 +317,7 @@ GEM
       activesupport (>= 3.0)
       i18n
       polyamorous (~> 1.2)
-    redis (3.2.1)
+    redis (3.2.2)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
     rollbar (2.7.1)
@@ -356,12 +353,10 @@ GEM
     settingslogic (2.0.9)
     shoulda-matchers (2.8.0)
       activesupport (>= 3.0.0)
-    sidekiq (3.4.2)
-      celluloid (~> 0.16.0)
+    sidekiq (4.0.2)
+      concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
-      json (~> 1.0)
       redis (~> 3.2, >= 3.2.1)
-      redis-namespace (~> 1.5, >= 1.5.2)
     signature (0.1.8)
     sinatra (1.4.6)
       rack (~> 1.4)
@@ -385,8 +380,6 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.1)
-    timers (4.0.1)
-      hitimes
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     vcr (2.9.3)
@@ -406,9 +399,9 @@ PLATFORMS
 
 DEPENDENCIES
   acts-as-taggable-on (~> 3.4)
-  acts_as_commentable
-  acts_as_tree
-  bcrypt
+  acts_as_commentable (= 4.0.2)
+  acts_as_tree (= 2.2.0)
+  bcrypt (= 3.1.10)
   better_errors
   binding_of_caller
   byebug
@@ -419,44 +412,45 @@ DEPENDENCIES
   capistrano-rvm
   capistrano-sidekiq
   capistrano3-nginx (~> 2.0)
-  carrierwave
+  carrierwave (= 0.10.0)
   database_cleaner
-  elasticsearch-model
-  elasticsearch-rails
+  elasticsearch-model (= 0.1.8)
+  elasticsearch-rails (= 0.1.8)
   faker
   fog
   gcm
   git
   httparty
-  jbuilder
+  jbuilder (= 2.3.1)
   json-schema
-  kaminari
+  kaminari (= 0.16.3)
   lol_dba
   machinist
   mailboxer!
   mailchimp-api
-  mini_magick
+  mini_magick (= 4.2.10)
   paranoia (~> 2.0)
-  pg
-  pundit
+  pg (= 0.18.2)
+  pundit (= 1.0.1)
   pusher
   quiet_assets
   rack-cors
   rails (= 4.2.5)
-  rails-api
-  ransack
+  rails-api (= 0.4.0)
+  ransack (= 1.7.0)
+  redis-namespace
   rollbar (~> 2.7.1)
   rspec-activejob
   rspec-rails
   rspec-sidekiq
   settingslogic
   shoulda-matchers
-  sidekiq
+  sidekiq (= 4.0.2)
   sinatra
-  smarter_csv
+  smarter_csv (= 1.1.0)
   spring
   spring-commands-rspec
   vcr
-  versionist
+  versionist (= 1.4.1)
   webmock
   whenever
