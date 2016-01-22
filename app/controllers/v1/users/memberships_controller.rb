@@ -15,6 +15,12 @@ class V1::Users::MembershipsController < V1::BaseController
     render :index, status: :ok
   end
 
+  def created_groups
+    @q = @user.memberships.accepted.by_creation_of_group(@user).ransack(params[:q])
+    @memberships = @q.result
+    render :index, status: :ok
+  end
+
   def create
     @membership = @user.build_membership_for(@group)
     if @membership.save
