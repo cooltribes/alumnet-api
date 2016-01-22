@@ -119,6 +119,7 @@ Rails.application.routes.draw do
       resources :folders, controller: 'groups/folders'
       resources :campaigns, controller: 'groups/campaigns' do
         post :send_test, on: :collection
+        post :preview, on: :collection
       end
     end
 
