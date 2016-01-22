@@ -24,6 +24,7 @@ gem 'httparty'
 gem 'mailchimp-api'
 gem 'kaminari', '0.16.3'
 gem 'sidekiq', '4.0.2'
+gem 'redis-namespace'
 gem 'sinatra', :require => nil
 gem 'acts-as-taggable-on', '~> 3.4'
 gem 'gcm'

@@ -318,6 +318,8 @@ GEM
       i18n
       polyamorous (~> 1.2)
     redis (3.2.2)
+    redis-namespace (1.5.2)
+      redis (~> 3.0, >= 3.0.4)
     rollbar (2.7.1)
       multi_json
     rspec (3.3.0)
@@ -436,6 +438,7 @@ DEPENDENCIES
   rails (= 4.2.5)
   rails-api (= 0.4.0)
   ransack (= 1.7.0)
+  redis-namespace
   rollbar (~> 2.7.1)
   rspec-activejob
   rspec-rails

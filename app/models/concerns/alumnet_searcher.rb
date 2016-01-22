@@ -1,5 +1,7 @@
 class AlumnetSearcher
 
+  SEARCHEABLE_MODELS = [Group, Event, Company, Task, Profile]
+
   def initialize(params)
     @query = params.delete(:q) || params.delete(:term)
     @type =  params.delete(:type)
@@ -39,12 +41,9 @@ class AlumnetSearcher
 
   def searcheable
     model = @type.capitalize.constantize
-    return model if searchable_models.include?(model)
+    return model if SEARCHEABLE_MODELS.include?(model)
   rescue
     return nil
   end
 
-  def searchable_models
-    [Group, Event, Company, Task, Profile]
-  end
 end
