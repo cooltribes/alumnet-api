@@ -31,7 +31,7 @@ class Group < ActiveRecord::Base
   ##this is for pictures in description.
   has_many :pictures, as: :pictureable, dependent: :destroy
   belongs_to :creator, class_name: 'User'
-  
+
   has_many :campaigns, dependent: :destroy
 
   validates_presence_of :api_key, :list_id, if: 'mailchimp?'
@@ -47,7 +47,7 @@ class Group < ActiveRecord::Base
 
 
   ### Validations
-  validates_presence_of :name, :description, :group_type, :join_process, :cover
+  validates_presence_of :name, :short_description, :group_type, :join_process, :cover
   validate :validate_join_process, on: :create
   validate :validate_officiality
 
