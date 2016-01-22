@@ -31,9 +31,9 @@ class Company < ActiveRecord::Base
   has_many :contact_infos, as: :contactable, dependent: :destroy
   has_many :company_admins, dependent: :destroy
   has_many :admins, through: :company_admins, source: :user
-  has_and_belongs_to_many :product_services, dependent: :destroy #,
-    # after_add: [ lambda { |a,c| a.__elasticsearch__.index_document } ],
-    # after_remove: [ lambda { |a,c| a.__elasticsearch__.index_document } ]
+  has_and_belongs_to_many :product_services, dependent: :destroy,
+    after_add: [ lambda { |a,c| a.__elasticsearch__.index_document } ],
+    after_remove: [ lambda { |a,c| a.__elasticsearch__.index_document } ]
 
   ### Validations
   validates_presence_of :name
