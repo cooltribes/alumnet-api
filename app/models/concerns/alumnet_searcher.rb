@@ -12,7 +12,7 @@ class AlumnetSearcher
     if @type && searcheable
       searcheable.search(@query).page(@page).results
     else
-      Elasticsearch::Model.search(@query, searchable_models).page(@page).results
+      Elasticsearch::Model.search(@query, SEARCHEABLE_MODELS).page(@page).results
     end
   end
 
