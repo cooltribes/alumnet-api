@@ -271,6 +271,7 @@ Rails.application.routes.draw do
         get :subgroups, on: :member
       end
       resources :regions
+      resources :campaigns, only: [:index, :show]
 
       namespace :deleted do
         resources :groups, only: [:index, :update, :destroy]

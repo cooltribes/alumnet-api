@@ -1,5 +1,5 @@
 class V1::Admin::GroupsController < V1::AdminController
-  before_action :set_group, except: [:index, :create]
+  before_action :set_group, except: [:index, :create, :campaigns]
 
   def index
     @q = if @admin_location

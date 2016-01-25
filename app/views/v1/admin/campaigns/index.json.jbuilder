@@ -1,0 +1,1 @@
+json.array! @campaigns, partial: 'campaign', as: :campaign, current_user: @current_user
