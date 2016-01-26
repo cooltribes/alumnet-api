@@ -223,6 +223,7 @@ Rails.application.routes.draw do
     resources :countries, only: [:index, :show] do
       get :cities, on: :member
       get :committees, on: :member
+      get :locations, on: :collection
     end
 
     resources :cities, only: [:show]
