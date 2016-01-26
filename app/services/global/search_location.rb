@@ -3,8 +3,8 @@ module Global
 
     attr_reader :result
 
-    def initialize(query)
-      @query = query
+    def initialize(term)
+      @query = { name_cont: term }
     end
 
     def call

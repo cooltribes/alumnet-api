@@ -15,7 +15,7 @@ describe V1::CountriesController, type: :request do
   describe "GET /countries/locations" do
     it "return all countries and cities " do
       Country.make!(:simple, name: "Venezuela")
-      get locations_countries_path, { q: { name_cont: "Vene"} }, basic_header(user.auth_token)
+      get locations_countries_path, { q: "Vene" }, basic_header(user.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(4) #+2 of bluprint of user
     end
