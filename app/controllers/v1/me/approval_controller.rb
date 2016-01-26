@@ -46,6 +46,7 @@ class V1::Me::ApprovalController < V1::BaseController
     requester = @approval_request.user
 
     if requester.get_approved_requests.count == 3
+      requester.switch_approval_to_friendship
       requester.activate!
       requester.save_profinda_profile
       requester.subscribe_to_mailchimp_list(@mc, Settings.mailchimp_general_list_id)

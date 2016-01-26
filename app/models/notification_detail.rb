@@ -71,7 +71,7 @@ class NotificationDetail < ActiveRecord::Base
   end
 
   def self.notify_approval_request_to_user(notification, user)
-    create!(url: "approval-requests", notification_type: "approval", sender: user,
+    create!(url: "alumni/approval", notification_type: "approval", sender: user,
       mailboxer_notification_id: notification.id, notified_object_id: user.id)
   end
 

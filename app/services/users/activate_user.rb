@@ -21,6 +21,7 @@ module Users
     private
       def activate_process
         if user.activate!
+          user.switch_approval_to_friendship
           save_profile_and_activate_in_profinda
           ##TODO: Urgentemente refactorizar este metodo. :yondri
           user.subscribe_to_mailchimp_list(@mailchimp, Settings.mailchimp_general_list_id)

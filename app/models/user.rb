@@ -521,6 +521,27 @@ class User < ActiveRecord::Base
     end
   end
 
+  def switch_approval_to_friendship
+    requests = approval_requests
+    requests.each do |r|
+      if r.accepted == false
+        friendship = self.create_friendship_for(r.approver)
+        if friendship.save  
+          Notification.notify_friendship_request_to_user(self, r.approver)
+        end
+        notifications = NotificationDetail.where(notification_type:'approval', sender_id: self.id)
+        notifications.each do |notification|
+          if notification.mailboxer_notification.present?
+            if notification.mailboxer_notification.notified_object_id == r.approver.id
+              notification.mailboxer_notification.destroy 
+            end
+          end
+        end 
+        r.destroy  
+      end
+    end
+  end
+
   ## TASKS
   def has_task_invitation(task)
     task_invitations.exists?(task_id: task.id)
