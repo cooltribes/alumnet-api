@@ -1,5 +1,5 @@
 class V1::CountriesController < V1::BaseController
-  before_action :set_country, except: [:index, :city]
+  before_action :set_country, except: [:index, :city, :locations]
 
   def index
     ## Too dirty!
@@ -10,6 +10,10 @@ class V1::CountriesController < V1::BaseController
       @q = Country.ransack(params[:q])
       @countries = @q.result
     end
+  end
+
+  def locations
+    @locations = ::Global::SearchLocation.new(params[:q]).call
   end
 
   def show
