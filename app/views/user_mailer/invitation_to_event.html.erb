@@ -1,7 +1,11 @@
 <div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
-  <p>Greetings <%= "#{ @user.name }" %></p>
+  <p>hello <%= "#{ @user.name }" %></p>
   <p>
+  	<% if @host.present? %>
+  		<%= "#{ @host.profile.first_name }" %>  <%= "#{ @host.profile.last_name }" %>  sent you an invitation to the event <%= "#{@event.name}" %><br>
+  	 <% else %>
       <%= "#{@event.creator.name}" %> is inviting you to attend an event <%= "#{@event.name}" %> <br>
-      Click <a href=<%= "#{Settings.ui_endpoint}/#events/#{@event.id}/posts" %>>here</a> to visit the group.
+     <% end %>
+      <a href=<%= "#{Settings.ui_endpoint}/#events/#{@event.id}/posts" %>>CLIC HERE</a> to see more details about the event.
   </p>
 </div>

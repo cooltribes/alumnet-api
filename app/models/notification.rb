@@ -139,7 +139,7 @@ class Notification
     notfy = notification.send_notification(subject, body, event, attendance.user)
     notification.send_pusher_notification
     NotificationDetail.invitation_to_event(notfy, event.creator, event)
-    UserMailer.invitation_to_event(attendance.user, event).deliver_later
+    UserMailer.invitation_to_event(attendance.user, event, host).deliver_later
   end
 
   def self.notify_new_friendship_by_approval(requester, user)
