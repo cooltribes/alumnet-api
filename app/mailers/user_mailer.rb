@@ -25,10 +25,15 @@ class UserMailer < ActionMailer::Base
     mail to: user.email, subject: "#{friend.name} accepted your friendship request"
   end
 
-  def invitation_to_event(user, event)
+  def invitation_to_event(user, event, host)
     @user = user
     @event = event
-    mail to: user.email, subject: "You have a new invitation!"
+    @host = host
+    if host.present?
+      mail to: user.email, subject: "#{host.profile.first_name} #{host.profile.last_name} invites you to the event #{event.name}"
+    elsif
+      mail to: user.email, subject: "You have a new invitation to an event in AlumNet!"
+    end
   end
 
   def approval_request_accepted(requester, approver)
