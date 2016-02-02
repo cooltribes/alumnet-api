@@ -47,7 +47,7 @@ class Group < ActiveRecord::Base
 
 
   ### Validations
-  validates_presence_of :name, :short_description, :group_type, :join_process, :cover
+  validates_presence_of :name, :short_description, :group_type, :join_process
   validate :validate_join_process, on: :create
   validate :validate_officiality
 
