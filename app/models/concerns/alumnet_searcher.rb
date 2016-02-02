@@ -8,21 +8,25 @@ class AlumnetSearcher
     @page = params.delete(:page)
   end
 
-  def get_results
+  def get_response
     if @type && searcheable
-      searcheable.search(@query).page(@page).results
+      searcheable.search(@query).page(@page).per(25)
     else
-      Elasticsearch::Model.search(@query, SEARCHEABLE_MODELS).page(@page).results
+      Elasticsearch::Model.search(@query, SEARCHEABLE_MODELS).page(@page).per(25)
     end
   end
 
+  def ar_results
+    get_response.records if get_response
+  end
+
   def results
-    get_results.to_a.map(&:to_hash) if get_results
+    get_response.results.to_a.map(&:to_hash) if get_response
   end
 
   def suggestions
-    if get_results
-      get_results.each_with_object([]) do |result, array|
+    if get_response
+      get_response.results.each_with_object([]) do |result, array|
         image = if result._type == "group" || result._type == "event"
           result._source.cover.small.url
         elsif result._type == "profile"
