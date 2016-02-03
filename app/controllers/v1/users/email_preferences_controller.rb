@@ -2,7 +2,7 @@ class V1::Users::EmailPreferencesController < V1::BaseController
   before_action :set_user
 
   def index
-    @email_preferences = @user.email_preferences.order(:id)
+    @email_preferences = @user.email_preferences.order(:name)
   end
 
 
