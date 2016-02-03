@@ -4,6 +4,8 @@ class SenderInvitation
   attr_reader :file, :count
   validate :contacts_format
 
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
+
   def initialize(contacts, sender)
     @count = 0
     @sender = sender
@@ -18,14 +20,16 @@ class SenderInvitation
 
   def send_invitations
     contacts_out_alumnet.each do |contact|
-      @count = count + 1
-      invitation = Invitation.find_or_create_by(user: @sender, guest_email: contact[:email])
-      UserMailer.invitation_to_alumnet(contact[:email], contact[:name], @sender, invitation.token).deliver_later
+      if is_valid_contact_email?(contact[:email])
+        @count = count + 1
+        invitation = Invitation.find_or_create_by(user: @sender, guest_email: contact[:email])
+        UserMailer.invitation_to_alumnet(contact[:email], contact[:name], @sender, invitation.token).deliver_later
+      end
     end
   end
 
   def contacts
-    @contacts.map(&:symbolize_keys)
+    strip_contacts_values(@contacts)
   end
 
   def users_in_alumnet
@@ -50,12 +54,26 @@ class SenderInvitation
   end
 
   protected
+    # TODO: Add bad emails to errors and show :armando
+    def is_valid_contact_email?(email)
+      email.present? && email.strip =~ VALID_EMAIL_REGEX
+    end
+
     def extract_email_from_contacts(contacts)
-      contacts.inject([]) { |array, contact| array << contact[:email]  }
+      contacts.inject([]) { |array, contact| array << contact[:email] }
     end
 
     def extract_contact_from_hash(contacts)
       contacts.values
+    end
+
+    def strip_contacts_values(contacts_array)
+      new_contacts = []
+      contacts_array.each do |contact|
+        new_contact = contact.each_with_object({}) { |(k, v), hash| hash[k] = v.try(:strip) }
+        new_contacts << new_contact
+      end
+      new_contacts.map(&:symbolize_keys)
     end
 
     def contacts_format
