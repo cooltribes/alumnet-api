@@ -2,14 +2,14 @@
   <p>Hello <%= "#{ @user.name }" %></p>
   <p>
   	<% if @task.company.present? %>
-    	The company <%= "#{@task.company.name}" %> added a the job post <%= "#{@task.name}" %> that matches with your profile
+    	The company <%= "#{@task.company.name}" %> added a the <%= "#{@task.type_text}" %> <%= "#{@task.name}" %> that matches with your profile
     <% else %>
-    	A new job post <%= "#{@task.name}" %> matches with your profile
+    	A new <%= "#{@task.type_text}" %> - <%= "#{@task.name}" %> matches with your profile
     <% end %>
     <br>
   </p>
-  <p>  
-    See more details <a href=<%= "#{Settings.ui_endpoint}/#job-exchange/#{@task.id}" %>>here</a>.
+  <p>
+    See more details <a href=<%= "#{Settings.ui_endpoint}/#{@task.ui_url}/#{@task.id}" %>>here</a>.
   </p>
 
 </div>

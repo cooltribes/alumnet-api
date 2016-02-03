@@ -16,7 +16,9 @@ class Task < ActiveRecord::Base
   POSITION_TYPES = { 0 => "Top Management/Director", 1 => "Middle management", 2 => "Senior Specialist",
     3 => "Junior Specialist", 4 => "Entry job" }
 
-  HELP_TYPES = ["task_business_exchange", "task_home_exchange", "task_job_exchange", "task_meetup_exchange"]
+  HELP_TYPES = {"task_business_exchange" => "Business Opportunity", "task_home_exchange" => "Home Exchange",
+    "task_job_exchange" => "Job Post", "task_meetup_exchange" => "Meet-up"}
+
 
   enum application_type: [ :alumnet, :external ]
 
@@ -39,7 +41,7 @@ class Task < ActiveRecord::Base
 
   ## Dinamics methods
 
-  HELP_TYPES.each do |type|
+  HELP_TYPES.keys.each do |type|
     define_method("#{type}?") do
       help_type == type
     end
@@ -99,6 +101,15 @@ class Task < ActiveRecord::Base
 
   def employment_info
     { text: employment_type_text, id: employment_type }
+  end
+
+  def type_text
+    HELP_TYPES[help_type]
+  end
+
+  #HINT: THIS IS HORRIBLE FOR THE API
+  def ui_url
+    help_type.gsub("_", "-").gsub("task-", "#")
   end
 
   # PROFINDA INTEGRATION

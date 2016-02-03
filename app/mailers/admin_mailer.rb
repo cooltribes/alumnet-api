@@ -26,9 +26,9 @@ class AdminMailer < ActionMailer::Base
     @user = user
     @task = task
     if task.company.present?
-      mail to: user.email, subject: "A job post from #{task.company.name} matches with your profile"
+      mail to: user.email, subject: "A #{task.type_text} from #{task.company.name} matches with your profile"
     else
-      mail to: user.email, subject: "A job post matches with your profile"
+      mail to: user.email, subject: "A #{task.type_text} matches with your profile"
     end
   end
 
