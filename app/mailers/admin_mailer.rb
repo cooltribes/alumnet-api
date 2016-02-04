@@ -22,14 +22,22 @@ class AdminMailer < ActionMailer::Base
     mail to: admin.email, subject: "A new user was registered in AlumNet"
   end
 
-  def user_have_match_in_task(user, task)
+  def match_task_business_exchange(user, task)
     @user = user
     @task = task
-    if task.company.present?
-      mail to: user.email, subject: "A #{task.type_text} from #{task.company.name} matches with your profile"
-    else
-      mail to: user.email, subject: "A #{task.type_text} matches with your profile"
-    end
+    mail to: user.email, subject: "A #{task.type_text} from #{task.company.name} matches with your profile"
+  end
+
+  def match_task_job_exchange(user, task)
+    @user = user
+    @task = task
+    mail to: user.email, subject: "A #{task.type_text} from #{task.company.name} matches with your profile"
+  end
+
+  def match_task_meetup_exchange(user, task)
+    @user = user
+    @task = task
+    mail to: user.email, subject: "A #{task.type_text} matches with your profile"
   end
 
   def admin_request_to_company_admins(admin, user, company)

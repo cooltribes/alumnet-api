@@ -25,6 +25,7 @@ class Task < ActiveRecord::Base
   ## Validations
   validates_presence_of :name, :description, :nice_have_list, :help_type, :post_until, :user_id
   validates_presence_of :arrival_date,  if: Proc.new { |t| t.task_meetup_exchange? }
+  validates_presence_of :company_id,  if: Proc.new { |t| t.task_job_exchange? }
 
   ## Scopes
   scope :business_exchanges, -> { where(help_type: "task_business_exchange") }
@@ -164,7 +165,7 @@ class Task < ActiveRecord::Base
     matches.delete_with_profinda_uid(p_matches)
     User.where(profinda_uid: p_matches).each do |user|
       matches.find_or_create_by(user: user)
-      AdminMailer.user_have_match_in_task(user, self).deliver_later
+      send_match_notification
     end
   end
 
@@ -190,6 +191,10 @@ class Task < ActiveRecord::Base
 
   def profinda_api
     @profinda_api ||= ProfindaApiClient.new(user.email, user.profinda_password)
+  end
+
+  def send_match_notification
+    AdminMailer.send("match_#{help_type}", user, self).deliver_later
   end
 
 

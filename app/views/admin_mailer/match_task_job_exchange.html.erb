@@ -1,0 +1,15 @@
+<div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
+  <p>Hello <%= "#{ @user.name }" %></p>
+  <p>
+  	<% if @task.company.present? %>
+    	The company <%= "#{@task.company.name}" %> added a the <%= "#{@task.type_text}" %> <%= "#{@task.name}" %> that matches with your profile
+    <% else %>
+    	A new <%= "#{@task.type_text}" %> - <%= "#{@task.name}" %> matches with your profile
+    <% end %>
+    <br>
+  </p>
+  <p>
+    See more details <a href=<%= "#{Settings.ui_endpoint}/#{@task.ui_url}/#{@task.id}" %>>here</a>.
+  </p>
+
+</div>

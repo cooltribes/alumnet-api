@@ -74,6 +74,22 @@ RSpec.describe Task, :type => :model do
       it "should create task_attributes from the dictonary objects of profinda" do
       end
     end
+
+    describe "#send_match_notification" do
+      it "should send a email according with the help_type of task" do
+        VCR.use_cassette('task_help_type_callback') do
+          task = Task.make!(:business)
+          task.send_match_notification
+          expect(ActionMailer::DeliveryJob).to have_been_enqueued
+            .with("AdminMailer", "match_task_business_exchange", "deliver_now", global_id(task.user), global_id(task))
+
+          task.help_type = "task_meetup_exchange"
+          task.send_match_notification
+          expect(ActionMailer::DeliveryJob).to have_been_enqueued
+            .with("AdminMailer", "match_task_meetup_exchange", "deliver_now", global_id(task.user), global_id(task))
+        end
+      end
+    end
   end
 
   describe "Callbacks" do

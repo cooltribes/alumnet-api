@@ -327,6 +327,7 @@ Task.blueprint(:job) do
   country { Country.make! }
   city { object.country.cities.first }
   user {  User.make! }
+  company { Company.make! }
 end
 
 Task.blueprint(:home) do
@@ -423,7 +424,7 @@ Company.blueprint do
   description { Faker::Lorem.sentence }
   main_address { Faker::Address.street_address }
   size { 1 }
-  logo { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
+  # logo { File.open("#{Rails.root}/spec/fixtures/cover_test.jpg") }
   sector { Sector.make! }
   country { Country.make! }
   city { City.make! }
