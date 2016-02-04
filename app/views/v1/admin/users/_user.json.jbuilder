@@ -92,3 +92,5 @@ end
 
 json.admin_note user.admin_note.try(:body)
 json.tag_list user.tag_list
+
+json.approval_status user.approval_status

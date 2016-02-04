@@ -4,7 +4,12 @@ class ApprovalRequest < ActiveRecord::Base
   ###relations
   belongs_to :user
   belongs_to :approver, class_name: "User"
-  
+
+  ###Scopes
+  scope :accepted, -> { where(accepted: true) }
+  scope :pending, -> { where(accepted: false) }
+
+
   ###Instance Methods
 
   def request_type(user)
@@ -22,5 +27,5 @@ class ApprovalRequest < ActiveRecord::Base
       #Notification.notify_accepted_friendship_to_user(user, friend)
     end
   end
-  
+
 end

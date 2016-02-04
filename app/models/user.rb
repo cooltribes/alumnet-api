@@ -464,6 +464,11 @@ class User < ActiveRecord::Base
   end
 
   ###Attendances
+  def approval_status
+    return "A" if created_by_admin
+    approval_requests.accepted.count
+  end
+
   def attendance_for(event)
     attendances.find_by(event_id: event.id)
   end
@@ -526,18 +531,18 @@ class User < ActiveRecord::Base
     requests.each do |r|
       if r.accepted == false
         friendship = self.create_friendship_for(r.approver)
-        if friendship.save  
+        if friendship.save
           Notification.notify_friendship_request_to_user(self, r.approver)
         end
         notifications = NotificationDetail.where(notification_type:'approval', sender_id: self.id)
         notifications.each do |notification|
           if notification.mailboxer_notification.present?
             if notification.mailboxer_notification.notified_object_id == r.approver.id
-              notification.mailboxer_notification.destroy 
+              notification.mailboxer_notification.destroy
             end
           end
-        end 
-        r.destroy  
+        end
+        r.destroy
       end
     end
   end
