@@ -120,4 +120,10 @@ class UserMailer < ActionMailer::Base
     @post = post
     mail to: @user.email, subject: "#{post.user.name} has edited a post you commented on"
   end
+
+  def user_commented_post_you_commented_or_liked(user, comment)
+    @user = user
+    @comment = comment
+    mail to: @user.email, subject: "#{comment.user.name} commented a post on AlumNet"
+  end
 end
