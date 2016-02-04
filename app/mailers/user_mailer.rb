@@ -114,4 +114,10 @@ class UserMailer < ActionMailer::Base
     @user = user
     mail to: @user.email, subject: "You have a new message from  #{sender.name}"
   end
+
+  def user_edited_post_you_commented(user, post)
+    @user = user
+    @post = post
+    mail to: @user.email, subject: "#{post.user.name} has edited a post you commented on"
+  end
 end
