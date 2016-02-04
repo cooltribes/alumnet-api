@@ -13,7 +13,7 @@ module Alumnet
     end
 
     def country_info
-      { name: country.try(:name) || "", id: country_id, cc_iso: city.try(:cc_iso) }
+      { name: country.try(:name) || "", id: country_id, cc_iso: country.try(:cc_iso) }
     end
   end
 end

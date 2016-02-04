@@ -16,12 +16,12 @@ describe V1::GroupsController, type: :request do
   end
 
   def invalid_attributes
-    { name: "", description: "short description", cover: cover_file,
+    { name: "", short_description: "short description", cover: cover_file,
       country_id: country.id, city_id: city.id, join_process: 0 }
   end
 
   def invalid_attributes_with_mailchimp
-    { name: "Group 1", description: "short description", cover: cover_file,
+    { name: "Group 1", short_description: "short description", cover: cover_file,
       country_id: country.id, city_id: city.id, join_process: 0, mailchimp: true,
       api_key: 'HHHHHHH', list_id: "dsd" }
   end

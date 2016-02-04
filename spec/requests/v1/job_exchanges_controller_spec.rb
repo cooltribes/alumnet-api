@@ -96,7 +96,7 @@ describe V1::JobExchangesController, type: :request do
         expect {
           post job_exchanges_path, invalid_attributes, basic_header(user.auth_token)
         }.to change(Task, :count).by(0)
-        expect(json).to eq({"name"=>["can't be blank"]})
+        expect(json).to eq({"name"=>["can't be blank"], "company_id"=>["can't be blank"]})
         expect(response.status).to eq 422
       end
     end

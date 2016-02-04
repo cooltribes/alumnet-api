@@ -11,7 +11,7 @@ describe V1::Admin::GroupsController, type: :request do
   end
 
   def valid_attributes
-    { name: "Group 1", description: "short description", cover: cover_file,
+    { name: "Group 1", short_description: "short description", cover: cover_file,
       country_id: country.id, city_id: city.id, join_process: 0 }
   end
 
@@ -59,7 +59,7 @@ describe V1::Admin::GroupsController, type: :request do
     context "with valid attributes" do
       it "create a group and membership for user" do
         expect {
-          post admin_groups_path, valid_attributes , basic_header(admin.auth_token)
+          post admin_groups_path, valid_attributes, basic_header(admin.auth_token)
         }.to change(Group, :count).by(1)
         expect(response.status).to eq 201
         expect(admin.groups).to eq([Group.last])
