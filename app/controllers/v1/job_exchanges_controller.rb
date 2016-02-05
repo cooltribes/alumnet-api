@@ -25,7 +25,10 @@ class V1::JobExchangesController < V1::TasksController
   def apply
     if @task.can_apply(current_user)
       @task.apply(current_user)
-      UserMailer.user_applied_to_job(@task, current_user, apply_params["whyme"]).deliver_now
+      preference = @task.user.email_preferences.find_by(name: 'apply_job_post')
+      if not(preference.present?) || (preference.present? && preference.value == 0)
+        UserMailer.user_applied_to_job(@task, current_user, apply_params["whyme"]).deliver_now
+      end
 
       render 'v1/tasks/show'
     else

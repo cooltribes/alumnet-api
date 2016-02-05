@@ -32,6 +32,12 @@ class V1::BasePostsController < V1::BaseController
     authorize @post
     service = ::Posts::UpdatePost.new(@postable, @post, current_user, post_params)
     if service.call
+      @post.comment_users.each do |comment_user|
+        preference = comment_user.email_preferences.find_by(name: 'commented_post_edit')
+        if not(preference.present?) || (preference.present? && preference.value == 0)
+          UserMailer.user_edited_post_you_commented(comment_user, @post).deliver_later
+        end
+      end
       render :show, status: :ok,  location: [@postable, @post]
     else
       render json: service.post.errors, status: :unprocessable_entity
