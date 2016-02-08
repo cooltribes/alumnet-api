@@ -9,6 +9,8 @@ json.birth_country profile.permit_birth_country(current_user)
 json.residence_city profile.permit_residence_city(current_user)
 json.residence_country profile.permit_residence_country(current_user)
 
+json.residence_region profile.residence_region
+
 json.last_experience profile.permit_last_experience(current_user)
 
 json.avatar do
