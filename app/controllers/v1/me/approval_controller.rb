@@ -37,7 +37,7 @@ class V1::Me::ApprovalController < V1::BaseController
   end
 
   def update
-    ##TODO: Refactor this
+    ##TODO: Refactor this :nelson
     @approval_request = @user.pending_approval_requests.find(params[:id])
     #if @friendship.friend_id == current_user.id #this a policy refactor!
     @approval_request.accept!

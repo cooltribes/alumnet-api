@@ -15,6 +15,7 @@ class V1::Me::ReceiptsController < V1::BaseController
     PusherDelegator.send_message(@receipt.message, recipients)
     recipients.each do |recipient|
       preference = recipient.email_preferences.find_by(name: 'message')
+      # TODO: refactorizar esto y moverlo de lugar, quizas un servicio :yondri
       if not(preference.present?) || (preference.present? && preference.value == 0)
         UserMailer.new_message_direct(@user, recipient, @conversation).deliver_later
       end
