@@ -41,7 +41,7 @@ module ProfileHelpers
   end
 
   def residence_region
-    if residence_country.region.present?
+    if residence_country && residence_country.region.present?
       { id: residence_country.region.id, name: residence_country.region.name }
     else
       { id: nil, name: "" }
