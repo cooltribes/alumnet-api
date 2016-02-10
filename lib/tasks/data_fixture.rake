@@ -54,4 +54,12 @@ namespace :data_fixture do
     Feature.create!(name: "Get help", description: "Get help on business exchange is a member only feature", status: 0, key_name: "get_help")
     Feature.create!(name: "Give help", description: "Give help on business exchange is a member only feature", status: 0, key_name: "give_help")
   end
+
+  desc "add contact_info for users registered after changes on registration process"
+  task add_users_contact_info: :environment do
+    Profile.includes(:contact_infos).where(contact_infos: { id: nil}).each do |profile|
+      profile.contact_infos.create!(contact_type: 0, info: profile.user.email, privacy: 1, contactable_type: "Profile", contactable_id: profile.id)
+      puts 'Contact info created for: ' + profile.user.name + ' | email: ' + profile.user.email
+    end
+  end
 end
