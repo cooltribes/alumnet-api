@@ -68,6 +68,7 @@ class V1::BaseCommentsController < V1::BaseController
     params.permit(:comment, :markup_comment, :user_tags_list)
   end
 
+  #TODO: Refactorizar mover un callback en el modelo y crear metodos de verificacion. (78-88-97)
   def send_notification_emails
     users = []
     # check for users who liked the commentable (post, etc)
