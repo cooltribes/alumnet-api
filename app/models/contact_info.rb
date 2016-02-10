@@ -11,7 +11,7 @@ class ContactInfo < ActiveRecord::Base
 
   ###Validations
   validates_presence_of :info
-  validates_uniqueness_of :info, scope: [:contact_type, :contactable_type, :contactable_id]
+  #validates_uniqueness_of :info, scope: [:contact_type, :contactable_type, :contactable_id]
 
   def contact_type_text
     CONTACT_TYPE[contact_type]

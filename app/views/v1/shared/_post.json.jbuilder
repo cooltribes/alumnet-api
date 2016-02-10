@@ -25,6 +25,18 @@ end
 
 json.postable_info post.postable_info(current_user)
 
+json.postable do
+  if post.postable
+    if post.postable_type == 'Group'
+      json.userIsMember post.postable.user_is_member?(current_user)
+    else
+      json.nil!
+    end
+  else
+    json.nil!
+  end
+end
+
 json.permissions do
   json.canShare post.can_shared?
   json.canEdit post.can_edited_by(current_user)
