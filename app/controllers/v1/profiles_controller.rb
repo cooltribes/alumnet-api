@@ -1,6 +1,7 @@
 class V1::ProfilesController < V1::BaseController
   include Pundit
   before_action :set_profile
+  before_action :setup_mcapi, only: :update
 
   def show
   end
@@ -36,5 +37,9 @@ class V1::ProfilesController < V1::BaseController
 
     def crop_params
       params.permit(:imgInitH, :imgInitW, :imgW, :imgH, :imgX1, :imgY1, :cropW, :cropH, :image)
+    end
+
+    def setup_mcapi
+      @mc = Mailchimp::API.new(Settings.mailchimp_general_api_key)
     end
 end

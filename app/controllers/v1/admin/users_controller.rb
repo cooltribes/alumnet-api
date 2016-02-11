@@ -1,6 +1,7 @@
 class V1::Admin::UsersController < V1::AdminController
   skip_before_action :set_request_format, only: :csv
   before_action :set_user, except: [:index, :stats, :register, :csv]
+  before_action :setup_mcapi, only: [:activate, :banned]
 
   def index
     if params[:tags].present?
@@ -154,5 +155,9 @@ class V1::Admin::UsersController < V1::AdminController
       User.includes(:profile).ransack(params[:q])
     end
     q.result.order("#{params[:sort_by]} #{params[:order_by]}")
+  end
+
+  def setup_mcapi
+    @mc = Mailchimp::API.new(Settings.mailchimp_general_api_key)
   end
 end

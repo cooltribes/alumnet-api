@@ -10,6 +10,7 @@ defaults: &defaults
   initial_groups: []
   google_api_key: xxxxxxxxxxx
   elasticsearch_url: http://localhost:9200
+  mailchimp_general_api_key: 'f0ad0e019703b02132b2cf15ad458e50-us10'
 
 
 development:
@@ -26,3 +27,5 @@ staging:
 
 production:
   <<: *defaults
+  mailchimp_general_list_id: '156305'
+  mailchimp_general_api_key: '01053b731cd9246d18f459085ea9cb2f-us5'
