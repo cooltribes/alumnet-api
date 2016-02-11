@@ -8,16 +8,16 @@ class MetaTagExtractor
     # TODO: validate url
     @url = url.strip
     # TODO: Preguntar si esto es necesario en ui o se puede enviar un nil :rafael
-    @image = "no image"
-    @description = "no description"
-    @title = "no title"
+    @image = nil
+    @description = nil
+    @title = nil
     run
   end
 
 
   def webpage
     @webpage ||= begin
-      Nokogiri::HTML(open(url))
+      timeout(2) { Nokogiri::HTML(open(url)) }
     rescue
       nil
     end
