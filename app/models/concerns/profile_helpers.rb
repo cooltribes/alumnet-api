@@ -103,8 +103,18 @@ module ProfileHelpers
       completeLocation = "#{city[:name]} - #{country[:name]}"
     end
 
+  end  
+
+  def my_skills
+    skills.map do |skill|
+      skill.id      
+    end
   end
 
-
+  def my_languages
+    languages.map do |language|
+      language.id      
+    end
+  end
 
 end
