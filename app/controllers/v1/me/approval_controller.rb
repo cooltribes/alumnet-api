@@ -1,6 +1,7 @@
 class V1::Me::ApprovalController < V1::BaseController
   before_action :set_user
   before_action :set_and_check_approver, only: :create
+  before_action :setup_mcapi, only: :update
 
   def index
     @q = @user.get_pending_approval_requests(params[:q])
@@ -88,5 +89,9 @@ class V1::Me::ApprovalController < V1::BaseController
         UserAction.create(value: action.value, generator_id: @approval_request.id, generator_type: action.key_name, user_id: @user.id, action_id: action.id)
         @user.profile.add_points(action.value)
       end
+    end
+
+    def setup_mcapi
+      @mc = Mailchimp::API.new(Settings.mailchimp_general_api_key)
     end
 end

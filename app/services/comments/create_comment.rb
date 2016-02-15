@@ -15,10 +15,45 @@ module Comments
       @comment.user = @current_user
       if commentable.comments << @comment
         @comment.update_user_tags(user_tags_list, tagger: @current_user) if user_tags_list
+        send_notification_emails(@comment)
         true
       else
         @errors = @comment.errors
         false
+      end
+    end
+
+    private
+
+    #TODO: crear metodos de verificacion. (35-45)
+    def send_notification_emails(comment)
+      users = []
+      # check for users who liked the commentable (post, etc)
+      comment.commentable.likes.each do |like|
+        unless users.include?(like.user)
+          #check is not creator user
+          if like.user.id != comment.commentable.user.id && like.user.id != @current_user.id
+            users << like.user
+          end
+        end
+      end
+
+      # check for users who commented the commentable (post, etc)
+      comment.commentable.comments.each do |comment|
+        unless users.include?(comment.user)
+          #check is not creator user
+          if comment.user.id != comment.commentable.user.id && comment.user.id != @current_user.id
+            users << comment.user
+          end
+        end
+      end
+
+      # send email to selected users
+      users.each do |user|
+        preference = user.email_preferences.find_by(name: 'commented_or_liked_post_comment')
+        if not(preference.present?) || (preference.present? && preference.value == 0)
+          UserMailer.user_commented_post_you_commented_or_liked(user, comment).deliver_now
+        end
       end
     end
   end
