@@ -52,8 +52,12 @@ class Membership < ActiveRecord::Base
   end
 
   ## this return the memberships in group where the user is creator. This is a hack for the ui
-  def self.by_creation_of_group(user)
-    joins(:group).where({ groups: { creator_id: user.id } })
+  def self.by_creator_of_group(user)
+    accepted.joins(:group).where({ groups: { creator_id: user.id } })
+  end
+
+  def self.where_user_is_admin(user)
+    accepted.where(user: user, admin: true)
   end
 
   private

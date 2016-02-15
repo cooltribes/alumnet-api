@@ -97,6 +97,11 @@ class User < ActiveRecord::Base
     user
   end
 
+  def self.search_in_location(location, query)
+    locations = location.is_a?(Country) ? [location.id] : location.countries.pluck(:id)
+    includes(:profile).ransack(query).result.where(profiles: { residence_country_id: [locations]})
+  end
+
   ### Instance Methods
 
   def devices_tokens(platform)
