@@ -33,6 +33,22 @@ describe V1::UsersController, type: :request do
     end
   end
 
+  describe "POST /users" do
+    pending
+    # before do
+    #   5.times do
+    #     u = User.make!
+    #     u.profile.set_last_register_step!
+    #     u.activate!
+    #     ContactInfo.make!(:email, contactable: u.profile )
+    #   end
+    # end
+
+    # it "search in Profile with elastic search and return the user from postgres" do
+    #   # post users_path, {q: User.last.profile.first_name }, basic_header(admin.auth_token)
+    # end
+  end
+
   describe "GET /users/:id" do
     it "return a user by id" do
       user = User.make!
