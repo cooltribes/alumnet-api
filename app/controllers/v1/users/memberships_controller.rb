@@ -10,14 +10,12 @@ class V1::Users::MembershipsController < V1::BaseController
   end
 
   def groups
-    @q = @user.memberships.accepted.ransack(params[:q])
-    @memberships = @q.result
+    @memberships = @user.memberships.accepted.ransack(params[:q]).result
     render :index, status: :ok
   end
 
   def created_groups
-    @q = @user.memberships.accepted.by_creation_of_group(@user).ransack(params[:q])
-    @memberships = @q.result
+    @memberships = @user.memberships.where_user_is_admin(@user).ransack(params[:q]).result
     render :index, status: :ok
   end
 
