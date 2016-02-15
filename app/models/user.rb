@@ -62,6 +62,7 @@ class User < ActiveRecord::Base
 
 
   ### Scopes
+  scope :alumnet_admins, -> { where(role: ROLES[:alumnet_admin]) }
   scope :without_externals, -> { where.not(role: ROLES[:external]) }
   scope :active, -> { where(status: 1) }
   scope :inactive, -> { where(status: 0) }

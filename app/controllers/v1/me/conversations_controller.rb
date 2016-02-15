@@ -12,6 +12,7 @@ class V1::Me::ConversationsController < V1::BaseController
   end
 
   def create
+    # Refactor this with :yondri
     recipients = User.where(id: users_ids)
     @conversation = @user.send_message(recipients, body, subject).conversation
     PusherDelegator.send_message(@conversation.last_message, recipients.to_a)

@@ -23,15 +23,14 @@ class V1::Me::ApprovalController < V1::BaseController
   end
 
   def notify_admins
-    countryAiesec = @user.profile.experiences.where(exp_type: 0).first.committee.country
-    countryResidence = @user.profile.residence_country
-    superAdmins = User.where(role: "AlumNetAdmin")
-    admins = countryResidence.admins | superAdmins
+    country_aiesec = @user.profile.first_aiesec_experience_committee.try(:country)
+    country_residence = @user.profile.residence_country
+    admins = country_residence.admins | User.alumnet_admins
 
-    if countryAiesec
-      regionAiesec = countryAiesec.region
-      admins = admins | countryAiesec.admins | regionAiesec.admins
+    if country_aiesec && country_aiesec.region
+      admins = admins | country_aiesec.admins | country_aiesec.region.admins
     end
+
     Notification.notify_approval_request_to_admins(admins, @user)
     head :no_content
   end

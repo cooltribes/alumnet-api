@@ -89,6 +89,10 @@ class Profile < ActiveRecord::Base
     experiences.where(exp_type: 0).first
   end
 
+  def first_aiesec_experience_committee
+    first_aiesec_experience.try(:committee)
+  end
+
   def last_experience
     experiences.where.not(exp_type: 2).order(end_date: :desc, id: :desc).first
   end
@@ -161,7 +165,7 @@ class Profile < ActiveRecord::Base
     total = self.points-points
     self.update(points: total)
   end
-  
+
   private
     def generate_slug
       if first_name_changed? || last_name_changed?
