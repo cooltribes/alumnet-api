@@ -149,10 +149,11 @@ class V1::Admin::UsersController < V1::AdminController
 
   def users
     q = if @admin_location
-      @admin_location.users.includes(:profile).ransack(params[:q])
+      # @admin_location.users.includes(:profile).ransack(params[:q])
+      User.search_in_location(@admin_location, params[:q])
     else
-      User.includes(:profile).ransack(params[:q])
+      User.includes(:profile).ransack(params[:q]).result
     end
-    q.result.order("#{params[:sort_by]} #{params[:order_by]}")
+    q.order("#{params[:sort_by]} #{params[:order_by]}")
   end
 end
