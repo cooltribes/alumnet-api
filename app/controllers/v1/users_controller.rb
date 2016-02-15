@@ -1,5 +1,5 @@
 class V1::UsersController < V1::BaseController
-  before_action :set_user, except: [:index, :create, :change_password]
+  before_action :set_user, except: [:index, :create, :change_password, :search]
 
   def index
     @q = User.active.without_externals.includes(:profile).ransack(params[:q])
@@ -9,6 +9,19 @@ class V1::UsersController < V1::BaseController
     else
       @users = @users.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object
     end
+    byebug
+  end
+
+  def search
+    @q = User.active.without_externals.includes(:profile).ransack(params[:q])
+    @users = @q.result
+    if @users.class == Array
+      @users = Kaminari.paginate_array(@users).page(params[:page]).per(params[:per_page])
+    else
+      @users = @users.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object
+    end
+    byebug
+    render :index, status: :ok
   end
 
   def show
