@@ -1,7 +1,7 @@
 module Comments
   class CreateComment
 
-    attr_reader :commentable, :comment, :errors, :users
+    attr_reader :commentable, :comment, :errors
 
     def initialize(commentable, current_user, params)
       @commentable = commentable
@@ -51,7 +51,7 @@ module Comments
       users.each do |user|
         preference = user.email_preferences.find_by(name: 'commented_or_liked_post_comment')
         if not(preference.present?) || (preference.present? && preference.value == 0)
-          UserMailer.user_commented_post_you_commented_or_liked(user, comment).deliver_now
+          UserMailer.user_commented_post_you_commented_or_liked(user, comment).deliver_later
         end
       end
     end
