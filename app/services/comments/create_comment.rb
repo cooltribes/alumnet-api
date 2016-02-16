@@ -25,25 +25,24 @@ module Comments
 
     private
 
-    #TODO: crear metodos de verificacion. (35-45)
     def send_notification_emails(comment)
       users = []
       # check for users who liked the commentable (post, etc)
       comment.commentable.likes.each do |like|
         unless users.include?(like.user)
-          #check is not creator user
-          if like.user.id != comment.commentable.user.id && like.user.id != @current_user.id
+          #check is not current user
+          if like.user != @current_user
             users << like.user
           end
         end
       end
 
       # check for users who commented the commentable (post, etc)
-      comment.commentable.comments.each do |comment|
-        unless users.include?(comment.user)
-          #check is not creator user
-          if comment.user.id != comment.commentable.user.id && comment.user.id != @current_user.id
-            users << comment.user
+      comment.commentable.comments.each do |c|
+        unless users.include?(c.user)
+          #check is not current user or post creator
+          if c.user != @current_user && comment.commentable.user != c.user
+            users << c.user
           end
         end
       end
@@ -52,7 +51,7 @@ module Comments
       users.each do |user|
         preference = user.email_preferences.find_by(name: 'commented_or_liked_post_comment')
         if not(preference.present?) || (preference.present? && preference.value == 0)
-          UserMailer.user_commented_post_you_commented_or_liked(user, comment).deliver_now
+          UserMailer.user_commented_post_you_commented_or_liked(user, comment).deliver_later
         end
       end
     end
