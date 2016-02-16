@@ -1,7 +1,7 @@
 module Comments
   class CreateComment
 
-    attr_reader :commentable, :comment, :errors
+    attr_reader :commentable, :comment, :errors, :users
 
     def initialize(commentable, current_user, params)
       @commentable = commentable
@@ -25,25 +25,24 @@ module Comments
 
     private
 
-    #TODO: crear metodos de verificacion. (35-45)
     def send_notification_emails(comment)
       users = []
       # check for users who liked the commentable (post, etc)
       comment.commentable.likes.each do |like|
         unless users.include?(like.user)
-          #check is not creator user
-          if like.user.id != comment.commentable.user.id && like.user.id != @current_user.id
+          #check is not current user
+          if like.user != @current_user
             users << like.user
           end
         end
       end
 
       # check for users who commented the commentable (post, etc)
-      comment.commentable.comments.each do |comment|
-        unless users.include?(comment.user)
-          #check is not creator user
-          if comment.user.id != comment.commentable.user.id && comment.user.id != @current_user.id
-            users << comment.user
+      comment.commentable.comments.each do |c|
+        unless users.include?(c.user)
+          #check is not current user or post creator
+          if c.user != @current_user && comment.commentable.user != c.user
+            users << c.user
           end
         end
       end
