@@ -12,7 +12,6 @@ class V1::UsersController < V1::BaseController
   end
 
   def search
-    byebug
     user_ids = Profile.search(params[:q]).page(params[:page]).per(params[:per_page]).results.to_a.map(&:user_id)
     @users = User.active.without_externals.includes(:profile).where(id: user_ids)
     render :index, status: :ok
