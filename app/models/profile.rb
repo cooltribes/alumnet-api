@@ -44,7 +44,7 @@ class Profile < ActiveRecord::Base
   ###Instance Methods
 
   def as_indexed_json(options = {})
-    as_json(methods: [:name, :local_committee, :current_experience, :age, :my_skills, :my_languages],
+    as_json(methods: [:name, :local_committee, :current_experience, :age, :skill_ids, :language_ids],
       include: { birth_city: { only: :name }, birth_country: { only: :name },
       residence_city: { only: :name }, residence_country: { only: :name },
       user: { only: [:id, :email, :role]} })
