@@ -52,6 +52,7 @@ class User < ActiveRecord::Base
   has_many :matches, dependent: :destroy
   has_many :payments, dependent: :destroy
   has_many :company_admins, dependent: :destroy
+  has_many :managed_companies, -> { where(company_admins: {status: 1}) }, through: :company_admins, source: :company
   has_many :profile_visits, dependent: :destroy
   has_many :posts_by_like, through: :likes, source: :likeable, source_type: "Post"
   has_many :devices, dependent: :destroy

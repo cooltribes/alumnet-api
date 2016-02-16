@@ -26,7 +26,7 @@ describe V1::Groups::MembershipsController, type: :request do
   describe "GET /users/:id/memberships/created_groups" do
     it "return a groups created by the user" do
       2.times { Membership.make!(:approved, user: user ) }
-      Membership.make!(:approved, user: user, group: Group.make!(creator: user))
+      Membership.make!(:approved, user: user, admin: true, group: Group.make!(creator: user))
       get created_groups_user_memberships_path(user), {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(1)

@@ -12,10 +12,20 @@ describe V1::CompaniesController, type: :request do
       expect(json.count).to eq(3)
     end
 
+    # it "return only the companies where the user is admin" do
+    #   4.times { Company.make! }
+    #   CompanyAdmin.create!(user: othe_user, company: Company.last, status: 1, accepted_by: user)
+    #   get companies_path, { q: { company_admins_user_id_eq: othe_user.id, status_eq: 1 } }, basic_header(othe_user.auth_token)
+    #   expect(response.status).to eq 200
+    #   expect(json.count).to eq(1)
+    # end
+  end
+
+  describe "GET /companies/managed" do
     it "return only the companies where the user is admin" do
       4.times { Company.make! }
       CompanyAdmin.create!(user: othe_user, company: Company.last, status: 1, accepted_by: user)
-      get companies_path, { q: { company_admins_user_id_eq: othe_user.id, status_eq: 1 } }, basic_header(othe_user.auth_token)
+      get managed_companies_path, {}, basic_header(othe_user.auth_token)
       expect(response.status).to eq 200
       expect(json.count).to eq(1)
     end

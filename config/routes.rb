@@ -170,11 +170,12 @@ Rails.application.routes.draw do
     resources :contact, only: :create
 
     resources :companies do
-      post :cropping, on: :member
       get :all, on: :collection
+      get :managed, on: :collection
       get :employees, on: :member
       get :past_employees, on: :member
       get :admins, on: :member
+      post :cropping, on: :member
       resources :branches, except: :show, controller: 'companies/branches'
       resources :contact_infos, except: :show, controller: 'companies/contact_infos'
       resources :product_services, except: :show, controller: 'companies/product_services'

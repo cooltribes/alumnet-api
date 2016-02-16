@@ -1,9 +1,9 @@
 class V1::CompaniesController < V1::BaseController
-  before_action :set_company, except: [:index, :create, :all]
+  before_action :set_company, except: [:index, :create, :all, :managed]
 
   def index
-    @q = Company.ransack(params[:q])
-    @companies = @q.result
+    q = Company.ransack(params[:q])
+    @companies = q.result
     if @companies.class == Array
       @companies = Kaminari.paginate_array(@companies).page(params[:page]).per(params[:per_page])
     else
@@ -16,20 +16,25 @@ class V1::CompaniesController < V1::BaseController
     render :index
   end
 
+  def managed
+    @companies = @current_user.managed_companies.ransack(params[:q]).result
+    render :index
+  end
+
   def employees
-    @q = @company.current_employees.ransack(params[:q])
-    @employees = @q.result
+    q = @company.current_employees.ransack(params[:q])
+    @employees = q.result
   end
 
   def past_employees
-    @q = @company.past_employees.ransack(params[:q])
-    @employees = @q.result
+    q = @company.past_employees.ransack(params[:q])
+    @employees = q.result
     render :employees
   end
 
   def admins
-    @q = @company.accepted_admins.ransack(params[:q])
-    @employees = @q.result
+    q = @company.accepted_admins.ransack(params[:q])
+    @employees = q.result
     render :employees
   end
 
