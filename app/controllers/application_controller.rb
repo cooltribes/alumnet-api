@@ -1,5 +1,3 @@
-require 'mailchimp'
-
 class ApplicationController < ActionController::API
   include ActionController::ImplicitRender
   include ActionController::HttpAuthentication::Token::ControllerMethods

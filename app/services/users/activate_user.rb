@@ -24,7 +24,7 @@ module Users
           user.switch_approval_to_friendship
           save_profile_and_activate_in_profinda
           ##TODO: Urgentemente refactorizar este metodo. :yondri
-          user.subscribe_to_mailchimp_list(@mailchimp, Settings.mailchimp_general_list_id)
+          # user.subscribe_to_mailchimp_list(@mailchimp, Settings.mailchimp_general_list_id)
           true
         else
           errors.add(:user, "can't be activate")
