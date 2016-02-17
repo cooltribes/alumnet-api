@@ -30,7 +30,7 @@ gem 'acts-as-taggable-on', '~> 3.4'
 gem 'gcm'
 gem 'elasticsearch-model', '0.1.8'
 gem 'elasticsearch-rails', '0.1.8'
-gem 'rollbar', '~> 2.7.1'
+gem 'rollbar', '~> 2.8.0'
 gem 'whenever', :require => false
 
 group :development do

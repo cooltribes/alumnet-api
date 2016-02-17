@@ -320,7 +320,7 @@ GEM
     redis (3.2.2)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
-    rollbar (2.7.1)
+    rollbar (2.8.0)
       multi_json
     rspec (3.3.0)
       rspec-core (~> 3.3.0)
@@ -439,7 +439,7 @@ DEPENDENCIES
   rails-api (= 0.4.0)
   ransack (= 1.7.0)
   redis-namespace
-  rollbar (~> 2.7.1)
+  rollbar (~> 2.8.0)
   rspec-activejob
   rspec-rails
   rspec-sidekiq
