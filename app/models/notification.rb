@@ -240,33 +240,7 @@ class Notification
   def self.notify_tagging(tagging)
     notification = new(tagging.user)
     subject = "You were mentioned"
-    body = "Mentioned you in a #{tagging.taggable_type}"
-    if tagging.taggable_type == "Comment"
-      if tagging.taggable.commentable.present? 
-        if tagging.taggable.commentable.postable_type == "Group" || tagging.taggable.commentable.postable_type == "Event" 
-          body = "Mentioned you in a #{tagging.taggable_type} in a #{tagging.taggable.commentable_type} in the #{tagging.taggable.commentable.postable_type} #{tagging.taggable.commentable.postable.name}"
-        elsif tagging.taggable.commentable.postable_type == "User" 
-
-          creator_post = tagging.taggable.commentable.user_id
-          tagger_user = tagging.taggable.user_id
-          tagged_user = tagging.user_id
-          if creator_post == tagged_user
-            body = "Mentioned you in a #{tagging.taggable_type} in a #{tagging.taggable.commentable_type} in your timeline"
-          elsif creator_post == tagger_user
-            gender = tagging.taggable.user.profile.gender
-            gender = "( her / his )"
-            if gender == "F"
-              body = "Mentioned you in a #{tagging.taggable_type} in a #{tagging.taggable.commentable_type} in her timeline"
-            else
-              body = "Mentioned you in a #{tagging.taggable_type} in a #{tagging.taggable.commentable_type} in his timeline"
-            end     
-          else
-            body = "Mentioned you in a #{tagging.taggable_type} in a #{tagging.taggable.commentable_type} in #{tagging.taggable.commentable.postable.name} timeline"
-          end
-        end
-      end
-    end
-
+    body = tagging.notification_body
     notfy = notification.send_notification(subject, body, tagging.taggable, tagging.tagger)
     notification.send_pusher_notification
     NotificationDetail.notify_tag(notfy, tagging.tagger, tagging.taggable)

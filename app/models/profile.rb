@@ -66,6 +66,14 @@ class Profile < ActiveRecord::Base
     "#{first_name} #{last_name}"
   end
 
+  def name_prefix
+    gender == "M" ? "Mr." : "Mrs."
+  end
+
+  def pronoun
+    gender == "M" ? "His" : "Her"
+  end
+
   def age
     if born
       age = Date.today.year - born.year

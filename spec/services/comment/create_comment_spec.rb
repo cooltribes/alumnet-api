@@ -18,7 +18,7 @@ RSpec.describe Comments::CreateComment, type: :service do
   end
 
   it "should create a comment and send email to users that liked or commented in commentable" do
-    commentable = Post.make! #Picture.make!
+    commentable = Picture.make!
     armando = User.make!
     yondri = User.make!
     nelson = User.make!
