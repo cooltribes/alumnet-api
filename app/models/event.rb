@@ -33,7 +33,7 @@ class Event < ActiveRecord::Base
   after_create :send_invites
 
   ### Validations
-  validates_presence_of :name, :description, :start_date, :end_date, :country_id
+  validates_presence_of :name, :description, :start_date, :end_date
 
   ### Scopes
   scope :open, -> { where(event_type: 0) }
