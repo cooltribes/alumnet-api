@@ -15,7 +15,7 @@ module Comments
       @comment.user = @current_user
       if commentable.comments << @comment
         @comment.update_user_tags(user_tags_list, tagger: @current_user) if user_tags_list
-        send_notification_emails(@comment)
+        send_notification_emails(commentable, @comment, @current_user)
         true
       else
         @errors = @comment.errors
@@ -25,33 +25,21 @@ module Comments
 
     private
 
-    def send_notification_emails(comment)
+    def send_notification_emails(commentable, created_comment, current_user)
       users = []
-      # check for users who liked the commentable (post, etc)
-      comment.commentable.likes.each do |like|
-        unless users.include?(like.user)
-          #check is not current user
-          if like.user != @current_user
-            users << like.user
-          end
-        end
+      commentable.likes.each do |like|
+        users << like.user unless like.is_owner?(current_user)
       end
 
-      # check for users who commented the commentable (post, etc)
-      comment.commentable.comments.each do |c|
-        unless users.include?(c.user)
-          #check is not current user or post creator
-          if c.user != @current_user && comment.commentable.user != c.user
-            users << c.user
-          end
-        end
+      commentable.comments.each do |comment|
+        users << comment.user if !comment.is_owner?(current_user) && !commentable.is_owner?(comment.user)
       end
 
       # send email to selected users
-      users.each do |user|
+      users.uniq.each do |user|
         preference = user.email_preferences.find_by(name: 'commented_or_liked_post_comment')
         if not(preference.present?) || (preference.present? && preference.value == 0)
-          UserMailer.user_commented_post_you_commented_or_liked(user, comment).deliver_later
+          UserMailer.user_commented_post_you_commented_or_liked(user, created_comment).deliver_later
         end
       end
     end

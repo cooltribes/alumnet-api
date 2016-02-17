@@ -15,11 +15,18 @@ class Picture < ActiveRecord::Base
   before_create :check_date_taken, :check_location
 
   ### Instances Methods
+
+  def is_owner?(user)
+    self.uploader == user
+  end
+
   def url_for_notification
     if pictureable
       "#{pictureable.class.to_s.pluralize.downcase}/#{pictureable.id}/pictures/#{id}"
-    else
+    elsif album
       "albums/#{album.id}/pictures/#{id}"
+    else
+      "pictures/#{id}"
     end
   end
 

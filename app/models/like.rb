@@ -12,6 +12,13 @@ class Like < ActiveRecord::Base
   after_create :notify_to_author
 
   scope :without_user, ->(user) { where.not(user_id: user.id)}
+
+  ### Instance methods
+
+  def is_owner?(user)
+    self.user == user
+  end
+
   private
 
     def notify_to_author
