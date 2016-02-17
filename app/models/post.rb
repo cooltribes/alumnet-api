@@ -39,6 +39,11 @@ class Post < ActiveRecord::Base
   after_create :assign_pictures_to_album, :notify_to_users
 
   ### Instance Methods
+
+  def is_owner?(user)
+    self.user == user
+  end
+
   def url_for_notification
     "#{postable.class.to_s.pluralize.downcase}/#{postable.id}/posts/#{id}"
   end

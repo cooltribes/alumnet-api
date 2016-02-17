@@ -18,6 +18,13 @@ class Comment < ActiveRecord::Base
   ### Callback
   after_create :set_last_comment_at_on_post, :notify_to_users
 
+  ### Instance Methods
+
+  def is_owner?(user)
+    self.user == user
+  end
+
+
   private
     def set_last_comment_at_on_post
       if commentable.respond_to?(:last_comment_at)
