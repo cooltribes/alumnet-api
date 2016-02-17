@@ -99,8 +99,8 @@ class User < ActiveRecord::Base
   end
 
   def self.search_in_location(location, query)
-    locations = location.is_a?(Country) ? [location.id] : location.countries.pluck(:id)
-    includes(:profile).ransack(query).result.where(profiles: { residence_country_id: [locations]})
+    locations = location.is_a?(Country) ? [location.id] : location.country_ids
+    includes(:profile).ransack(query).result.where(profiles: { residence_country_id: locations})
   end
 
   ### Instance Methods
