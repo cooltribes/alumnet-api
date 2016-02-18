@@ -4,6 +4,11 @@ class V1::EventsController < V1::BaseEventsController
   def index
     @q = Event.open.ransack(params[:q])
     @events = @q.result
+    if @events.class == Array
+      @events = Kaminari.paginate_array(@events).page(params[:page]).per(params[:per_page])
+    else
+      @events = @events.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object
+    end
   end
 
   def cropping
