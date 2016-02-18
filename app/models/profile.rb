@@ -19,11 +19,17 @@ class Profile < ActiveRecord::Base
   belongs_to :residence_country, class_name: 'Country'
   belongs_to :user
   has_many :contact_infos, as: :contactable, dependent: :destroy
-  has_many :experiences, dependent: :destroy
+  has_many :experiences, dependent: :destroy,
+    after_add: :create_elasticsearch_index,
+    after_remove: :create_elasticsearch_index
   has_many :committees, through: :experiences
-  has_many :language_levels, dependent: :destroy
+  has_many :language_levels, dependent: :destroy,
+    after_add: :create_elasticsearch_index,
+    after_remove: :create_elasticsearch_index
   has_many :languages, through: :language_levels
-  has_and_belongs_to_many :skills
+  has_and_belongs_to_many :skills,
+    after_add: :create_elasticsearch_index,
+    after_remove: :create_elasticsearch_index
   has_many :company_relations, dependent: :destroy
   has_many :companies
 
