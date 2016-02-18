@@ -11,6 +11,7 @@ defaults: &defaults
   google_api_key: xxxxxxxxxxx
   elasticsearch_url: http://localhost:9200
   mailchimp_general_api_key: 'f0ad0e019703b02132b2cf15ad458e50-us10'
+  pusher_url: xxxx
 
 
 development:
@@ -23,7 +24,7 @@ test:
 staging:
   <<: *defaults
   mailchimp_general_list_id: '52c8e138cb'
-  elasticsearch_url: http://search-elasticsearch-alumnet-crdxhp32vkdizx3ozybbk6irxu.us-west-2.es.amazonaws.com/  
+  elasticsearch_url: http://search-elasticsearch-alumnet-crdxhp32vkdizx3ozybbk6irxu.us-west-2.es.amazonaws.com/
 
 production:
   <<: *defaults
