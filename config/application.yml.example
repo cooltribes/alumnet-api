@@ -10,23 +10,27 @@ defaults: &defaults
   initial_groups: []
   google_api_key: xxxxxxxxxxx
   elasticsearch_url: http://localhost:9200
-  mailchimp_general_api_key: 'f0ad0e019703b02132b2cf15ad458e50-us10'
   pusher_url: xxxx
-
+  smtp_settings:
+    address: xxxxxxxxxxxx
+    port: 587
+    user_name: xxxxxxxxxxxxxxxxxxxxx
+    password: xxxxxxxxxxxxxxxxxxxxxx
+  profinda_account:
+    user: xxxxxxxxxxxxxxx
+    password: xxxxxxxxxxx
 
 development:
   <<: *defaults
-  mailchimp_general_list_id: 'a43c1698cd'
+  mailchimp_general_list_id: 'development'
 
 test:
   <<: *defaults
+  mailchimp_general_list_id: 'testing'
 
 staging:
   <<: *defaults
-  mailchimp_general_list_id: '52c8e138cb'
-  elasticsearch_url: http://search-elasticsearch-alumnet-crdxhp32vkdizx3ozybbk6irxu.us-west-2.es.amazonaws.com/
+  mailchimp_general_list_id: 'staging'
 
 production:
   <<: *defaults
-  mailchimp_general_list_id: '156305'
-  mailchimp_general_api_key: '01053b731cd9246d18f459085ea9cb2f-us5'

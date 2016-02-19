@@ -37,10 +37,5 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address: "smtp.mandrillapp.com",
-    port: 587,
-    user_name: 'nramirez@upsidecorp.ch',
-    password: '0IVzh8zd9CAJw1CZgeaLTw'
-  }
+  config.action_mailer.smtp_settings = Settings.smtp_settings.symbolize_keys
 end

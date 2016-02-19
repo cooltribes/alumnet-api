@@ -1,13 +1,8 @@
 class ProfindaAdminApiClient < ProfindaApiClient
 
-  ADMIN_CREDENTIALS = {
-    user: 'admin@cooltribes.com',
-    password: 'AlumNet2015'
-  }
-
   ## Instance Methods
   def initialize
-    authenticate(ADMIN_CREDENTIALS[:user], ADMIN_CREDENTIALS[:password])
+    authenticate(credentials[:user], credentials[:password])
   end
 
   def activate(uid)
@@ -24,6 +19,10 @@ class ProfindaAdminApiClient < ProfindaApiClient
     return [] if collection_ids.empty?
     dictionary = get("/admin/dictionary_objects", { query: { ids: collection_ids } })
     dictionary ? dictionary["entries"] : []
+  end
+
+  def credentials
+    Settings.profinda_account || { user: "", password: "" }
   end
 
 end
