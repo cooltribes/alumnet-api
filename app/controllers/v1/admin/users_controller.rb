@@ -1,3 +1,4 @@
+require 'mailchimp'
 class V1::Admin::UsersController < V1::AdminController
   skip_before_action :set_request_format, only: :csv
   before_action :set_user, except: [:index, :stats, :register, :csv]

@@ -1,3 +1,4 @@
+require 'mailchimp'
 class V1::ProfilesController < V1::BaseController
   include Pundit
   before_action :set_profile
