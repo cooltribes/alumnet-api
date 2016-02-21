@@ -15,6 +15,10 @@ class Like < ActiveRecord::Base
 
   ### Instance methods
 
+  def owner
+    self.user
+  end
+
   def is_owner?(user)
     self.user == user
   end

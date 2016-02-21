@@ -40,8 +40,12 @@ class Post < ActiveRecord::Base
 
   ### Instance Methods
 
+  def owner
+    self.user
+  end
+
   def is_owner?(user)
-    self.user == user
+    owner == user
   end
 
   def url_for_notification

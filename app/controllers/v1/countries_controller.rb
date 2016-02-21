@@ -33,12 +33,6 @@ class V1::CountriesController < V1::BaseController
 
   private
     def set_country
-      #TODO: Implementar captura de Exceptions globales. :armando
-      #this is a ugly patch
-      if params[:id] == "null"
-        render json: { message: "Please select a Country" }
-      else
-        @country = Country.find(params[:id])
-      end
+      @country = Country.find(params[:id])
     end
 end

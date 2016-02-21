@@ -14,7 +14,6 @@ class RenderException
   private
 
     def check_exception(exception)
-      Rollbar.error(exception)
       klass = exception.class
       case
       when klass == Pundit::NotAuthorizedError
@@ -22,6 +21,7 @@ class RenderException
       when klass == ActiveRecord::RecordNotFound
         @status, @message = 404, { record: ['not found'] }
       else
+        Rollbar.error(exception)
         if Rails.env.production?
           @status, @message = 500, { server: ['error'] }
         else

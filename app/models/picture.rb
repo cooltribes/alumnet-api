@@ -16,8 +16,12 @@ class Picture < ActiveRecord::Base
 
   ### Instances Methods
 
+  def owner
+    self.uploader
+  end
+
   def is_owner?(user)
-    self.uploader == user
+    owner == user
   end
 
   def url_for_notification
