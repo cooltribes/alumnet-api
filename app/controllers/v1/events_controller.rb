@@ -3,7 +3,7 @@ class V1::EventsController < V1::BaseEventsController
 
   def index
     @q = Event.open.ransack(params[:q])
-    @events = @q.result
+    @events = @q.result.order(start_date: :desc)
     if @events.class == Array
       @events = Kaminari.paginate_array(@events).page(params[:page]).per(params[:per_page])
     else
