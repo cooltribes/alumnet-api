@@ -68,6 +68,11 @@ class User < ActiveRecord::Base
   scope :active, -> { where(status: 1) }
   scope :inactive, -> { where(status: 0) }
 
+  scope :approvals_count, ->(count) { joins(:approval_requests)
+    .where(approval_requests: { accepted: true } )
+    .group('users.id')
+    .having('count(approval_requests.id)=?', count) }
+
   ### Validations
   validates :email, presence: true, uniqueness: true, format: { with: VALID_EMAIL_REGEX, message: "Please enter a valid e-mail address" }
   validates :password, length: { minimum: 8, message: "must contain at least eight (8) characters." },
