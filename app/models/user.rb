@@ -215,20 +215,14 @@ class User < ActiveRecord::Base
 
   ##Sugestions Methods
   def suggested_groups(limit = 6)
-    aiesec_countries_ids = profile.experiences.aiesec.pluck(:country_id).uniq || []
-    profile_countries_ids = [profile.residence_country_id, profile.birth_country_id]
-    countries_ids = [aiesec_countries_ids, profile_countries_ids].flatten.uniq
-    groups = Group.where(country_id: countries_ids).not_secret
-    if groups.size < limit
-      groups.to_a | Group.not_secret.order("RANDOM()").limit(limit - groups.size).to_a
-    else
-      groups.limit(limit).to_a
-    end
+    limit = limit.present? ? limit.to_i : 6
+    suggestions = Suggesters::SuggesterGroups.new(self, limit: 6)
+    suggestions.results[0..(limit-1)]
   end
 
   def suggested_users(limit)
     limit = limit.present? ? limit.to_i : 6
-    suggestions = SuggesterUsers.new(self, limit: 6)
+    suggestions = Suggesters::SuggesterUsers.new(self, limit: 6)
     suggestions.results[0..(limit-1)]
   end
 
