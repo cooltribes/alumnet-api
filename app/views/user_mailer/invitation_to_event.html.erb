@@ -1,5 +1,5 @@
 <div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
-  <p>hello <%= "#{ @user.name }" %></p>
+  <p>Hello <%= "#{ @user.name }" %></p>
   <p>
   	<% if @host.present? %>
   		<%= "#{ @host.profile.first_name }" %>  <%= "#{ @host.profile.last_name }" %>  sent you an invitation to the event <%= "#{@event.name}" %><br>
