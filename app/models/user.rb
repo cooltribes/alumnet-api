@@ -562,8 +562,10 @@ class User < ActiveRecord::Base
   def subscribe_to_mailchimp_list(mailchimp, list_id)
     mailchimp_vars = mailchimp.lists.merge_vars({'id' => list_id})
     array = []
-    mailchimp_vars['data'][0]['merge_vars'].each do |v|
-      array << v['tag']
+    if mailchimp_vars['error_count'] == 0
+      mailchimp_vars['data'][0]['merge_vars'].each do |v|
+        array << v['tag']
+      end
     end
 
     all_vars = ["EMAIL", "FNAME", "LNAME", "BIRTHDAY", "GENDER", "B_COUNTRY", "B_CITY", "R_COUNTRY", "R_CITY", "L_EXP", "PREMIUM"]
