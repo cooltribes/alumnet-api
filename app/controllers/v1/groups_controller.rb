@@ -2,7 +2,7 @@ require 'mailchimp'
 # TODO: Refactorizar mailchimp este controlador :yondry
 class V1::GroupsController < V1::BaseController
   include Pundit
-  before_action :set_group, except: [:index, :create]
+  before_action :set_group, except: [:index, :create, :search]
 
   def index
     @q = Group.without_secret.ransack(params[:q])

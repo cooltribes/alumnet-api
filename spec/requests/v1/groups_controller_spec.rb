@@ -42,6 +42,15 @@ describe V1::GroupsController, type: :request do
     end
   end
 
+  # describe "POST /groups/search" do
+  #   it "search the groups in elasticseach by the query given" do
+  #     5.times { Group.make! }
+  #     post search_groups_path, {q: "name: #{Group.first.name}"}, basic_header(user.auth_token)
+  #     expect(response.status).to eq 200
+  #     expect(json.count).to eq(5)
+  #   end
+  # end
+
   describe "GET /groups/:id" do
     it "return a group by id" do
       group = Group.make!(:with_parent_and_childen)
