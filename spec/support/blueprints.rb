@@ -276,26 +276,6 @@ Picture.blueprint do
   uploader { User.make! }
 end
 
-Subscription.blueprint(:lifetime) do
-  start_date { Date.today }
-  end_date { nil }
-  lifetime { true }
-  status { 1 }
-  ownership_type { 1 }
-  user { User.make! }
-  creator { User.make! }
-end
-
-Subscription.blueprint(:premium) do
-  start_date { Date.today }
-  end_date { Date.today + 365 }
-  lifetime { false }
-  status { 1 }
-  ownership_type { 1 }
-  user { User.make! }
-  creator { User.make! }
-end
-
 Invitation.blueprint do
   user { User.make }
   guest_email { Faker::Internet.email }
@@ -407,6 +387,26 @@ Product.blueprint do
   price { 100 }
   product_type { 1 }
   quantity { 1 }
+  feature { 'subscription' }
+end
+
+Product.blueprint(:lifetime_membership) do
+  name { "Lifetime Membership" }
+  description { Faker::Lorem.sentence }
+  status { 'active' }
+  price { 100 }
+  product_type { 0 }
+  quantity { 0 }
+  feature { 'subscription' }
+end
+
+Product.blueprint(:limit_membership) do
+  name { "Membership" }
+  description { Faker::Lorem.sentence }
+  status { 'active' }
+  price { 50 }
+  product_type { 1 }
+  quantity { 0 }
   feature { 'subscription' }
 end
 

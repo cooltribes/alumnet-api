@@ -147,13 +147,11 @@ class AlumnetUsersStatistics
   end
 
   def active_members
-    User.joins(:subscriptions).where(status: 1, member: 1).
-      where(subscriptions: { lifetime: false, status: 1 })
+    User.joins(:user_products).where(status: 1).where("member = ? OR member = ?", 1, 2)
   end
 
   def active_lifetime
-    User.joins(:subscriptions).where(status: 1, member: 1).
-      where(subscriptions: { lifetime: true, status: 1 })
+    User.joins(:user_products).where(status: 1, member: 3)
   end
 
   def get_query_for(name, init_date, end_date)
@@ -161,15 +159,15 @@ class AlumnetUsersStatistics
   end
 
   def query_for_regular_users(init_date, end_date)
-    User.where("date(active_at) between ? and ?", init_date, end_date).
-      where(status: 1, member: 0).
-      where(role: User::ROLES[:regular])
+    User.where("date(active_at) between ? and ?", init_date, end_date)
+      .where(status: 1, member: 0)
+      .where(role: User::ROLES[:regular])
   end
 
   def query_for_admins(init_date, end_date)
-    User.where("date(active_at) between ? and ?", init_date, end_date).
-      where(status: 1, member: 0).
-      where.not.(role: User::ROLES[:regular])
+    User.where("date(active_at) between ? and ?", init_date, end_date)
+      .where(status: 1, member: 0)
+      .where.not.(role: User::ROLES[:regular])
   end
 
   def query_for_registrants(init_date, end_date)
@@ -177,11 +175,13 @@ class AlumnetUsersStatistics
   end
 
   def query_for_members(init_date, end_date)
-    active_members.where("date(\"subscriptions\".start_date) between ? and ?", init_date, end_date)
+    active_members.where("date(\"user_products\".start_date) between ? and ?", init_date, end_date)
+      .where(user_products: { feature: "subscription", status: 1 })
   end
 
   def query_for_lifetime(init_date, end_date)
-    active_lifetime.where("date(\"subscriptions\".start_date) between ? and ?", init_date, end_date)
+    active_lifetime.where("date(\"user_products\".start_date) between ? and ?", init_date, end_date)
+      .where(user_products: { feature: "subscription", status: 1 })
   end
 
   def query_for_user_generation(range, countries = [])
@@ -224,9 +224,9 @@ class AlumnetUsersStatistics
 
   def group_and_count_subscriptions(query, interval = "years")
     if interval == "years"
-      format_years_results query.group("date_part('year', \"subscriptions\".start_date)").count
+      format_years_results query.group("date_part('year', \"user_products\".start_date)").count
     elsif interval == "days"
-      format_days_results query.group("date(\"subscriptions\".start_date)").count
+      format_days_results query.group("date(\"user_products\".start_date)").count
     elsif interval == "months"
       generate_data_by_month(query, "start_date")
     end
