@@ -106,6 +106,7 @@ Rails.application.routes.draw do
     end
 
     resources :groups do
+      post :search, on: :collection
       post :picture, on: :member
       post :cropping, on: :member
       post :add_group, on: :member

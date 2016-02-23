@@ -2,7 +2,7 @@ require 'mailchimp'
 # TODO: Refactorizar mailchimp este controlador :yondry
 class V1::GroupsController < V1::BaseController
   include Pundit
-  before_action :set_group, except: [:index, :create]
+  before_action :set_group, except: [:index, :create, :search]
 
   def index
     @q = Group.without_secret.ransack(params[:q])
@@ -13,6 +13,12 @@ class V1::GroupsController < V1::BaseController
     else
       @groups = @groups.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object
     end
+  end
+
+  def search
+    group_ids = Group.search(params[:q]).page(params[:page]).per(params[:per_page]).results.to_a.map(&:id)
+    @groups = Group.without_secret.where(id: group_ids)
+    render :index, status: :ok
   end
 
   def picture

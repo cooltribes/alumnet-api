@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe V1::Admin::RegionsController, type: [:request, :stats] do
+describe V1::Admin::StatsController, type: [:request, :stats] do
   let!(:current_user) { User.make!(:admin) }
 
 

@@ -35,16 +35,20 @@ module StatsHelper
 
   def make_lifetime_active_user(country, active_date = Date.today)
     user = User.make!
-    Subscription.make!(:lifetime, user: user, creator: user, start_date: active_date)
+    lifetime_product = Product.make!(:lifetime_membership)
+    UserProduct.create!(user: user, product: lifetime_product, start_date: active_date,
+      feature: lifetime_product.feature, transaction_type: 1)
     user.profile.update(residence_country_id: country.id)
     activate_user(user)
-    user.update(active_at: Date.parse('21-08-2001'), member: 1)
+    user.update(active_at: Date.parse('21-08-2001'), member: 3)
     user
   end
 
   def make_member_active_user(country, active_date = Date.today)
     user = User.make!
-    Subscription.make!(:premium, user: user, creator: user, start_date: active_date)
+    limit_membership = Product.make!(:limit_membership)
+    UserProduct.create!(user: user, product: limit_membership, start_date: active_date,
+      end_date: active_date + 60, feature: limit_membership.feature, transaction_type: 1)
     user.profile.update(residence_country_id: country.id)
     activate_user(user)
     user.update(active_at: Date.parse('21-08-2001'), member: 1)

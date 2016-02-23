@@ -73,11 +73,11 @@ RSpec.describe AlumnetUsersStatistics, type: :stats, slow: true do
       user = make_regional_admin
       stats = AlumnetUsersStatistics.new(user)
       data_array = [200, 100, 50]
-      expect(stats.format_for_pie_graph(data_array)).to eq([
+      expect(stats.format_for_pie_graph(data_array)).to match_array([
         ['Users', 'Count'],
         ['Registrants', 200],
         ['Members', 100],
-        ['LT Members', 50],
+        ['Lifetime members', 50],
       ])
     end
   end
@@ -90,8 +90,8 @@ RSpec.describe AlumnetUsersStatistics, type: :stats, slow: true do
       lifetime = { "2010"=> 14, "2011"=> 55, "2012"=>33, "2013"=>27, "2014"=>100 }
       stats = AlumnetUsersStatistics.new(user)
       data_array = [regulars, members, lifetime]
-      expect(stats.format_for_line_graph(data_array, "years")).to eq([
-        ['Years', 'Registrants', 'Members', 'LT Members'],
+      expect(stats.format_for_line_graph(data_array, "years")).to match_array([
+        ['Years', 'Registrants', 'Members', 'Lifetime members'],
         ['2010', 10, 0, 14],
         ['2011', 40, 80, 55],
         ['2012', 10, 20, 33],

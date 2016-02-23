@@ -1,16 +1,15 @@
 <div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
 	<p>Hello <%= "#{ @approver.name }" %>,</p>
 	<p>
-		<%= "#{ @requester.name }" %> just registered in AlumNet and must to be verified by other Alumni before getting access into the platform.     
+		<b><a href=<%= "#{Settings.ui_endpoint}/#users/#{@requester.id}/about" %>><%= "#{ @requester.name }" %></a></b> just registered in AlumNet and must to be verified by other Alumni before getting access into the platform.
 	</p>
 	<p>
-	  In case you know <%= "#{ @requester.name }" %> <a href=<%= "#{Settings.ui_endpoint}/#approval-requests" %>>you can give your approval</a>  (And by giving your approval you will earn 10 points in AlumNet!)
+	  	In case you know <%= "#{ @requester.name }" %> <b><a href=<%= "#{Settings.ui_endpoint}/#approval-requests" %>>click here to give your approval</a></b> (And by doing it you will earn 10 points in AlumNet!)
 	</p>
 	<p>
-	  If you don't know this person please just ignore this message.
+	  	<i>If you don't know this person please just ignore this message.</i>
 	</p>
 	<p>
-	<p>
-	 	If you think this user should NOT be in AlumNet <a href="mailto:aiesec-alumni@inbox.groovehq.com" target="_blank"> you can report this account</a>  to the administrator.
+	 	If you think this user should NOT be in AlumNet you can <a href="mailto:aiesec-alumni@inbox.groovehq.com" target="_blank">report this account to the administrator.</a>
 	</p>
 </div>
