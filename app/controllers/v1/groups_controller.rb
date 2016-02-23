@@ -15,6 +15,12 @@ class V1::GroupsController < V1::BaseController
     end
   end
 
+  def search
+    group_ids = Group.search(params[:q]).page(params[:page]).per(params[:per_page]).results.to_a.map(&:id)
+    @groups = Group.without_secret.where(id: group_ids)
+    render :index, status: :ok
+  end
+
   def picture
     render json: { error: "Not file given" }, status: :unprocessable_entity unless params.key?(:file)
     service = ::Pictures::CreatePicture.new(@group, current_user, params)
