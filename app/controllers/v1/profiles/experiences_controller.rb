@@ -5,7 +5,7 @@ class V1::Profiles::ExperiencesController < V1::BaseController
 
   def index
     @q = @profile.experiences.ransack(params[:q])
-    @experiences = @q.result
+    @experiences = @q.result.order(end_date: :desc)
   end
 
   def show
