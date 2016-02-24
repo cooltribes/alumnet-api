@@ -26,15 +26,19 @@ json.country do
 end
 
 json.uploader do
-  json.id picture.uploader.id
-  json.name picture.uploader.permit_name(current_user)
-  json.avatar do
-  if picture.uploader.permit('see-avatar', current_user)
-    json.large picture.uploader.avatar.large.url
+  if picture.uploader.present?
+    json.id picture.uploader.id
+    json.name picture.uploader.permit_name(current_user)
+    json.avatar do
+      if picture.uploader.permit('see-avatar', current_user)
+        json.large picture.uploader.avatar.large.url
+      else
+        json.large picture.uploader.avatar.large.default_url
+      end
+    end
   else
-    json.large picture.uploader.avatar.large.default_url
+    json.nil!
   end
-end
 end
 
 json.likes_count picture.likes_count
