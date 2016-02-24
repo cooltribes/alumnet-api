@@ -10,7 +10,7 @@ class V1::Users::MembershipsController < V1::BaseController
   end
 
   def groups
-    @memberships = @user.memberships.accepted.ransack(params[:q]).result.order(:name)
+    @memberships = @user.memberships.accepted.ransack(params[:q]).result
     render :index, status: :ok
   end
 
