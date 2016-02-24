@@ -108,6 +108,13 @@ class Group < ActiveRecord::Base
   def notify(user, sender, admin_flag)
     if join_process == 0
       Notification.notify_join_to_users(user, sender, self)
+      # send to admins without current user
+      send_to = []
+      admins.each do |admin|
+        if admin != sender
+          send_to << admin
+        end
+      end
       Notification.notify_join_to_admins(admins.to_a, user, self)
     elsif join_process == 1
       Notification.notify_request_to_users(user, self, sender)
