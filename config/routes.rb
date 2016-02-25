@@ -178,6 +178,7 @@ Rails.application.routes.draw do
       get :past_employees, on: :member
       get :admins, on: :member
       post :cropping, on: :member
+      post :search, on: :collection
       resources :branches, except: :show, controller: 'companies/branches'
       resources :contact_infos, except: :show, controller: 'companies/contact_infos'
       resources :product_services, except: :show, controller: 'companies/product_services'

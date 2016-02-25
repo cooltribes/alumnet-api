@@ -1,5 +1,5 @@
 class V1::CompaniesController < V1::BaseController
-  before_action :set_company, except: [:index, :create, :all, :managed]
+  before_action :set_company, except: [:index, :create, :all, :managed, :search]
 
   def index
     q = Company.ransack(params[:q])
@@ -9,6 +9,12 @@ class V1::CompaniesController < V1::BaseController
     else
       @companies = @companies.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object
     end
+  end
+
+  def search
+    company_ids = Company.search(params[:q]).page(params[:page]).per(params[:per_page]).results.to_a.map(&:id)
+    @companies = Company.where(id: company_ids)
+    render :index, status: :ok
   end
 
   def all
