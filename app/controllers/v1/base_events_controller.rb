@@ -1,11 +1,17 @@
 class V1::BaseEventsController < V1::BaseController
   include Pundit
   before_action :set_eventable
-  before_action :set_event, except: [:index, :create]
+  before_action :set_event, except: [:index, :create, :search]
 
   def index
     @q = @eventable.events.ransack(params[:q])
     @events = @q.result
+  end
+
+  def search
+    event_ids = Event.search(params[:q]).page(params[:page]).per(params[:per_page]).results.to_a.map(&:id)
+    @events = Event.where(id: event_ids)
+    render :index, status: :ok
   end
 
   def contacts

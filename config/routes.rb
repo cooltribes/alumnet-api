@@ -130,6 +130,7 @@ Rails.application.routes.draw do
       post :picture, on: :member
       get :contacts, on: :member
       post :cropping, on: :member
+      post :search, on: :collection
       resources :posts, controller: 'events/posts'
       resources :albums, controller: 'events/albums'
       resources :payments, controller: 'events/payments'
