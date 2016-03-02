@@ -10,7 +10,6 @@ class V1::Admin::UsersController < V1::AdminController
     else
       @users = users
     end
-    @total_records = @users.size
     @users = Kaminari.paginate_array(@users).page(params[:page]).per(params[:per_page])
   end
 

@@ -12,7 +12,8 @@ class V1::CompaniesController < V1::BaseController
   end
 
   def search
-    company_ids = Company.search(params[:q]).page(params[:page]).per(params[:per_page]).results.to_a.map(&:id)
+    @results = Company.search(params[:q]).page(params[:page]).per(params[:per_page])
+    company_ids = @results.results.to_a.map(&:id)
     @companies = Company.where(id: company_ids)
     render :index, status: :ok
   end

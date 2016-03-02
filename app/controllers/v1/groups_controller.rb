@@ -16,7 +16,8 @@ class V1::GroupsController < V1::BaseController
   end
 
   def search
-    group_ids = Group.search(params[:q]).page(params[:page]).per(params[:per_page]).results.to_a.map(&:id)
+    @results = Group.search(params[:q]).page(params[:page]).per(params[:per_page])
+    group_ids = @results.results.to_a.map(&:id)
     @groups = Group.without_secret.where(id: group_ids)
     render :index, status: :ok
   end

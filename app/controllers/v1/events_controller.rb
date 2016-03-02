@@ -11,6 +11,13 @@ class V1::EventsController < V1::BaseEventsController
     end
   end
 
+  def search
+    @results = Event.search(params[:q]).page(params[:page]).per(params[:per_page])
+    event_ids = @results.results.to_a.map(&:id)
+    @events = Event.open.where(id: event_ids)
+    render :index, status: :ok
+  end
+
   def cropping
     @event.assign_attributes(crop_params)
     @event.crop('cover')

@@ -10,7 +10,7 @@ class V1::BaseEventsController < V1::BaseController
 
   def search
     event_ids = Event.search(params[:q]).page(params[:page]).per(params[:per_page]).results.to_a.map(&:id)
-    @events = Event.where(id: event_ids)
+    @events = @eventable.events.where(id: event_ids)
     render :index, status: :ok
   end
 
