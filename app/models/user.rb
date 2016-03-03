@@ -254,6 +254,12 @@ class User < ActiveRecord::Base
   end
 
   ### Events
+    # This is a temp hack.. fix soon! :armando
+  def managed_events(query)
+    Event.ransack(query).result.select do |event|
+      event.is_admin?(self)
+    end
+  end
 
   def limit_attend_events(limit = nil)
     invited_events.where(attendances: { status: 1 }).order(:start_date).limit(limit)

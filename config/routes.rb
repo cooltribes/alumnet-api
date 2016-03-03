@@ -67,6 +67,7 @@ Rails.application.routes.draw do
         get :my_groups, on: :collection
       end
 
+      get '/events/managed', to: 'me/events#managed', as: :managed_events
 
       post '/contacts/file', to: 'contacts#file' ###TEMPORAL
       post '/contacts/in_alumnet', to: 'contacts#in_alumnet' ###TEMPORAL
