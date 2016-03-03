@@ -35,6 +35,14 @@ class V1::Me::FriendshipsController < V1::BaseController
 
   def destroy
     @friendship = Friendship.find(params[:id])
+    # find notification to destroy
+    notification = @friendship.friend.mailbox.notifications.joins(:notification_detail)
+      .find_by(sender: @friendship.user, notification_details: {notification_type: ['friendship']})
+    notification_detail = NotificationDetail.find_by(mailboxer_notification: notification)
+
+    #destroy them all
+    notification_detail.destroy
+    notification.mark_as_deleted(@friendship.friend)
     @friendship.destroy
     head :no_content
   end
