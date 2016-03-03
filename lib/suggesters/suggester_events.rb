@@ -27,6 +27,10 @@ module Suggesters
     end
 
     private
+      def region
+        profile.residence_country.try(:region)
+      end
+
       def profile
         user.profile
       end
@@ -49,13 +53,12 @@ module Suggesters
 
       def get_by_region_of_residence(days: 60, official: false)
         data_range = [Date.today..(Date.today + days)]
-        region = profile.residence_country.try(:region)
-        if region
+        events = if region
           country_ids = region.country_ids
-          events = Event.where(country_id: country_ids, official: official, start_date: data_range)
+          Event.where(country_id: country_ids, official: official, start_date: data_range)
             .where.not(creator_id: user.id).uniq.limit(@limit)
         else
-          events =[]
+          []
         end
         name = "region_of_residence_#{days}#{ official ? "_official" : "" }".to_sym
         @results[name] = events.to_a

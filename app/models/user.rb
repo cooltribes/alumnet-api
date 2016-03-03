@@ -232,6 +232,12 @@ class User < ActiveRecord::Base
     suggestions.results[0..(suggest_limit)]
   end
 
+  def suggested_companies(limit = 6)
+    suggest_limit = (limit.to_i - 1) > 0 ? (limit.to_i - 1) : 0
+    suggestions = Suggesters::SuggesterCompanies.new(self, limit: 6)
+    suggestions.results[0..(suggest_limit)]
+  end
+
   ### Admin Note
   def set_admin_note(body)
     if admin_note.present?

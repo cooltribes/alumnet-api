@@ -13,6 +13,10 @@ class V1::Me::SuggestionsController < V1::BaseController
     @events = @user.suggested_events(params[:limit])
   end
 
+  def companies
+    @companies = @user.suggested_companies(params[:limit])
+  end
+
   private
     def set_user
       @user = current_user if current_user
