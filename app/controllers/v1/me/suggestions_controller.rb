@@ -2,12 +2,15 @@ class V1::Me::SuggestionsController < V1::BaseController
   before_action :set_user
 
   def groups
-    @groups = @user.suggested_groups
+    @groups = @user.suggested_groups(params[:limit])
   end
 
   def users
-    #this is an array not ar:r
     @users = @user.suggested_users(params[:limit])
+  end
+
+  def events
+    @events = @user.suggested_events(params[:limit])
   end
 
   private

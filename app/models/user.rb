@@ -215,15 +215,21 @@ class User < ActiveRecord::Base
 
   ##Sugestions Methods
   def suggested_groups(limit = 6)
-    limit = limit.present? ? limit.to_i : 6
+    suggest_limit = (limit.to_i - 1) > 0 ? (limit.to_i - 1) : 0
     suggestions = Suggesters::SuggesterGroups.new(self, limit: 6)
-    suggestions.results[0..(limit-1)]
+    suggestions.results[0..(suggest_limit)]
   end
 
-  def suggested_users(limit)
-    limit = limit.present? ? limit.to_i : 6
+  def suggested_users(limit = 6)
+    suggest_limit = (limit.to_i - 1) > 0 ? (limit.to_i - 1) : 0
     suggestions = Suggesters::SuggesterUsers.new(self, limit: 6)
-    suggestions.results[0..(limit-1)]
+    suggestions.results[0..(suggest_limit)]
+  end
+
+  def suggested_events(limit = 6)
+    suggest_limit = (limit.to_i - 1) > 0 ? (limit.to_i - 1) : 0
+    suggestions = Suggesters::SuggesterEvents.new(self, limit: 6)
+    suggestions.results[0..(suggest_limit)]
   end
 
   ### Admin Note
