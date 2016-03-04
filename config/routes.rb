@@ -74,6 +74,8 @@ Rails.application.routes.draw do
 
       get '/suggestions/groups', to: 'me/suggestions#groups'
       get '/suggestions/users', to: 'me/suggestions#users'
+      get '/suggestions/events', to: 'me/suggestions#events'
+      get '/suggestions/companies', to: 'me/suggestions#companies'
     end
 
     resources :users, except: :create do
