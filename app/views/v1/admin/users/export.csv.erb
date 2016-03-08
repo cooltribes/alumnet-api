@@ -1,11 +1,12 @@
-<%- headers = ['Id','Name', 'Email', 'Location of Origin', 'LC', 'Joined', 'Gender', 'Age', 'Status', 'Role', 'Last Login', 'Login Count', 'Register Step'] -%>
+<%- headers = ['Id','Name', 'Email', 'Country of Origin', 'City of Origin', 'LC', 'Joined', 'Gender', 'Age', 'Status', 'Role', 'Last Login', 'Login Count', 'Register Step'] -%>
 <%= CSV.generate_line headers -%>
 <%- @users.each do |user| -%>
   <%= CSV.generate_line([
     user.id,
     user.name.present? ? user.name : "No name registered",
     user.email,
-    "#{user.profile.birth_city_info[:name]} - #{user.profile.birth_country_info[:name]}",
+    user.profile.birth_country_info[:name],
+    user.profile.birth_city_info[:name],
     user.profile.local_committee.try(:name),
     "#{time_ago_in_words(user.created_at)} ago",
     user.profile.gender || "No gender",
