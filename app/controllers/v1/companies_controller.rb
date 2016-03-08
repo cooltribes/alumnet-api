@@ -19,8 +19,8 @@ class V1::CompaniesController < V1::BaseController
   end
 
   def all
+    #this is for selects
     @companies = Company.all.order(:name)
-    render :index
   end
 
   def managed
