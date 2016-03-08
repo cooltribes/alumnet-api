@@ -32,6 +32,9 @@ json.array! @events do |event|
   json.going_count event.attendances.going.count
   json.maybe_count event.attendances.maybe.count
   json.not_going_count event.attendances.not_going.count
+  json.admin event.is_admin?(current_user)
+  json.can_attend event.can_attend?(current_user)
+  json.user_can_upload_files event.user_can_upload_files?(current_user)
 
   attendance = event.attendance_for(@current_user)
   if attendance
