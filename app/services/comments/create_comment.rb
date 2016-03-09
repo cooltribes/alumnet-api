@@ -39,9 +39,12 @@ module Comments
       users.uniq.each do |user|
         preference = user.email_preferences.find_by(name: 'commented_or_liked_post_comment')
         if not(preference.present?) || (preference.present? && preference.value == 0)
-          UserMailer.user_commented_post_you_commented_or_liked(user, created_comment).deliver_later
+          UserMailer.user_commented_post_you_commented_or_liked(user, created_comment).deliver_now
         end
       end
+
+      # send email to post author
+      UserMailer.user_commented_post(created_comment).deliver_now
     end
   end
 end
