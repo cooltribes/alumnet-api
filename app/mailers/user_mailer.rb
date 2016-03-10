@@ -126,4 +126,20 @@ class UserMailer < ActionMailer::Base
     @comment = comment
     mail to: @user.email, subject: "#{comment.user.name} commented a post on AlumNet"
   end
+
+  def user_commented_post(comment)
+    @user = comment.user
+    @comment = comment
+    @post = comment.commentable
+
+    mail to: @post.user.email, subject: "#{@user.name} commented on your post"
+  end
+
+  def user_commented_post_you_are_tagged_in(user, comment)
+    @user = user
+    @comment = comment
+    @post = comment.commentable
+
+    mail to: @user.email, subject: "#{@comment.user.name} commented a post you are tagged in"
+  end
 end

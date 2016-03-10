@@ -35,11 +35,21 @@ module Comments
         users << comment.user if !comment.is_owner?(current_user) && !commentable.is_owner?(comment.user)
       end
 
-      # send email to selected users
+      # send email to selected users (likes and comments)
       users.uniq.each do |user|
         preference = user.email_preferences.find_by(name: 'commented_or_liked_post_comment')
         if not(preference.present?) || (preference.present? && preference.value == 0)
           UserMailer.user_commented_post_you_commented_or_liked(user, created_comment).deliver_later
+        end
+      end
+
+      # send email to post author
+      UserMailer.user_commented_post(created_comment).deliver_later
+
+      # send email to users tagged on post
+      commentable.user_tags.uniq.each do |user|
+        unless users.include?(user)
+          UserMailer.user_commented_post_you_are_tagged_in(user, created_comment).deliver_later
         end
       end
     end

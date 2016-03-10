@@ -1,0 +1,12 @@
+<div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
+  <p>
+  	Hello <%= "#{ @user.name }" %>, <br>
+    <%= "#{@comment.user.name}" %> has commented a post you're tagged in: <br>
+  </p>
+  <p>
+  	<%= "#{@comment.comment}" %> 
+  </p>
+  <p>
+  	Click <a href=<%="#{Settings.ui_endpoint}/#users/#{@post.user.id}/posts/#{@comment.commentable.id}" %>>here</a>	to see the post.
+  </p>
+</div>

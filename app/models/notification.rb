@@ -221,7 +221,7 @@ class Notification
     return if author.blank?
     notification = new(author)
     subject = "You have new comment in Post"
-    body = "Commented in your post"
+    body = "Commented on your post"
     notfy = notification.send_notification(subject, body, post, comment.user)
     notification.send_pusher_notification
     NotificationDetail.notify_comment_in_post(notfy, comment.user, post)
