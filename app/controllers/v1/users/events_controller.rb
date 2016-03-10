@@ -2,7 +2,7 @@ class V1::Users::EventsController < V1::BaseEventsController
 
   def index
     q = @eventable.invited_events.ransack(params[:q])
-    @events = q.result.page(params[:page]).per(params[:per_page])
+    @events = q.result.page(params[:page]).per(params[:per_page]).order(start_date: :desc)
   end
 
   private
