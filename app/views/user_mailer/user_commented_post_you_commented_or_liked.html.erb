@@ -2,6 +2,10 @@
   <p>
   	Hello <%= "#{ @user.name }" %>, <br>
     <%= "#{@comment.user.name}" %> has commented a post you have interacted on. <br>
-		Click <a href=<%="#{Settings.ui_endpoint}/#users/#{@comment.commentable.owner.id}/posts/#{@comment.commentable.id}" %>>here</a>	to see the post.
+    	<% if @comment.commentable.postable_type == 'User' %>
+			Click <a href=<%="#{Settings.ui_endpoint}/#users/#{@comment.commentable.owner.id}/posts/#{@comment.commentable.id}" %>>here</a>	to see the post.
+		<% elsif @comment.commentable.postable_type == 'Group' %>
+			Click <a href=<%="#{Settings.ui_endpoint}/#groups/#{@comment.commentable.owner.id}/posts/#{@comment.commentable.id}" %>>here</a>	to see the post.
+		<% end %>
   </p>
 </div>
