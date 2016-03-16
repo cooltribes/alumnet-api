@@ -31,7 +31,11 @@ class AdminMailer < ActionMailer::Base
   def match_task_job_exchange(user, task)
     @user = user
     @task = task
-    mail to: user.email, subject: "A #{task.type_text} from #{task.company.name} matches with your profile"
+    if task.company.present?
+      mail to: user.email, subject: "A #{task.type_text} from #{task.company.name} matches with your profile"
+    else
+      mail to: user.email, subject: "A #{task.type_text} matches with your profile"
+    end
   end
 
   def match_task_meetup_exchange(user, task)
