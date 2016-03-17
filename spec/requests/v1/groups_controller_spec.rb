@@ -36,7 +36,7 @@ describe V1::GroupsController, type: :request do
     it "return all groups" do
       get groups_path, {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(6)
+      expect(json["data"].count).to eq(6)
       #TODO: Validate schema with null value. Groups without parents and children
       #expect(valid_schema('group-array', json)).to be_empty
     end
@@ -70,8 +70,8 @@ describe V1::GroupsController, type: :request do
       group = Group.make!(:with_parent_and_childen)
       get subgroups_group_path(group), {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(2)
-      expect(json.first["name"]).to eq(group.children.first.name)
+      expect(json["data"].count).to eq(2)
+      expect(json["data"].first["name"]).to eq(group.children.first.name)
     end
   end
 

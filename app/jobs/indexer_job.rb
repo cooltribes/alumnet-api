@@ -1,6 +1,5 @@
 class IndexerJob < ActiveJob::Base
   queue_as :indexer
-  sidekiq_options retry: 5
 
   rescue_from(ActiveJob::DeserializationError) do |exception|
    # do something with the exception

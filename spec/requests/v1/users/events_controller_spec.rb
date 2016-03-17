@@ -34,7 +34,7 @@ describe V1::Users::EventsController, type: :request do
     it "return all events of user" do
       get user_events_path(user), {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(5)
+      expect(json["data"].count).to eq(5)
     end
   end
 

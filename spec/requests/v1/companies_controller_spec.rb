@@ -9,7 +9,7 @@ describe V1::CompaniesController, type: :request do
       3.times { Company.make! }
       get companies_path, {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(3)
+      expect(json["data"].count).to eq(3)
     end
 
     # it "return only the companies where the user is admin" do
@@ -27,7 +27,7 @@ describe V1::CompaniesController, type: :request do
       CompanyAdmin.create!(user: othe_user, company: Company.last, status: 1, accepted_by: user)
       get managed_companies_path, {}, basic_header(othe_user.auth_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(1)
+      expect(json["data"].count).to eq(1)
     end
   end
 

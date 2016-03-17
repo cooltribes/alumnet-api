@@ -29,7 +29,7 @@ describe V1::UsersController, type: :request do
     it "return all users" do
       get users_path, {}, basic_header(admin.auth_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(6) #with the admin
+      expect(json["data"].count).to eq(6) #with the admin
     end
   end
 

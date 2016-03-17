@@ -10,7 +10,7 @@ describe V1::Groups::MembershipsController, type: :request do
       3.times { Membership.make!(:not_approved ) }
       get user_memberships_path(user),{}, basic_header(user.auth_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(3)
+      expect(json["data"].count).to eq(3)
     end
   end
 
@@ -19,7 +19,7 @@ describe V1::Groups::MembershipsController, type: :request do
       5.times { Membership.make!(:approved, user: user ) }
       get groups_user_memberships_path(user), {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(5)
+      expect(json["data"].count).to eq(5)
     end
   end
 
@@ -29,7 +29,7 @@ describe V1::Groups::MembershipsController, type: :request do
       Membership.make!(:approved, user: user, admin: true, group: Group.make!(creator: user))
       get created_groups_user_memberships_path(user), {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(1)
+      expect(json["data"].count).to eq(1)
     end
   end
 

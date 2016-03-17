@@ -29,9 +29,9 @@ describe V1::ContactsController, type: :request do
       User.make!(email: "flor.maria.mendez@gmail.com")
       post contacts_in_alumnet_me_path, { contacts: contacts }, basic_header(user.auth_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(2)
-      expect(json.first).to have_key("email")
-      expect(json.first).to have_key("name")
+      expect(json["data"].count).to eq(2)
+      expect(json["data"].first).to have_key("email")
+      expect(json["data"].first).to have_key("name")
     end
   end
 end
