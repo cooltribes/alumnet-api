@@ -5,6 +5,15 @@ class V1::Users::EmailPreferencesController < V1::BaseController
     @email_preferences = @user.email_preferences.order(:name)
   end
 
+  def messages
+    @email_preferences = @user.email_preferences.where(group: 0).order(:name)
+    render :index, status: :ok
+  end
+
+  def news
+    @email_preferences = @user.email_preferences.where(group: 1).order(:name)
+    render :index, status: :ok
+  end
 
   def create
     # TODO: Hacer review a esto :yondry

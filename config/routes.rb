@@ -105,7 +105,10 @@ Rails.application.routes.draw do
       end
       resources :payments, except: :show, controller: 'users/payments'
       post :change_password, on: :member
-      resources :email_preferences, controller: 'users/email_preferences'
+      resources :email_preferences, controller: 'users/email_preferences' do
+        get :messages, on: :collection
+        get :news, on: :collection
+      end
     end
 
     resources :groups do

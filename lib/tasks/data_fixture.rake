@@ -62,4 +62,11 @@ namespace :data_fixture do
       puts 'Contact info created for: ' + profile.user.name + ' | email: ' + profile.user.email
     end
   end
+
+  desc "setup group for email notifications preferences according to name"
+  task set_notification_preferences_group: :environment do
+    EmailPreference.where(name: ['join_group_request', 'approval']).each do |preference| #TODO: decide wich ones are separated and include here
+      preference.update(group: 1)
+    end
+  end
 end
