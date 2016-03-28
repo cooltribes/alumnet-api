@@ -109,6 +109,7 @@ Rails.application.routes.draw do
         get :messages, on: :collection
         get :news, on: :collection
       end
+      resources :group_email_preferences, controller: 'users/group_email_preferences'
     end
 
     resources :groups do
