@@ -176,6 +176,19 @@ class Group < ActiveRecord::Base
     memberships.exists?(user_id: user.id)
   end
 
+  def email_digest
+    users.each do |user|
+      preference = user.group_email_preferences.find_by(group_id: id)
+      if not(preference.present?) || (preference.present? && preference.value == 0)
+        #UserMailer.join_to_group(user, sender, group).deliver_later
+        puts '-- ' + user.email + ' -- send'
+      else
+        puts '-- ' + user.email + ' -- dont'
+      end
+      
+    end
+  end
+
   private
     def validate_join_process
       if (group_type == "secret" && join_process < 2) || (group_type == "closed" && join_process == 0)
