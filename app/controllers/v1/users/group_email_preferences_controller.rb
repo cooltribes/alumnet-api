@@ -1,27 +1,18 @@
-class V1::Users::EmailPreferencesController < V1::BaseController
+class V1::Users::GroupEmailPreferencesController < V1::BaseController
   before_action :set_user
+  before_action :set_group, except: :index
 
   def index
-    @email_preferences = @user.email_preferences.order(:name)
-  end
-
-  def messages
-    @email_preferences = @user.email_preferences.where(group: 0).order(:name)
-    render :index, status: :ok
-  end
-
-  def news
-    @email_preferences = @user.email_preferences.where(group: 1).order(:name)
-    render :index, status: :ok
+    @email_preferences = @user.group_email_preferences
   end
 
   def create
     # TODO: Hacer review a esto :yondry
-    @email_preference = EmailPreference.find_by(name: params[:name], user_id: params[:user_id])
+    @email_preference = GroupEmailPreference.find_by(user_id: params[:user_id], group_id: params[:group_id])
     if @email_preference.present?
       @email_preference.value = params[:value]
     else
-      @email_preference = EmailPreference.new(create_params)
+      @email_preference = GroupEmailPreference.new(create_params)
     end
 
     if @email_preference.save
@@ -51,8 +42,12 @@ class V1::Users::EmailPreferencesController < V1::BaseController
       @user = User.find(params[:user_id])
     end
 
+    def set_group
+      @group = Group.find(params[:group_id])
+    end
+
     def create_params
-      params.permit(:name, :user_id, :value)
+      params.permit(:user_id, :group_id, :value)
     end
 
     def update_params

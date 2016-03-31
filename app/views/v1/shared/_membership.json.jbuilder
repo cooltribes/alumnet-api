@@ -1,6 +1,7 @@
 json.(membership, :id, :approved, :group_id, :user_id)
 
 group = membership.group
+
 json.group do
   json.id group.id
   json.name group.name

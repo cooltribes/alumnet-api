@@ -14,7 +14,7 @@ class V1::EventsController < V1::BaseEventsController
   def search
     @results = Event.search(params[:q]).page(params[:page]).per(params[:per_page])
     event_ids = @results.results.to_a.map(&:id)
-    @events = Event.open.where(id: event_ids).order(start_date: :desc)
+    @events = Event.where(id: event_ids).order(start_date: :desc)
     render :index, status: :ok
   end
 

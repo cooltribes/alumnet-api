@@ -36,3 +36,4 @@ staging:
 production:
   <<: *defaults
   mailchimp_general_api_key: '01053b731cd9246d18f459085ea9cb2f-us5'
+  mailchimp_general_list_id: 'e958827e05'
