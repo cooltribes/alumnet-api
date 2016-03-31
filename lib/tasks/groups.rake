@@ -5,7 +5,11 @@ namespace :groups do
   task send_digest: :environment do
     Group.all.each do |group|
       puts group.name
-      group.email_digest()
+      if group.posts.count > 0
+        group.email_digest()
+      else
+        puts '-- Not enough posts'
+      end
     end
   end
 end

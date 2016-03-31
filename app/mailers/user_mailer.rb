@@ -142,4 +142,11 @@ class UserMailer < ActionMailer::Base
 
     mail to: @user.email, subject: "#{@comment.user.name} commented a post you are tagged in"
   end
+
+  def group_digest(membership, posts)
+    @membership = membership
+    @posts = posts
+
+    mail to: @membership.user.email, subject: "Alumnet digest: #{@membership.group.name}"
+  end
 end

@@ -177,15 +177,104 @@ class Group < ActiveRecord::Base
   end
 
   def email_digest
+    test_emails = ['yroa@upsidecorp.ch', 'yondri@gmail.com', 'jmarquez@cooltribes.com', 'jmarquez@upsidecorp.ch']
     users.each do |user|
-      preference = user.group_email_preferences.find_by(group_id: id)
-      if not(preference.present?) || (preference.present? && preference.value == 0)
-        #UserMailer.join_to_group(user, sender, group).deliver_later
-        puts '-- ' + user.email + ' -- send'
-      else
-        puts '-- ' + user.email + ' -- dont'
+      if test_emails.include? user.email
+        preference = user.group_email_preferences.find_by(group_id: id)
+        user_membership = membership_of_user(user)
+        if user_membership.status() == 'approved'
+          if not(preference.present?) || (preference.present? && preference.value != 0)
+            if not preference.present? 
+              # send weekly digest by default
+              puts '-- ' + user.email + ' -- send weekly default'
+              send_digest(user_membership, 'weekly')
+            else
+              case preference.value
+              when 1
+                # daily digest
+                puts '-- ' + user.email + ' -- send daily'
+                send_digest(user_membership, 'daily')
+              when 2
+                # weekly digest
+                send_digest(user_membership, 'weekly')
+                puts '-- ' + user.email + ' -- send weekly'
+              when 3
+                # monthly digest
+                send_digest(user_membership, 'monthly')
+                puts '-- ' + user.email + ' -- send monthly'
+              else
+                # weekly digest by default
+                send_digest(user_membership, 'weekly')
+                puts '-- ' + user.email + ' -- send weekly default'
+              end
+            end
+          else
+            puts '-- ' + user.email + ' -- dont'
+          end
+        end
       end
-      
+    end
+  end
+
+  def send_digest(user_membership, time_range)
+    last_digest = GroupDigest.find_by(membership_id: user_membership.id)
+    if not last_digest.present?
+      # send email
+      digest_posts = get_best_posts('all_time')
+      if digest_posts.count > 0
+        GroupDigest.create(membership_id: user_membership.id, sent_at: DateTime.now)
+        puts '----- Posts: ' + digest_posts.map(&:id).to_json
+        UserMailer.group_digest(user_membership, digest_posts).deliver_now
+      else
+        puts '---- Not enough posts'
+      end
+    else
+      puts '-- ' + user_membership.user.email + ' - previous digest: ' + last_digest.sent_at.to_s
+      if validate_last_digest(last_digest, time_range)
+        digest_posts = get_best_posts(time_range)
+        if digest_posts.count > 0
+          GroupDigest.create(membership_id: user_membership.id, sent_at: DateTime.now)
+          UserMailer.group_digest(user_membership, digest_posts).deliver_now
+          puts '-- ' + user_membership.user.email + ' -- send daily'
+          puts '----- Posts: ' + digest_posts.map(&:id).to_json
+        else
+          puts '---- Not enough posts'
+        end
+      else
+        puts '---- Not yet'
+      end
+    end
+  end
+
+  def validate_last_digest(last_digest, time_range)
+    send_digest = false
+    case time_range
+    when 'daily'
+      if last_digest.sent_at < DateTime.now - 23.hours
+        send_digest = true
+      end
+    when 'weekly'
+      if last_digest.sent_at < DateTime.now - 7.days
+        send_digest = true
+      end
+    when 'monthly'
+      if last_digest.sent_at < DateTime.now - 30.days
+        send_digest = true
+      end
+    end
+    send_digest
+  end
+
+  def get_best_posts(time_range)
+    case time_range
+    when 'daily'
+      posts.where("created_at > ?", DateTime.now - 1.day).limit(3).sort_by{|post| post.likes.count + post.comments.count}.reverse
+    when 'weekly'
+      posts.where("created_at > ?", DateTime.now - 7.days).limit(3).sort_by{|post| post.likes.count + post.comments.count}.reverse
+    when 'monthly'
+      posts.where("created_at > ?", DateTime.now - 30.days).limit(3).sort_by{|post| post.likes.count + post.comments.count}.reverse
+    else
+      posts.limit(3).sort_by{|post| post.likes.count + post.comments.count}.reverse
     end
   end
 
