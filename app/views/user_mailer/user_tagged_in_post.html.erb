@@ -1,0 +1,10 @@
+<div style="background:#e6e6e8; color:#111; padding: 15px; font-size:1em;">
+  <p>
+  	Hello <%= "#{ @user.name }" %>, <br>
+    <%= "#{@post.user.name}" %> tagged you in a post. <br>
+  </p>
+  
+  <p>
+  	Click <a href=<%="#{Settings.ui_endpoint}/#users/#{@post.user.id}/posts/#{@post.id}" %>>here</a>	to see the post.
+  </p>
+</div>

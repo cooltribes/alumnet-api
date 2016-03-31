@@ -22,6 +22,12 @@ class V1::BasePostsController < V1::BaseController
     service = ::Posts::CreatePost.new(@postable, current_user, post_params)
     if service.call
       @post = service.post
+      # send notification email to tagged users, if any
+      if @post.user_tags
+        @post.user_tags.each do |user|
+          UserMailer.user_tagged_in_post(user, @post).deliver_later
+        end
+      end
       render :show, status: :created
     else
       render json: service.post.errors, status: :unprocessable_entity

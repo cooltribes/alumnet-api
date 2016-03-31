@@ -15,6 +15,7 @@ module Posts
       @post = Post.new(@params)
       @post.user = @current_user
       @post.content = content if content
+
       if postable.posts << @post
         @post.update_user_tags(user_tags_list, tagger: @current_user) if user_tags_list
         true
