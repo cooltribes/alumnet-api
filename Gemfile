@@ -61,7 +61,7 @@ group :test do
   gem 'machinist'
   gem 'faker'
   gem 'database_cleaner'
-  gem 'shoulda-matchers', require: false
+  gem 'shoulda-matchers', '~> 3.1'
   gem 'rspec-sidekiq'
   gem 'webmock'
   gem 'vcr'

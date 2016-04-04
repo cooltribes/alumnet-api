@@ -18,6 +18,13 @@ VCR.configure do |c|
   c.hook_into :webmock
 end
 
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
+end
+
 RSpec.configure do |config|
   config.include RequestsHelper, type: :request
   config.include StatsHelper, type: :stats
