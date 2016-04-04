@@ -33,6 +33,7 @@ gem 'elasticsearch-rails', '0.1.8'
 gem 'rollbar', '~> 2.8.1'
 gem 'whenever', :require => false
 gem 'newrelic_rpm'
+gem 'broke', '~> 0.1.2'
 
 group :development do
   gem 'spring'
