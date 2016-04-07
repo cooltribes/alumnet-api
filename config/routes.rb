@@ -170,6 +170,8 @@ Rails.application.routes.draw do
       get :find_by_sku, on: :collection
     end
 
+    resources :categories
+
     resources :banners
 
     resources :keywords
