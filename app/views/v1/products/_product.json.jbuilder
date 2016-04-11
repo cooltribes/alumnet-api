@@ -1,4 +1,4 @@
-json.(product, :id, :sku, :name, :description, :status, :price, :highlight, :category_id, :created_at, :updated_at)
+json.(product, :id, :sku, :name, :description, :status, :price, :highlight, :category_id, :created_at, :updated_at, :image)
 
 if product.category.present?
 	json.category do

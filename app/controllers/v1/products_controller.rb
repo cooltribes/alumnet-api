@@ -40,7 +40,7 @@ class V1::ProductsController < V1::BaseController
   end
 
   def product_params
-    params.permit(:sku, :name, :description, :status, :price, :created_at, :updated_at, :category_id, :highlight)
+    params.permit(:sku, :name, :description, :status, :price, :created_at, :updated_at, :category_id, :highlight, :image)
   end
 
 end

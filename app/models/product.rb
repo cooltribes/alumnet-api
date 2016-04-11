@@ -1,4 +1,5 @@
 class Product < ActiveRecord::Base
+	mount_uploader :image, ProductUploader
 	enum status: [:inactive, :active]
 
 	# Relations
