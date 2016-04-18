@@ -172,6 +172,8 @@ Rails.application.routes.draw do
 
     resources :categories
 
+    resources :characteristics
+
     resources :banners
 
     resources :keywords

@@ -1,0 +1,1 @@
+json.(characteristic, :id, :name, :mandatory, :status, :measure_unit, :created_at, :updated_at)
