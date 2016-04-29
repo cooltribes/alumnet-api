@@ -6,3 +6,5 @@ if category.father.present?
 		json.name category.father.name
 	end
 end
+
+json.children category.children
