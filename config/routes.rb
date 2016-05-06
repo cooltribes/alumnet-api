@@ -168,6 +168,7 @@ Rails.application.routes.draw do
 
     resources :products do
       get :find_by_sku, on: :collection
+      resources :categories, controller: 'products/categories'
     end
 
     resources :categories
