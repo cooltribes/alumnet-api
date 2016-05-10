@@ -24,7 +24,7 @@ describe V1::JobExchangesController, type: :request do
       end
       get job_exchanges_path, {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(3)
+      expect(json["data"].count).to eq(3)
     end
   end
 
@@ -37,7 +37,7 @@ describe V1::JobExchangesController, type: :request do
       end
       get my_job_exchanges_path, {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(2)
+      expect(json["data"].count).to eq(2)
     end
   end
 
@@ -49,7 +49,7 @@ describe V1::JobExchangesController, type: :request do
       end
       get applied_job_exchanges_path, {}, basic_header(user.auth_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(1)
+      expect(json["data"].count).to eq(1)
     end
   end
 

@@ -10,7 +10,7 @@ describe V1::BusinessController, type: :request do
       end
       get business_index_path, {}, basic_header(current_user.auth_token)
       expect(response.status).to eq 200
-      expect(json.count).to eq(3)
+      expect(json["data"].count).to eq(3)
     end
   end
 
