@@ -1,0 +1,1 @@
+json.array! @categories, partial: 'category', as: :category, current_user: @current_user
