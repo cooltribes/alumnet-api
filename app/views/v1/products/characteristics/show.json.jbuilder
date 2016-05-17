@@ -1,0 +1,1 @@
+json.partial! 'product_characteristic', product_characteristic: @product_characteristic
