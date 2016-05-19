@@ -177,7 +177,12 @@ class Group < ActiveRecord::Base
   end
 
   def email_digest
-    test_emails = ['yroa@upsidecorp.ch', 'yondri@gmail.com', 'jmarquez@cooltribes.com', 'jmarquez@upsidecorp.ch', 'cmarquez@cooltribes.com', 'carlos.botero@aiesec-alumni.org', 'johannmg@gmail.com']
+    test_emails = [
+      'yroa@upsidecorp.ch', 'yondri@gmail.com', 'jmarquez@cooltribes.com', 'jmarquez@upsidecorp.ch', 'cmarquez@cooltribes.com', 
+      'carlos.botero@aiesec-alumni.org', 'johannmg@gmail.com', 'francisco@cooltribes.com', 'pirlo@cooltribes.com',
+      'simon@cooltribes.com', 'dudamel@cooltribes.com', 'elon@cooltribes.com', 'marthy@cooltribes.com'
+    ]
+    #test_emails = ['yroa@upsidecorp.ch', 'yondri@gmail.com']
     users.each do |user|
       if test_emails.include? user.email
         preference = user.group_email_preferences.find_by(group_id: id)
@@ -224,7 +229,9 @@ class Group < ActiveRecord::Base
       if digest_posts.count > 0
         GroupDigest.create(membership_id: user_membership.id, sent_at: DateTime.now)
         puts '----- Posts: ' + digest_posts.map(&:id).to_json
-        UserMailer.group_digest(user_membership, digest_posts).deliver_now
+        #UserMailer.group_digest(user_membership, digest_posts).deliver_now
+        mailer = GroupMailer.new
+        mailer.send_digest(user_membership, digest_posts)
       else
         puts '---- Not enough posts'
       end
@@ -234,7 +241,9 @@ class Group < ActiveRecord::Base
         digest_posts = get_best_posts(time_range)
         if digest_posts.count > 0
           GroupDigest.create(membership_id: user_membership.id, sent_at: DateTime.now)
-          UserMailer.group_digest(user_membership, digest_posts).deliver_now
+          #UserMailer.group_digest(user_membership, digest_posts).deliver_now
+          mailer = GroupMailer.new
+          mailer.send_digest(user_membership, digest_posts)
           puts '-- ' + user_membership.user.email + ' -- send daily'
           puts '----- Posts: ' + digest_posts.map(&:id).to_json
         else

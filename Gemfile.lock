@@ -250,6 +250,9 @@ GEM
     mailchimp-api (2.0.6)
       excon (>= 0.16.0)
       json (>= 1.7.7)
+    mandrill-api (1.0.53)
+      excon (>= 0.16.0, < 1.0)
+      json (>= 1.7.7, < 2.0)
     mime-types (2.99)
     mini_magick (4.2.10)
     mini_portile2 (2.0.0)
@@ -427,6 +430,7 @@ DEPENDENCIES
   machinist
   mailboxer (= 0.13.0)
   mailchimp-api
+  mandrill-api
   mini_magick (= 4.2.10)
   newrelic_rpm
   paranoia (~> 2.0)
@@ -454,3 +458,6 @@ DEPENDENCIES
   versionist (= 1.4.1)
   webmock
   whenever
+
+BUNDLED WITH
+   1.11.2
