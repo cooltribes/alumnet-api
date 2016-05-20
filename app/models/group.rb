@@ -180,7 +180,8 @@ class Group < ActiveRecord::Base
     test_emails = [
       'yroa@upsidecorp.ch', 'yondri@gmail.com', 'jmarquez@cooltribes.com', 'jmarquez@upsidecorp.ch', 'cmarquez@cooltribes.com', 
       'carlos.botero@aiesec-alumni.org', 'johannmg@gmail.com', 'francisco@cooltribes.com', 'pirlo@cooltribes.com',
-      'simon@cooltribes.com', 'dudamel@cooltribes.com', 'elon@cooltribes.com', 'marthy@cooltribes.com'
+      'simon@cooltribes.com', 'dudamel@cooltribes.com', 'elon@cooltribes.com', 'marthy@cooltribes.com', 'ashton@cooltribes.com',
+      'eric@cooltribes.com', 'margot@cooltribes.com', 'megan@cooltribes.com'
     ]
     #test_emails = ['yroa@upsidecorp.ch', 'yondri@gmail.com']
     users.each do |user|

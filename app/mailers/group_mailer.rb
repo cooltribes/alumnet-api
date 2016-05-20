@@ -15,6 +15,14 @@ class GroupMailer
     	{"name"=>"user_name", "content"=>"#{user_membership.user.name}"},
     	{"name"=>"main", "content"=>main_content}
     ]
+
+    subaccount = 'alumnet_develop'
+    if Rails.env.production?
+    	subaccount = 'alumnet_production'
+    elsif Rails.env.staging?
+    	subaccount = 'alumnet_staging'
+    end
+
     message = {
 			# "google_analytics_campaign"=>"message.from_email@example.com",
 			# "tags"=>["password-resets"],
@@ -30,7 +38,7 @@ class GroupMailer
 			# "metadata"=>{"website"=>"www.example.com"},
 			# "merge_language"=>"mailchimp",
 			# "inline_css"=>nil,
-			# "subaccount"=>"customer-123",
+			"subaccount"=>subaccount,
 			# "merge"=>true,
 			"return_path_domain"=>nil,
 			"url_strip_qs"=>nil,
