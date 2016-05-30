@@ -177,13 +177,13 @@ class Group < ActiveRecord::Base
   end
 
   def email_digest
-    test_emails = [
-      'yroa@upsidecorp.ch', 'yondri@gmail.com', 'jmarquez@cooltribes.com', 'jmarquez@upsidecorp.ch', 'cmarquez@cooltribes.com', 
-      'carlos.botero@aiesec-alumni.org', 'johannmg@gmail.com', 'francisco@cooltribes.com', 'pirlo@cooltribes.com',
-      'simon@cooltribes.com', 'dudamel@cooltribes.com', 'elon@cooltribes.com', 'marthy@cooltribes.com', 'ashton@cooltribes.com',
-      'eric@cooltribes.com', 'margot@cooltribes.com', 'megan@cooltribes.com'
-    ]
-    #test_emails = ['yroa@upsidecorp.ch', 'yondri@gmail.com']
+    # test_emails = [
+    #   'yroa@upsidecorp.ch', 'yondri@gmail.com', 'jmarquez@cooltribes.com', 'jmarquez@upsidecorp.ch', 'cmarquez@cooltribes.com', 
+    #   'carlos.botero@aiesec-alumni.org', 'johannmg@gmail.com', 'francisco@cooltribes.com', 'pirlo@cooltribes.com',
+    #   'simon@cooltribes.com', 'dudamel@cooltribes.com', 'elon@cooltribes.com', 'marthy@cooltribes.com', 'ashton@cooltribes.com',
+    #   'eric@cooltribes.com', 'margot@cooltribes.com', 'megan@cooltribes.com'
+    # ]
+    test_emails = ['yroa@upsidecorp.ch', 'yondri@gmail.com']
     users.each do |user|
       if test_emails.include? user.email
         preference = user.group_email_preferences.find_by(group_id: id)

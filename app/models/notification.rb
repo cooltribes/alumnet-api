@@ -39,7 +39,9 @@ class Notification
     notification.recipients.each do |user|
       preference = user.email_preferences.find_by(name: 'join_group_invitation')
       if not(preference.present?) || (preference.present? && preference.value == 0)
-        UserMailer.join_to_group(user, sender, group).deliver_later
+        #UserMailer.join_to_group(user, sender, group).deliver_later
+        mailer = GroupMailer.new
+        mailer.join_group(user, sender, group)
       end
     end
   end
@@ -60,6 +62,7 @@ class Notification
   def self.notify_group_join_accepted_to_user(sender, group)
     return if sender.blank?
     notification = new(sender)
+    NotificationDetail.join_group_admins(notfy, sender, group)
     subject = "You were accepted to join the group #{group.name}"
     body = "Your request to join the group #{group.name} was accepted"
     notfy = notification.send_notification(subject, body, group, sender)
