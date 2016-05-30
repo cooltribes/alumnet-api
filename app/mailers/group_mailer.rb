@@ -52,10 +52,10 @@ class GroupMailer
 		main_content = ''
 		images = []
 		digest_posts.each do |post|
-			main_content += "<img src='cid:avatar_user_#{post.user.id}' alt='' height='40px' style='margin-right: 10px;'>"
+			main_content += "<a href='#{Settings.ui_endpoint}/#users/#{post.user.id}/posts'><img src='cid:avatar_user_#{post.user.id}' alt='#{post.user.name}' height='40px' style='margin-right: 10px;'></a>"
 			main_content += '<div style="margin-top: 10px;">'
-			main_content += "<span style='font-family: sans-serif; font-size: 13px; color: #838385; font-weight: 100; text-decoration: none;'>#{post.body}</span><br>"
-			main_content += "<span style='font-family: sans-serif; font-size: 12px; color: #838385;'>By: #{post.user.name}</span>"
+			main_content += "<span style='font-family: sans-serif; font-size: 13px; color: #838385; font-weight: 100; text-decoration: none;'>#{post.body}</span><br><br>"
+			main_content += "<span style='font-family: sans-serif; font-size: 12px; color: #838385;'>By: <a href='#{Settings.ui_endpoint}/#users/#{post.user.id}/posts'>#{post.user.name}</a></span>"
 			main_content += '</div><br><br>'
 			mime_type = MIME::Types.type_for("#{post.user.avatar.medium.url}").first.try(:content_type)
 			user_avatar = {"type"=>mime_type, "name"=>"avatar_user_#{post.user.id}", "content"=>Base64.encode64(open("#{post.user.avatar.medium.url}") { |io| io.read })}
@@ -65,7 +65,7 @@ class GroupMailer
 
 		template_name = "group_digest"
     template_content = [
-    	{"name"=>"alumnet_url", "content"=>"<a href='#{Settings.ui_endpoint}"},
+    	{"name"=>"alumnet_url", "content"=>"<a href='#{Settings.ui_endpoint}' style='color: #FFF; border: 1px solid #FFF; padding: 10px; text-decoration: none; font-family: sans-serif; font-size: 12px;'>GO TO ALUMNET</a>"},
     	{"name"=>"user_name", "content"=>"#{user_membership.user.name}"},
     	{"name"=>"group_name", "content"=>"#{user_membership.group.name}"},
     	{"name"=>"group_url", "content"=>"<a href='#{Settings.ui_endpoint}/#groups/#{user_membership.group.id}/posts'>here</a>"},
@@ -114,11 +114,11 @@ class GroupMailer
 			"tracking_domain"=>nil,
 			"subject"=>"AlumNet Digest - #{user_membership.group.name}",
 			"signing_domain"=>nil,
-			"auto_html"=>nil,
+			"auto_html"=>true,
 			"track_opens"=>true,
 			"track_clicks"=>true,
 			"from_email"=>"alumnet-noreply@aiesec-alumni.org",
-			"auto_text"=>nil,
+			"auto_text"=>true,
 			"images"=>images,
 			"important"=>false}
     async = false
