@@ -53,31 +53,40 @@ class GroupMailer
 		digest_posts.each do |post|
 			body = post.body
 			if post.body.length > 400
-				body = post.body.truncate(400, omission: "... <a href='#{Settings.ui_endpoint}/#groups/#{user_membership.group.id}/posts/#{post.id}'>(read more)</a>")
+				body = post.body.truncate(400, omission: "... <a href='#{Settings.ui_endpoint}/#groups/#{user_membership.group.id}/posts/#{post.id}' style='color: #2099d0; text-decoration: none;'>(read more)</a>")
 			end
+			main_content += '<div style="display: inline-block; width: 50px; text-align: left;">'
 			main_content += "<a href='#{Settings.ui_endpoint}/#users/#{post.user.id}/posts'><img src='cid:avatar_user_#{post.user.id}' alt='#{post.user.name}' height='40px' style='margin-right: 10px;'></a>"
+			main_content += '</div>'
+			main_content += '<div style="width: 200px; display: inline-block; top: 0; padding: 5px;">'
+			main_content += "<span style='font-family: sans-serif; font-size: 12px; color: #838385; font-weight: 100;'>By: <a href='#{Settings.ui_endpoint}/#users/#{post.user.id}/posts' style='color: #2099d0; text-decoration: none;'>#{post.user.name}</a></span><br>"
+			main_content += "<span style='font-family: sans-serif; font-size: 13px; color: #838385; font-weight: 100;'>#{post.created_at.strftime('%b %e %Y')}</span>"
+			main_content += '</div>'
 			main_content += '<div style="margin-top: 10px;">'
-			main_content += "<span style='font-family: sans-serif; font-size: 13px; color: #838385; font-weight: 100; text-decoration: none;'>#{body}</span><br><br>"
+			main_content += "<span style='font-family: sans-serif; font-size: 13px; color: #838385; font-weight: 100; text-decoration: none; line-height: 20px;'>#{body}</span><br><br>"
 			if post.pictures.first
-				main_content += "<img src='cid:post_image_#{post.id}' alt='' max-widht='400px'>"
+				main_content += '<div style="text-align: center; margin-bottom: 20px">'
+				main_content += "<img src='cid:post_image_#{post.id}' alt='' width='500px'>"
+				main_content += '</div>'
 				post_image_type = MIME::Types.type_for("#{post.pictures.first.picture.url}").first.try(:content_type)
 				post_image = {"type"=>post_image_type, "name"=>"post_image_#{post.id}", "content"=>Base64.encode64(open("#{post.pictures.first.picture.url}") { |io| io.read })}
 				images << post_image
 			end
-			main_content += "<span style='font-family: sans-serif; font-size: 12px; color: #838385;'>By: <a href='#{Settings.ui_endpoint}/#users/#{post.user.id}/posts'>#{post.user.name}</a></span><br>"
-			main_content += "<span style='font-family: sans-serif; font-size: 12px; color: #838385;'>#{post.created_at.strftime('%b %e %Y')}</span>"
 			if post.likes.count > 0
-				main_content += "<br>#{post.likes.count} likes"
+				main_content += "<a href='#{Settings.ui_endpoint}/#groups/#{user_membership.group.id}/posts/#{post.id}' style='color: #2099d0; text-decoration: none; font-family: sans-serif; margin-right:10px; font-size: 14px; font-weight: 100;'><span>#{post.likes.count} Likes</span></a>"
 			end
 			if post.comments.count > 0
-				main_content += "<br>#{post.comments.count} likes"
+				main_content += "<a href='#{Settings.ui_endpoint}/#groups/#{user_membership.group.id}/posts/#{post.id}' style='color: #2099d0; text-decoration: none; font-family: sans-serif; font-size: 14px; font-weight: 100;'><span>#{post.comments.count} Comments</span></a>"
 			end
 			main_content += '</div><br><br>'
 			mime_type = MIME::Types.type_for("#{post.user.avatar.medium.url}").first.try(:content_type)
 			user_avatar = {"type"=>mime_type, "name"=>"avatar_user_#{post.user.id}", "content"=>Base64.encode64(open("#{post.user.avatar.medium.url}") { |io| io.read })}
 			images << user_avatar
-      #main_content += "User: #{post.user.name}<br>#{post.likes.count} likes<br>#{post.comments.count} comments<br><br>#{post.body}<br><br><br>"
   	end
+
+  	main_content += '<div style="margin: 20px; text-align: center">'
+  	main_content += "<a href='#{Settings.ui_endpoint}/#groups/#{user_membership.group.id}/posts' style='color: #FFF; padding: 15px 40px; text-decoration: none; font-family: sans-serif; font-size: 12px; background-color: #2099d0'>GO TO GROUP</a>"
+  	main_content += '</div>'
 
 		template_name = "group_digest"
     template_content = [
@@ -85,8 +94,7 @@ class GroupMailer
     	{"name"=>"user_name", "content"=>"#{user_membership.user.name}"},
     	{"name"=>"group_name", "content"=>"#{user_membership.group.name}"},
     	{"name"=>"group_url", "content"=>"<a href='#{Settings.ui_endpoint}/#groups/#{user_membership.group.id}/posts'>here</a>"},
-    	{"name"=>"digest_content", "content"=>main_content},
-    	{"name"=>"group_button", "content"=>"<a href='#{Settings.ui_endpoint}/#groups/#{user_membership.group.id}/posts' style='color: #000; border: 1px solid #FFF; padding: 10px; text-decoration: none; font-family: sans-serif; font-size: 12px;'>GO TO GROUP</a>"}
+    	{"name"=>"digest_content", "content"=>main_content}
     ]
 
     message = {
@@ -133,7 +141,6 @@ class GroupMailer
 			"signing_domain"=>nil,
 			"auto_html"=>true,
 			"track_opens"=>true,
-			"track_clicks"=>true,
 			"from_email"=>"alumnet-noreply@aiesec-alumni.org",
 			"auto_text"=>true,
 			"images"=>images,
