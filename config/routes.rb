@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       get :profinda_token
       post :send_invitations
       post :activate
+      post :identity_layer
       resource :profile, only: [:show, :update], controller: 'me/profiles'
       resource :registration, only: [:show, :update], controller: 'me/registration'
       resources :posts, controller: 'me/posts'

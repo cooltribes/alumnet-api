@@ -21,6 +21,13 @@ describe V1::MeController, type: :request do
     end
   end
 
+  describe "POST /identity_layer" do
+    it "should return a valid toker for layer client" do
+      post identity_layer_me_path, { nonce: "UNKNOWTOKEN"}, basic_header(user.auth_token)
+      expect(response.status).to eq(200)
+    end
+  end
+
   describe "GET /me/receptive_settings" do
     it "return the settings for receptive.io integration" do
       get receptive_settings_me_path, {}, basic_header(user.auth_token)
