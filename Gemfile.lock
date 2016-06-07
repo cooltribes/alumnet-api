@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/dreimannzelt/layer-identity_token.git
+  revision: bcbe6c13154794c8cd7eb283ae06a9e34284f028
+  specs:
+    layer-identity_token (0.0.2)
+      jwt (~> 1.4, >= 1.4.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -231,6 +238,7 @@ GEM
     json (1.8.3)
     json-schema (2.5.1)
       addressable (~> 2.3.7)
+    jwt (1.5.4)
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -426,6 +434,7 @@ DEPENDENCIES
   jbuilder (= 2.3.1)
   json-schema
   kaminari (= 0.16.3)
+  layer-identity_token!
   lol_dba
   machinist
   mailboxer (= 0.13.0)
@@ -458,6 +467,3 @@ DEPENDENCIES
   versionist (= 1.4.1)
   webmock
   whenever
-
-BUNDLED WITH
-   1.11.2
