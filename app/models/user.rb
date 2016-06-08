@@ -189,6 +189,10 @@ class User < ActiveRecord::Base
 
   ##Mailboxer Methods
   #TODO: quitar parentesis y refatorizar los counts :yondri
+  def messages_with_includes
+    receipts.messages_receipts.includes(message: [{sender: :profile}, :conversation])
+  end
+
   def friendship_notifications()
     mailbox.notifications.joins(:notification_detail)
     .where(notification_details: {notification_type: ['friendship', 'approval']})

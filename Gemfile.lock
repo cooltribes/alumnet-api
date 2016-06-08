@@ -52,6 +52,9 @@ GEM
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.2.2)
+    bullet (5.1.0)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.10.0)
     byebug (6.0.2)
     capistrano (3.4.0)
       i18n
@@ -384,6 +387,7 @@ GEM
     tilt (2.0.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    uniform_notifier (1.10.0)
     vcr (2.9.3)
     versionist (1.4.1)
       activesupport (>= 3)
@@ -406,6 +410,7 @@ DEPENDENCIES
   bcrypt (= 3.1.10)
   better_errors
   binding_of_caller
+  bullet
   byebug
   capistrano
   capistrano-bundler
@@ -458,6 +463,3 @@ DEPENDENCIES
   versionist (= 1.4.1)
   webmock
   whenever
-
-BUNDLED WITH
-   1.11.2
