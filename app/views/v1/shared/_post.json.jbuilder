@@ -46,7 +46,7 @@ end
 json.resource_path post.resource_path
 
 if post.pictures.any?
-  json.pictures post.pictures, partial: 'v1/shared/picture', as: :picture, current_user: current_user
+  json.pictures post.pictures.with_includes, partial: 'v1/shared/picture', as: :picture, current_user: current_user
 else
   json.pictures nil
 end
