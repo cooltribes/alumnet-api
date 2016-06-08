@@ -5,13 +5,7 @@ class V1::MeController < V1::BaseController
   end
 
   def identity_layer
-    more_clain_attrs = {
-      first_name: @user.profile.first_name,
-      last_name: @user.profile.last_name,
-      display_name: @user.name,
-      avatar_url: @user.avatar.large.url
-    }
-    token = Layer::IdentityToken.new(@user.id, params[:nonce], (Time.now+(86400*14)), more_clain_attrs)
+    token = Layer::IdentityToken.new(@user.id, params[:nonce], (Time.now+(86400*14)))
     render json: token
   end
 
