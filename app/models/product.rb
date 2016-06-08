@@ -8,6 +8,10 @@ class Product < ActiveRecord::Base
 	# Relations
 	has_many :user_products, dependent: :destroy
 	belongs_to :user
+	has_many :product_characteristics, dependent: :destroy
+  has_many :characteristics, through: :product_characteristics
+  has_many :product_categories, dependent: :destroy
+  has_many :categories, through: :product_categories
 
 	### Validations
 	validates_presence_of :name, :description
