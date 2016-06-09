@@ -458,6 +458,3 @@ DEPENDENCIES
   versionist (= 1.4.1)
   webmock
   whenever
-
-BUNDLED WITH
-   1.11.2
