@@ -4,7 +4,7 @@ class V1::BaseCommentsController < V1::BaseController
   before_action :set_comment, except: [:index, :create]
 
   def index
-    @comments = @commentable.comments
+    @comments = @commentable.comments.with_includes
   end
 
   def show

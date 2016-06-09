@@ -189,6 +189,10 @@ class User < ActiveRecord::Base
 
   ##Mailboxer Methods
   #TODO: quitar parentesis y refatorizar los counts :yondri
+  def messages_with_includes
+    receipts.messages_receipts.includes(message: [{sender: :profile}, :conversation])
+  end
+
   def friendship_notifications()
     mailbox.notifications.joins(:notification_detail)
     .where(notification_details: {notification_type: ['friendship', 'approval']})
@@ -363,13 +367,13 @@ class User < ActiveRecord::Base
   def groups_posts(q)
     #return all posts of groups where the user is member
     groups_ids = groups.pluck(:id)
-    Post.joins(:postable_group).where(postable_type: "Group")
+    Post.with_includes.joins(:postable_group).where(postable_type: "Group")
       .where("groups.id in(?) and groups.group_type = ?", groups_ids, 0)
       .ransack(q).result
   end
 
   def my_likes_posts(q)
-    posts = posts_by_like.includes(:postable).ransack(q).result.to_a
+    posts = posts_by_like.with_includes.ransack(q).result.to_a
     posts.reject! do |post|
       post.in_group_closed_or_secret? || post.in_event_closed_or_secret?
     end
@@ -393,7 +397,7 @@ class User < ActiveRecord::Base
   end
 
   def my_posts(query)
-    posts.includes(:postable).ransack(query).result | publications.includes(:postable).ransack(query).result
+    posts.with_includes.ransack(query).result | publications.with_includes.ransack(query).result
   end
 
   def publicable_posts(query)

@@ -44,6 +44,16 @@ class V1::AuthController < V1::BaseController
     end
   end
 
+  def mobile_register
+    service = ::Registers::MobileRegister.new(mobile_register_params)
+    if service.call
+      @user = service.user
+      render :user, status: :created
+    else
+      render json: { errors: service.errors }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def add_provider
@@ -76,6 +86,11 @@ class V1::AuthController < V1::BaseController
 
   def provider_params
     params.permit(:provider, :uid)
+  end
+
+  def mobile_register_params
+    params.permit(user: [:email, :password], profile:[:first_name, :last_name, :born, :residence_city_id],
+      experience: [:start_date, :end_date, :country_id, :committee_id])
   end
 
   def validate_register_points(token)

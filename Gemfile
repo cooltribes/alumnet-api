@@ -49,6 +49,7 @@ group :development do
   gem 'capistrano-sidekiq'
   gem 'capistrano3-nginx', '~> 2.0'
   gem 'git'
+  gem 'bullet'
 end
 
 group :test, :development do

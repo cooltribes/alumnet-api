@@ -11,6 +11,7 @@ class Comment < ActiveRecord::Base
 
   ### Scopes
   default_scope -> { order('created_at ASC') }
+  scope :with_includes, -> { includes(:user, :commentable) }
 
   ### Validations
   validates_presence_of :comment, :user_id

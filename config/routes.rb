@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     post '/oauth_sign_in', to: 'auth#oauth_sign_in', as: :oauth_sign_in
     post '/register', to: 'auth#register', as: :register
     post '/oauth_register', to: 'auth#oauth_register', as: :oauth_register
+    post '/mobile_register', to: 'auth#mobile_register', as: :mobile_register
 
     get '/public_profile/:slug', to: 'public_profiles#show'
 
