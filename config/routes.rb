@@ -251,7 +251,7 @@ Rails.application.routes.draw do
     resources :sectors, only: [:index]
 
     resources :profiles, only: [:show, :update] do
-      post :cropping, on: :member, on: :member
+      post :cropping, on: :member
       resources :experiences, except: [:new, :edit], controller: 'profiles/experiences'
       resources :skills, except: [:show, :new, :edit, :update], controller: 'profiles/skills'
       resources :language_levels, except: [:show, :new, :edit], controller: 'profiles/language_levels'
