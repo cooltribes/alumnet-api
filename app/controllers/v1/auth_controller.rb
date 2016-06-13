@@ -88,9 +88,9 @@ class V1::AuthController < V1::BaseController
     params.permit(:provider, :uid)
   end
 
+    # profile:[:first_name, :last_name, :born, :residence_city_id],
   def mobile_register_params
-    params.permit(user: [:email, :password], profile:[:first_name, :last_name, :born, :residence_city_id],
-      experience: [:start_date, :end_date, :country_id, :committee_id])
+    params.permit(user: [:email, :password], experience: [:start_date, :end_date, :country_id, :committee_id])
   end
 
   def validate_register_points(token)
