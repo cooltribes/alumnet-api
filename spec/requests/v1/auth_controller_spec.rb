@@ -122,7 +122,7 @@ describe V1::AuthController, type: :request do
     let(:valid_mobile_params) do
       {
         user: { password: "FAMG12345678", email: "test_email@gmail.com" },
-        profile: { first_name: "Armando", last_name: "Mendoza", born: "1980-08-21", residence_city_id: city.id },
+        # profile: { first_name: "Armando", last_name: "Mendoza", born: "1980-08-21", residence_city_id: city.id },
         experience: { start_date: "01-01-1995", end_date: "01-01-1996", country_id: city.country.id, committee_id: committee.id }
       }
 
@@ -131,7 +131,7 @@ describe V1::AuthController, type: :request do
     let(:invalid_mobile_params) do
       {
         user: { password: "12345678", email: "test_email@gmail.com" },
-        profile: { first_name: "Armando", last_name: "Mendoza", born: "2006-08-26", residence_city_id: city.id },
+        # profile: { first_name: "Armando", last_name: "Mendoza", born: "2006-08-26", residence_city_id: city.id },
         experience: { start_date: "01-01-1995", end_date: "01-01-1996", country_id: city.country.id, committee_id: committee.id }
       }
     end
@@ -144,8 +144,8 @@ describe V1::AuthController, type: :request do
         expect(response.status).to eq 201
         expect(json['email']).to eq("test_email@gmail.com")
         user = User.last
-        expect(user.profile.last_name).to eq("Mendoza")
-        expect(user.profile.residence_country).to eq(city.country)
+        # expect(user.profile.last_name).to eq("Mendoza")
+        # expect(user.profile.residence_country).to eq(city.country)
         experience = user.profile.experiences.last
         expect(experience.exp_type).to eq(1)
         expect(experience.committee).to eq(committee)

@@ -6,14 +6,14 @@ module Registers
       @errors = []
       @params = params
       @user_params = @params.delete(:user)
-      @profile_params = @params.delete(:profile)
+      # @profile_params = @params.delete(:profile)
       @experience_params = @params.delete(:experience)
     end
 
     def call
       @user = create_user(@user_params)
       if user.valid?
-        update_profile(user, @profile_params) if @profile_params
+        # update_profile(user, @profile_params) if @profile_params
         create_experience(user, @experience_params) if @experience_params
       end
       is_valid?
