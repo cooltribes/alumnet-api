@@ -245,7 +245,7 @@ Rails.application.routes.draw do
       get :locations, on: :collection
     end
 
-    resources :cities, only: [:show]
+    resources :cities, only: [:index, :show]
 
     resources :committees, only: [:index]
     resources :sectors, only: [:index]
