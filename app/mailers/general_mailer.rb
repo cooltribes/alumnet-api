@@ -40,7 +40,7 @@ class GeneralMailer
 			      "name"=>"#{user.name}"}],
 			"from_name"=>"Aiesec Alumni International",
 			"tracking_domain"=>nil,
-			"subject"=>"#{user.name} accepted your friend request",
+			"subject"=>"#{friend.name} accepted your friend request",
 			"signing_domain"=>nil,
 			"auto_html"=>true,
 			"track_opens"=>true,
@@ -96,6 +96,7 @@ class GeneralMailer
 			"track_opens"=>true,
 			"from_email"=>"alumnet-noreply@aiesec-alumni.org",
 			"auto_text"=>true,
+			"images"=>images,
 			"important"=>false}
     async = false
     result = @mandrill.messages.send_template template_name, template_content, message, async
