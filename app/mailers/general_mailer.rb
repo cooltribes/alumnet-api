@@ -46,6 +46,7 @@ class GeneralMailer
 			"track_opens"=>true,
 			"from_email"=>"alumnet-noreply@aiesec-alumni.org",
 			"auto_text"=>true,
+			"images"=>images,
 			"important"=>false}
     async = false
     result = @mandrill.messages.send_template template_name, template_content, message, async
