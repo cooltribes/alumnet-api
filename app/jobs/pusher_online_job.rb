@@ -6,8 +6,7 @@ class PusherOnlineJob < ActiveJob::Base
     if user
       user.update(online: online)
       user.my_friends.each do |friend|
-        bind = online ? "user_online" : "user_offline"
-        Pusher["USER-#{friend.id}"].trigger(bind, { user_id: user.id })
+        Pusher["USER-#{friend.id}"].trigger("user_online", { user_id: user.id, online: online })
       end
     end
   end

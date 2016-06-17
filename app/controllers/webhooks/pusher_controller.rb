@@ -7,11 +7,11 @@ class Webhooks::PusherController < ActionController::API
         case event["name"]
         when 'channel_occupied'
           channel = event["channel"]
-          id = channel.split("-").last.to_id
+          id = channel.split("-").last.to_i
           PusherOnlineJob.perform_later(id, true)
         when 'channel_vacated'
           channel = event["channel"]
-          id = channel.split("-").last.to_id
+          id = channel.split("-").last.to_i
           PusherOnlineJob.perform_later(id, false)
         end
       end
