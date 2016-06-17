@@ -19,6 +19,12 @@ class V1::CountriesController < V1::BaseController
   def show
   end
 
+  def alumni
+    region = @country.region
+    in_region_count = region.try(:users).try(:count)
+    render json: { in_country: @country.users.count, in_region: in_region_count, total: User.count }
+  end
+
   def cities
     @q = @country.cities.ransack(params[:q])
     @cities = @q.result.order(name: :asc)

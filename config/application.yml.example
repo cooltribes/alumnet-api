@@ -19,9 +19,13 @@ defaults: &defaults
   profinda_account:
     user: xxxxxxxxxxxxxxx
     password: xxxxxxxxxxx
-  mailchimp_general_api_key: 'f0ad0e019703b02132b2cf15ad458e50-us10'
-  mandrill_subaccount: 'alumnet_develop'
-  mandrill_api_key: '_6giUhWWZOU6r2YgCmuf-Q'
+  layer:
+    provider_id: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    key_id: xxxxxxxxxxxxxxxxxxxxxxxxxxx
+    private_key: /path/to/layer_key.pem
+  mailchimp_general_api_key: xxxxxxxxxxxxxxxxxxxxxxxx
+  mandrill_subaccount: xxxxxxxxxxxxxxx
+  mandrill_api_key: xxxxxxxxxxxxxxxxxxxx
 
 development:
   <<: *defaults
