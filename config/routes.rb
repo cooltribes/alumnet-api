@@ -35,7 +35,9 @@ Rails.application.routes.draw do
       post :send_invitations
       post :activate
       resource :profile, only: [:show, :update], controller: 'me/profiles'
-      resource :registration, only: [:show, :update], controller: 'me/registration'
+      resource :registration, only: [:show, :update], controller: 'me/registration' do
+        put :step, on: :member
+      end
       resources :posts, controller: 'me/posts'
 
       resources :friendships, except: :show, controller: 'me/friendships' do
@@ -242,6 +244,7 @@ Rails.application.routes.draw do
     resources :countries, only: [:index, :show] do
       get :cities, on: :member
       get :committees, on: :member
+      get :alumni, on: :member
       get :locations, on: :collection
     end
 

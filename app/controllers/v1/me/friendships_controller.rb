@@ -41,7 +41,9 @@ class V1::Me::FriendshipsController < V1::BaseController
     notification_detail = NotificationDetail.find_by(mailboxer_notification: notification)
 
     #destroy them all
-    notification_detail.destroy
+    if notification_detail.present?
+      notification_detail.destroy
+    end
     notification.mark_as_deleted(@friendship.friend)
     @friendship.destroy
     head :no_content
