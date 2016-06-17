@@ -215,6 +215,13 @@ City.blueprint do
   name { "City #{sn}" }
 end
 
+City.blueprint(:with_country) do
+  cc_iso { sn }
+  name { "City #{sn}" }
+  country { Country.make!(:simple) }
+end
+
+
 Committee.blueprint do
   cc_fips { sn }
   name { "Committee #{sn}" }

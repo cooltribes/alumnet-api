@@ -30,5 +30,24 @@ describe V1::Me::RegistrationController, type: :request do
     end
 
   end
+
+  describe 'PUT me/registration/step' do
+
+    context "valid params" do
+      it "update register step" do
+        put step_me_registration_path, { register_step: "completed"}, basic_header(@current_user.auth_token)
+        expect(response.status).to eq(200)
+        expect(json).to eq({"current_step"=>"completed"})
+      end
+    end
+
+    context "invalid params" do
+      it "not update register step" do
+        put step_me_registration_path, { register_step: "xxxcompleted"}, basic_header(@current_user.auth_token)
+        expect(response.status).to eq(422)
+        expect(json["errors"]).to eq(["is not a valid register_step"])
+      end
+    end
+  end
 end
 

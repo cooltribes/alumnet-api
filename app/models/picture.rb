@@ -11,6 +11,9 @@ class Picture < ActiveRecord::Base
   belongs_to :pictureable, polymorphic: true
   belongs_to :uploader, class_name: 'User'
 
+  ### Scopes
+  scope :with_includes, -> { includes(:uploader, :city, :country)}
+
   ### Callbacks
   before_create :check_date_taken, :check_location
 

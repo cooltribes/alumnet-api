@@ -38,4 +38,11 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = Settings.smtp_settings.symbolize_keys
+
+  # Config Bullet gem
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.bullet_logger = true
+    Bullet.rails_logger = false
+  end
 end

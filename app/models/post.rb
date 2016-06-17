@@ -29,6 +29,8 @@ class Post < ActiveRecord::Base
   ### Scopes
   default_scope -> { order(last_comment_at: :desc) }
 
+  scope :with_includes, -> { includes([{user: :profile}, :pictures, :user_tags, :content, :postable]) }
+
   ### Validations
   validates_presence_of :user_id
   validates_presence_of :body, if: Proc.new { |p| p.post_type == "regular" }

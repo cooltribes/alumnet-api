@@ -24,6 +24,6 @@ class V1::Users::ProfilesController < V1::BaseController
 
     def profile_params
       params.permit(:first_name, :last_name, :avatar, :born, :birth_city, :residence_city,
-        :bird_country, :residence_country, :professional_headline)
+        :birth_country, :residence_country, :professional_headline)
     end
 end

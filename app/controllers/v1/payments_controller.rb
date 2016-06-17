@@ -25,6 +25,11 @@ class V1::PaymentsController < V1::BaseController
           render json: @attendance.errors, status: :unprocessable_entity
         end
       else
+        if payment_params[:user_product_id]
+          @user_product = UserProduct.find(payment_params[:user_product_id])
+          mailer = MembershipMailer.new
+          mailer.send_purchase_email(@user_product, @payment)
+        end
         render :show, status: :created, location: @payment
       end
     else
@@ -67,7 +72,7 @@ class V1::PaymentsController < V1::BaseController
   end
 
   def payment_params
-    params.permit(:user_id, :paymentable_id, :paymentable_type, :subtotal, :iva, :total, :reference, :country_id, :city_id, :address, :status)
+    params.permit(:user_id, :paymentable_id, :paymentable_type, :subtotal, :iva, :total, :reference, :country_id, :city_id, :address, :status, :user_product_id)
   end
 
 end

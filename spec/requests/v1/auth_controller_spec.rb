@@ -114,4 +114,52 @@ describe V1::AuthController, type: :request do
       end
     end
   end
+
+  describe "POST /mobile_register" do
+    let(:city) { City.make!(:with_country) }
+    let(:committee) { Committee.make! }
+
+    let(:valid_mobile_params) do
+      {
+        user: { password: "FAMG12345678", email: "test_email@gmail.com" },
+        # profile: { first_name: "Armando", last_name: "Mendoza", born: "1980-08-21", residence_city_id: city.id },
+        experience: { start_date: "01-01-1995", end_date: "01-01-1996", country_id: city.country.id, committee_id: committee.id }
+      }
+
+    end
+
+    let(:invalid_mobile_params) do
+      {
+        user: { password: "12345678", email: "test_email@gmail.com" },
+        # profile: { first_name: "Armando", last_name: "Mendoza", born: "2006-08-26", residence_city_id: city.id },
+        experience: { start_date: "01-01-1995", end_date: "01-01-1996", country_id: city.country.id, committee_id: committee.id }
+      }
+    end
+
+    context "with valid attributes" do
+      it "create a user" do
+        expect {
+          post mobile_register_path, valid_mobile_params, header
+        }.to change(User, :count).by(1)
+        expect(response.status).to eq 201
+        expect(json['email']).to eq("test_email@gmail.com")
+        user = User.last
+        # expect(user.profile.last_name).to eq("Mendoza")
+        # expect(user.profile.residence_country).to eq(city.country)
+        experience = user.profile.experiences.last
+        expect(experience.exp_type).to eq(1)
+        expect(experience.committee).to eq(committee)
+      end
+    end
+
+    context "with invalid attributes" do
+      it "return the errors in format json" do
+        expect {
+          post mobile_register_path, invalid_mobile_params, header
+        }.to change(User, :count).by(0)
+        expect(json).to eq( {"errors"=>[["Password must be a combination of numbers and letters"]]} )
+        expect(response.status).to eq 422
+      end
+    end
+  end
 end

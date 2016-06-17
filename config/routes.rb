@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     post '/oauth_sign_in', to: 'auth#oauth_sign_in', as: :oauth_sign_in
     post '/register', to: 'auth#register', as: :register
     post '/oauth_register', to: 'auth#oauth_register', as: :oauth_register
+    post '/mobile_register', to: 'auth#mobile_register', as: :mobile_register
 
     get '/public_profile/:slug', to: 'public_profiles#show'
 
@@ -35,7 +36,9 @@ Rails.application.routes.draw do
       post :activate
       post :identity_layer
       resource :profile, only: [:show, :update], controller: 'me/profiles'
-      resource :registration, only: [:show, :update], controller: 'me/registration'
+      resource :registration, only: [:show, :update], controller: 'me/registration' do
+        put :step, on: :member
+      end
       resources :posts, controller: 'me/posts'
 
       resources :friendships, except: :show, controller: 'me/friendships' do
@@ -242,16 +245,17 @@ Rails.application.routes.draw do
     resources :countries, only: [:index, :show] do
       get :cities, on: :member
       get :committees, on: :member
+      get :alumni, on: :member
       get :locations, on: :collection
     end
 
-    resources :cities, only: [:show]
+    resources :cities, only: [:index, :show]
 
     resources :committees, only: [:index]
     resources :sectors, only: [:index]
 
     resources :profiles, only: [:show, :update] do
-      post :cropping, on: :member, on: :member
+      post :cropping, on: :member
       resources :experiences, except: [:new, :edit], controller: 'profiles/experiences'
       resources :skills, except: [:show, :new, :edit, :update], controller: 'profiles/skills'
       resources :language_levels, except: [:show, :new, :edit], controller: 'profiles/language_levels'

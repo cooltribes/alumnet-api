@@ -13,12 +13,12 @@ class V1::Users::ProductsController < V1::BaseController
   def create
     @user_product = UserProduct.new(create_params)
     if @user_product.save
-      if @product.feature == "subscription"
+      if @user_product.feature == "subscription"
         if @user.show_onboarding
           @user.update(show_onboarding: false)
         end
-        UserMailer.subscription_purchase(@user_product).deliver_later
-      elsif @product.feature == "job_post"
+        UserMailer.subscription_purchase(@user_product).deliver_now
+      elsif @user_product.feature == "job_post"
         feature = Feature.find_by(key_name: 'job_post')
         if feature
           @user_product.update(feature_id: feature.id)
@@ -105,7 +105,7 @@ class V1::Users::ProductsController < V1::BaseController
     end
 
     def create_params
-      params.permit(:user_id, :product_id, :status, :start_date, :end_date, :quantity, :transaction_type, :created_at, :updated_at)
+      params.permit(:user_id, :product_id, :status, :start_date, :end_date, :quantity, :transaction_type, :created_at, :updated_at, :feature)
     end
 
     def update_params

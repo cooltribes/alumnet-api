@@ -74,7 +74,7 @@ class V1::MeController < V1::BaseController
   end
 
   def messages
-    @receipts = @user.receipts.messages_receipts.limit(6)
+    @receipts = @user.messages_with_includes.limit(6)
     render "v1/me/receipts/index", status: :ok
   end
 
