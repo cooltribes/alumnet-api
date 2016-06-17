@@ -114,7 +114,8 @@ class Notification
     NotificationDetail.friendship_request(notfy, user)
     preference = friend.email_preferences.find_by(name: 'friendship')
     if not(preference.present?) || (preference.present? && preference.value == 0)
-      UserMailer.user_request_friendship(user, friend).deliver_later
+      mailer = GeneralMailer.new
+      mailer.user_request_friendship(user, friend)
     end
   end
 
@@ -128,7 +129,9 @@ class Notification
     NotificationDetail.friendship_accepted(notfy, friend)
     preference = user.email_preferences.find_by(name: 'friendship_accepted')
     if not(preference.present?) || (preference.present? && preference.value == 0)
-      UserMailer.friend_accept_friendship(user, friend).deliver_later
+      mailer = GeneralMailer.new
+      mailer.friend_accept_friendship(user, friend)
+      #UserMailer.friend_accept_friendship(user, friend).deliver_later
     end
   end
 
