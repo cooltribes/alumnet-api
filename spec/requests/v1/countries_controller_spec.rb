@@ -49,4 +49,13 @@ describe V1::CountriesController, type: :request do
       expect(json.count).to eq(country.committees.count + 1) #the other committee
     end
   end
+
+  describe "GET /countries/:id/alumni" do
+    it "return the number of alumni of country and region" do
+      country = Country.make!
+      get alumni_country_path(country), {}, basic_header(user.auth_token)
+      expect(response.status).to eq 200
+      # expect(json).to eq("")
+    end
+  end
 end
