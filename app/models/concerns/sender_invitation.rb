@@ -23,7 +23,9 @@ class SenderInvitation
       if is_valid_contact_email?(contact[:email])
         @count = count + 1
         invitation = Invitation.find_or_create_by(user: @sender, guest_email: contact[:email])
-        UserMailer.invitation_to_alumnet(contact[:email], contact[:name], @sender, invitation.token).deliver_later
+        #UserMailer.invitation_to_alumnet(contact[:email], contact[:name], @sender, invitation.token).deliver_later
+        mailer = GeneralMailer.new
+        mailer.invitation_to_alumnet(contact[:email], contact[:name], @sender, invitation.token)
       end
     end
   end
