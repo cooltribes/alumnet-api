@@ -45,7 +45,7 @@ class GeneralMailer
 
 			last_experience = ''
 			last_experience = suggested_user.last_experience.name if suggested_user.last_experience.present?
-			last_experience += " at " + suggested_user.last_experience.organization_name if suggested_user.last_experience.present? && suggested_user.last_experience.organization_name != ''
+			last_experience += " at " + suggested_user.last_experience.organization_name if suggested_user.last_experience.present? && suggested_user.last_experience.organization_name.present?
 
 			#email html
 			suggested_friends += "<div style='background-color: #f3f3f5; padding: 20px; width: 550px; margin: 0 auto; text-align: center;'>"
@@ -94,11 +94,11 @@ class GeneralMailer
 			"view_content_link"=>nil,
 			"to"=>
 			  [{"type"=>"to",
-			      "email"=>"#{user.email}",
-			      "name"=>"#{user.name}"}],
+			      "email"=>"#{friend.email}",
+			      "name"=>"#{friend.name}"}],
 			"from_name"=>"Aiesec Alumni International",
 			"tracking_domain"=>nil,
-			"subject"=>"#{friend.name} accepted your friend request",
+			"subject"=>"#{user.name} accepted your friend request",
 			"signing_domain"=>nil,
 			"auto_html"=>true,
 			"track_opens"=>true,
