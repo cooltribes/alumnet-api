@@ -130,7 +130,7 @@ class GeneralMailer
 
 		last_experience = ''
 		last_experience = user.last_experience.name if user.last_experience.present?
-		last_experience += " at " + user.last_experience.organization_name if user.last_experience.present? && user.last_experience.organization_name != ''
+		last_experience += " at " + user.last_experience.organization_name if user.last_experience.present? && user.last_experience.organization_name.present?
 
 		template_name = "USR005_friendship_invitation"
     template_content = [
@@ -187,11 +187,12 @@ class GeneralMailer
 		  nil
 		end
 
-		template_name = "invitation_to_alumnet"
+		template_name = "USR039_invitation_to_alumnet"
     template_content = [
     	{"name"=>"alumnet_button", "content"=>"<a href='#{Settings.ui_endpoint}' style='color: #FFF; border: 1px solid #FFF; padding: 10px; text-decoration: none; font-family: sans-serif; font-size: 12px;'>GO TO ALUMNET</a>"},
     	{"name"=>"user_name", "content"=>user.name},
-    	{"name"=>"reconnect_link", "content"=>"<a href='#{Settings.ui_endpoint}/home/?invitation_token=#{token}' style='color: #FFF; padding: 15px 40px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>RECONNECT WITH AIESEC ALUMNI</a>"}
+    	{"name"=>"reconnect_link", "content"=>"<a href='#{Settings.ui_endpoint}/home/?invitation_token=#{token}' style='color: #FFF; padding: 15px 40px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>RECONNECT WITH AIESEC ALUMNI</a>"},
+    	{"name"=>"reconnect_link_footer", "content"=>"<a href='#{Settings.ui_endpoint}/home/?invitation_token=#{token}' style='color: #FFF; padding: 15px 40px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>REGISTER</a>"}
     ]
 
     message = {
