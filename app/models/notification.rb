@@ -190,7 +190,9 @@ class Notification
     notification.recipients.each do |recipient|
       preference = recipient.email_preferences.find_by(name: 'approval')
       if not(preference.present?) || (preference.present? && preference.value == 0)
-        UserMailer.user_request_approval(recipient, user).deliver_later
+        mailer = GeneralMailer.new
+        mailer.user_request_approval(recipient, user)
+        #UserMailer.user_request_approval(recipient, user).deliver_later
       end
     end
     NotificationDetail.notify_approval_request_to_user(notfy, user)

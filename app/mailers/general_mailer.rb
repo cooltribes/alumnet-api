@@ -114,7 +114,6 @@ class GeneralMailer
 	    # Mandrill errors are thrown as exceptions
 	    puts "A mandrill error occurred: #{e.class} - #{e.message}"
 	  end
-
 	end
 
 	def user_request_friendship(user, friend)
@@ -210,6 +209,64 @@ class GeneralMailer
 			"from_name"=>"Aiesec Alumni International",
 			"tracking_domain"=>nil,
 			"subject"=>"You’re invited to join AIESEC AlumNet",
+			"signing_domain"=>nil,
+			"auto_html"=>true,
+			"track_opens"=>true,
+			"from_email"=>"alumnet-noreply@aiesec-alumni.org",
+			"auto_text"=>true,
+			"images"=>images,
+			"important"=>false}
+    async = false
+
+    begin
+    	result = @mandrill.messages.send_template template_name, template_content, message, async
+    rescue Mandrill::Error => e
+	    # Mandrill errors are thrown as exceptions
+	    puts "A mandrill error occurred: #{e.class} - #{e.message}"
+	  end
+	end
+
+	def user_request_approval(approver, requester)
+		images = []
+		user_avatar_url = URI.parse("#{requester.avatar.url}")
+		user_avatar_type = MIME::Types.type_for("#{requester.avatar.url}").first.try(:content_type)
+		begin
+			user_avatar = {"type"=>user_avatar_type, "name"=>"user_avatar", "content"=>Base64.encode64(open(user_avatar_url) { |io| io.read })}
+			images << user_avatar
+		rescue Net::ReadTimeout
+		  nil
+		end
+
+		last_experience = ''
+		last_experience = requester.last_experience.name if requester.last_experience.present?
+		last_experience += " at " + requester.last_experience.organization_name if requester.last_experience.present? && requester.last_experience.organization_name.present?
+
+		template_name = "USR002_request_approval"
+    template_content = [
+    	{"name"=>"friend_name", "content"=>approver.name},
+    	{"name"=>"user_name", "content"=>requester.name},
+    	{"name"=>"user_last_experience", "content"=>last_experience},
+    	{"name"=>"user_location", "content"=>requester.first_committee},
+    	{"name"=>"user_country", "content"=>requester.aiesec_location},
+    	{"name"=>"profile_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{requester.id}/about' style='color: #2099d0; padding: 14px 20px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #FFF; font-weight: 100; border: 1px solid #2099d0;'>VIEW PROFILE</a>"},
+    	{"name"=>"approve_link", "content"=>"<a href='#{Settings.ui_endpoint}/#alumni/approval' style='color: #FFF; padding: 15px 20px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>APPROVE REQUEST</a>"}
+    ]
+
+    message = {
+			"inline_css"=>true,
+			"subaccount"=>@subaccount,
+			"return_path_domain"=>nil,
+			"url_strip_qs"=>nil,
+			"track_clicks"=>true,
+			"headers"=>{"Reply-To"=>"info@aiesec-alumni.org"},
+			"view_content_link"=>nil,
+			"to"=>
+			  [{"type"=>"to",
+			      "email"=>"#{approver.email}",
+			      "name"=>"#{approver.name}"}],
+			"from_name"=>"Aiesec Alumni International",
+			"tracking_domain"=>nil,
+			"subject"=>"Is #{requester.name} an AIESEC Alum you know?",
 			"signing_domain"=>nil,
 			"auto_html"=>true,
 			"track_opens"=>true,
