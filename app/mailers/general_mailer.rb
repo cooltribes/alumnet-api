@@ -72,6 +72,10 @@ class GeneralMailer
 			suggested_friends += "</div>"
 		end
 
+		friend_last_experience = ''
+		friend_last_experience = friend.last_experience.name if friend.last_experience.present?
+		friend_last_experience += " at " + friend.last_experience.organization_name if friend.last_experience.present? && friend.last_experience.organization_name.present?
+
 		template_name = "USR006_accept_friendship_invitation"
     template_content = [
     	{"name"=>"alumnet_button", "content"=>"<a href='#{Settings.ui_endpoint}' style='color: #FFF; border: 1px solid #FFF; padding: 10px; text-decoration: none; font-family: sans-serif; font-size: 12px;'>GO TO ALUMNET</a>"},
@@ -81,7 +85,9 @@ class GeneralMailer
     	{"name"=>"user_he_she", "content"=>user_he_she},
     	{"name"=>"profile_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{user.id}/about' style='color: #FFF; padding: 12px 30px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>VIEW #{user.name} PROFILE</a>"},
     	{"name"=>"suggested_friends", "content"=>suggested_friends},
-    	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'> Manage Suscription </a>"}
+    	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'> Manage Suscription </a>"},
+    	{"name"=>"friend_last_experience", "content"=>friend_last_experience},
+    	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{friend.id}/settings' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'>"}
     ]
 
     message = {
@@ -131,6 +137,10 @@ class GeneralMailer
 		last_experience = user.last_experience.name if user.last_experience.present?
 		last_experience += " at " + user.last_experience.organization_name if user.last_experience.present? && user.last_experience.organization_name.present?
 
+		friend_last_experience = ''
+		friend_last_experience = friend.last_experience.name if friend.last_experience.present?
+		friend_last_experience += " at " + friend.last_experience.organization_name if friend.last_experience.present? && friend.last_experience.organization_name.present?
+
 		template_name = "USR005_friendship_invitation"
     template_content = [
     	{"name"=>"alumnet_button", "content"=>"<a href='#{Settings.ui_endpoint}' style='color: #FFF; border: 1px solid #FFF; padding: 10px; text-decoration: none; font-family: sans-serif; font-size: 12px;'>GO TO ALUMNET</a>"},
@@ -140,7 +150,9 @@ class GeneralMailer
     	{"name"=>"user_location", "content"=>user.first_committee},
     	{"name"=>"user_country", "content"=>user.aiesec_location},
     	{"name"=>"profile_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{user.id}/about' style='color: #2099d0; padding: 15px 20px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #FFF; font-weight: 100; border: 1px solid #2099d0;'>VIEW PROFILE</a>"},
-    	{"name"=>"accept_link", "content"=>"<a href='#{Settings.ui_endpoint}/#alumni/received' style='color: #FFF; padding: 15px 40px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>ACCEPT</a>"}
+    	{"name"=>"accept_link", "content"=>"<a href='#{Settings.ui_endpoint}/#alumni/received' style='color: #FFF; padding: 15px 40px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>ACCEPT</a>"},
+    	{"name"=>"friend_last_experience", "content"=>friend_last_experience},
+    	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{friend.id}/settings' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'>"}
     ]
 
     message = {
@@ -241,6 +253,10 @@ class GeneralMailer
 		last_experience = requester.last_experience.name if requester.last_experience.present?
 		last_experience += " at " + requester.last_experience.organization_name if requester.last_experience.present? && requester.last_experience.organization_name.present?
 
+		friend_last_experience = ''
+		friend_last_experience = friend.last_experience.name if friend.last_experience.present?
+		friend_last_experience += " at " + friend.last_experience.organization_name if friend.last_experience.present? && friend.last_experience.organization_name.present?
+
 		template_name = "USR002_request_approval"
     template_content = [
     	{"name"=>"friend_name", "content"=>approver.name},
@@ -249,7 +265,9 @@ class GeneralMailer
     	{"name"=>"user_location", "content"=>requester.first_committee},
     	{"name"=>"user_country", "content"=>requester.aiesec_location},
     	{"name"=>"profile_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{requester.id}/about' style='color: #2099d0; padding: 14px 20px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #FFF; font-weight: 100; border: 1px solid #2099d0;'>VIEW PROFILE</a>"},
-    	{"name"=>"approve_link", "content"=>"<a href='#{Settings.ui_endpoint}/#alumni/approval' style='color: #FFF; padding: 15px 20px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>APPROVE REQUEST</a>"}
+    	{"name"=>"approve_link", "content"=>"<a href='#{Settings.ui_endpoint}/#alumni/approval' style='color: #FFF; padding: 15px 20px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>APPROVE REQUEST</a>"},
+    	{"name"=>"friend_last_experience", "content"=>friend_last_experience},
+    	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{friend.id}/settings' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'>"}
     ]
 
     message = {
