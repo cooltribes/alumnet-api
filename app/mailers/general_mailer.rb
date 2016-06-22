@@ -45,7 +45,7 @@ class GeneralMailer
 
 			last_experience = ''
 			last_experience = suggested_user.last_experience.name if suggested_user.last_experience.present?
-			last_experience += " at " + suggested_user.last_experience.organization_name if suggested_user.last_experience.present? && suggested_user.last_experience.organization_name != ''
+			last_experience += " at " + suggested_user.last_experience.organization_name if suggested_user.last_experience.present? && suggested_user.last_experience.organization_name.present?
 
 			#email html
 			suggested_friends += "<div style='background-color: #f3f3f5; padding: 20px; width: 550px; margin: 0 auto; text-align: center;'>"
@@ -72,6 +72,10 @@ class GeneralMailer
 			suggested_friends += "</div>"
 		end
 
+		friend_last_experience = ''
+		friend_last_experience = friend.last_experience.name if friend.last_experience.present?
+		friend_last_experience += " at " + friend.last_experience.organization_name if friend.last_experience.present? && friend.last_experience.organization_name.present?
+
 		template_name = "USR006_accept_friendship_invitation"
     template_content = [
     	{"name"=>"alumnet_button", "content"=>"<a href='#{Settings.ui_endpoint}' style='color: #FFF; border: 1px solid #FFF; padding: 10px; text-decoration: none; font-family: sans-serif; font-size: 12px;'>GO TO ALUMNET</a>"},
@@ -81,7 +85,9 @@ class GeneralMailer
     	{"name"=>"user_he_she", "content"=>user_he_she},
     	{"name"=>"profile_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{user.id}/about' style='color: #FFF; padding: 12px 30px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>VIEW #{user.name} PROFILE</a>"},
     	{"name"=>"suggested_friends", "content"=>suggested_friends},
-    	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'> Manage Suscription </a>"}
+    	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'> Manage Suscription </a>"},
+    	{"name"=>"friend_last_experience", "content"=>friend_last_experience},
+    	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{friend.id}/settings' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'>"}
     ]
 
     message = {
@@ -94,11 +100,11 @@ class GeneralMailer
 			"view_content_link"=>nil,
 			"to"=>
 			  [{"type"=>"to",
-			      "email"=>"#{user.email}",
-			      "name"=>"#{user.name}"}],
+			      "email"=>"#{friend.email}",
+			      "name"=>"#{friend.name}"}],
 			"from_name"=>"Aiesec Alumni International",
 			"tracking_domain"=>nil,
-			"subject"=>"#{friend.name} accepted your friend request",
+			"subject"=>"#{user.name} accepted your friend request",
 			"signing_domain"=>nil,
 			"auto_html"=>true,
 			"track_opens"=>true,
@@ -114,7 +120,6 @@ class GeneralMailer
 	    # Mandrill errors are thrown as exceptions
 	    puts "A mandrill error occurred: #{e.class} - #{e.message}"
 	  end
-
 	end
 
 	def user_request_friendship(user, friend)
@@ -130,7 +135,11 @@ class GeneralMailer
 
 		last_experience = ''
 		last_experience = user.last_experience.name if user.last_experience.present?
-		last_experience += " at " + user.last_experience.organization_name if user.last_experience.present? && user.last_experience.organization_name != ''
+		last_experience += " at " + user.last_experience.organization_name if user.last_experience.present? && user.last_experience.organization_name.present?
+
+		friend_last_experience = ''
+		friend_last_experience = friend.last_experience.name if friend.last_experience.present?
+		friend_last_experience += " at " + friend.last_experience.organization_name if friend.last_experience.present? && friend.last_experience.organization_name.present?
 
 		template_name = "USR005_friendship_invitation"
     template_content = [
@@ -141,7 +150,9 @@ class GeneralMailer
     	{"name"=>"user_location", "content"=>user.first_committee},
     	{"name"=>"user_country", "content"=>user.aiesec_location},
     	{"name"=>"profile_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{user.id}/about' style='color: #2099d0; padding: 15px 20px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #FFF; font-weight: 100; border: 1px solid #2099d0;'>VIEW PROFILE</a>"},
-    	{"name"=>"accept_link", "content"=>"<a href='#{Settings.ui_endpoint}/#alumni/received' style='color: #FFF; padding: 15px 40px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>ACCEPT</a>"}
+    	{"name"=>"accept_link", "content"=>"<a href='#{Settings.ui_endpoint}/#alumni/received' style='color: #FFF; padding: 15px 40px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>ACCEPT</a>"},
+    	{"name"=>"friend_last_experience", "content"=>friend_last_experience},
+    	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{friend.id}/settings' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'>"}
     ]
 
     message = {
@@ -187,11 +198,12 @@ class GeneralMailer
 		  nil
 		end
 
-		template_name = "invitation_to_alumnet"
+		template_name = "USR039_invitation_to_alumnet"
     template_content = [
     	{"name"=>"alumnet_button", "content"=>"<a href='#{Settings.ui_endpoint}' style='color: #FFF; border: 1px solid #FFF; padding: 10px; text-decoration: none; font-family: sans-serif; font-size: 12px;'>GO TO ALUMNET</a>"},
     	{"name"=>"user_name", "content"=>user.name},
-    	{"name"=>"reconnect_link", "content"=>"<a href='#{Settings.ui_endpoint}/home/?invitation_token=#{token}' style='color: #FFF; padding: 15px 40px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>RECONNECT WITH AIESEC ALUMNI</a>"}
+    	{"name"=>"reconnect_link", "content"=>"<a href='#{Settings.ui_endpoint}/home/?invitation_token=#{token}' style='color: #FFF; padding: 15px 40px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>RECONNECT WITH AIESEC ALUMNI</a>"},
+    	{"name"=>"reconnect_link_footer", "content"=>"<a href='#{Settings.ui_endpoint}/home/?invitation_token=#{token}' style='color: #FFF; padding: 15px 40px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>REGISTER</a>"}
     ]
 
     message = {
@@ -209,6 +221,70 @@ class GeneralMailer
 			"from_name"=>"Aiesec Alumni International",
 			"tracking_domain"=>nil,
 			"subject"=>"You’re invited to join AIESEC AlumNet",
+			"signing_domain"=>nil,
+			"auto_html"=>true,
+			"track_opens"=>true,
+			"from_email"=>"alumnet-noreply@aiesec-alumni.org",
+			"auto_text"=>true,
+			"images"=>images,
+			"important"=>false}
+    async = false
+
+    begin
+    	result = @mandrill.messages.send_template template_name, template_content, message, async
+    rescue Mandrill::Error => e
+	    # Mandrill errors are thrown as exceptions
+	    puts "A mandrill error occurred: #{e.class} - #{e.message}"
+	  end
+	end
+
+	def user_request_approval(approver, requester)
+		images = []
+		user_avatar_url = URI.parse("#{requester.avatar.url}")
+		user_avatar_type = MIME::Types.type_for("#{requester.avatar.url}").first.try(:content_type)
+		begin
+			user_avatar = {"type"=>user_avatar_type, "name"=>"user_avatar", "content"=>Base64.encode64(open(user_avatar_url) { |io| io.read })}
+			images << user_avatar
+		rescue Net::ReadTimeout
+		  nil
+		end
+
+		last_experience = ''
+		last_experience = requester.last_experience.name if requester.last_experience.present?
+		last_experience += " at " + requester.last_experience.organization_name if requester.last_experience.present? && requester.last_experience.organization_name.present?
+
+		friend_last_experience = ''
+		friend_last_experience = friend.last_experience.name if friend.last_experience.present?
+		friend_last_experience += " at " + friend.last_experience.organization_name if friend.last_experience.present? && friend.last_experience.organization_name.present?
+
+		template_name = "USR002_request_approval"
+    template_content = [
+    	{"name"=>"friend_name", "content"=>approver.name},
+    	{"name"=>"user_name", "content"=>requester.name},
+    	{"name"=>"user_last_experience", "content"=>last_experience},
+    	{"name"=>"user_location", "content"=>requester.first_committee},
+    	{"name"=>"user_country", "content"=>requester.aiesec_location},
+    	{"name"=>"profile_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{requester.id}/about' style='color: #2099d0; padding: 14px 20px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #FFF; font-weight: 100; border: 1px solid #2099d0;'>VIEW PROFILE</a>"},
+    	{"name"=>"approve_link", "content"=>"<a href='#{Settings.ui_endpoint}/#alumni/approval' style='color: #FFF; padding: 15px 20px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>APPROVE REQUEST</a>"},
+    	{"name"=>"friend_last_experience", "content"=>friend_last_experience},
+    	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{friend.id}/settings' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'>"}
+    ]
+
+    message = {
+			"inline_css"=>true,
+			"subaccount"=>@subaccount,
+			"return_path_domain"=>nil,
+			"url_strip_qs"=>nil,
+			"track_clicks"=>true,
+			"headers"=>{"Reply-To"=>"info@aiesec-alumni.org"},
+			"view_content_link"=>nil,
+			"to"=>
+			  [{"type"=>"to",
+			      "email"=>"#{approver.email}",
+			      "name"=>"#{approver.name}"}],
+			"from_name"=>"Aiesec Alumni International",
+			"tracking_domain"=>nil,
+			"subject"=>"Is #{requester.name} an AIESEC Alum you know?",
 			"signing_domain"=>nil,
 			"auto_html"=>true,
 			"track_opens"=>true,
