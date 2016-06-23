@@ -1,3 +1,4 @@
+require 'mailchimp'
 class V1::Me::ApprovalController < V1::BaseController
   before_action :set_user
   before_action :set_and_check_approver, only: :create
@@ -50,6 +51,8 @@ class V1::Me::ApprovalController < V1::BaseController
       requester.activate!
       requester.save_profinda_profile
       requester.subscribe_to_mailchimp_list(@mc, Settings.mailchimp_general_list_id)
+      mailer = GeneralMailer.new
+      mailer.approval_request_accepted(@approval_request.approver, requester)
     end
 
     #Create a friendship between users
