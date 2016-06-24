@@ -176,6 +176,18 @@ class Group < ActiveRecord::Base
     memberships.exists?(user_id: user.id)
   end
 
+  def get_cover_type
+    MIME::Types.type_for(cover.card.url).first.try(:content_type)
+  end
+
+  def get_cover_base64
+    if Rails.env.development?
+      Base64.encode64(File.open(cover.card.path) { |io| io.read })
+    else
+      Base64.encode64(open(cover.card.url) { |io| io.read })
+    end
+  end
+
   def email_digest
     # test_emails = [
     #   'yroa@upsidecorp.ch', 'yondri@gmail.com', 'jmarquez@cooltribes.com', 'jmarquez@upsidecorp.ch', 'cmarquez@cooltribes.com', 
