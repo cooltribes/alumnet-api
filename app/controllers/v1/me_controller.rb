@@ -4,6 +4,11 @@ class V1::MeController < V1::BaseController
   def show
   end
 
+  def identity_layer
+    token = Layer::IdentityToken.new(@user.id, params[:nonce], (Time.now+(86400*14)))
+    render json: token
+  end
+
   def profinda_token
     if @user.profinda_uid.present?
       profinda_api = ProfindaApiClient.new(@user.email, @user.profinda_password)

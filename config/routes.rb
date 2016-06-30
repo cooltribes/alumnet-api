@@ -13,6 +13,10 @@ Rails.application.routes.draw do
   root 'home#index'
   get '/status', to: 'home#status'
 
+  namespace :webhooks do
+    post '/pusher', to: 'pusher#create'
+  end
+
   api_version(:module => "V1", :header => {:name => "Accept", :value => "application/vnd.alumnet+json;version=1"}) do
 
     post '/sign_in', to: 'auth#sign_in', as: :sign_in
@@ -34,6 +38,7 @@ Rails.application.routes.draw do
       get :profinda_token
       post :send_invitations
       post :activate
+      post :identity_layer
       resource :profile, only: [:show, :update], controller: 'me/profiles'
       resource :registration, only: [:show, :update], controller: 'me/registration' do
         put :step, on: :member

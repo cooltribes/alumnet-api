@@ -391,7 +391,7 @@ Product.blueprint do
   name { "Product #{sn}" }
   description { Faker::Lorem.sentence }
   status { 'active' }
-  price { 100 }
+  # price { 100 }
   product_type { 1 }
   quantity { 1 }
   feature { 'subscription' }
@@ -401,7 +401,7 @@ Product.blueprint(:lifetime_membership) do
   name { "Lifetime Membership" }
   description { Faker::Lorem.sentence }
   status { 'active' }
-  price { 100 }
+  # price { 100 }
   product_type { 0 }
   quantity { 0 }
   feature { 'subscription' }
@@ -411,7 +411,7 @@ Product.blueprint(:limit_membership) do
   name { "Membership" }
   description { Faker::Lorem.sentence }
   status { 'active' }
-  price { 50 }
+  # price { 50 }
   product_type { 1 }
   quantity { 0 }
   feature { 'subscription' }
