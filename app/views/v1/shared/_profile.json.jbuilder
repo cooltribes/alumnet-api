@@ -37,3 +37,4 @@ end
 
 json.role profile.user.role
 json.created_by_admin profile.user.created_by_admin
+json.status current_user.status

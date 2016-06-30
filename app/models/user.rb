@@ -153,6 +153,25 @@ class User < ActiveRecord::Base
     profile.last_experience
   end
 
+  def full_last_experience
+    last_experience = ''
+    last_experience = self.last_experience.name if self.last_experience.present?
+    last_experience += " at " + self.last_experience.organization_name if self.last_experience.present? && self.last_experience.organization_name.present?
+    last_experience
+  end
+
+  def get_avatar_type
+    MIME::Types.type_for(avatar.url).first.try(:content_type)
+  end
+
+  def get_avatar_base64
+    if Rails.env.development?
+      Base64.encode64(File.open(self.avatar.path) { |io| io.read }) if self.avatar.path.present?
+    else
+      Base64.encode64(open(self.avatar.url) { |io| io.read })
+    end
+  end
+
   def send_password_reset
     self.password_reset_token = generate_token_for(:password_reset_token)
     self.password_reset_sent_at = Time.current
@@ -294,7 +313,7 @@ class User < ActiveRecord::Base
   def activate_in_alumnet
     active!
     join_to_initial_groups unless is_external?
-    UserMailer.welcome(self).deliver_later
+    #UserMailer.welcome(self).deliver_later
     touch(:active_at)
   end
 
