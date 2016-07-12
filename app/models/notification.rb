@@ -62,7 +62,6 @@ class Notification
   def self.notify_group_join_accepted_to_user(sender, group)
     return if sender.blank?
     notification = new(sender)
-    NotificationDetail.join_group_admins(notfy, sender, group)
     subject = "You were accepted to join the group #{group.name}"
     body = "Your request to join the group #{group.name} was accepted"
     notfy = notification.send_notification(subject, body, group, sender)
