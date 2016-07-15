@@ -1,5 +1,5 @@
 json.(@user, :id, :name, :member, :email, :unread_messages_count, :unread_notifications_count, :unread_friendship_notifications_count,
-  :remaining_job_posts, :show_onboarding)
+  :remaining_job_posts, :show_onboarding, :online)
 
 json.profinda_api_token nil
 json.status @user.get_status_info

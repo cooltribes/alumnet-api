@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.5'
+gem 'rails', '4.2.6'
 gem 'rails-api', '0.4.0'
 gem 'pg', '0.18.2'
 gem 'jbuilder', '2.3.1'
@@ -34,6 +34,7 @@ gem 'rollbar', '~> 2.11.4'
 gem 'whenever', :require => false
 gem 'newrelic_rpm'
 gem 'mandrill-api'
+gem 'layer-identity_token', git: 'https://github.com/dreimannzelt/layer-identity_token.git'
 
 group :development do
   gem 'spring'
