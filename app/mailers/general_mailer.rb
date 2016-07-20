@@ -368,8 +368,8 @@ class GeneralMailer
 			first_five_table += "</th>"
 			first_five_table += "</tr>"
 
-			mime_type = MIME::Types.type_for("#{notification.sender.avatar.medium.url}").first.try(:content_type)
-			user_avatar = {"type"=>mime_type, "name"=>"user_avatar_#{notification.sender.id}", "content"=>Base64.encode64(open("#{notification.sender.avatar.medium.url}") { |io| io.read })}
+			mime_type = MIME::Types.type_for("#{notification.sender.avatar.url}").first.try(:content_type)
+			user_avatar = {"type"=>mime_type, "name"=>"user_avatar_#{notification.sender.id}", "content"=>Base64.encode64(open("#{notification.sender.avatar.url}") { |io| io.read })}
 			images << user_avatar
 		end
 
