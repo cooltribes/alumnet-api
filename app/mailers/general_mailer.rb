@@ -368,9 +368,7 @@ class GeneralMailer
 			first_five_table += "</th>"
 			first_five_table += "</tr>"
 
-			mime_type = MIME::Types.type_for("#{notification.sender.avatar.url}").first.try(:content_type)
-			user_avatar = {"type"=>mime_type, "name"=>"user_avatar_#{notification.sender.id}", "content"=>Base64.encode64(open("#{notification.sender.avatar.url}") { |io| io.read })}
-			images << user_avatar
+			images << {"type"=>notification.sender.get_avatar_type, "name"=>"user_avatar_#{notification.sender.id}", "content"=>notification.sender.get_avatar_base64}
 		end
 
 		remaining_users_content = ''
@@ -385,9 +383,7 @@ class GeneralMailer
 			remaining_users_content += "<div style='margin: 20px auto; text-align: center;'>"
 			notifications_array.each do |notification|
 				remaining_users_content += "<a href='#{Settings.ui_endpoint}/#admin/users/#{notification.sender.id}'><img src='cid:user_avatar_#{notification.sender.id}' alt=' height='40px' width='40px' style='border-radius: 50%;'></a>"
-				mime_type = MIME::Types.type_for("#{notification.sender.avatar.medium.url}").first.try(:content_type)
-				user_avatar = {"type"=>mime_type, "name"=>"user_avatar_#{notification.sender.id}", "content"=>Base64.encode64(open("#{notification.sender.avatar.medium.url}") { |io| io.read })}
-				images << user_avatar
+				images << {"type"=>notification.sender.get_avatar_type, "name"=>"user_avatar_#{notification.sender.id}", "content"=>notification.sender.get_avatar_base64}
 			end
 			remaining_users_content += "</div>"
 			remaining_users_content += "<div>"
@@ -423,6 +419,72 @@ class GeneralMailer
 			"from_name"=>"Aiesec Alumni International",
 			"tracking_domain"=>nil,
 			"subject"=>"Alumnet - New user registered",
+			"signing_domain"=>nil,
+			"auto_html"=>true,
+			"track_opens"=>true,
+			"from_email"=>"alumnet-noreply@aiesec-alumni.org",
+			"auto_text"=>true,
+			"images"=>images,
+			"important"=>false}
+    async = false
+    result = @mandrill.messages.send_template template_name, template_content, message, async
+    
+		rescue Mandrill::Error => e
+	    # Mandrill errors are thrown as exceptions
+	    puts "A mandrill error occurred: #{e.class} - #{e.message}"
+	    # A mandrill error occurred: Mandrill::UnknownSubaccountError - No subaccount exists with the id 'customer-123'
+    raise
+	end
+
+	def registration_approvals_needed(user, users_list)
+		suggested_users = ''
+		images = []
+		users_list.each do |suggested_user|
+			suggested_users += "<tr>"
+			suggested_users += "<th style='width: 14%; text-align: left;'>"
+			suggested_users += "<img src='cid:user_avatar_#{suggested_user.id}' alt=' height='80px' width='80px' style='border-radius: 50%;'>"
+			suggested_users += "</th>"
+			suggested_users += "<th style='text-align: left; width: 40%;'>"
+			suggested_users += "<span style='color: #464646; font-weight: 400; font-family: sans-serif; font-size: 15px;'>#{suggested_user.name.upcase}</span><br>"
+			suggested_users += "<span style='color: #6e6e6e; font-family: sans-serif; font-weight: 100; font-size: 15px;'>"
+			suggested_users += "<span>#{suggested_user.full_last_experience}</span> <br>"
+			suggested_users += "<span>#{suggested_user.first_committee}</span> <br>"
+			suggested_users += "<span>#{suggested_user.aiesec_location}</span>"
+			suggested_users += "</span>"
+			suggested_users += "</th>"
+			suggested_users += "<th style='text-align: right; width: 40%;'>"
+			suggested_users += "<a href='#{Settings.ui_endpoint}/#registration/completed' style='color: #FFF; padding: 10px 30px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>REQUEST APPROVAL</a>"
+			suggested_users += "</th>"
+			suggested_users += "</tr>"
+
+			images << {"type"=>suggested_user.get_avatar_type, "name"=>"user_avatar_#{suggested_user.id}", "content"=>suggested_user.get_avatar_base64}
+		end
+
+		template_name = "USR038_approvals_needed"
+    template_content = [
+    	{"name"=>"alumnet_button", "content"=>"<a href='#{Settings.ui_endpoint}' style='color: #FFF; border: 1px solid #FFF; padding: 10px; text-decoration: none; font-family: sans-serif; font-size: 12px;'>GO TO ALUMNET</a>"},
+    	{"name"=>"user_name", "content"=>"#{user.name}"},
+    	{"name"=>"user_last_experience", "content"=>user.full_last_experience},
+    	{"name"=>"suggested_users", "content"=>suggested_users},
+    	{"name"=>"request_from_admin_link", "content"=>"<a href='#{Settings.ui_endpoint}/#registration/completed' style='color: #FFF; padding: 10px 30px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>Request from admin</a>"},
+    	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{user.id}/settings' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'>Manage Suscription</a>"}
+    ]
+
+    message = {
+			"inline_css"=>true,
+			"subaccount"=>@subaccount,
+			"return_path_domain"=>nil,
+			"url_strip_qs"=>nil,
+			"track_clicks"=>nil,
+			"headers"=>{"Reply-To"=>"info@aiesec-alumni.org"},
+			"view_content_link"=>nil,
+			"to"=>
+			  [{"type"=>"to",
+			      "email"=>"#{user.email}",
+			      "name"=>"#{user.name}"}],
+			"from_name"=>"Aiesec Alumni International",
+			"tracking_domain"=>nil,
+			"subject"=>"Alumnet - You need 3 approvals to complete registration",
 			"signing_domain"=>nil,
 			"auto_html"=>true,
 			"track_opens"=>true,
