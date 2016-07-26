@@ -1,0 +1,20 @@
+<% unless suggested_users.empty? %>
+	<% suggested_users.each do |suggested_user| %>
+		<tr>
+			<th style='width: 14%; text-align: left;'>
+				<img src='cid:user_avatar_<%= suggested_user.id %>' alt='' height='80px' width='80px' style='border-radius: 50%;'>
+			</th>
+			<th style='text-align: left; width: 40%;'>
+				<span style='color: #464646; font-weight: 400; font-family: sans-serif; font-size: 15px;'><%= suggested_user.name.upcase %></span><br>
+				<span style='color: #6e6e6e; font-family: sans-serif; font-weight: 100; font-size: 15px;'>
+					<span><%= suggested_user.full_last_experience %></span> <br>
+					<span><%= suggested_user.first_committee %></span> <br>
+					<span><%= suggested_user.aiesec_location %></span>
+				</span>
+			</th>
+			<th style='text-align: right; width: 40%;'>
+				<a href='<%= Settings.ui_endpoint %>/#registration/completed' style='color: #FFF; padding: 10px 30px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>REQUEST APPROVAL</a>
+			</th>
+		</tr>
+	<% end %>
+<% end %>

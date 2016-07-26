@@ -1,0 +1,25 @@
+<% unless suggested_users.empty? %>
+	<div style='background-color: #f3f3f5; padding: 20px; width: 550px; margin: 0 auto; text-align: center;'>
+		<span style='color: #464646; font-weight: 400; font-family: sans-serif; font-size: 18px;'>Suggested Friends</span><br><br>
+		<table style='margin-top: 25px; margin-bottom: 35px;'>
+			<% suggested_users.each do |suggested_user| %>
+				<tr>
+					<th style='width: 14%; text-align: left;'>
+						<span><img src='cid:suggested_user_avatar_<%= suggested_user.id %>' alt='' height='80px' width='80px' style='border-radius: 50%;'></span>
+					</th>
+					<th style='text-align: left; width: 50%;'>
+						<span style='color: #464646; font-weight: 400; font-family: sans-serif; font-size: 15px;'><%= suggested_user.name %></span><br>
+						<span style='color: #6e6e6e; font-family: sans-serif; font-weight: 100; font-size: 15px;'>
+							<%= suggested_user.full_last_experience %> <br>
+							<%= suggested_user.first_committee %> <br>
+							<%= suggested_user.aiesec_location %>
+						</span>
+					</th>
+					<th style='text-align: right; width: 30%;'>
+						<a href='<%= Settings.ui_endpoint %>/#users/<%= suggested_user.id %>/about' style='color: #2099d0; padding: 10px 30px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #f3f3f5; font-weight: 100; border: 1px solid #2099d0;'>VIEW PROFILE</a>
+					</th>
+				</tr>
+			<% end %>
+		</table>
+	</div>
+<% end %>

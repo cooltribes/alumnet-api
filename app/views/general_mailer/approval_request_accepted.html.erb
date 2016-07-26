@@ -1,8 +1,8 @@
-<% if @suggested_users.present? %>
+<% if suggested_users.present? %>
 	<span style='color: #464646; font-weight: 400; font-family: sans-serif; font-size: 18px;'>Suggested Friends</span><br><br>
 	<table>
 		<tr>
-			<% @suggested_users.each do |suggested_user| %>
+			<% suggested_users.each do |suggested_user| %>
 				<th style='width: 33%;'>
 					<div style='margin-bottom: 35px;'>
 						<table>
@@ -24,11 +24,11 @@
 	</table>
 <% end %>
 
-<% if @suggested_groups.present? %>
+<% if suggested_groups.present? %>
 	<span style='color: #464646; font-weight: 400; font-family: sans-serif; font-size: 18px;'>Suggested Groups</span><br><br>
 	<table>
 		<tr>
-			<% @suggested_groups.each do |suggested_group| %>
+			<% suggested_groups.each do |suggested_group| %>
 				<th style='width: 14%; text-align: left;'>
 					<span><img src='cid:suggested_group_cover_'<%= suggested_group.id %> alt='' height='80px' width='80px'></span>
 					<th>

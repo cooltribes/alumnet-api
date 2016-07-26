@@ -51,46 +51,20 @@ class GeneralMailer
 		images = []
 		images << {"type"=>user.get_avatar_type, "name"=>"user_avatar", "content"=>user.get_avatar_base64}
 
-		# define user treatment based on gender
-		user_his_her = 'his' 
-		if user.profile.gender == 'F'
-			user_his_her = 'her'
-		end
+		subject = "#{user.name} accepted your friend request"
+		suggested_users = friend.suggested_users(3)
 
-		user_he_she = 'he\'s' 
-		if user.profile.gender == 'F'
-			user_he_she = 'she\'s'
-		end
+		main_content_html = @view.render(
+			file: 'friend_accept_friendship.html.erb', 
+			locals: { 
+				suggested_users: suggested_users
+			}
+		)
 
-		# build suggested friends if any suggestions
-		suggested_friends = ''
-		if friend.suggested_users.present?
-			suggested_user = friend.suggested_users.first
-			images << {"type"=>suggested_user.get_avatar_type, "name"=>"suggested_user_avatar", "content"=>suggested_user.get_avatar_base64}
-
-			#email html
-			suggested_friends += "<div style='background-color: #f3f3f5; padding: 20px; width: 550px; margin: 0 auto; text-align: center;'>"
-			suggested_friends += "<span style='color: #464646; font-weight: 400; font-family: sans-serif; font-size: 18px;'>Suggested Friends</span><br><br>"
-			suggested_friends += "<span style='color: #6e6e6e; font-weight: 100; font-family: sans-serif; font-size: 15px;'>Lorem ipsum dolor sit amet, consectetur adipiscing elit</span>"
-			suggested_friends += "<table style='margin-top: 25px; margin-bottom: 35px;'>"
-			suggested_friends += "<tr>"
-			suggested_friends += "<th style='width: 14%; text-align: left;'>"
-			suggested_friends += "<span><img src='cid:suggested_user_avatar' alt='' height='80px' width='80px' style='border-radius: 50%;'></span>"
-			suggested_friends += "</th>"
-			suggested_friends += "<th style='text-align: left; width: 50%;'>"
-			suggested_friends += "<span style='color: #464646; font-weight: 400; font-family: sans-serif; font-size: 15px;'>#{suggested_user.name}</span><br>"
-			suggested_friends += "<span style='color: #6e6e6e; font-family: sans-serif; font-weight: 100; font-size: 15px;'>"
-			suggested_friends += "#{suggested_user.full_last_experience} <br>"
-			suggested_friends += "#{suggested_user.first_committee} <br>"
-			suggested_friends += "#{suggested_user.aiesec_location}"
-			suggested_friends += "</span>"
-			suggested_friends += "</th>"
-			suggested_friends += "<th style='text-align: right; width: 30%;'>"
-			suggested_friends += "<a href='#{Settings.ui_endpoint}/#users/#{suggested_user.id}/about' style='color: #2099d0; padding: 10px 30px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #f3f3f5; font-weight: 100; border: 1px solid #2099d0;'>VIEW PROFILE</a>"
-			suggested_friends += "</th>"
-			suggested_friends += "</tr>"
-			suggested_friends += "</table>"
-			suggested_friends += "</div>"
+		if suggested_users.present?
+			suggested_users.each do |suggested_user|
+				images << {"type"=>suggested_user.get_avatar_type, "name"=>"suggested_user_avatar_#{suggested_user.id}", "content"=>suggested_user.get_avatar_base64}
+			end
 		end
 
 		template_name = "USR006_accept_friendship_invitation"
@@ -98,50 +72,23 @@ class GeneralMailer
     	{"name"=>"alumnet_button", "content"=>"<a href='#{Settings.ui_endpoint}' style='color: #FFF; border: 1px solid #FFF; padding: 10px; text-decoration: none; font-family: sans-serif; font-size: 12px;'>GO TO ALUMNET</a>"},
     	{"name"=>"friend_name", "content"=>friend.name},
     	{"name"=>"user_name", "content"=>user.name},
-    	{"name"=>"user_his_her", "content"=>user_his_her},
-    	{"name"=>"user_he_she", "content"=>user_he_she},
-    	{"name"=>"profile_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{user.id}/about' style='color: #FFF; padding: 12px 30px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>VIEW #{user.name} PROFILE</a>"},
-    	{"name"=>"suggested_friends", "content"=>suggested_friends},
+    	{"name"=>"user_his_her", "content"=>user.profile.pronoun},
+    	{"name"=>"user_he_she", "content"=>user.he_or_she},
+    	{"name"=>"profile_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{user.id}/about' style='color: #FFF; padding: 12px 30px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>VIEW #{user.profile.first_name.upcase}\'S PROFILE</a>"},
+    	{"name"=>"suggested_friends", "content"=>main_content_html},
     	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'> Manage Suscription </a>"},
     	{"name"=>"friend_last_experience", "content"=>friend.full_last_experience},
     	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{friend.id}/settings' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'>Manage Suscription</a>"}
     ]
 
-    message = {
-			"inline_css"=>true,
-			"subaccount"=>@subaccount,
-			"return_path_domain"=>nil,
-			"url_strip_qs"=>nil,
-			"track_clicks"=>nil,
-			"headers"=>{"Reply-To"=>"info@aiesec-alumni.org"},
-			"view_content_link"=>nil,
-			"to"=>
-			  [{"type"=>"to",
-			      "email"=>"#{friend.email}",
-			      "name"=>"#{friend.name}"}],
-			"from_name"=>"Aiesec Alumni International",
-			"tracking_domain"=>nil,
-			"subject"=>"#{user.name} accepted your friend request",
-			"signing_domain"=>nil,
-			"auto_html"=>true,
-			"track_opens"=>true,
-			"from_email"=>"alumnet-noreply@aiesec-alumni.org",
-			"auto_text"=>true,
-			"images"=>images,
-			"important"=>false}
-    async = false
-
-    begin
-    	result = @mandrill.messages.send_template template_name, template_content, message, async
-    rescue Mandrill::Error => e
-	    # Mandrill errors are thrown as exceptions
-	    puts "A mandrill error occurred: #{e.class} - #{e.message}"
-	  end
+    send_email(friend.email, friend.name, subject, images, template_name, template_content)
 	end
 
 	def invitation_to_alumnet(email, guest_name, user, token)
 		images = []
 		images << {"type"=>user.get_avatar_type, "name"=>"user_avatar", "content"=>user.get_avatar_base64}
+
+		subject = "You’re invited to join AIESEC AlumNet"
 
 		template_name = "USR039_invitation_to_alumnet"
     template_content = [
@@ -151,36 +98,7 @@ class GeneralMailer
     	{"name"=>"reconnect_link_footer", "content"=>"<a href='#{Settings.ui_endpoint}/home/?invitation_token=#{token}' style='color: #FFF; padding: 15px 40px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>REGISTER</a>"}
     ]
 
-    message = {
-			"inline_css"=>true,
-			"subaccount"=>@subaccount,
-			"return_path_domain"=>nil,
-			"url_strip_qs"=>nil,
-			"track_clicks"=>true,
-			"headers"=>{"Reply-To"=>"info@aiesec-alumni.org"},
-			"view_content_link"=>nil,
-			"to"=>
-			  [{"type"=>"to",
-			      "email"=>"#{email}",
-			      "name"=>"#{guest_name}"}],
-			"from_name"=>"Aiesec Alumni International",
-			"tracking_domain"=>nil,
-			"subject"=>"You’re invited to join AIESEC AlumNet",
-			"signing_domain"=>nil,
-			"auto_html"=>true,
-			"track_opens"=>true,
-			"from_email"=>"alumnet-noreply@aiesec-alumni.org",
-			"auto_text"=>true,
-			"images"=>images,
-			"important"=>false}
-    async = false
-
-    begin
-    	result = @mandrill.messages.send_template template_name, template_content, message, async
-    rescue Mandrill::Error => e
-	    # Mandrill errors are thrown as exceptions
-	    puts "A mandrill error occurred: #{e.class} - #{e.message}"
-	  end
+    send_email(email, guest_name, subject, images, template_name, template_content)
 	end
 
 	def user_request_approval(approver, requester)
@@ -208,6 +126,8 @@ class GeneralMailer
 		images = []
 		images << {"type"=>user.get_avatar_type, "name"=>"user_avatar", "content"=>user.get_avatar_base64}
 
+		subject = "New friendship request from #{user.name}"
+
 		template_name = "USR005_friendship_invitation"
     template_content = [
     	{"name"=>"alumnet_button", "content"=>"<a href='#{Settings.ui_endpoint}' style='color: #FFF; border: 1px solid #FFF; padding: 10px; text-decoration: none; font-family: sans-serif; font-size: 12px;'>GO TO ALUMNET</a>"},
@@ -222,36 +142,7 @@ class GeneralMailer
     	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{friend.id}/settings' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'>Manage Suscription</a>"}
     ]
 
-    message = {
-			"inline_css"=>true,
-			"subaccount"=>@subaccount,
-			"return_path_domain"=>nil,
-			"url_strip_qs"=>nil,
-			"track_clicks"=>nil,
-			"headers"=>{"Reply-To"=>"info@aiesec-alumni.org"},
-			"view_content_link"=>nil,
-			"to"=>
-			  [{"type"=>"to",
-			      "email"=>"#{friend.email}",
-			      "name"=>"#{friend.name}"}],
-			"from_name"=>"Aiesec Alumni International",
-			"tracking_domain"=>nil,
-			"subject"=>"New friendship request from #{user.name}",
-			"signing_domain"=>nil,
-			"auto_html"=>true,
-			"track_opens"=>true,
-			"from_email"=>"alumnet-noreply@aiesec-alumni.org",
-			"auto_text"=>true,
-			"images"=>images,
-			"important"=>false}
-    async = false
-
-    begin
-    	result = @mandrill.messages.send_template template_name, template_content, message, async
-    rescue Mandrill::Error => e
-	    # Mandrill errors are thrown as exceptions
-	    puts "A mandrill error occurred: #{e.class} - #{e.message}"
-	  end
+    send_email(friend.email, friend.name, subject, images, template_name, template_content)
 	end
 
 	def new_users_digest(admin)
@@ -345,26 +236,17 @@ class GeneralMailer
 	end
 
 	def registration_approvals_needed(user, users_list)
-		suggested_users = ''
 		images = []
-		users_list.each do |suggested_user|
-			suggested_users += "<tr>"
-			suggested_users += "<th style='width: 14%; text-align: left;'>"
-			suggested_users += "<img src='cid:user_avatar_#{suggested_user.id}' alt=' height='80px' width='80px' style='border-radius: 50%;'>"
-			suggested_users += "</th>"
-			suggested_users += "<th style='text-align: left; width: 40%;'>"
-			suggested_users += "<span style='color: #464646; font-weight: 400; font-family: sans-serif; font-size: 15px;'>#{suggested_user.name.upcase}</span><br>"
-			suggested_users += "<span style='color: #6e6e6e; font-family: sans-serif; font-weight: 100; font-size: 15px;'>"
-			suggested_users += "<span>#{suggested_user.full_last_experience}</span> <br>"
-			suggested_users += "<span>#{suggested_user.first_committee}</span> <br>"
-			suggested_users += "<span>#{suggested_user.aiesec_location}</span>"
-			suggested_users += "</span>"
-			suggested_users += "</th>"
-			suggested_users += "<th style='text-align: right; width: 40%;'>"
-			suggested_users += "<a href='#{Settings.ui_endpoint}/#registration/completed' style='color: #FFF; padding: 10px 30px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>REQUEST APPROVAL</a>"
-			suggested_users += "</th>"
-			suggested_users += "</tr>"
+		subject = "Alumnet - You need 3 approvals to complete registration"
 
+		main_content_html = @view.render(
+			file: 'registration_approvals_needed.html.erb', 
+			locals: { 
+				suggested_users: users_list
+			}
+		)
+
+		users_list.each do |suggested_user|
 			images << {"type"=>suggested_user.get_avatar_type, "name"=>"user_avatar_#{suggested_user.id}", "content"=>suggested_user.get_avatar_base64}
 		end
 
@@ -373,41 +255,12 @@ class GeneralMailer
     	{"name"=>"alumnet_button", "content"=>"<a href='#{Settings.ui_endpoint}' style='color: #FFF; border: 1px solid #FFF; padding: 10px; text-decoration: none; font-family: sans-serif; font-size: 12px;'>GO TO ALUMNET</a>"},
     	{"name"=>"user_name", "content"=>"#{user.name}"},
     	{"name"=>"user_last_experience", "content"=>user.full_last_experience},
-    	{"name"=>"suggested_users", "content"=>suggested_users},
+    	{"name"=>"suggested_users", "content"=>main_content_html},
     	{"name"=>"request_from_admin_link", "content"=>"<a href='#{Settings.ui_endpoint}/#registration/completed' style='color: #FFF; padding: 10px 30px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>Request from admin</a>"},
     	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{user.id}/settings' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'>Manage Suscription</a>"}
     ]
 
-    message = {
-			"inline_css"=>true,
-			"subaccount"=>@subaccount,
-			"return_path_domain"=>nil,
-			"url_strip_qs"=>nil,
-			"track_clicks"=>nil,
-			"headers"=>{"Reply-To"=>"info@aiesec-alumni.org"},
-			"view_content_link"=>nil,
-			"to"=>
-			  [{"type"=>"to",
-			      "email"=>"#{user.email}",
-			      "name"=>"#{user.name}"}],
-			"from_name"=>"Aiesec Alumni International",
-			"tracking_domain"=>nil,
-			"subject"=>"Alumnet - You need 3 approvals to complete registration",
-			"signing_domain"=>nil,
-			"auto_html"=>true,
-			"track_opens"=>true,
-			"from_email"=>"alumnet-noreply@aiesec-alumni.org",
-			"auto_text"=>true,
-			"images"=>images,
-			"important"=>false}
-    async = false
-    result = @mandrill.messages.send_template template_name, template_content, message, async
-    
-		rescue Mandrill::Error => e
-	    # Mandrill errors are thrown as exceptions
-	    puts "A mandrill error occurred: #{e.class} - #{e.message}"
-	    # A mandrill error occurred: Mandrill::UnknownSubaccountError - No subaccount exists with the id 'customer-123'
-    raise
+    send_email(user.email, user.name, subject, images, template_name, template_content)
 	end
 
 	def send_email(email_to, name_to, subject, images = [], template_name, template_content)

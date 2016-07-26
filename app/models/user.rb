@@ -389,6 +389,10 @@ class User < ActiveRecord::Base
     role == "External"
   end
 
+  def he_or_she
+    profile.gender == "M" ? "he\'s" : "she\'s"
+  end
+
   ### all about Post
   def groups_posts(q)
     #return all posts of groups where the user is member
