@@ -1,0 +1,51 @@
+<% if @suggested_users.present? %>
+	<span style='color: #464646; font-weight: 400; font-family: sans-serif; font-size: 18px;'>Suggested Friends</span><br><br>
+	<table>
+		<tr>
+			<% @suggested_users.each do |suggested_user| %>
+				<th style='width: 33%;'>
+					<div style='margin-bottom: 35px;'>
+						<table>
+							<tr style='text-align: left;'>
+								<th>
+									<img src='cid:suggested_user_avatar_'<%= suggested_user.id %> alt='' height='50px' width='50px' style='border-radius: 50%;'>
+								</th>
+								<th style='text-align: left;'>
+									<span style='color: #464646; font-family: sans-serif; font-weight: 400; font-size: 14px;'><%= suggested_user.name %></span><br>
+									<span style='color: #696969; font-family: sans-serif; font-weight: 100; font-size: 12px;'><%=suggested_user.first_committee %></span>  
+								</th>
+							</tr>
+						</table>
+					</div>
+				</th>
+				<a href=<%= Settings.ui_endpoint %>'/#alumni/discover' style='color: #FFF; padding: 12px 9px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>FIND THE PEOPLE THAT SHARE YOUR VALUES</a><br><br><br><br>
+			<% end %>
+		</tr>
+	</table>
+<% end %>
+
+<% if @suggested_groups.present? %>
+	<span style='color: #464646; font-weight: 400; font-family: sans-serif; font-size: 18px;'>Suggested Groups</span><br><br>
+	<table>
+		<tr>
+			<% @suggested_groups.each do |suggested_group| %>
+				<th style='width: 14%; text-align: left;'>
+					<span><img src='cid:suggested_group_cover_'<%= suggested_group.id %> alt='' height='80px' width='80px'></span>
+					<th>
+						<th style='text-align: left; width: 50%;'>
+							<span style='color: #464646; font-weight: 400; font-family: sans-serif; font-size: 15px;'><%= suggested_group.name %></span><br>
+							<span style='color: #6e6e6e; font-family: sans-serif; font-weight: 100; font-size: 13px;'>
+								<span><%= suggested_group.short_description %></span> <br>
+								<span><%= suggested_group.members.count %> members</span> <br>
+							</span>
+						</th>
+						<th style='text-align: right; width: 30%;'>
+							<a href=<%= Settings.ui_endpoint %>'/#groups/<%= suggested_group.id %>/about' style='color: #2099d0; padding: 10px 30px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #FFF; font-weight: 100; border: 1px solid #2099d0;'>JOIN GROUP</a>
+						</th>
+					</th>
+				</th>
+			<% end %>
+		</tr>
+	</table>
+	<a href='<%= Settings.ui_endpoint %>/#groups/discover' style='color: #FFF; padding: 12px 30px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>FIND, JOIN AND SHARE ON THE TOPICS YOU CARE</a>
+<% end %>
