@@ -65,6 +65,7 @@ class User < ActiveRecord::Base
 
   ### Scopes
   scope :alumnet_admins, -> { where(role: ROLES[:alumnet_admin]) }
+  scope :admins, -> { where.not(role: ROLES[:regular]) }
   scope :without_externals, -> { where.not(role: ROLES[:external]) }
   scope :active, -> { where(status: 1) }
   scope :inactive, -> { where(status: 0) }
@@ -210,6 +211,12 @@ class User < ActiveRecord::Base
   #TODO: quitar parentesis y refatorizar los counts :yondri
   def messages_with_includes
     receipts.messages_receipts.includes(message: [{sender: :profile}, :conversation])
+  end
+
+  def last_week_approval_notifications()
+    mailbox.notifications.joins(:notification_detail)
+    .where(notification_details: {notification_type: ['approval']})
+    .where("notification_details.created_at >= ?", 1.week.ago.utc)
   end
 
   def friendship_notifications()
@@ -380,6 +387,10 @@ class User < ActiveRecord::Base
 
   def is_external?
     role == "External"
+  end
+
+  def he_or_she
+    profile.gender == "M" ? "he\'s" : "she\'s"
   end
 
   ### all about Post
