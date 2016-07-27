@@ -6,6 +6,7 @@ json.(receipt, :is_read)
 if detail
   json.url detail.url
   json.type detail.notification_type
+  json.notified_object_id detail.notified_object_id
   json.sender_name detail.sender.try(:name)
   if detail.sender
     json.sender_avatar detail.sender.avatar.large.url
