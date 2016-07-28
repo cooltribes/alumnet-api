@@ -24,7 +24,7 @@ class GeneralMailer
 				suggested_users: suggested_users,
 				suggested_groups: suggested_groups
 			}
-		) 
+		)
 		suggested_users.each do |suggested_user|
 			images << {"type"=>suggested_user.get_avatar_type, "name"=>"suggested_user_avatar_#{suggested_user.id}", "content"=>suggested_user.get_avatar_base64}
 		end
@@ -148,47 +148,20 @@ class GeneralMailer
 	def new_users_digest(admin)
 		first_five_table = ''
 		images = []
+		subject = "Alumnet - New users registered"
 		notifications_array = admin.last_week_approval_notifications.to_a
-		notifications_array.shift(5).each do |notification|
-			first_five_table += "<tr>"
-			first_five_table += "<th style='width: 14%; text-align: left;'>"
-			first_five_table += "<img src='cid:user_avatar_#{notification.sender.id}' alt=' height='80px' width='80px' style='border-radius: 50%;'>"
-			first_five_table += "</th>"
-			first_five_table += "<th style='text-align: left; width: 40%;'>"
-			first_five_table += "<span style='color: #464646; font-weight: 400; font-family: sans-serif; font-size: 15px;'>#{notification.sender.name.upcase}</span><br>"
-			first_five_table += "<span style='color: #6e6e6e; font-family: sans-serif; font-weight: 100; font-size: 15px;'>"
-			first_five_table += "<span>#{notification.sender.full_last_experience}</span> <br>"
-			first_five_table += "<span>#{notification.sender.first_committee}</span> <br>"
-			first_five_table += "<span>#{notification.sender.aiesec_location}</span>"
-			first_five_table += "</span>"
-			first_five_table += "</th>"
-			first_five_table += "<th style='text-align: right; width: 40%;'>"
-			first_five_table += "<a href='#{Settings.ui_endpoint}/#admin/users/#{notification.sender.id}' style='color: #FFF; padding: 10px 30px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>ACCEPT REQUEST</a>"
-			first_five_table += "</th>"
-			first_five_table += "</tr>"
 
+		main_content_html = @view.render(
+			file: 'new_users_digest.html.erb', 
+			locals: { 
+				notifications: notifications_array,
+				admin: admin,
+				time_range_string: 'This week'
+			}
+		)
+
+		notifications_array.each do |notification|
 			images << {"type"=>notification.sender.get_avatar_type, "name"=>"user_avatar_#{notification.sender.id}", "content"=>notification.sender.get_avatar_base64}
-		end
-
-		remaining_users_content = ''
-		if notifications_array.size > 0
-			remaining_users_content += "<div style='background-color: #f3f3f5; padding: 20px; width: 550px; margin: 0 auto; text-align: center;'>"
-			remaining_users_content += "<span style='color: #696969; font-family: sans-serif; font-weight: 100; font-size: 15px;'>"
-			remaining_users_content += "<span style='font-weight: 400; color: #464646; font-size: 18px;'>This is becoming faster and faster!</span><br><br>"
-			remaining_users_content += "There are #{notifications_array.size} more people asking to be approved. <br><br>"
-			remaining_users_content += "Please, verify them and encourage them to start interacting on AlumNet! <br><br>"
-			remaining_users_content += "Finally, we can really be together in one space. <br><br>"
-			remaining_users_content += "</span>"
-			remaining_users_content += "<div style='margin: 20px auto; text-align: center;'>"
-			notifications_array.each do |notification|
-				remaining_users_content += "<a href='#{Settings.ui_endpoint}/#admin/users/#{notification.sender.id}'><img src='cid:user_avatar_#{notification.sender.id}' alt=' height='40px' width='40px' style='border-radius: 50%;'></a>"
-				images << {"type"=>notification.sender.get_avatar_type, "name"=>"user_avatar_#{notification.sender.id}", "content"=>notification.sender.get_avatar_base64}
-			end
-			remaining_users_content += "</div>"
-			remaining_users_content += "<div>"
-			remaining_users_content += "<a href='#{Settings.ui_endpoint}/#admin/users' style='color: #FFF; padding: 10px 30px; text-decoration: none; font-family: sans-serif; font-size: 16px; background-color: #2099d0; font-weight: 100;'>VIEW REQUESTS</a>"
-			remaining_users_content += "</div>"
-			remaining_users_content += "</div>"
 		end
 
 		template_name = "USR044_new_user_registered"
@@ -196,43 +169,11 @@ class GeneralMailer
     	{"name"=>"alumnet_button", "content"=>"<a href='#{Settings.ui_endpoint}' style='color: #FFF; border: 1px solid #FFF; padding: 10px; text-decoration: none; font-family: sans-serif; font-size: 12px;'>GO TO ALUMNET</a>"},
     	{"name"=>"admin_name", "content"=>"#{admin.name}"},
     	{"name"=>"admin_last_experience", "content"=>admin.full_last_experience},
-    	{"name"=>"time_range_string", "content"=>"This week"},
-    	{"name"=>"registered_number", "content"=>admin.last_week_approval_notifications.count},
-    	{"name"=>"first_five_users", "content"=>first_five_table},
-    	{"name"=>"remaining_users", "content"=>remaining_users_content},
+    	{"name"=>"main_content_html", "content"=>main_content_html},
     	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{admin.id}/settings' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'>Manage Suscription</a>"}
     ]
 
-    message = {
-			"inline_css"=>true,
-			"subaccount"=>@subaccount,
-			"return_path_domain"=>nil,
-			"url_strip_qs"=>nil,
-			"track_clicks"=>nil,
-			"headers"=>{"Reply-To"=>"info@aiesec-alumni.org"},
-			"view_content_link"=>nil,
-			"to"=>
-			  [{"type"=>"to",
-			      "email"=>"#{admin.email}",
-			      "name"=>"#{admin.name}"}],
-			"from_name"=>"Aiesec Alumni International",
-			"tracking_domain"=>nil,
-			"subject"=>"Alumnet - New user registered",
-			"signing_domain"=>nil,
-			"auto_html"=>true,
-			"track_opens"=>true,
-			"from_email"=>"alumnet-noreply@aiesec-alumni.org",
-			"auto_text"=>true,
-			"images"=>images,
-			"important"=>false}
-    async = false
-    result = @mandrill.messages.send_template template_name, template_content, message, async
-    
-		rescue Mandrill::Error => e
-	    # Mandrill errors are thrown as exceptions
-	    puts "A mandrill error occurred: #{e.class} - #{e.message}"
-	    # A mandrill error occurred: Mandrill::UnknownSubaccountError - No subaccount exists with the id 'customer-123'
-    raise
+    send_email(admin.email, admin.name, subject, images, template_name, template_content)
 	end
 
 	def registration_approvals_needed(user, users_list)

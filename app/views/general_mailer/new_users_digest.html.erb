@@ -1,0 +1,50 @@
+<div style="background-color: #FFF; padding: 20px 20px 40px 20px; width: 550px; margin: 0 auto; text-align: center;">
+	<span style="color: #696969; font-family: sans-serif; font-weight: 100; font-size: 15px;">
+	  <span style="font-size: 18px;">Hi <span style="font-weight: 400; color: #464646;"><%= admin.profile.first_name %>!</span></span><br><br>
+	  <div style="width: 500px; margin: 5px auto 20px;">
+	      Great news, our community is growing and our dream to connect Aiesec Alumni around the world is becoming a reality. <br><br>
+	      <%= time_range_string %> <%= notifications.size %> Alumni have registered and have asked directly to you to approve their access to AlumNet. <br><br>
+	      Please, help us validate them Aiesec Alumni and give them a warm welcome onboard!
+	  </div>
+	</span>
+	<table style="margin-top: 25px; margin-bottom: 35px;">
+		<% notifications.shift(5).each do |notification| %>
+			<tr>
+				<th style='width: 14%; text-align: left;'>
+					<img src='cid:user_avatar_<%= notification.sender.id %>' alt='' height='80px' width='80px' style='border-radius: 50%;'>
+				</th>
+				<th style='text-align: left; width: 40%;'>
+					<span style='color: #464646; font-weight: 400; font-family: sans-serif; font-size: 15px;'><%= notification.sender.name.upcase %></span><br>
+					<span style='color: #6e6e6e; font-family: sans-serif; font-weight: 100; font-size: 15px;'>
+						<span><%= notification.sender.full_last_experience %></span> <br>
+						<span><%= notification.sender.first_committee %></span> <br>
+						<span><%= notification.sender.aiesec_location %></span>
+					</span>
+				</th>
+				<th style='text-align: right; width: 40%;'>
+					<a href='<%= Settings.ui_endpoint %>/#admin/users/<%= notification.sender.id %>' style='color: #FFF; padding: 10px 30px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;'>ACCEPT REQUEST</a>
+				</th>
+			</tr>
+		<% end %>
+	</table>
+</div>
+
+<% if notifications.size > 0 %>
+	<div style='background-color: #f3f3f5; padding: 20px; width: 550px; margin: 0 auto; text-align: center;'>
+		<span style='color: #696969; font-family: sans-serif; font-weight: 100; font-size: 15px;'>
+			<span style='font-weight: 400; color: #464646; font-size: 18px;'>This is becoming faster and faster!</span><br><br>
+			There are <%= notifications_array.size %> more people asking to be approved. <br><br>
+			Please, verify them and encourage them to start interacting on AlumNet! <br><br>
+			Finally, we can really be together in one space. <br><br>
+		</span>
+		<div style='margin: 20px auto; text-align: center;'>
+			<% notifications.each do |notification| %>
+				<a href='<%= Settings.ui_endpoint %>/#admin/users/<%= notification.sender.id %>'><img src='cid:user_avatar_<%= notification.sender.id %>' alt='' height='40px' width='40px' style='border-radius: 50%;'></a>
+
+			<% end %>
+		</div>
+		<div>
+			<a href='<%= Settings.ui_endpoint %>/#admin/users' style='color: #FFF; padding: 10px 30px; text-decoration: none; font-family: sans-serif; font-size: 16px; background-color: #2099d0; font-weight: 100;'>VIEW REQUESTS</a>
+		</div>
+	</div>
+<% end %>

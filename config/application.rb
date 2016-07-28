@@ -39,5 +39,9 @@ module AlumnetApi
           :max_age => 0
       end
     end
+
+    config.to_prepare do
+      Mailboxer::Notification.send(:include, MailboxerExtend)
+    end
   end
 end
