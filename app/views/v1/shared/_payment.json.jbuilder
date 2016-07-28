@@ -30,7 +30,13 @@ json.paymentable do
   json.sku paymentable.sku
   json.name paymentable.name
   json.description paymentable.description
-  json.price paymentable.price
-  json.quantity paymentable.name
-  json.feature paymentable.feature
+  json.status paymentable.status
+  json.highlight paymentable.highlight
+  json.image paymentable.image
+  json.sale_price paymentable.sale_price
+  json.tax_rule paymentable.tax_rule
+  json.tax_value paymentable.tax_value
+  json.discount_type paymentable.discount_type
+  json.discount_value paymentable.discount_value
+  json.total_price paymentable.total_price
 end
