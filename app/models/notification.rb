@@ -173,9 +173,9 @@ class Notification
     body = "Is waiting for your approval in admin section"
     notfy = notification.send_notification(subject, body, user, user)
     notification.send_pusher_notification
-    notification.recipients.each do |admin|
-      AdminMailer.user_request_approval(admin, user).deliver_later
-    end
+    # notification.recipients.each do |admin|
+    #   AdminMailer.user_request_approval(admin, user).deliver_later
+    # end
     NotificationDetail.notify_approval_request_to_admins(notfy, user)
   end
 
