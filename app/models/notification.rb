@@ -40,7 +40,7 @@ class Notification
       preference = user.email_preferences.find_by(name: 'join_group_invitation')
       if not(preference.present?) || (preference.present? && preference.value == 0)
         #UserMailer.join_to_group(user, sender, group).deliver_later
-        mailer = GroupMailer.new
+        mailer = GeneralMailer.new
         mailer.join_group(user, sender, group)
       end
     end

@@ -204,6 +204,40 @@ class GeneralMailer
     send_email(user.email, user.name, subject, images, template_name, template_content)
 	end
 
+	def join_group(user, sender, group)
+		images = []
+		images << {"type"=>group.get_cover_type, "name"=>"group_cover_image", "content"=>group.get_cover_base64}
+
+		subject = "#{sender.name} has invited you to join #{group.name}"
+		if user == sender
+			subject = "Welcome to #{group.name}"
+		end
+
+		group.last_6_members.each do |member|
+			images << {"type"=>member.get_avatar_type, "name"=>"user_avatar_#{member.id}", "content"=>member.get_avatar_base64}
+		end
+
+		main_content_html = @view.render(
+			file: 'join_group.html.erb', 
+			locals: { 
+				user: user,
+				sender: sender,
+				group: group,
+				last_6_members: group.last_6_members
+			}
+		)
+
+		template_name = "USR007_join_to_group"
+    template_content = [
+    	{"name"=>"main_content_html", "content"=>main_content_html},
+    	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{user.id}/settings' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'>Manage Suscription</a>"},
+    	{"name"=>"user_name", "content"=>user.name},
+    	{"name"=>"user_last_experience", "content"=>user.full_last_experience}
+    ]
+
+    send_email(user.email, user.name, subject, images, template_name, template_content)
+	end
+
 	def send_email(email_to, name_to, subject, images = [], template_name, template_content)
 		message = {
 			"inline_css"=>true,
