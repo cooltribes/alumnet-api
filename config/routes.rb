@@ -26,6 +26,7 @@ Rails.application.routes.draw do
     post '/mobile_register', to: 'auth#mobile_register', as: :mobile_register
 
     get '/public_profile/:slug', to: 'public_profiles#show'
+    get '/donations/products', to: 'donations#products'
 
     match '/search', to: 'search#search', via: [:post, :get]
     get '/suggestions', to: 'search#suggestions'
