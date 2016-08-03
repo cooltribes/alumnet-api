@@ -11,4 +11,5 @@ end
 
 every 1.day, at: '11:30 am' do
   rake "admin_users:new_registrations_digest"
+  rake "groups:send_digest"
 end
