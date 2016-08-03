@@ -160,7 +160,7 @@ class GeneralMailer
 			}
 		)
 
-		notifications_array.each do |notification|
+		admin.last_week_approval_notifications.to_a.each do |notification|
 			images << {"type"=>notification.sender.get_avatar_type, "name"=>"user_avatar_#{notification.sender.id}", "content"=>notification.sender.get_avatar_base64}
 		end
 
@@ -264,6 +264,8 @@ class GeneralMailer
 	end
 
 	def send_email(email_to, name_to, subject, images = [], template_name, template_content)
+		from_name = Rails.env.development? || Rails.env.staging? ? "AlumNet Test" : "Aiesec Alumni International"
+
 		message = {
 			"inline_css"=>true,
 			"subaccount"=>@subaccount,
@@ -277,7 +279,7 @@ class GeneralMailer
 		      "email"=>email_to,
 		      "name"=>name_to
 			  }],
-			"from_name"=>"Aiesec Alumni International",
+			"from_name"=>from_name,
 			"tracking_domain"=>nil,
 			"subject"=>subject,
 			"signing_domain"=>nil,

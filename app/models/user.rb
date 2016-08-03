@@ -216,7 +216,7 @@ class User < ActiveRecord::Base
   def last_week_approval_notifications()
     mailbox.notifications.joins(:notification_detail)
     .where(notification_details: {notification_type: ['approval']})
-    .where("notification_details.created_at >= ?", 1.week.ago.utc)
+    .where("notification_details.created_at >= ?", 2.days.ago.utc)
   end
 
   def friendship_notifications()
