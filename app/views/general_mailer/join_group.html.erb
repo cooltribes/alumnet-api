@@ -1,0 +1,60 @@
+<div style="background-color: #FFF; padding: 20px; width: 550px; margin: 0 auto; text-align: left;">
+    <span style="color: #696969; font-family: sans-serif; font-weight: 100; font-size: 15px;">
+        <span style="font-size: 18px;">Hi <%= user.profile.first_name %>!</span><br><br>
+        <% if user == sender %>
+            Welcome to <span mc:edit="" style="font-weight: 400; color: #464646;"><%= group.name.upcase %></span>
+        <% else %>
+            <span style="font-weight: 400; color: #464646;"><%= sender.name %></span>
+            has invited you to join the group <span style="font-weight: 400; color: #464646;"><%= group.name.upcase %></span>
+        <% end %>
+    </span>
+    <table style="margin-top: 25px; margin-bottom: 35px;">
+        <tr>
+            <th style="width: 14%; text-align: left; vertical-align: initial;">
+                <span><img src="cid:group_cover_image" alt="" height="80px" width="80px"></span>
+            </th>
+            <th style="text-align: left; width: 40%;">
+                <span style="color: #464646; font-weight: 400; font-family: sans-serif; font-size: 15px;"><%= group.name.upcase %></span><br>
+                <span style="color: #6e6e6e; font-family: sans-serif; font-weight: 100; font-size: 15px;">
+                    <span style="font-size: 17px;"><%= group.members.count %> members</span> <br>
+                    <span><%= group.short_description %></span><br><br>
+                    <% if group.members.count > 3 %>
+                        <% group.last_3_members.each do |member| %>
+                            <% if member == group.last_3_members.last %>
+                                <%= "#{member.name} and " %>
+                            <% else %>
+                                <%= "#{member.name}, " %>
+                            <% end %>
+                        <% end %>
+                        <%= group.members.count - 3 %> more people are interacting here! <br><br>
+                    <% end %>
+                </span>
+                <div style="margin: 20px auto; text-align: left;">
+                    <% group.last_6_members.each do |member| %>
+                        <span><a href='<%= Settings.ui_endpoint %>/#users/<%= member.id %>/about' style="color: #2099d0; text-decoration: none;"><img src="cid:user_avatar_<%= member.id %>" alt="" height="30px" width="30px" style="border-radius: 50%;"></a></span>
+                    <% end %>
+                </div>
+                <div style="text-align: center; margin-top: 40px">
+                    <a href='<%= Settings.ui_endpoint %>/#groups/<%= group.id %>/about' style="color: #FFF; padding: 10px 30px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;">JOIN GROUP</a>
+                </div>
+            </th>
+        </tr>
+    </table>
+</div>
+<div style="background-color: #f3f3f5; padding: 20px 20px 40px 20px; width: 550px; margin: 10px auto 0px auto; text-align: left;">
+    <span style="color: #696969; font-family: sans-serif; font-weight: 100; font-size: 15px;">
+        <span mc:edit="" style="font-weight: 400; color: #464646;">Once you enter the group you can:</span><br><br>
+        <ul>
+            <li style="color: #2099d0"><span style="color: #696969">See what other Alumni are sharing</span></li>
+            <li style="color: #2099d0"><span style="color: #696969">Stay up to date on the events happening in the group</span></li>
+            <li style="color: #2099d0"><span style="color: #696969">Look at picture galleries and upload your own photos</span></li>
+            <li style="color: #2099d0"><span style="color: #696969">Connect with other AIESEC Alumni who share your interests</span></li>
+            <li style="color: #2099d0"><span style="color: #696969">Share your thoughts, knowledge and whatever you think can 
+                add value to other Alumni</span></li><br><br>
+            Enjoy!
+        </ul>
+    </span>
+    <div style="text-align: center; margin-top: 40px; margin-bottom: 20px;">
+        <a href='<%= Settings.ui_endpoint %>/#groups/<%= group.id %>/about' style="color: #2099d0; padding: 10px 30px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #f3f3f5; font-weight: 100; border: 1px solid #2099d0;">GO TO GROUP</a>
+    </div>
+</div>

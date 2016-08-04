@@ -160,7 +160,7 @@ class GeneralMailer
 			}
 		)
 
-		notifications_array.each do |notification|
+		admin.last_week_approval_notifications.to_a.each do |notification|
 			images << {"type"=>notification.sender.get_avatar_type, "name"=>"user_avatar_#{notification.sender.id}", "content"=>notification.sender.get_avatar_base64}
 		end
 
@@ -204,7 +204,68 @@ class GeneralMailer
     send_email(user.email, user.name, subject, images, template_name, template_content)
 	end
 
+	def join_group(user, sender, group)
+		images = []
+		images << {"type"=>group.get_cover_type, "name"=>"group_cover_image", "content"=>group.get_cover_base64}
+
+		subject = "#{sender.name} has invited you to join #{group.name}"
+		if user == sender
+			subject = "Welcome to #{group.name}"
+		end
+
+		group.last_6_members.each do |member|
+			images << {"type"=>member.get_avatar_type, "name"=>"user_avatar_#{member.id}", "content"=>member.get_avatar_base64}
+		end
+
+		main_content_html = @view.render(
+			file: 'join_group.html.erb', 
+			locals: { 
+				user: user,
+				sender: sender,
+				group: group,
+				last_6_members: group.last_6_members
+			}
+		)
+
+		template_name = "USR007_join_to_group"
+    template_content = [
+    	{"name"=>"main_content_html", "content"=>main_content_html},
+    	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{user.id}/settings' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'>Manage Suscription</a>"},
+    	{"name"=>"user_name", "content"=>user.name},
+    	{"name"=>"user_last_experience", "content"=>user.full_last_experience}
+    ]
+
+    send_email(user.email, user.name, subject, images, template_name, template_content)
+	end
+
+	def user_commented_post_you_commented_or_liked(user, created_comment)
+		images = []
+		images << {"type"=>created_comment.user.get_avatar_type, "name"=>"user_avatar", "content"=>created_comment.user.get_avatar_base64}
+
+		subject = "#{created_comment.user.name} commented a post on AlumNet"
+
+		main_content_html = @view.render(
+			file: 'user_commented_post_you_commented_or_liked.html.erb', 
+			locals: { 
+				user: user,
+				created_comment: created_comment
+			}
+		)
+
+		template_name = "USR009_activity_in_post"
+    template_content = [
+    	{"name"=>"main_content_html", "content"=>main_content_html},
+    	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{user.id}/settings' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'>Manage Suscription</a>"},
+    	{"name"=>"user_name", "content"=>user.name},
+    	{"name"=>"user_last_experience", "content"=>user.full_last_experience}
+    ]
+
+    send_email(user.email, user.name, subject, images, template_name, template_content)
+	end
+
 	def send_email(email_to, name_to, subject, images = [], template_name, template_content)
+		from_name = Rails.env.development? || Rails.env.staging? ? "AlumNet Test" : "Aiesec Alumni International"
+
 		message = {
 			"inline_css"=>true,
 			"subaccount"=>@subaccount,
@@ -218,7 +279,7 @@ class GeneralMailer
 		      "email"=>email_to,
 		      "name"=>name_to
 			  }],
-			"from_name"=>"Aiesec Alumni International",
+			"from_name"=>from_name,
 			"tracking_domain"=>nil,
 			"subject"=>subject,
 			"signing_domain"=>nil,

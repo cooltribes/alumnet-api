@@ -40,7 +40,7 @@ class Notification
       preference = user.email_preferences.find_by(name: 'join_group_invitation')
       if not(preference.present?) || (preference.present? && preference.value == 0)
         #UserMailer.join_to_group(user, sender, group).deliver_later
-        mailer = GroupMailer.new
+        mailer = GeneralMailer.new
         mailer.join_group(user, sender, group)
       end
     end
@@ -173,9 +173,9 @@ class Notification
     body = "Is waiting for your approval in admin section"
     notfy = notification.send_notification(subject, body, user, user)
     notification.send_pusher_notification
-    notification.recipients.each do |admin|
-      AdminMailer.user_request_approval(admin, user).deliver_later
-    end
+    # notification.recipients.each do |admin|
+    #   AdminMailer.user_request_approval(admin, user).deliver_later
+    # end
     NotificationDetail.notify_approval_request_to_admins(notfy, user)
   end
 

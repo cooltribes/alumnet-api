@@ -78,6 +78,14 @@ class Group < ActiveRecord::Base
     members.where("memberships.admin = ?", true)
   end
 
+  def last_3_members
+    members.last(3)
+  end
+
+  def last_6_members
+    members.last(6)
+  end
+
   def user_is_admin?(user)
     admins.where("users.id = ?", user.id).any?
   end
@@ -177,14 +185,16 @@ class Group < ActiveRecord::Base
   end
 
   def get_cover_type
-    MIME::Types.type_for(cover.card.url).first.try(:content_type)
+    MIME::Types.type_for(cover.card.url).first.try(:content_type) if cover.present?
   end
 
   def get_cover_base64
-    if Rails.env.development?
-      Base64.encode64(File.open(cover.card.path) { |io| io.read })
-    else
-      Base64.encode64(open(cover.card.url) { |io| io.read })
+    if cover.present?
+      if Rails.env.development?
+        Base64.encode64(File.open(cover.card.path) { |io| io.read })
+      else
+        Base64.encode64(open(cover.card.url) { |io| io.read })
+      end
     end
   end
 
