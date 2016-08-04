@@ -27,6 +27,7 @@ Rails.application.routes.draw do
 
     get '/public_profile/:slug', to: 'public_profiles#show'
     get '/donations/products', to: 'donations#products'
+    get '/donations/products/:id', to: 'donations#get_product'
 
     match '/search', to: 'search#search', via: [:post, :get]
     get '/suggestions', to: 'search#suggestions'
