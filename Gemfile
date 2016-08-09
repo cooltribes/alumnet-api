@@ -35,6 +35,7 @@ gem 'whenever', :require => false
 gem 'newrelic_rpm'
 gem 'mandrill-api'
 gem 'layer-identity_token', git: 'https://github.com/dreimannzelt/layer-identity_token.git'
+gem 'browser'
 
 group :development do
   gem 'spring'

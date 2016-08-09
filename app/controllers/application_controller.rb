@@ -31,4 +31,8 @@ class ApplicationController < ActionController::API
     error = RenderException.new(e)
     render json: error, status: error.status
   end
+
+  def browser
+    @browser ||= Browser.new(request.user_agent)
+  end
 end
