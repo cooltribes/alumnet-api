@@ -13,13 +13,18 @@ class V1::GroupsController < V1::BaseController
     else
       @groups = @groups.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object
     end
+    render 'mobile/groups' if browser.platform.ios? || browser.platform.android?
   end
 
   def search
     @results = Group.search(params[:q]).page(params[:page]).per(params[:per_page])
     group_ids = @results.results.to_a.map(&:id)
     @groups = Group.without_secret.where(id: group_ids)
-    render :index, status: :ok
+    if browser.platform.ios? || browser.platform.android?
+      render 'mobile/groups'
+    else
+      render :index, status: :ok
+    end
   end
 
   def picture

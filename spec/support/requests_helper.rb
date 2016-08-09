@@ -4,11 +4,11 @@ module RequestsHelper
     @json ||= JSON.parse(response.body)
   end
 
-  def basic_header(auth_token)
+  def basic_header(auth_token, options = {})
     {
       'Accept' => 'application/vnd.alumnet+json;version=1',
       'Authorization' => ActionController::HttpAuthentication::Token.encode_credentials(auth_token)
-    }
+    }.merge!(options)
   end
 
   def get_schema(name)
