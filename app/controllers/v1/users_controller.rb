@@ -66,7 +66,7 @@ class V1::UsersController < V1::BaseController
   end
 
   def user_params
-    params.permit(:email, :password, :password_confirmation, :avatar, :name, :member)
+    params.permit(:email, :password, :password_confirmation, :avatar, :name, :member, :status)
   end
 
   def password_params

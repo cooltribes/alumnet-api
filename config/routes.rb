@@ -28,6 +28,10 @@ Rails.application.routes.draw do
     get '/public_profile/:slug', to: 'public_profiles#show'
     get '/donations/products', to: 'donations#products'
     get '/donations/products/:id', to: 'donations#get_product'
+    get '/donations/countries', to: 'donations#countries'
+    get '/donations/cities/:country_id', to: 'donations#cities'
+    get '/donations/committees/:country_id', to: 'donations#committees'
+    post '/donations/update_user', to: 'donations#update_user'
 
     match '/search', to: 'search#search', via: [:post, :get]
     get '/suggestions', to: 'search#suggestions'
