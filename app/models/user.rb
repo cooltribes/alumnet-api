@@ -180,6 +180,12 @@ class User < ActiveRecord::Base
     UserMailer.password_reset(self).deliver_later
   end
 
+  def new_password_reset_token
+    self.password_reset_token = generate_token_for(:password_reset_token)
+    self.password_reset_sent_at = Time.current
+    save!
+  end
+
   def password_reset_token_expired?
     password_reset_sent_at < 2.hours.ago
   end

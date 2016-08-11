@@ -12,7 +12,15 @@ class V1::Products::CharacteristicsController < V1::BaseController
   # end
 
   def create
-    @product_characteristic = ProductCharacteristic.new(product_characteristic_params)
+    @product_characteristic = ProductCharacteristic.find_by(
+      product_id: params[:product_id], 
+      characteristic_id: params[:characteristic_id]
+    )
+    if @product_characteristic.present?
+      @product_characteristic.value = params[:value]
+    else
+      @product_characteristic = ProductCharacteristic.new(product_characteristic_params)
+    end
     @product_characteristic.save
     head :ok, content_type: "text/html"
     #render :show, status: :created, location: @product_characteristic

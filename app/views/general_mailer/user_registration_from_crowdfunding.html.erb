@@ -1,0 +1,10 @@
+<div style="font-family: sans-serif; font-weight: lighter; font-size: 16px; margin-bottom: 15px;">
+    <span style="color: #3a3737;">
+        Hi <%= first_name %>!
+        We have generated a new password so you can login to AlumNet, but you can create your own anytime.<br><br>
+        <strong>Email: </strong><%= user.email %><br>
+        <strong>Password: </strong><%= password %><br>
+    </span>
+</div>
+<div style="margin: 40px 0px 10px 1px; text-align: center"><a href="#{Settings.ui_endpoint}/password_resets/#{@user.password_reset_token}/edit"" style="color: #FFF; padding: 15px 40px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;">Create new password</a>
+</div>

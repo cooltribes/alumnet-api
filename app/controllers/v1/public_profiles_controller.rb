@@ -9,13 +9,10 @@ class V1::PublicProfilesController < V1::BaseController
     end
   end
 
-
   private
     def set_guest
       guest = User.new()
       @current_user = guest
     end
-  
-
 
 end
