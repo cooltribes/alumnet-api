@@ -57,6 +57,11 @@ class V1::DonationsController < V1::BaseController
       profile.last_name = last_name
       profile.gender = params[:user][:gender]
       profile.born = params[:user][:birthdate]
+
+      @user.new_password_reset_token
+      mailer = GeneralMailer.new
+      mailer.user_registration_from_crowdfunding(@user, first_name, params[:password])
+
       if profile.save
         experience = Experience.new
         experience.exp_type = 0

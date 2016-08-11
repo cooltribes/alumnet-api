@@ -263,6 +263,26 @@ class GeneralMailer
     send_email(user.email, user.name, subject, images, template_name, template_content)
 	end
 
+	def user_registration_from_crowdfunding(user, first_name, password)
+		subject = "Welcome to AlumNet"
+
+		main_content_html = @view.render(
+			file: 'user_registration_from_crowdfunding.html.erb', 
+			locals: { 
+				user: user,
+				first_name: first_name,
+				password: password,
+			}
+		)
+
+		template_name = "user_registration_from_crowdfunding"
+    template_content = [
+    	{"name"=>"main_content", "content"=>main_content_html}
+    ]
+
+    send_email(user.email, first_name, subject, [], template_name, template_content)
+	end
+
 	def send_email(email_to, name_to, subject, images = [], template_name, template_content)
 		from_name = Rails.env.development? || Rails.env.staging? ? "AlumNet Test" : "Aiesec Alumni International"
 
