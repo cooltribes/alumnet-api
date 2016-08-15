@@ -31,6 +31,12 @@ class V1::DonationsController < V1::BaseController
     @committees = @q.result.order(name: :asc)
   end
 
+  def details
+    @total_sold = UserProduct.where(feature: 'donation').joins(:product).sum(:total_price)
+    @donors = UserProduct.where(feature: 'donation').uniq.pluck(:user_id).count
+    @countries = UserProduct.where(feature: 'donation').includes(user: :profile).uniq.pluck(:residence_city_id, "profiles.residence_country_id").count
+  end
+
   def update_user
     @user = User.find(params[:user_id])
     if @user.present?
@@ -57,6 +63,7 @@ class V1::DonationsController < V1::BaseController
       profile.last_name = last_name
       profile.gender = params[:user][:gender]
       profile.born = params[:user][:birthdate]
+      profile.residence_country_id = params[:residence][:country]
 
       @user.new_password_reset_token
       mailer = GeneralMailer.new
@@ -65,8 +72,8 @@ class V1::DonationsController < V1::BaseController
       if profile.save
         experience = Experience.new
         experience.exp_type = 0
-        experience.name = ''
-        experience.description = ''
+        experience.name = 'LC Member'
+        experience.description = 'I joined AIESEC this year and started one of the most incredible experiences in my life by knowing amazing people, attending to spectacular events, learning incredible skills and...'
         experience.start_date = '01/01/'+params[:experience][:start_year]
         experience.end_date = '31/12/'+params[:experience][:start_year]
         experience.organization_name = ''
