@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     get '/donations/cities/:country_id', to: 'donations#cities'
     get '/donations/committees/:country_id', to: 'donations#committees'
     post '/donations/update_user', to: 'donations#update_user'
+    get '/donations/details', to: 'donations#details'
 
     match '/search', to: 'search#search', via: [:post, :get]
     get '/suggestions', to: 'search#suggestions'
