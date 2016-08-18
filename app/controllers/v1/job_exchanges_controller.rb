@@ -2,6 +2,7 @@ class V1::JobExchangesController < V1::TasksController
 
   def index
     @q = Task.job_exchanges.ransack(params[:q])
+    @q.sorts = 'created_at desc'
     @tasks = @q.result
     if @tasks.class == Array
       @tasks = Kaminari.paginate_array(@tasks).page(params[:page]).per(params[:per_page])
