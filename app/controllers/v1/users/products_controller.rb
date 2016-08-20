@@ -105,7 +105,7 @@ class V1::Users::ProductsController < V1::BaseController
     end
 
     def create_params
-      params.permit(:user_id, :product_id, :status, :start_date, :end_date, :quantity, :transaction_type, :created_at, :updated_at, :feature)
+      params.permit(:user_id, :product_id, :status, :start_date, :end_date, :quantity, :transaction_type, :created_at, :updated_at, :feature, :total_price)
     end
 
     def update_params

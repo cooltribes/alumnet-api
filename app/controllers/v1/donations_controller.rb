@@ -2,7 +2,7 @@ class V1::DonationsController < V1::BaseController
   skip_before_action :authenticate
 
   def products
-    @products = Product.joins(:categories).where(categories: {name: "Donations"})
+    @products = Product.joins(:categories).where(categories: {name: "Donations"}).order('total_price asc')
   end
 
   def get_product
@@ -32,7 +32,7 @@ class V1::DonationsController < V1::BaseController
   end
 
   def details
-    @total_sold = UserProduct.where(feature: 'donation').joins(:product).sum(:total_price)
+    @total_sold = UserProduct.where(feature: 'donation').sum(:total_price)
     @donors = UserProduct.where(feature: 'donation').uniq.pluck(:user_id).count
     @countries = UserProduct.where(feature: 'donation').includes(user: :profile).uniq.pluck(:residence_city_id, "profiles.residence_country_id").count
   end
