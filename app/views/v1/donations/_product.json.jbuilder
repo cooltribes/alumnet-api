@@ -5,3 +5,4 @@ json.product_characteristics product.product_characteristics
 json.characteristics product.characteristics
 json.product_categories product.product_categories
 json.categories product.categories
+json.backers product.user_products.count
