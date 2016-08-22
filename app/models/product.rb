@@ -5,6 +5,8 @@ class Product < ActiveRecord::Base
 	enum tax_rule: [:no_tax, :automatic]
 	enum discount_type: [:no_discount, :percentage, :amount]
 
+	scope :active, -> { where(status: 1) }
+
 	# Relations
 	belongs_to :user
 	has_many :user_products, dependent: :destroy
