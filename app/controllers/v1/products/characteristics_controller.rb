@@ -4,8 +4,7 @@ class V1::Products::CharacteristicsController < V1::BaseController
   before_action :set_characteristic
 
   def index
-    @q = ProductCharacteristic.ransack(params[:q])
-    @product_characteristics = @q.result
+    @product_characteristics = @product.product_characteristics
   end
 
   # def show
