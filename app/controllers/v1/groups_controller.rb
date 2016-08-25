@@ -20,7 +20,7 @@ class V1::GroupsController < V1::BaseController
     @results = Group.search(params[:q]).page(params[:page]).per(params[:per_page])
     group_ids = @results.results.to_a.map(&:id)
     @groups = Group.without_secret.where(id: group_ids)
-    if browser.platform.ios? || browser.platform.android?
+    if browser.platform.ios? || browser.platform.android? || browser.platform.other?
       render 'mobile/groups'
     else
       render :index, status: :ok

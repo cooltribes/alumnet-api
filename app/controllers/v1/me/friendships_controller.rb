@@ -10,6 +10,9 @@ class V1::Me::FriendshipsController < V1::BaseController
   def friends
     @q = @user.search_accepted_friends(params[:q])
     @friends = Kaminari.paginate_array(@q).page(params[:page]).per(params[:per_page])
+    if browser.platform.ios? || browser.platform.android? || browser.platform.other?
+      render 'mobile/friends'
+    end
   end
 
   def suggestions
