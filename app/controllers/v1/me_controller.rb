@@ -2,6 +2,9 @@ class V1::MeController < V1::BaseController
   before_action :set_user
 
   def show
+    if browser.platform.ios? || browser.platform.android? || browser.platform.other?
+      render 'mobile/me'
+    end
   end
 
   def identity_layer

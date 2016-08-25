@@ -13,6 +13,9 @@ class V1::Users::FriendshipsController < V1::BaseController
     else
       []
     end
+    if browser.platform.ios? || browser.platform.android? || browser.platform.other?
+      render 'mobile/friends'
+    end
   end
 
   def commons
