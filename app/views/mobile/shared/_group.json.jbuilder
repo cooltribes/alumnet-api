@@ -8,16 +8,18 @@ end
 
 membership = group.membership_of_user(current_user)
 
+if group.last_post.present?
+  json.last_post_at group.last_post.last_comment_at
+else
+  json.last_post_at nil
+end
+
 if membership
   json.membership do
     json.id membership.id
     json.admin group.user_is_admin?(current_user)
     json.membership_status membership.status
     json.membership_created membership.created_at
-    json.permissions do
-      json.(membership, :edit_group, :create_subgroup, :delete_member,
-        :change_join_process, :moderate_posts, :make_admin)
-    end
   end
 else
   json.membership do

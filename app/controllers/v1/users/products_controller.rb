@@ -43,11 +43,14 @@ class V1::Users::ProductsController < V1::BaseController
     @user_product = UserProduct.new(add_params)
     @user_product.transaction_type = 1
     @user_product.feature = 'subscription'
+    byebug
+    @characteristic = @product.characteristics.find_by(name: 'Duration')
+    @product_characteristic = @characteristic.present? ? @product.product_characteristics.find_by(characteristic_id: @characteristic.id) : nil
     if(@user.member == 0)
       @user_product.start_date = DateTime.now
-      if @product.quantity
-        @user_product.end_date = DateTime.now + @product.quantity.months
-        @user_product.quantity = @product.quantity
+      if @product_characteristic.present?
+        @user_product.end_date = DateTime.now + @product_characteristic.value.to_i.months
+        @user_product.quantity = @product_characteristic.value.to_i
         @user.member = 1
       else
         @user.member = 3
@@ -56,18 +59,18 @@ class V1::Users::ProductsController < V1::BaseController
       @active_subscription = UserProduct.where(user_id: @user.id, feature: 'subscription', status: 1).last
       if @active_subscription
         @user_product.start_date = @active_subscription.end_date
-        if @product.quantity
-          @user_product.end_date = @active_subscription.end_date + @product.quantity.months
-          @user_product.quantity = @product.quantity
+        if @product_characteristic.present?
+          @user_product.end_date = @active_subscription.end_date + @product_characteristic.value.to_i.months
+          @user_product.quantity = @product_characteristic.value.to_i
           @user.member = 1
         else
           @user.member = 3
         end
       else
         @user_product.start_date = DateTime.now
-        if @product.quantity
-          @user_product.end_date = DateTime.now + @product.quantity.months
-          @user_product.quantity = @product.quantity
+        if @product_characteristic.present?
+          @user_product.end_date = DateTime.now + @product_characteristic.value.to_i.months
+          @user_product.quantity = @product_characteristic.value.to_i
           @user.member = 1
         else
           @user.member = 3

@@ -7,3 +7,5 @@ json.user do
   json.avatar user.avatar.large.url
   json.last_experience user.last_experience.try(:name)
 end
+
+json.paymentable payment.paymentable

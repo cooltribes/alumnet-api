@@ -4,8 +4,7 @@ class V1::Products::CategoriesController < V1::BaseController
   before_action :set_category
 
   def index
-    @q = ProductCategory.ransack(params[:q])
-    @product_categories = @q.result
+    @product_categories = @product.product_categories
   end
 
   # def show

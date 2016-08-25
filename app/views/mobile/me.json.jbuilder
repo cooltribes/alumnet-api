@@ -1,0 +1,10 @@
+json.(@user, :unread_messages_count, :unread_notifications_count, :unread_friendship_notifications_count)
+
+#Counters
+
+json.friends_count @user.friends_count
+json.pending_received_friendships_count @user.pending_received_friendships_count
+json.pending_sent_friendships_count @user.pending_sent_friendships_count
+json.pending_approval_requests_count @user.pending_approval_requests_count
+json.approved_requests_count @user.approved_requests_count
+
