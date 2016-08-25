@@ -13,7 +13,7 @@ class V1::GroupsController < V1::BaseController
     else
       @groups = @groups.page(params[:page]).per(params[:per_page]) # if @posts is AR::Relation object
     end
-    render 'mobile/groups' if browser.platform.ios? || browser.platform.android?
+    render 'mobile/groups' if browser.platform.ios? || browser.platform.android? || browser.platform.other?
   end
 
   def search
