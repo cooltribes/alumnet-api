@@ -1,0 +1,14 @@
+<%- headers = ['Id','User', 'Product', 'Method', 'Total', 'Date', 'Country'] -%>
+<%= CSV.generate_line headers -%>
+<%- @payments.each do |payment| -%>
+  <%= CSV.generate_line([
+    payment.id,
+    payment.user.name.present? ? payment.user.name : "No name registered",
+    payment.paymentable.name,
+    'Credit Card',
+    payment.total,
+    payment.created_at.strftime("%d/%m/%Y"),
+    payment.get_country_name
+    ])
+  -%>
+<%- end -%>
