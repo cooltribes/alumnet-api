@@ -2,7 +2,7 @@ class V1::UsersController < V1::BaseController
   before_action :set_user, except: [:index, :create, :change_password, :search]
 
   def index
-    search_params = params[:q].present? ? JSON.parse(params[:q]) : nil
+    search_params = params[:q].present? ? params[:q] : nil
     q = User.active.without_externals.includes(:profile).ransack(search_params)
     @users = q.result
     if @users.class == Array
