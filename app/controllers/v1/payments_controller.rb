@@ -1,5 +1,5 @@
 class V1::PaymentsController < V1::BaseController
-  before_action :set_payment, except: [:index, :create, :update]
+  before_action :set_payment, except: [:index, :create, :update, :csv]
   before_action :set_paymentable, only: [:create]
   before_action :set_payment_by_reference, only: [:update]
   # TODO: Refactor this controller
@@ -7,6 +7,13 @@ class V1::PaymentsController < V1::BaseController
   def index
     @q = Payment.ransack(params[:q])
     @payments = @q.result
+  end
+
+  def csv
+    @payments = Payment.ransack(params[:q]).result
+    headers['Content-Disposition'] = "attachment; filename=\"payment-list\""
+    headers['Content-Type'] ||= 'text/csv'
+    render "export", :formats => [:csv]
   end
 
   def show

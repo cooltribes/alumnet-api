@@ -5,6 +5,6 @@ class Payment < ActiveRecord::Base
   belongs_to :paymentable, polymorphic: true
 
   def get_country_name
-  	country_id.present? ? Country.find(country_id).name : nil
+  	country_id.present? ? Country.find(country_id).name : user.location
   end
 end

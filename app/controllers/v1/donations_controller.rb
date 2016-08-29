@@ -34,7 +34,7 @@ class V1::DonationsController < V1::BaseController
   def details
     @total_sold = UserProduct.where(feature: 'donation').sum(:total_price)
     @donors = UserProduct.where(feature: 'donation').uniq.pluck(:user_id).count
-    @countries = UserProduct.where(feature: 'donation').includes(user: :profile).uniq.pluck(:residence_city_id, "profiles.residence_country_id").count
+    @countries = UserProduct.where(feature: 'donation').includes(user: :profile).uniq.pluck(:residence_country_id, "profiles.residence_country_id").count
   end
 
   def update_user
