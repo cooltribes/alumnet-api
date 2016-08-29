@@ -18,6 +18,9 @@ class V1::Me::FriendshipsController < V1::BaseController
   def suggestions
     query = { m: 'or', profile_first_name_cont: params[:term], profile_last_name_cont: params[:term] }
     @friends = @user.search_accepted_friends(query)
+    if browser.platform.ios? || browser.platform.android? || browser.platform.other?
+      render 'mobile/me/friendships/suggestions'
+    end
   end
 
   def create

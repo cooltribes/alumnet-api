@@ -3,7 +3,7 @@ class V1::MeController < V1::BaseController
 
   def show
     if browser.platform.ios? || browser.platform.android? || browser.platform.other?
-      render 'mobile/me'
+      render 'mobile/me/me'
     end
   end
 
