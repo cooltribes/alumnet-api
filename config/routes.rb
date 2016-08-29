@@ -275,7 +275,9 @@ Rails.application.routes.draw do
 
     resources :languages, only: :index
     resources :skills, only: :index
-    resources :payments
+    resources :payments do
+      post :csv, on: :collection
+    end
     resources :metatags, only: [:index]
     resources :tempfiles, only: [:index]
 
