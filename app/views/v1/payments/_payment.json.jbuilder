@@ -6,6 +6,12 @@ json.user do
   json.name user.name
   json.avatar user.avatar.large.url
   json.last_experience user.last_experience.try(:name)
+  json.location user.location
 end
 
 json.paymentable payment.paymentable
+
+json.country do
+	json.id payment.country_id
+	json.name payment.get_country_name
+end

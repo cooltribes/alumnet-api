@@ -3,4 +3,8 @@ class Payment < ActiveRecord::Base
   ### Relations
   belongs_to :user
   belongs_to :paymentable, polymorphic: true
+
+  def get_country_name
+  	country_id.present? ? Country.find(country_id).name : nil
+  end
 end
