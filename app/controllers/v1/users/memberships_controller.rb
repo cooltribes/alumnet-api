@@ -12,13 +12,21 @@ class V1::Users::MembershipsController < V1::BaseController
   def groups
     q = @user.memberships.accepted.ransack(params[:q])
     @memberships = q.result.joins(:group).order('groups.name').page(params[:page]).per(params[:per_page])
-    render :index, status: :ok
+    if browser.platform.ios? || browser.platform.android? || browser.platform.other?
+      render 'mobile/memberships_groups'
+    else
+      render :index, status: :ok
+    end
   end
 
   def created_groups
     q = @user.memberships.where_user_is_admin(@user).ransack(params[:q])
     @memberships = q.result.page(params[:page]).per(params[:per_page])
-    render :index, status: :ok
+    if browser.platform.ios? || browser.platform.android? || browser.platform.other?
+      render 'mobile/memberships_groups'
+    else
+      render :index, status: :ok
+    end
   end
 
   def create

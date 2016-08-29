@@ -2,7 +2,7 @@ class V1::UsersController < V1::BaseController
   before_action :set_user, except: [:index, :create, :change_password, :search]
 
   def index
-    search_params = params[:q].present? ? JSON.parse(params[:q]) : nil
+    search_params = params[:q].present? ? params[:q] : nil
     q = User.active.without_externals.includes(:profile).ransack(search_params)
     @users = q.result
     if @users.class == Array
@@ -16,7 +16,11 @@ class V1::UsersController < V1::BaseController
     @results = Profile.search(params[:q]).page(params[:page]).per(params[:per_page])
     user_ids = @results.results.to_a.map(&:user_id)
     @users = User.active.without_externals.includes(:profile).where(id: user_ids)
-    render :index, status: :ok
+    if browser.platform.ios? || browser.platform.android? || browser.platform.other?
+      render 'mobile/users'
+    else
+      render :index, status: :ok
+    end
   end
 
   def show

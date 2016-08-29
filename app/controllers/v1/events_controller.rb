@@ -15,7 +15,11 @@ class V1::EventsController < V1::BaseEventsController
     @results = Event.search(params[:q]).page(params[:page]).per(params[:per_page])
     event_ids = @results.results.to_a.map(&:id)
     @events = Event.where(id: event_ids).order(start_date: :desc)
-    render :index, status: :ok
+    if browser.platform.ios? || browser.platform.android? || browser.platform.other?
+      render 'mobile/events'
+    else
+      render :index, status: :ok
+    end
   end
 
   def cropping

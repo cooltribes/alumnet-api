@@ -13,6 +13,10 @@ class V1::ContactsController < V1::BaseController
   def in_alumnet
     sender = SenderInvitation.new(params[:contacts], current_user)
     @users = sender.users_in_alumnet
-    render 'v1/users/index'
+    if browser.platform.ios? || browser.platform.android? || browser.platform.other?
+      render 'mobile/users'
+    else
+      render 'v1/users/index'
+    end
   end
 end
