@@ -6,7 +6,9 @@ class V1::PaymentsController < V1::BaseController
 
   def index
     @q = Payment.ransack(params[:q])
-    @payments = @q.result
+    @q.sorts = 'created_at desc' if @q.sorts.empty?
+    @payments = Kaminari.paginate_array(@q.result).page(params[:page]).per(params[:per_page])
+    #@payments = @q.result
   end
 
   def csv
