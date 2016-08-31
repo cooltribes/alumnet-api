@@ -263,6 +263,31 @@ class GeneralMailer
     send_email(user.email, user.name, subject, images, template_name, template_content)
 	end
 
+	def user_commented_post(user, created_comment)
+		images = []
+		images << {"type"=>created_comment.user.get_avatar_type, "name"=>"user_avatar", "content"=>created_comment.user.get_avatar_base64}
+
+		subject = "#{created_comment.user.name} commented your post on AlumNet"
+
+		main_content_html = @view.render(
+			file: 'user_commented_post.html.erb', 
+			locals: { 
+				user: user,
+				created_comment: created_comment
+			}
+		)
+
+		template_name = "USR010_user_commented_post"
+    template_content = [
+    	{"name"=>"main_content_html", "content"=>main_content_html},
+    	{"name"=>"manage_subscriptions_link", "content"=>"<a href='#{Settings.ui_endpoint}/#users/#{user.id}/settings' style='text-decoration: underline; color: #3a3737; font-size: 11px; font-weight: 100;'>Manage Suscription</a>"},
+    	{"name"=>"user_name", "content"=>user.name},
+    	{"name"=>"user_last_experience", "content"=>user.full_last_experience}
+    ]
+
+    send_email(user.email, user.name, subject, images, template_name, template_content)
+	end
+
 	def user_registration_from_crowdfunding(user, first_name, password)
 		subject = "Welcome to AlumNet"
 

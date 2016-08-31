@@ -47,7 +47,10 @@ module Comments
       end
 
       # send email to post author
-      UserMailer.user_commented_post(created_comment).deliver_later
+      #UserMailer.user_commented_post(created_comment).deliver_now
+      if !commentable.is_owner?(comment.user)
+        mailer.user_commented_post(commentable.user, created_comment)
+      end
 
       # send email to users tagged on post
       commentable.user_tags.uniq.each do |user|
