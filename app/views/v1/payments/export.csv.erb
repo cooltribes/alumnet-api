@@ -4,7 +4,7 @@
   <%= CSV.generate_line([
     payment.id,
     payment.user.name.present? ? payment.user.name : "No name registered",
-    payment.paymentable.name,
+    payment.paymentable_type == "Product" ? payment.paymentable.name : "Subscription",
     'Credit Card',
     payment.total,
     payment.created_at.strftime("%d/%m/%Y"),
