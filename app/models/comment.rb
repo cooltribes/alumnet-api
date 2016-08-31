@@ -10,7 +10,7 @@ class Comment < ActiveRecord::Base
   belongs_to :user ##Creator
 
   ### Scopes
-  default_scope -> { order('created_at ASC') }
+  default_scope -> { order('created_at DESC') }
   scope :with_includes, -> { includes(:user, :commentable) }
 
   ### Validations
