@@ -1,9 +1,10 @@
-<%- headers = ['Id','Name', 'Email', 'Country of Origin', 'City of Origin', 'LC', 'Joined', 'Gender', 'Age', 'Status', 'Role', 'Last Login', 'Login Count', 'Register Step'] -%>
+<%- headers = ['Id','First Name', 'Last Name', 'Email', 'Country of Origin', 'City of Origin', 'LC', 'Joined', 'Gender', 'Age', 'Status', 'Role', 'Last Login', 'Login Count', 'Register Step'] -%>
 <%= CSV.generate_line headers -%>
 <%- @users.each do |user| -%>
   <%= CSV.generate_line([
     user.id,
-    user.name.present? ? user.name : "No name registered",
+    user.profile.first_name.present? ? user.profile.first_name : "N/A",
+    user.profile.last_name.present? ? user.profile.last_name : "N/A",
     user.email,
     user.profile.birth_country_info[:name],
     user.profile.birth_city_info[:name],
