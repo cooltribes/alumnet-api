@@ -41,9 +41,15 @@ class V1::Users::ProductsController < V1::BaseController
   #todo: refactor this, create user function
   def add_product
     @user_product = UserProduct.new(add_params)
+
+    feature = 'subscription'
+    if @product.categories.present?
+      category = @product.categories.find_by(name: "Donations")
+      feature = 'donation' if category.present?
+    end
+
     @user_product.transaction_type = 1
-    @user_product.feature = 'subscription'
-    byebug
+    @user_product.feature = feature
     @characteristic = @product.characteristics.find_by(name: 'Duration')
     @product_characteristic = @characteristic.present? ? @product.product_characteristics.find_by(characteristic_id: @characteristic.id) : nil
     if(@user.member == 0)
@@ -56,7 +62,8 @@ class V1::Users::ProductsController < V1::BaseController
         @user.member = 3
       end
     else
-      @active_subscription = UserProduct.where(user_id: @user.id, feature: 'subscription', status: 1).last
+      #@active_subscription = UserProduct.where(user_id: @user.id, feature: 'subscription', status: 1).last
+      @active_subscription = UserProduct.where("user_id=? AND status=1 AND (feature='subscription' OR feature='donation')", @user.id).last
       if @active_subscription
         @user_product.start_date = @active_subscription.end_date
         if @product_characteristic.present?
