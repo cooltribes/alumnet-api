@@ -50,4 +50,24 @@ class AlumnetSearcher
     return nil
   end
 
+  def suggestions_filter_secret_groups(results, current_user)
+    results.each do |result|
+      if result[:type] == 'group'
+        group = Group.find(result[:id])
+        results.delete(result) if !group.user_has_membership?(current_user)
+      end
+    end
+    results
+  end
+
+  def results_filter_secret_groups(results, current_user)
+    results.each do |result|
+      if result['_type'] == 'group'
+        group = Group.find(result['_id'])
+        results.delete(result) if !group.user_has_membership?(current_user)
+      end
+    end
+    results
+  end
+
 end
