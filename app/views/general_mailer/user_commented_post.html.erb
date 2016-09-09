@@ -10,8 +10,10 @@
             <th style="text-align: left; width: 40%;">
                 <span style="color: #6e6e6e; font-family: sans-serif; font-weight: 100; font-size: 14px;">
                     <span style="font-weight: 400; color: #464646"><%= created_comment.user.name %></span> commented on your post 
-                    <% if created_comment.commentable.in_group_or_event? %>
-                        in <%= created_comment.commentable.postable.name %> </span>
+                    <% if created_comment.commentable.class.to_s != 'Picture' %>
+                        <% if created_comment.commentable.in_group_or_event? %>
+                            in <%= created_comment.commentable.postable.name %> </span>
+                        <% end %>
                     <% end %>
                     <%= created_comment.created_at.to_time.strftime("on %B %d at %l %P") %>.<br><br>
                     <span>"<%= created_comment.comment %>"</span>
@@ -20,6 +22,6 @@
         </tr>
     </table>
     <div style="text-align: center; margin-top: 50px">
-        <a href="<%= Settings.ui_endpoint %>/#<%= created_comment.commentable.postable_type.downcase %>s/<%= created_comment.commentable.postable_id %>/posts/<%= created_comment.commentable.id %>" style="color: #FFF; padding: 15px 30px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;">VIEW CONVERSATION</a>
+        <a href="<%= view_link %>" style="color: #FFF; padding: 15px 30px; text-decoration: none; font-family: sans-serif; font-size: 15px; background-color: #2099d0; font-weight: 100;">VIEW CONVERSATION</a>
     </div>
 </div>
