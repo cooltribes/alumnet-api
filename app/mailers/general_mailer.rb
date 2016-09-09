@@ -243,12 +243,14 @@ class GeneralMailer
 		images << {"type"=>created_comment.user.get_avatar_type, "name"=>"user_avatar", "content"=>created_comment.user.get_avatar_base64}
 
 		subject = "#{created_comment.user.name} commented a post on AlumNet"
+		view_link = created_comment.commentable.class.to_s == 'Picture' ? "#{Settings.ui_endpoint}/##{created_comment.commentable.pictureable.postable_type.downcase}s/#{created_comment.commentable.pictureable.postable_id}/posts/#{created_comment.commentable.pictureable_id}" : "#{Settings.ui_endpoint}/##{created_comment.commentable.postable_type.downcase}s/#{created_comment.commentable.postable_id}/posts/#{created_comment.commentable.id}"
 
 		main_content_html = @view.render(
 			file: 'user_commented_post_you_commented_or_liked.html.erb', 
 			locals: { 
 				user: user,
-				created_comment: created_comment
+				created_comment: created_comment,
+				view_link: view_link
 			}
 		)
 
@@ -268,12 +270,14 @@ class GeneralMailer
 		images << {"type"=>created_comment.user.get_avatar_type, "name"=>"user_avatar", "content"=>created_comment.user.get_avatar_base64}
 
 		subject = "#{created_comment.user.name} commented your post on AlumNet"
+		view_link = created_comment.commentable.class.to_s == 'Picture' ? "#{Settings.ui_endpoint}/##{created_comment.commentable.pictureable.postable_type.downcase}s/#{created_comment.commentable.pictureable.postable_id}/posts/#{created_comment.commentable.pictureable_id}" : "#{Settings.ui_endpoint}/##{created_comment.commentable.postable_type.downcase}s/#{created_comment.commentable.postable_id}/posts/#{created_comment.commentable.id}"
 
 		main_content_html = @view.render(
 			file: 'user_commented_post.html.erb', 
 			locals: { 
 				user: user,
-				created_comment: created_comment
+				created_comment: created_comment,
+				view_link: view_link
 			}
 		)
 
