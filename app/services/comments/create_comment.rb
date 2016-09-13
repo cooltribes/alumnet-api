@@ -49,7 +49,11 @@ module Comments
       # send email to post author
       #UserMailer.user_commented_post(created_comment).deliver_now
       if !commentable.is_owner?(comment.user)
-        mailer.user_commented_post(commentable.user, created_comment)
+        if commentable.class.to_s == 'Picture'
+          mailer.user_commented_post(commentable.pictureable.user, created_comment) if commentable.pictureable.present?
+        else
+          mailer.user_commented_post(commentable.user, created_comment)
+        end
       end
 
       # send email to users tagged on post

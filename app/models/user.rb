@@ -409,11 +409,12 @@ class User < ActiveRecord::Base
     groups_ids = groups.pluck(:id)
     Post.with_includes.joins(:postable_group).where(postable_type: "Group")
       .where("groups.id in(?) and groups.group_type = ?", groups_ids, 0)
+      .where('posts.updated_at > ?', 3.months.ago)
       .ransack(q).result
   end
 
   def my_likes_posts(q)
-    posts = posts_by_like.with_includes.ransack(q).result.to_a
+    posts = posts_by_like.with_includes.where('posts.updated_at > ?', 3.months.ago).ransack(q).result.to_a
     posts.reject! do |post|
       post.in_group_closed_or_secret? || post.in_event_closed_or_secret?
     end
@@ -437,7 +438,7 @@ class User < ActiveRecord::Base
   end
 
   def my_posts(query)
-    posts.with_includes.ransack(query).result | publications.with_includes.ransack(query).result
+    posts.with_includes.where('updated_at > ?', 3.months.ago).ransack(query).result | publications.with_includes.where('updated_at > ?', 3.months.ago).ransack(query).result
   end
 
   def publicable_posts(query)
