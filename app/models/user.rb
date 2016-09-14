@@ -487,12 +487,16 @@ class User < ActiveRecord::Base
 
   def validate_subscription
     # TODO: refactorizar esto con : through para acceder directo a .product :yondri
-    user_products.where('status = 1').each do |user_product|
-      if user_product.product.feature == 'subscription'
-        if user_product.end_date && user_product.end_date.past?
-          user_product.update_column(:status, 0)
-          update_column(:member, 0)
-          "expired - user_id: #{id} - #{user_product.end_date}"
+    if user_products.count == 0
+      update_column(:member, 0)
+    else
+      user_products.where('status = 1').each do |user_product|
+        if user_product.feature == 'subscription'
+          if user_product.end_date && user_product.end_date.past?
+            user_product.update_column(:status, 0)
+            update_column(:member, 0)
+            "expired - user_id: #{id} - #{user_product.end_date}"
+          end
         end
       end
     end
