@@ -1,5 +1,6 @@
 json.array! @friends do |friend|
   json.id friend.id
+  json.online friend.online
   json.name friend.permit_name(current_user)
   json.avatar do
 	  if friend.permit('see-avatar', current_user)
