@@ -46,6 +46,15 @@ json.parent do
   end
 end
 
+json.parents do
+  json.array! group.get_parents do |parent|
+    json.id parent.id
+    json.name parent.name
+    json.description parent.description
+    json.group_type parent.group_type
+  end
+end
+
 json.children do
   if group.has_children?
     json.array! group.children, :id, :name, :description, :group_type

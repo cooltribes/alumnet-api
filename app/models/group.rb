@@ -164,6 +164,15 @@ class Group < ActiveRecord::Base
     false
   end
 
+  def get_parents(parents = [])
+    if self.has_parent?
+      parents.push self.parent
+      self.parent.get_parents(parents)
+    else
+      parents
+    end
+  end
+
   def last_post
     posts.last
   end
