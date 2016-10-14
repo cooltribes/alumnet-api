@@ -107,7 +107,9 @@ class User < ActiveRecord::Base
 
   def self.search_in_location(location, query)
     locations = location.is_a?(Country) ? [location.id] : location.country_ids
-    includes(:profile).ransack(query).result.where(profiles: { residence_country_id: locations})
+    query_sql = "profiles.residence_country_id = ? OR experiences.country_id = ? OR profiles.birth_country_id = ?"
+    joins(profile: :experiences).ransack(query).result.where(query_sql, locations, locations, locations)
+
   end
 
   ### Instance Methods
