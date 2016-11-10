@@ -74,7 +74,8 @@ class Company < ActiveRecord::Base
   end
 
   def past_employees
-    employees.where(experiences: { current: false }).distinct
+    profile_ids = employees.where(experiences: { current: true }).select(:profile_id).distinct
+    employees.where(experiences: { current: false }).where.not(experiences: { profile_id: profile_ids }).distinct    
   end
 
   def is_admin?(user)
