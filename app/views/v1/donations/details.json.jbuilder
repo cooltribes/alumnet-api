@@ -1,7 +1,7 @@
 json.total_sold @total_sold
 json.donors @donors
 json.countries @countries
-
+json.stats @stats
 json.backers @user_products do |user_product|
 	json.user_name user_product.user.name
 	json.user_avatar user_product.user.avatar.medium.url

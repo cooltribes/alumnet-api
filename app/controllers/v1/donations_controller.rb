@@ -36,6 +36,11 @@ class V1::DonationsController < V1::BaseController
     @donors = UserProduct.where(feature: 'donation').uniq.pluck(:user_id).count
     @user_products = UserProduct.where(feature: 'donation').order('created_at desc').uniq
     @countries = UserProduct.where(feature: 'donation').includes(user: :profile).uniq.pluck(:residence_country_id, "profiles.residence_country_id").count
+    @data= UserProduct.joins(user: { profile: :residence_country }).where(feature: 'donation').group('countries.name').count('*')
+    @stats = [ ['Country', 'N. Donations'] ]
+    @data.each do |stat| 
+      @stats << stat
+    end
   end
 
   def update_user
