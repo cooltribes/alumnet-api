@@ -13,10 +13,23 @@ class V1::UsersController < V1::BaseController
   end
 
   def search
-    @results = Profile.search(params[:q]).page(params[:page]).per(params[:per_page])
+    my_friends = current_user.my_friends.map(&:id)
+    query = { query: {
+        filtered: {
+            query: params[:q][:query],
+            filter: {
+                not: {
+                  terms: {
+                    "user_id"=>my_friends
+                  }
+                }
+            }
+        }
+      } 
+    }
+    @results= Profile.search(query).page(params[:page]).per(params[:per_page])
     user_ids = @results.results.to_a.map(&:user_id)
     @users = User.active.without_externals.includes(:profile).where(id: user_ids)
-    @users = @users.to_a - current_user.my_friends 
     if browser.platform.ios? || browser.platform.android? || browser.platform.other?
       render 'mobile/users'
     else

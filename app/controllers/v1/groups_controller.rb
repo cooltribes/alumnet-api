@@ -1,4 +1,6 @@
 require 'mailchimp'
+require "rubygems"
+require "json"
 # TODO: Refactorizar mailchimp este controlador :yondry
 class V1::GroupsController < V1::BaseController
   include Pundit
@@ -17,7 +19,21 @@ class V1::GroupsController < V1::BaseController
   end
 
   def search
-    @results = Group.search(params[:q]).page(params[:page]).per(params[:per_page])
+    my_groups = current_user.groups.map(&:id)
+    query = { query: {
+        filtered: {
+            query: params[:q][:query],
+            filter: {
+                not: {
+                  terms: {
+                    "id"=>my_groups
+                  }
+                }
+            }
+        }
+      } 
+    }
+    @results= Group.search(query).page(params[:page]).per(params[:per_page])
     group_ids = @results.results.to_a.map(&:id)
     @groups = Group.without_secret.where(id: group_ids)
     if browser.platform.ios? || browser.platform.android? || browser.platform.other?

@@ -12,7 +12,21 @@ class V1::EventsController < V1::BaseEventsController
   end
 
   def search
-    @results = Event.search(params[:q]).page(params[:page]).per(params[:per_page])
+    my_events = current_user.events.map(&:id)    
+    query = { query: {
+        filtered: {
+            query: params[:q][:query],
+            filter: {
+                not: {
+                  terms: {
+                    "id" => my_events
+                  }
+                }
+            }
+        }
+      } 
+    }     
+    @results = Event.search(query).page(params[:page]).per(params[:per_page])    
     event_ids = @results.results.to_a.map(&:id)
     @events = Event.where(id: event_ids).order(start_date: :desc)
     if browser.platform.ios? || browser.platform.android? || browser.platform.other?
