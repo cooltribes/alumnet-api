@@ -37,10 +37,10 @@ class V1::DonationsController < V1::BaseController
     @user_products = UserProduct.where(feature: 'donation').order('created_at desc').uniq
     @countries = UserProduct.where(feature: 'donation').includes(user: :profile).uniq.pluck(:residence_country_id, "profiles.residence_country_id").count
     @data= UserProduct.joins(user: { profile: :residence_country }).select('countries.name, count(*) as count_donations, sum(total_price) as total_donations').where(feature: 'donation').group('countries.name')    
-    @stats = [ ['Country', 'N. Donations','Total €'] ]
+    @stats = [ ['Country', 'Total €','N. Donations'] ]
     @data.each do |stat|  
          
-      @stats << [ stat.name, stat.count_donations, stat.total_donations.to_f]
+      @stats << [ stat.name, stat.total_donations.to_f ,stat.count_donations]
     end
     
   end
