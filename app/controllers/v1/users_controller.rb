@@ -1,5 +1,5 @@
 class V1::UsersController < V1::BaseController
-  before_action :set_user, except: [:index, :create, :change_password, :search]
+  before_action :set_user, except: [:index, :create, :change_password, :search,:change_email]
 
   def index
     search_params = params[:q].present? ? params[:q] : nil
@@ -77,6 +77,19 @@ class V1::UsersController < V1::BaseController
     end
   end
 
+  def change_email
+    @user = User.find(params[:id])
+    if @user
+      if @user.update(email_params)
+        render json: { message: "Email has been edit"}, status: :ok
+      else
+        render json: { errors: @user.errors }, status: :unprocessable_entity
+      end
+    else
+      render json: { error: "invalid user"}, status: 401
+    end
+  end
+
   private
 
   def set_user
@@ -89,6 +102,10 @@ class V1::UsersController < V1::BaseController
 
   def password_params
     params.permit(:id, :password, :password_confirmation)
+  end
+
+  def email_params
+    params.permit(:id, :email)
   end
 
   def check_if_current_user_can_invite_on_group
