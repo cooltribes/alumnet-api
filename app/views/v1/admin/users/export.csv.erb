@@ -9,12 +9,12 @@
     user.profile.birth_country_info[:name],
     user.profile.birth_city_info[:name],
     user.profile.local_committee.try(:name),
-    "#{time_ago_in_words(user.created_at)} ago",
+    user.created_at.try(:strftime, '%Y/%m/%d  %H:%M:%S'),
     user.profile.gender || "No gender",
     user.profile.age || "No Age",
     user.status.capitalize,
     user.role,
-    user.last_sign_in_at.try(:strftime, '%a %d %Y'),
+    user.last_sign_in_at.try(:strftime, '%Y/%m/%d  %H:%M:%S'),
     user.sign_in_count,
     user.profile.register_step
     ])
