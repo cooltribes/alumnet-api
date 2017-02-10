@@ -8,7 +8,7 @@
     payment.paymentable_type == "Product" ? payment.paymentable.name : "Subscription",
     'Credit Card',
     payment.total,
-    payment.created_at.strftime("%d/%m/%Y"),
+    payment.created_at.strftime("%Y%m%d  %H:%M:%S"),
     payment.get_country_name
     ])
   -%>
