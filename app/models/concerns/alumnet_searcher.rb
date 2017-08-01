@@ -42,7 +42,7 @@ class AlumnetSearcher
         # change profile id for user id
         id = result._source.id
         if result._type == 'profile'
-          result._source.user_id
+          id = result._source.user_id
         end
         array << { image: image, id: id, name: result._source.name, type: result._type }
       end
