@@ -2,7 +2,7 @@
 lock '3.4.0'
 
 set :application, 'alumnet-api'
-set :repo_url, 'https://ArmandoMendoza:14941830famg@github.com/cooltribes/alumnet-api.git '#'git@github.com:cooltribes/alumnet-api.git'
+set :repo_url, 'https://ArmandoMendoza:Geforce9800gtx@github.com/cooltribes/alumnet-api.git '#'git@github.com:cooltribes/alumnet-api.git'
 set :scm, :git
 set :linked_files, %w{config/database.yml config/application.yml}
 set :linked_dirs, %w{public/uploads}
